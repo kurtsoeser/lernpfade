@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Normalverteilung</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="css/normalverteilung-lernpfad.css">
+</head>
+<body>
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 7 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Normalverteilung</h1>
+  <p class="subtitle">Lernpfad: Glockenkurve verstehen — Begriffe, Faustregel, Standardisierung und Anwendungen, interaktiv und mit Übungen.</p>
+  <span class="badge">HAK Steyr · Abendschule · Mathematik</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:640px; margin-left:auto; margin-right:auto;">
+    Verwandter Lernpfad (Vertiefung): <a href="lernpfad-approximation-normalverteilung.html" style="color:var(--blue-dark); font-weight:600;">Normalverteilung als Näherung der Binomialverteilung</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Begriffe</button>
+  <button class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Eigenschaften</button>
+  <button class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>μ &amp; σ</button>
+  <button class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Beispiel</button>
+  <button class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Anwenden</button>
+  <button class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Übungen</button>
+  <button class="tab-btn tab-btn-optional" onclick="switchTab(7)" title="Optionale Technologie-Seite"><span class="tab-num">8</span>Tools</button>
+</div>
+
+<!-- ═══ STATION 1 ═══ -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Was ist die Normalverteilung?</div>
+
+  <p>Die <strong>Normalverteilung</strong> ist ein mathematisches Modell, das viele „natürlich entstehende“ Mess- und Leistungswerte gut beschreibt — zum Beispiel Füllmengen, Messfehler, Körpergrössen oder Prüfungsergebnisse, wenn sehr viele kleine Einflüsse zusammenwirken (Zentraler Grenzwertsatz als Hintergrundidee — in der Schule reicht die Intuition: „viele additive Zufallseffekte“).</p>
+
+  <div class="info-box concept">
+    <div class="icon">👉</div>
+    <div>
+      <strong>Kernaussage:</strong> Bei einer normalverteilten Zufallsgrösse liegen die Werte <strong>häufig nahe am Durchschnitt</strong> und <strong>selten weit davon entfernt</strong>. Die zugehörige Kurve heisst <strong>Normalverteilungskurve</strong> oder <strong>Glockenkurve</strong>.
+    </div>
+  </div>
+
+  <p><strong>Stetige Zufallsvariable:</strong> Im Gegensatz zu Zählgrössen (z.&nbsp;B. „Anzahl Treffer“) kann eine normalverteilte Variable <strong>jeden reellen Wert in einem Bereich</strong> annehmen — deshalb werden Wahrscheinlichkeiten als <strong>Flächen unter der Dichtekurve</strong> interpretiert, nicht als Balkenhöhen.</p>
+
+  <div class="exercise" id="quiz_nv0">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Einstieg testen</span>
+    </div>
+    <p><strong>Frage 1:</strong> Wofür steht die „Höhe“ der Glockenkurve \(f(x)\) an einer Stelle \(x\) direkt?</p>
+    <div class="quiz-options" data-quiz="nv0_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Für die Wahrscheinlichkeit \(P(X = x)\) (exakter Punkt)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Für den Anteil der Flaschen mit genau \(x\) ml</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Für die <em>Dichte</em> — Wahrscheinlichkeiten sind <em>Flächen</em> unter der Kurve</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Für den Median</div>
+    </div>
+    <div class="feedback" id="fb_nv0_1"></div>
+
+    <p style="margin-top:20px;"><strong>Frage 2:</strong> Die Gesamtfläche unter der Dichtekurve beträgt …</p>
+    <div class="quiz-options" data-quiz="nv0_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\mu\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(1\) (entspricht 100 %)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\sigma\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\tfrac{1}{2}\)</div>
+    </div>
+    <div class="feedback" id="fb_nv0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-check" onclick="checkQuizGroup(0, ['nv0_1','nv0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button class="btn btn-next" onclick="switchTab(1)">Weiter: Begriffe →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 2 ═══ -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Begriffe — sauber definiert</div>
+
+  <div class="info-box concept">
+    <div class="icon">📘</div>
+    <div>
+      <strong>Zufallsvariable \(X\)</strong><br>
+      Eine Grösse, die zufällig unterschiedliche Werte annehmen kann (z.&nbsp;B. Füllmenge einer Flasche in ml).
+    </div>
+  </div>
+
+  <p><strong>Schreibweise.</strong> In Schulbüchern und Taschenrechnern taucht oft \(X \sim \mathcal{N}(\mu;\,\sigma)\) auf — gemeint ist: <strong>Normalverteilung mit Erwartungswert \(\mu\) und Standardabweichung \(\sigma\)</strong>. In theoretischen Formeln steht in der Dichte die <strong>Varianz \(\sigma^2\)</strong>:</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Dichte der Normalverteilung</div>
+    \[ f(x) = \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}, \qquad x \in \mathbb{R} \]
+  </div>
+
+  <p><strong>Verteilungsfunktion:</strong> \(F(x) = P(X \le x) = \displaystyle\int_{-\infty}^{x} f(t)\,dt\). Für die <strong>Standardnormalverteilung</strong> \(Z \sim \mathcal{N}(0;\,1)\) schreibt man die Verteilungsfunktion oft \(\Phi(z) = P(Z \le z)\).</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Zusammenhang</div>
+    \[ P(X \le x) = F(x) = \Phi\!\left(\frac{x-\mu}{\sigma}\right) \]
+  </div>
+
+  <ul style="margin:12px 0 12px 22px;">
+    <li><strong>\(\mu\)</strong> — Erwartungswert (Lage der Glocke). Bei der Normalverteilung: Mittelwert = Median = Modus = \(\mu\).</li>
+    <li><strong>\(\sigma\)</strong> — Standardabweichung (typische Streuung). Kleines \(\sigma\): Werte eng beisammen; grosses \(\sigma\): starke Streuung.</li>
+    <li><strong>\(\sigma^2\)</strong> — Varianz (Quadrat der Standardabweichung).</li>
+  </ul>
+
+  <div class="info-box success">
+    <div class="icon">💡</div>
+    <div>
+      <strong>Merke:</strong> \(P(a \le X \le b)\) ist die <strong>Fläche unter \(f\)</strong> zwischen \(a\) und \(b\). Einzelwahrscheinlichkeiten wie \(P(X = x)\) sind bei stetiger Verteilung <strong>0</strong> — deshalb arbeitet man mit Intervallen.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Begriffe</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(\Phi(0)\) bei der Standardnormalverteilung ist …</p>
+    <div class="quiz-options" data-quiz="nv1_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(0\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(1\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(0{,}5\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\pi/2\)</div>
+    </div>
+    <div class="feedback" id="fb_nv1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die Varianz von \(X \sim \mathcal{N}(3;\,2)\) (wobei \(2\) die Standardabweichung sei) ist …</p>
+    <div class="quiz-options" data-quiz="nv1_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(2\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(4\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\sqrt{2}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(9\)</div>
+    </div>
+    <div class="feedback" id="fb_nv1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-check" onclick="checkQuizGroup(1, ['nv1_1','nv1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(2)">Weiter: Eigenschaften →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 3 ═══ -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Eigenschaften &amp; Faustregel</div>
+
+  <ul style="margin:8px 0 16px 22px;">
+    <li>symmetrisch um \(\mu\)</li>
+    <li>Maximum der Dichte bei \(x = \mu\)</li>
+    <li>je weiter von \(\mu\) entfernt, desto seltener (kleinere Dichte)</li>
+    <li><strong>Wendepunkte</strong> der Glockenkurve bei \(x = \mu \pm \sigma\)</li>
+  </ul>
+
+  <div class="formula-box">
+    <div class="formula-label">Faustregel (68–95–99,7)</div>
+    <p style="text-align:left; font-size:0.95rem;">Etwa <strong>68 %</strong> der Werte in \([\mu-\sigma;\,\mu+\sigma]\), etwa <strong>95 %</strong> in \([\mu-2\sigma;\,\mu+2\sigma]\), etwa <strong>99,7 %</strong> in \([\mu-3\sigma;\,\mu+3\sigma]\).</p>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">🎮</div>
+    <div><strong>Interaktiv:</strong> Wähle die Regel, stelle \(\mu\) und \(\sigma\) ein und beobachte das hervorgehobene Intervall unter der Dichtekurve.</div>
+  </div>
+
+  <div class="chart-controls" style="flex-direction:column; align-items:stretch;">
+    <div class="input-row" style="justify-content:center;">
+      <div class="slider-group">
+        <label for="ruleMu">\(\mu\)</label>
+        <input type="range" id="ruleMu" min="40" max="160" value="100" step="1" oninput="updateRuleChart()">
+        <span class="slider-value" id="valRuleMu">100</span>
+      </div>
+      <div class="slider-group">
+        <label for="ruleSigma">\(\sigma\)</label>
+        <input type="range" id="ruleSigma" min="3" max="30" value="10" step="1" oninput="updateRuleChart()">
+        <span class="slider-value" id="valRuleSigma">10</span>
+      </div>
+    </div>
+    <div style="text-align:center; margin:10px 0;">
+      <span style="font-weight:600; margin-right:10px;">Regel:</span>
+      <label style="margin:0 8px;"><input type="radio" name="ruleBand" value="68" checked onchange="updateRuleChart()"> 68 %</label>
+      <label style="margin:0 8px;"><input type="radio" name="ruleBand" value="95" onchange="updateRuleChart()"> 95 %</label>
+      <label style="margin:0 8px;"><input type="radio" name="ruleBand" value="997" onchange="updateRuleChart()"> 99,7 %</label>
+    </div>
+  </div>
+  <p id="ruleSync" style="text-align:center; font-size:0.88rem; color:var(--text-light);">Tipp: Passe \(\mu\) und \(\sigma\) an — die Fläche über dem markierten Streifen entspricht <em>ungefähr</em> der gewählten Regel (nur näherungsweise, da die Kurve nicht „einfach“ endet).</p>
+  <div class="chart-container" style="height:320px;">
+    <canvas id="ruleChart"></canvas>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Faustregel</span>
+    </div>
+    <p><strong>Frage 1:</strong> Wo liegen die Wendepunkte?</p>
+    <div class="quiz-options" data-quiz="nv2_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Bei \(x = \mu\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Bei \(x = 0\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Bei \(x = \mu \pm \sigma\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Bei \(x = \mu \pm 2\sigma\)</div>
+    </div>
+    <div class="feedback" id="fb_nv2_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Etwa 95 % der Werte liegen (bei Normalverteilung) in …</p>
+    <div class="quiz-options" data-quiz="nv2_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\([\mu-\sigma;\,\mu+\sigma]\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\([\mu-2\sigma;\,\mu+2\sigma]\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\([\mu-3\sigma;\,\mu+3\sigma]\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\([0;\,1]\)</div>
+    </div>
+    <div class="feedback" id="fb_nv2_2"></div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-check" onclick="checkQuizGroup(2, ['nv2_1','nv2_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(3)">Weiter: μ &amp; σ →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 4 ═══ -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Einfluss von \(\mu\) und \(\sigma\)</div>
+
+  <p><strong>A) Erwartungswert \(\mu\)</strong> verschiebt die Kurve auf der \(x\)-Achse — grösseres \(\mu\) nach rechts, kleineres nach links. Die <em>Form</em> bleibt gleich, wenn \(\sigma\) gleich bleibt.</p>
+  <p><strong>B) Standardabweichung \(\sigma\)</strong> steuert die Breite: kleines \(\sigma\) → hohe, schmale Glocke; grosses \(\sigma\) → flache, breite Glocke.</p>
+
+  <div class="info-box success">
+    <div class="icon">🎮</div>
+    <div><strong>Interaktiv:</strong> Ziehe die Regler und beobachte die Glockenkurve.</div>
+  </div>
+
+  <div class="chart-controls">
+    <div class="slider-group">
+      <label for="bellMu">\(\mu\)</label>
+      <input type="range" id="bellMu" min="400" max="600" value="500" step="1" oninput="updateBellChart()">
+      <span class="slider-value" id="valBellMu">500</span>
+    </div>
+    <div class="slider-group">
+      <label for="bellSigma">\(\sigma\)</label>
+      <input type="range" id="bellSigma" min="1" max="20" value="5" step="1" oninput="updateBellChart()">
+      <span class="slider-value" id="valBellSigma">5</span>
+    </div>
+  </div>
+  <p id="bellInterpret" style="text-align:center; font-size:0.92rem; min-height:2.5em;"></p>
+  <div class="chart-container" style="height:340px;">
+    <canvas id="bellChart"></canvas>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Parameter</span>
+    </div>
+    <p><strong>Frage 1:</strong> Wenn \(\sigma\) grösser wird bei gleichem \(\mu\), dann …</p>
+    <div class="quiz-options" data-quiz="nv3_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">wird die Glocke höher und schmaler</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">wird die Glocke flacher und breiter</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">wandert die Glocke nach links</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">ändert sich die Fläche unter der Kurve</div>
+    </div>
+    <div class="feedback" id="fb_nv3_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Wenn \(\mu\) kleiner wird bei gleichem \(\sigma\), dann …</p>
+    <div class="quiz-options" data-quiz="nv3_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">wird die Glocke breiter</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">wird die Glocke höher</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">wandert die gesamte Kurve nach links</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">ändert sich \(\sigma\) automatisch mit</div>
+    </div>
+    <div class="feedback" id="fb_nv3_2"></div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-check" onclick="checkQuizGroup(3, ['nv3_1','nv3_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(4)">Weiter: Beispiel →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 5 ═══ -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Beispiel: Füllmenge (HAK-nah)</div>
+
+  <p>Eine Abfüllanlage füllt nominal <strong>500 ml</strong>. Die Füllmenge (in ml) sei näherungsweise normalverteilt:</p>
+  \[ X \sim \mathcal{N}(500;\,5) \]
+  <ul style="margin:10px 0 16px 22px;">
+    <li>\(\mu = 500\) ml — mittlere Füllmenge</li>
+    <li>\(\sigma = 5\) ml — typische Streuung</li>
+  </ul>
+
+  <div class="info-box warning">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Interpretation mit der Faustregel:</strong><br>
+      Etwa 68 % der Flaschen liegen zwischen \(500 \pm 5\) ml, also ungefähr in \([495;\,505]\). Etwa 95 % liegen ungefähr zwischen \(490\) und \(510\) ml.
+    </div>
+  </div>
+
+  <p><strong>Qualitätsmanagement:</strong> Grösseres \(\sigma\) bedeutet mehr Unterfüllung und Überfüllung — Reklamationen bzw. Materialkosten. Ein zu kleines \(\mu\) verschiebt die ganze Verteilung nach links — das Risiko sinkt, die deklarierte Menge zu unterschreiten.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Beispiel</span>
+    </div>
+    <p><strong>Frage 1:</strong> Ungefähr 68 % der Flaschen liegen bei diesem Modell zwischen …</p>
+    <div class="quiz-options" data-quiz="nv4_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">480 und 520 ml</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">490 und 510 ml</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">495 und 505 ml</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">499 und 501 ml</div>
+    </div>
+    <div class="feedback" id="fb_nv4_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Steigt \(\sigma\) von 5 ml auf 8 ml (bei gleichem \(\mu\)), dann …</p>
+    <div class="quiz-options" data-quiz="nv4_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">sinkt die Wahrscheinlichkeit von Ausreissern nach unten/oben</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">steigt typischerweise die Wahrscheinlichkeit extremer Abweichungen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">bleibt die Streuung gleich</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">wird \(\mu\) automatisch grösser</div>
+    </div>
+    <div class="feedback" id="fb_nv4_2"></div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-check" onclick="checkQuizGroup(4, ['nv4_1','nv4_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(5)">Weiter: Anwenden →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 6 ═══ -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Standardisieren &amp; Wahrscheinlichkeiten</div>
+
+  <div class="formula-box">
+    <div class="formula-label">z-Transformation</div>
+    \[ z = \frac{x - \mu}{\sigma} \]
+    <p style="font-size:0.92rem; margin-top:10px;">Damit gilt \(Z = \dfrac{X-\mu}{\sigma} \sim \mathcal{N}(0;\,1)\). In der Tabelle bzw. im Rechner liest man \(\Phi(z)\) ab.</p>
+  </div>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div><strong>Standardisieren:</strong> \(z\) aus \(x\), \(\mu\), \(\sigma\) berechnen.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div><strong>Verteilungsfunktion:</strong> \(\Phi(z)\) mit Tabelle/GeoGebra/Taschenrechner — achte auf „\(\le\)“ vs. „\(\ge\)“ (Komplement: \(1 - \Phi(z)\)).</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div><strong>Interpretation:</strong> Antwort im Kontext (z.&nbsp;B. „Anteil der Flaschen mit höchstens 490 ml“).</div>
+    </div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">🔢</div>
+    <div>
+      <strong>Beispielrechnung (ohne Tabelle):</strong> Für \(X \sim \mathcal{N}(500;\,5)\) ist \(P(X \le 490)\): zuerst \(z = (490 - 500)/5 = -2\), dann \(\Phi(-2) \approx 0{,}0228\) (rund <strong>2,3 %</strong>).
+    </div>
+  </div>
+
+  <div class="exercise" style="background:linear-gradient(135deg, #FAFBFC, #F0F7FF);">
+    <div class="exercise-header">
+      <span class="exercise-badge">Interaktiv</span>
+      <span class="exercise-title">Mini-Rechner (Browser)</span>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="z_x">\(x\)</label>
+        <input type="text" id="z_x" value="490" placeholder="z. B. 490">
+      </div>
+      <div class="input-group">
+        <label for="z_mu">\(\mu\)</label>
+        <input type="text" id="z_mu" value="500">
+      </div>
+      <div class="input-group">
+        <label for="z_sigma">\(\sigma\)</label>
+        <input type="text" id="z_sigma" value="5">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="computeZ()">\(z\) berechnen</button>
+    <p id="z_out" style="margin-top:12px; font-weight:700;"></p>
+
+    <hr style="margin:20px 0; border:none; border-top:1px dashed #ccc;">
+
+    <p style="font-size:0.95rem; margin-bottom:10px;"><strong>Wahrscheinlichkeit \(P(X \le x)\)</strong> (Näherung über die Normalverteilung):</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="px_x">\(x\)</label>
+        <input type="text" id="px_x" value="490">
+      </div>
+      <div class="input-group">
+        <label for="px_mu">\(\mu\)</label>
+        <input type="text" id="px_mu" value="500">
+      </div>
+      <div class="input-group">
+        <label for="px_sigma">\(\sigma\)</label>
+        <input type="text" id="px_sigma" value="5">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="computePX()">\(P(X \le x)\) näherungsweise</button>
+    <p id="px_out" style="margin-top:12px; font-weight:700;"></p>
+  </div>
+
+  <div class="formula-box" style="margin-top:20px;">
+    <div class="formula-label">Mini-Merkkarte (für’s Heft)</div>
+    <ul style="text-align:left; margin:0; padding-left:20px; font-size:0.95rem;">
+      <li>Normalverteilung: symmetrische Glockenkurve, Fläche = 1</li>
+      <li>\(\mu\): Lage · \(\sigma\): Streuung · \(\sigma^2\): Varianz</li>
+      <li>Wahrscheinlichkeiten = Flächen; \(P(X=x)=0\) bei stetig</li>
+      <li>68–95–99,7-Regel zum schnellen Plausibilisieren</li>
+      <li>\(z = (x-\mu)/\sigma\); \(P(X\le x)=\Phi\!\big(\frac{x-\mu}{\sigma}\big)\)</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Standardisierung</span>
+    </div>
+    <p><strong>Frage 1:</strong> Für \(x=490\), \(\mu=500\), \(\sigma=5\) ist \(z\) gleich …</p>
+    <div class="quiz-options" data-quiz="nv5_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(-2\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(2\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(-10\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(98\)</div>
+    </div>
+    <div class="feedback" id="fb_nv5_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(P(X \le x)\) berechnest du als …</p>
+    <div class="quiz-options" data-quiz="nv5_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\Phi(x)\) ohne Standardisierung</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\Phi(\mu)\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\Phi\!\big(\frac{x-\mu}{\sigma}\big)\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\Phi(x-\mu)\)</div>
+    </div>
+    <div class="feedback" id="fb_nv5_2"></div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-check" onclick="checkQuizGroup(5, ['nv5_1','nv5_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(6)">Weiter: Übungen →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 7 ═══ -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Übungen &amp; Abschlussquiz</div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung A</span>
+      <span class="exercise-title">Füllmenge</span>
+    </div>
+    <p>\(X \sim \mathcal{N}(500;\,5)\) (ml). Berechne \(z\) für \(x = 490\).</p>
+    <div class="input-group">
+      <label for="u1_z">\(z =\)</label>
+      <input type="text" id="u1_z" placeholder="Dein Wert">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkU1()">Überprüfen</button>
+    <div class="feedback" id="fb_u1"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung B</span>
+      <span class="exercise-title">Wahrscheinlichkeit</span>
+    </div>
+    <p>Wie gross ist \(P(X \le 490)\) näherungsweise? (Dezimalzahl <code>0,0228</code> oder Prozent <code>2,28</code>)</p>
+    <div class="input-group">
+      <label for="u2_p">Antwort</label>
+      <input type="text" id="u2_p" placeholder="0,0228 oder 2,28">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkU2()">Überprüfen</button>
+    <div class="feedback" id="fb_u2"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung C</span>
+      <span class="exercise-title">Faustregel</span>
+    </div>
+    <p>Wo liegen etwa 68 % der Werte bei \(\mathcal{N}(500;\,5)\)? (untere und obere Grenze)</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="u3_lo">unten</label>
+        <input type="text" id="u3_lo" placeholder="495">
+      </div>
+      <div class="input-group">
+        <label for="u3_hi">oben</label>
+        <input type="text" id="u3_hi" placeholder="505">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkU3()">Überprüfen</button>
+    <div class="feedback" id="fb_u3"></div>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:28px;">Abschlussquiz</h3>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+
+  <div id="finalResult" style="display:none; margin-top:20px;">
+    <div class="info-box success">
+      <div class="icon">🏆</div>
+      <div>
+        <strong id="finalScore"></strong>
+        <p id="finalMessage" style="margin-top:8px;"></p>
+        <div class="badge-container" id="badgeContainer"></div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-hint" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(7)">Weiter: Tools →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 8 (optional) ═══ -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Technologie &amp; Vertiefung</div>
+
+  <p>Für Klausuren und Projekte lohnt sich der sichere Umgang mit <strong>GeoGebra</strong>, Tabellenwerk oder Taschenrechner (TI/NumWorks/Casio). Hier der gleiche <strong>Normalverteilungsrechner</strong> wie im Schwester-Lernpfad:</p>
+
+  <div class="geogebra-embed">
+    <p class="geogebra-embed-title">Normalverteilungsrechner (GeoGebra)</p>
+    <div class="geogebra-iframe-wrap">
+      <iframe title="Normalverteilungsrechner – GeoGebra"
+        src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
+        width="900" height="460" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <p class="geogebra-embed-note">Trage \(\mu\) und \(\sigma\) ein und lies \(P(X \le x)\) oder Tail-Wahrscheinlichkeiten ab. Für <em>diese</em> reine Normalverteilung brauchst du <strong>keine</strong> Stetigkeitskorrektur — die ist nur beim Übergang von diskreten Verteilungen (z.&nbsp;B. Binomial) relevant.</p>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">📎</div>
+    <div>
+      <strong>Excel (Stichwort):</strong> <code>NORM.VERT(x; μ; σ; WAHR)</code> für die Verteilungsfunktion · <code>NORM.INV(p; μ; σ)</code> für Quantile.<br>
+      <strong>GeoGebra:</strong> Wahrscheinlichkeitsrechner → Normalverteilung, Parameter eingeben.
+    </div>
+  </div>
+
+  <div class="info-box warning">
+    <div class="icon">📚</div>
+    <div>
+      <strong>Optional (Vertiefung):</strong> Lineare Transformationen: Wenn \(X \sim \mathcal{N}(\mu;\sigma)\), dann \(Y = aX + b\) ist wieder normalverteilt mit \(E(Y)=a\mu+b\) und entsprechender Streuung. Summen unabhängiger normalverteilter Grössen sind wieder normalverteilt — ein Fundament für viele Modelle in Statistik und Ökonometrie.
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(6)">← Zurück zu Übungen</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad erstellt für die HAK Steyr Abendschule · Mathematik<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div><!-- container -->
+
+<div class="floating-tools-wrap" id="floatingToolsWrap">
+  <div class="floating-tools-menu" id="floatingToolsMenu" role="menu" aria-label="Rechner und GeoGebra">
+    <button type="button" role="menuitem" onclick="openCalculatorModal();">
+      <span class="ft-icon" aria-hidden="true">🔢</span>
+      <span>Taschenrechner</span>
+    </button>
+    <button type="button" role="menuitem" onclick="openGeoGebraFromFloatingTools();">
+      <span class="ft-icon" aria-hidden="true">📊</span>
+      <span>Normalverteilung (GeoGebra)</span>
+    </button>
+  </div>
+  <button type="button" class="floating-tools-fab" id="floatingToolsFab" onclick="toggleFloatingToolsMenu()"
+    aria-label="Werkzeuge" aria-expanded="false" aria-controls="floatingToolsMenu" title="Werkzeuge">🧮</button>
+</div>
+
+<div id="calcModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="calcModalTitle" aria-hidden="true">
+  <div class="gg-modal-backdrop" onclick="closeCalculatorModal()"></div>
+  <div class="gg-modal-dialog calc-modal-dialog">
+    <div class="gg-modal-header">
+      <h2 id="calcModalTitle">Taschenrechner</h2>
+      <button type="button" class="gg-modal-close" onclick="closeCalculatorModal()" aria-label="Schließen">&times;</button>
+    </div>
+    <div class="gg-modal-body">
+      <div class="calc-display-wrap">
+        <input type="text" class="calc-display" id="calcDisplay" value="0" readonly inputmode="none" aria-live="polite">
+      </div>
+      <div class="calc-keys">
+        <button type="button" onclick="calcClear()">C</button>
+        <button type="button" onclick="calcBackspace()">⌫</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('/')">÷</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('*')">×</button>
+        <button type="button" onclick="calcPressDigit('7')">7</button>
+        <button type="button" onclick="calcPressDigit('8')">8</button>
+        <button type="button" onclick="calcPressDigit('9')">9</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('-')">−</button>
+        <button type="button" onclick="calcPressDigit('4')">4</button>
+        <button type="button" onclick="calcPressDigit('5')">5</button>
+        <button type="button" onclick="calcPressDigit('6')">6</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('+')">+</button>
+        <button type="button" onclick="calcPressDigit('1')">1</button>
+        <button type="button" onclick="calcPressDigit('2')">2</button>
+        <button type="button" onclick="calcPressDigit('3')">3</button>
+        <button type="button" class="calc-eq" onclick="calcEquals()">=</button>
+        <button type="button" class="calc-wide" onclick="calcPressDigit('0')">0</button>
+        <button type="button" onclick="calcPressDigit('.')">,</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--text-light); margin-top:12px;">Dezimalzahlen intern mit Punkt — Anzeige mit Komma.</p>
+    </div>
+  </div>
+</div>
+
+<div id="geogebraModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="ggModalTitle" aria-hidden="true">
+  <div class="gg-modal-backdrop" onclick="closeGeoGebraModal()"></div>
+  <div class="gg-modal-dialog">
+    <div class="gg-modal-header">
+      <h2 id="ggModalTitle">Normalverteilungsrechner</h2>
+      <button type="button" class="gg-modal-close" onclick="closeGeoGebraModal()" aria-label="Schließen">&times;</button>
+    </div>
+    <div class="gg-modal-body" id="ggModalBody">
+      <p class="gg-modal-intro">Trage \(\mu\) und \(\sigma\) ein und lies Wahrscheinlichkeiten zur Normalverteilung ab (links/rechts von einer Grenze).</p>
+      <div class="geogebra-iframe-wrap">
+        <iframe id="geogebraModalFrame" title="Normalverteilungsrechner – GeoGebra"
+          data-src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
+          src="about:blank"
+          width="900" height="460" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <p class="gg-modal-footer">
+        <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">In neuem Tab öffnen</a>
+        · Kurt Söser
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="js/normalverteilung-grundlagen/app.js"></script>
+<script>
+(function () {
+  function syncRuleSliders() {
+    var mu = document.getElementById('ruleMu');
+    var sg = document.getElementById('ruleSigma');
+    var vm = document.getElementById('valRuleMu');
+    var vs = document.getElementById('valRuleSigma');
+    if (mu && vm) vm.textContent = mu.value;
+    if (sg && vs) vs.textContent = sg.value;
+  }
+  var rm = document.getElementById('ruleMu');
+  var rs = document.getElementById('ruleSigma');
+  if (rm) rm.addEventListener('input', syncRuleSliders);
+  if (rs) rs.addEventListener('input', syncRuleSliders);
+  syncRuleSliders();
+})();
+</script>
+</body>
+</html>
