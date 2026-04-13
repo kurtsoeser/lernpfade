@@ -87,6 +87,9 @@ function switchTab(idx) {
   }
   if (idx === 2 && ruleChart) setTimeout(() => ruleChart.resize(), 60);
   if (idx === 3 && bellChart) setTimeout(() => bellChart.resize(), 60);
+  if (typeof window.nvRechnerRedrawAll === 'function') {
+    setTimeout(() => window.nvRechnerRedrawAll(), 100);
+  }
 }
 
 function updateProgress() {
@@ -644,17 +647,43 @@ function resetFinalQuiz() {
 // ══════════════════════════════════════════════
 // GeoGebra Modal
 // ══════════════════════════════════════════════
-function openGeoGebraModal() {
-  const modal = document.getElementById('geogebraModal');
-  const frame = document.getElementById('geogebraModalFrame');
-  if (frame && frame.dataset.src && !frame.dataset.loaded) {
-    frame.src = frame.dataset.src;
-    frame.dataset.loaded = '1';
+function closeBinomModal() {
+  const modal = document.getElementById('binomModal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   }
+}
+
+function openBinomModal() {
+  closeGeoGebraModal();
+  if (typeof closeCalculatorModal === 'function') closeCalculatorModal();
+  const modal = document.getElementById('binomModal');
   if (modal) {
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+  }
+  if (typeof window.bvRechnerRedrawAll === 'function') {
+    setTimeout(function () { window.bvRechnerRedrawAll(); }, 80);
+  }
+  if (window.MathJax && MathJax.typesetPromise) {
+    const body = document.getElementById('binomModalBody');
+    if (body) MathJax.typesetPromise([body]).catch(function () {});
+  }
+}
+
+function openGeoGebraModal() {
+  closeBinomModal();
+  const modal = document.getElementById('geogebraModal');
+  if (modal) {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  if (typeof window.nvRechnerRedrawAll === 'function') {
+    setTimeout(function () { window.nvRechnerRedrawAll(); }, 80);
   }
   if (window.MathJax && MathJax.typesetPromise) {
     const body = document.getElementById('ggModalBody');
@@ -758,6 +787,7 @@ function calcBackspace() {
 }
 function openCalculatorModal() {
   closeGeoGebraModal();
+  if (typeof closeBinomModal === 'function') closeBinomModal();
   closeFloatingToolsMenu();
   var m = document.getElementById('calcModal');
   if (m) {
@@ -795,7 +825,21 @@ function openGeoGebraFromFloatingTools() {
   openGeoGebraModal();
 }
 
+function openBinomFromFloatingTools() {
+  closeCalculatorModal();
+  closeFloatingToolsMenu();
+  openBinomModal();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   updateProgress();
   buildFinalQuiz();
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    if (typeof closeGeoGebraModal === 'function') closeGeoGebraModal();
+    if (typeof closeBinomModal === 'function') closeBinomModal();
+    if (typeof closeCalculatorModal === 'function') closeCalculatorModal();
+    if (typeof closeFloatingToolsMenu === 'function') closeFloatingToolsMenu();
+  }
 });

@@ -86,6 +86,7 @@ function calcBackspace() {
 
 function openCalculatorModal() {
   closeGeoGebraModal();
+  if (typeof closeBinomModal === 'function') closeBinomModal();
   closeFloatingToolsMenu();
   var m = document.getElementById('calcModal');
   if (m) {
@@ -125,6 +126,12 @@ function openGeoGebraFromFloatingTools() {
   closeCalculatorModal();
   closeFloatingToolsMenu();
   openGeoGebraModal();
+}
+
+function openBinomFromFloatingTools() {
+  closeCalculatorModal();
+  closeFloatingToolsMenu();
+  openBinomModal();
 }
 
 (function patchOpenGeoGebraModal() {

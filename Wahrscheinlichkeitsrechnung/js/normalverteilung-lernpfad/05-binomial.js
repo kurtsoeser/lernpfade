@@ -38,6 +38,32 @@ function formatBinomialScientific(log10c) {
   return '≈ ' + mantStr + ' · 10^' + exp;
 }
 
+/** Synchronisiert Schieberegler mit den Zahleneingaben (\(k\)-Regler: max = \(n\)). */
+function syncBinomialSliders() {
+  const nEl = document.getElementById('binomN');
+  const kEl = document.getElementById('binomK');
+  const nRange = document.getElementById('binomNRange');
+  const kRange = document.getElementById('binomKRange');
+  if (!nEl || !kEl || !nRange || !kRange) return;
+  const nMax = 8000;
+  let n = parseInt(nEl.value, 10);
+  let k = parseInt(kEl.value, 10);
+  if (Number.isNaN(n)) n = 0;
+  if (Number.isNaN(k)) k = 0;
+  n = Math.min(Math.max(0, n), nMax);
+  nRange.value = String(n);
+  nRange.max = String(nMax);
+  const kCap = Math.min(n, nMax);
+  kEl.setAttribute('max', String(kCap));
+  kRange.max = String(kCap);
+  kRange.min = '0';
+  if (k <= n) {
+    kRange.value = String(k);
+  } else {
+    kRange.value = String(kCap);
+  }
+}
+
 function updateBinomialCoefficient() {
   const out = document.getElementById('binomCoeffOut');
   const nEl = document.getElementById('binomN');
@@ -53,6 +79,7 @@ function updateBinomialCoefficient() {
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise([out]).catch(function () {});
     }
+    syncBinomialSliders();
     return;
   }
   if (n < 0 || k < 0) {
@@ -60,6 +87,7 @@ function updateBinomialCoefficient() {
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise([out]).catch(function () {});
     }
+    syncBinomialSliders();
     return;
   }
   if (n > nMax) {
@@ -76,6 +104,7 @@ function updateBinomialCoefficient() {
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise([out]).catch(function () {});
     }
+    syncBinomialSliders();
     return;
   }
 
@@ -85,6 +114,7 @@ function updateBinomialCoefficient() {
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise([out]).catch(function () {});
     }
+    syncBinomialSliders();
     return;
   }
 
@@ -123,4 +153,31 @@ function updateBinomialCoefficient() {
   if (window.MathJax && MathJax.typesetPromise) {
     MathJax.typesetPromise([out]).catch(function () {});
   }
+  syncBinomialSliders();
+}
+
+function wireBinomialSliders() {
+  const nEl = document.getElementById('binomN');
+  const kEl = document.getElementById('binomK');
+  const nRange = document.getElementById('binomNRange');
+  const kRange = document.getElementById('binomKRange');
+  if (!nEl || !kEl || !nRange || !kRange) return;
+  nRange.addEventListener('input', function () {
+    const n = parseInt(nRange.value, 10);
+    nEl.value = n;
+    let k = parseInt(kEl.value, 10);
+    if (Number.isNaN(k)) k = 0;
+    if (k > n) kEl.value = n;
+    updateBinomialCoefficient();
+  });
+  kRange.addEventListener('input', function () {
+    kEl.value = kRange.value;
+    updateBinomialCoefficient();
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', wireBinomialSliders);
+} else {
+  wireBinomialSliders();
 }

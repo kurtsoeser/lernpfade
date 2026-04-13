@@ -178,8 +178,408 @@ body {
 .geogebra-iframe-wrap iframe {
   display: block; width: 100%; height: 520px; border: 0; vertical-align: top;
 }
+.sk-canvas-wrap {
+  aspect-ratio: 900 / 520;
+  min-height: 280px;
+  background: #fff;
+}
+.sk-canvas-wrap canvas {
+  display: block; width: 100%; height: 100%; vertical-align: top;
+}
+.sk-widget-toolbar {
+  display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end;
+  justify-content: center; margin-bottom: 14px; font-family: 'Nunito', sans-serif;
+}
+.sk-widget-toolbar label {
+  display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; font-weight: 700;
+  color: var(--blue-dark); text-align: center; min-width: 200px;
+}
+.sk-widget-toolbar input[type="range"] { width: min(280px, 100%); cursor: pointer; }
+.sk-widget-value {
+  font-family: ui-monospace, Consolas, monospace; font-weight: 800; font-size: 1rem; color: var(--text);
+}
+.sk-widget-sub { font-weight: 600; color: var(--text-light); font-size: 0.85rem; }
+.sk-widget-reset { align-self: flex-end; margin-top: 0; }
+.sk-step-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 10px;
+  margin: 10px auto 12px;
+  max-width: 900px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #f8fbff, #fff);
+  border: 1px solid rgba(59, 130, 196, 0.25);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  font-family: 'Nunito', sans-serif;
+}
+.sk-step-buttons-label {
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: var(--blue-dark);
+  margin-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sk-step-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 2px solid #d0d8e0;
+  background: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.sk-step-btn:hover {
+  border-color: var(--blue);
+  background: var(--blue-light);
+  color: var(--blue-dark);
+}
+.sk-step-btn.active {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(59, 130, 196, 0.35);
+}
+@media (max-width: 700px) {
+  .sk-step-btn { padding: 7px 10px; font-size: 0.75rem; }
+  .sk-step-buttons-label { width: 100%; text-align: center; margin-right: 0; margin-bottom: 4px; }
+}
+.sk-widget-formulas {
+  font-size: 0.92rem; text-align: center; margin-bottom: 12px; line-height: 1.65;
+  min-height: 4.2em;
+}
+.sk-formula-line { margin: 6px 0; }
+.sk-formula-binomial { color: #8B0000; font-family: 'Nunito', sans-serif; }
+.sk-formula-green { color: #2E7D32; }
+.sk-formula-amber { color: #B45309; font-weight: 600; }
+.sk-step-hint {
+  font-size: 0.86rem; color: var(--text-light); text-align: center; margin: 0 0 14px;
+  line-height: 1.5; max-width: 640px; margin-left: auto; margin-right: auto;
+}
 @media (max-width: 700px) {
   .geogebra-iframe-wrap iframe { height: 420px; min-height: 360px; }
+  .sk-widget-toolbar label { min-width: 160px; }
+}
+
+/* Normalverteilungsrechner (nativ, GeoGebra-ähnlich) */
+.nv-rechner {
+  font-family: 'Nunito', system-ui, sans-serif;
+}
+.nv-rechner-layout {
+  display: grid;
+  grid-template-columns: minmax(176px, 210px) minmax(260px, 1fr);
+  gap: 14px 16px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .nv-rechner-layout { grid-template-columns: 1fr; }
+}
+.nv-rechner-sidebar {
+  padding: 4px 2px 8px;
+}
+.nv-intervals-caption {
+  font-size: 0.72rem; font-weight: 800; color: var(--blue-dark);
+  margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.nv-mode-group {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px;
+}
+.nv-mode-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 6px;
+  padding: 8px 4px 10px; font-size: 0.72rem; font-weight: 700;
+  border: 2px solid #c8d9e8; border-radius: 10px; background: #fff;
+  color: var(--blue-dark); cursor: pointer; line-height: 1.2;
+  font-family: 'Nunito', system-ui, sans-serif;
+  text-align: center;
+}
+.nv-mode-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+.nv-mode-btn--active {
+  border-color: var(--blue); background: linear-gradient(180deg, #e8f4ff, #fff);
+  box-shadow: 0 0 0 1px rgba(59,130,196,0.35);
+}
+.mode-interval-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%;
+  flex-shrink: 0;
+  color: #64748b;
+}
+.mode-interval-icon svg {
+  width: 44px;
+  height: 26px;
+  display: block;
+}
+.nv-mode-btn--active .mode-interval-icon,
+.bv-mode-btn--active .mode-interval-icon {
+  color: var(--blue-dark);
+}
+.mode-interval-label {
+  display: block;
+  line-height: 1.2;
+}
+.nv-params { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+.nv-field { display: flex; flex-direction: column; gap: 4px; min-width: 100px; }
+.nv-field-label { font-weight: 700; font-size: 0.88rem; color: var(--text); }
+.nv-field input[type="text"] {
+  width: 100%; max-width: 140px; padding: 8px 10px;
+  border: 2px solid #c8d9e8; border-radius: 8px; font-size: 1rem;
+  font-family: ui-monospace, Consolas, monospace;
+}
+.nv-field input:focus { border-color: var(--blue); outline: none; }
+.nv-formula-display {
+  min-height: 2.4em; font-size: 0.88rem; font-family: ui-monospace, Consolas, monospace;
+  color: var(--text); margin: 10px 0 6px; line-height: 1.35;
+}
+.nv-bounds { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+.nv-result-line {
+  margin-top: 10px; font-size: 1.02rem; color: var(--text);
+  padding-top: 10px; border-top: 1px solid rgba(59,130,196,0.2);
+}
+.nv-result-line input.nv-prob-out {
+  min-width: 7.5em; max-width: min(100%, 22em);
+  padding: 4px 8px; margin-left: 4px;
+  border: none; border-bottom: 2px solid rgba(59, 130, 196, 0.55);
+  font-weight: 700; font-size: 1rem;
+  font-family: ui-monospace, Consolas, monospace;
+  background: transparent; color: var(--text);
+}
+.nv-result-line input.nv-prob-out:read-only {
+  border-bottom-color: #cbd5e1; cursor: default;
+}
+.nv-result-line input.nv-prob-out:not(:read-only) {
+  cursor: text;
+}
+.nv-result-line input.nv-prob-out:focus {
+  outline: none; border-bottom-color: var(--blue);
+}
+.nv-graph-wrap {
+  background: #fff; border: 1px solid rgba(59,130,196,0.22);
+  border-radius: 12px; overflow: hidden; min-height: 260px;
+}
+.nv-canvas {
+  display: block; width: 100%; vertical-align: top;
+  touch-action: none;
+  user-select: none;
+}
+.gg-modal-dialog--nv {
+  width: min(940px, 100%);
+}
+
+/* Binomialverteilungsrechner — gleiche Layout-Struktur wie NV */
+.bv-rechner {
+  font-family: 'Nunito', system-ui, sans-serif;
+}
+.bv-rechner-layout {
+  display: grid;
+  grid-template-columns: minmax(176px, 210px) minmax(260px, 1fr);
+  gap: 14px 16px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .bv-rechner-layout { grid-template-columns: 1fr; }
+}
+.bv-rechner-sidebar {
+  padding: 4px 2px 8px;
+}
+.bv-intervals-caption {
+  font-size: 0.72rem; font-weight: 800; color: var(--blue-dark);
+  margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.bv-mode-group {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px;
+}
+.bv-mode-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 6px;
+  padding: 8px 4px 10px; font-size: 0.72rem; font-weight: 700;
+  border: 2px solid #c8d9e8; border-radius: 10px; background: #fff;
+  color: var(--blue-dark); cursor: pointer; line-height: 1.2;
+  font-family: 'Nunito', system-ui, sans-serif;
+  text-align: center;
+}
+.bv-mode-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+.bv-mode-btn--active {
+  border-color: var(--blue); background: linear-gradient(180deg, #e8f4ff, #fff);
+  box-shadow: 0 0 0 1px rgba(59,130,196,0.35);
+}
+.bv-params { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+.bv-field { display: flex; flex-direction: column; gap: 4px; min-width: 100px; }
+.bv-field-label { font-weight: 700; font-size: 0.88rem; color: var(--text); }
+.bv-field input[type="text"] {
+  width: 100%; max-width: 140px; padding: 8px 10px;
+  border: 2px solid #c8d9e8; border-radius: 8px; font-size: 1rem;
+  font-family: ui-monospace, Consolas, monospace;
+}
+.bv-field input:focus { border-color: var(--blue); outline: none; }
+.bv-formula-display {
+  min-height: 2.4em; font-size: 0.88rem; font-family: ui-monospace, Consolas, monospace;
+  color: var(--text); margin: 10px 0 6px; line-height: 1.35;
+}
+.bv-bounds { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+.bv-result-line {
+  margin-top: 10px; font-size: 1.02rem; color: var(--text);
+  padding-top: 10px; border-top: 1px solid rgba(59,130,196,0.2);
+}
+.bv-result-line input.bv-prob-out {
+  min-width: 7.5em; max-width: min(100%, 22em);
+  padding: 4px 8px; margin-left: 4px;
+  border: none; border-bottom: 2px solid rgba(59, 130, 196, 0.55);
+  font-weight: 700; font-size: 1rem;
+  font-family: ui-monospace, Consolas, monospace;
+  background: transparent; color: var(--text);
+}
+.bv-result-line input.bv-prob-out:read-only {
+  border-bottom-color: #cbd5e1; cursor: default;
+}
+.bv-result-line input.bv-prob-out:not(:read-only) {
+  cursor: text;
+}
+.bv-result-line input.bv-prob-out:focus {
+  outline: none; border-bottom-color: var(--blue);
+}
+.bv-graph-wrap {
+  background: #fff; border: 1px solid rgba(59,130,196,0.22);
+  border-radius: 12px; overflow: hidden; min-height: 260px;
+  display: flex; flex-direction: column;
+}
+.bv-graph-toolbar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 8px 12px; padding: 8px 10px;
+  border-bottom: 1px solid rgba(59,130,196,0.15);
+  background: linear-gradient(180deg, #f8fafc, #fff);
+}
+.bv-toolbar-actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+}
+.bv-table-toggle {
+  flex-shrink: 0;
+  padding: 6px 12px; font-size: 0.8rem; font-weight: 700;
+  border: 2px solid #93c5fd; border-radius: 10px; background: #fff;
+  color: var(--blue-dark); cursor: pointer; font-family: 'Nunito', sans-serif;
+}
+.bv-table-toggle:hover { background: var(--blue-light); border-color: var(--blue); }
+.bv-table-toggle[aria-expanded="true"] {
+  background: linear-gradient(180deg, #dbeafe, #fff);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 1px rgba(59,130,196,0.25);
+}
+.bv-graph-main {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-height: 200px;
+  overflow: hidden;
+}
+.bv-canvas-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 200px;
+}
+.bv-pmf-table-panel {
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: flex-basis 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.28s ease;
+}
+.bv-pmf-table-panel--open {
+  flex: 0 0 232px;
+  width: 232px;
+  min-width: 232px;
+  max-width: 232px;
+  opacity: 1;
+}
+.bv-pmf-table-scroll {
+  width: 216px;
+  max-height: min(52vh, 360px);
+  overflow: auto;
+  padding: 10px 8px 10px 12px;
+  border-left: 1px solid rgba(59, 130, 196, 0.22);
+  background: linear-gradient(180deg, #fafbff, #fff);
+  box-sizing: border-box;
+}
+.bv-pmf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-family: ui-monospace, Consolas, monospace;
+}
+.bv-pmf-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 8px 10px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--blue-dark);
+  background: linear-gradient(180deg, #e8eef8, #dfe8f4);
+  border-bottom: 2px solid rgba(59, 130, 196, 0.35);
+}
+.bv-pmf-table tbody td {
+  padding: 6px 10px;
+  text-align: center;
+  border-bottom: 1px solid #e8e8e8;
+  color: var(--text);
+}
+.bv-pmf-table tbody tr:nth-child(even) td {
+  background: rgba(139, 92, 246, 0.06);
+}
+.bv-pmf-table-note {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  padding: 6px 4px 0;
+  line-height: 1.35;
+}
+.bv-stats {
+  font-size: 0.88rem; font-weight: 700; color: var(--blue-dark);
+  font-family: ui-monospace, Consolas, monospace;
+  line-height: 1.35;
+}
+.bv-stats .bv-stats-muted {
+  font-weight: 600; color: var(--text-light); font-size: 0.78rem; margin-left: 6px;
+}
+.bv-normal-toggle {
+  flex-shrink: 0;
+  padding: 6px 12px; font-size: 0.8rem; font-weight: 700;
+  border: 2px solid #e2a3a3; border-radius: 10px; background: #fff;
+  color: #b91c1c; cursor: pointer; font-family: 'Nunito', system-ui, sans-serif;
+}
+.bv-normal-toggle:hover { background: #fef2f2; border-color: #dc2626; }
+.bv-normal-toggle--active {
+  background: linear-gradient(180deg, #fee2e2, #fff);
+  border-color: #dc2626; box-shadow: 0 0 0 1px rgba(220,38,38,0.25);
+}
+.bv-canvas {
+  display: block; width: 100%; vertical-align: top;
+  touch-action: none;
+  user-select: none;
+}
+@media (max-width: 640px) {
+  .bv-pmf-table-panel--open {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .bv-graph-main {
+    flex-direction: column;
+  }
+  .bv-pmf-table-scroll {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(59, 130, 196, 0.22);
+    max-height: 220px;
+  }
 }
 
 /* GeoGebra Modal (Übungen) */
@@ -288,7 +688,10 @@ body {
   font-size: 0.88rem; color: var(--text-light); margin-bottom: 14px;
 }
 .binom-widget-controls {
-  display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;
+  display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;
+}
+.binom-field {
+  flex: 1 1 220px; min-width: 200px; max-width: 360px;
 }
 .binom-field label {
   display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;
@@ -299,6 +702,10 @@ body {
 }
 .binom-field input[type=number]:focus {
   border-color: var(--blue); outline: none;
+}
+.binom-field-range {
+  display: block; width: 100%; margin-top: 10px; cursor: pointer;
+  accent-color: var(--blue);
 }
 .binom-widget-result {
   margin-top: 14px; padding: 12px 14px; background: white; border-radius: 10px;

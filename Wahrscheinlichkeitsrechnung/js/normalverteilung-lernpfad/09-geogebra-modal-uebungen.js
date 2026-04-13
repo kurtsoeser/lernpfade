@@ -1,17 +1,43 @@
 // ══════════════════════════════════════════════
 // GEOGEBRA-MODAL (Übungen)
 // ══════════════════════════════════════════════
-function openGeoGebraModal() {
-  const modal = document.getElementById('geogebraModal');
-  const frame = document.getElementById('geogebraModalFrame');
-  if (frame && frame.dataset.src && !frame.dataset.loaded) {
-    frame.src = frame.dataset.src;
-    frame.dataset.loaded = '1';
+function closeBinomModal() {
+  const modal = document.getElementById('binomModal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   }
+}
+
+function openBinomModal() {
+  closeGeoGebraModal();
+  if (typeof closeCalculatorModal === 'function') closeCalculatorModal();
+  const modal = document.getElementById('binomModal');
   if (modal) {
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+  }
+  if (typeof window.bvRechnerRedrawAll === 'function') {
+    setTimeout(function () { window.bvRechnerRedrawAll(); }, 80);
+  }
+  if (window.MathJax && MathJax.typesetPromise) {
+    var body = document.getElementById('binomModalBody');
+    if (body) MathJax.typesetPromise([body]).catch(function () {});
+  }
+}
+
+function openGeoGebraModal() {
+  closeBinomModal();
+  const modal = document.getElementById('geogebraModal');
+  if (modal) {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  if (typeof window.nvRechnerRedrawAll === 'function') {
+    setTimeout(function () { window.nvRechnerRedrawAll(); }, 80);
   }
   if (window.MathJax && MathJax.typesetPromise) {
     var body = document.getElementById('ggModalBody');

@@ -32,6 +32,14 @@ function switchTab(idx) {
   if (idx === 1 && mainChart) {
     setTimeout(() => mainChart.resize(), 50);
   }
+
+  if (idx === 3 && typeof skWidgetResize === 'function') {
+    setTimeout(() => skWidgetResize(), 80);
+  }
+
+  if (typeof nvRechnerRedrawAll === 'function') {
+    setTimeout(() => nvRechnerRedrawAll(), 100);
+  }
 }
 
 // ══════════════════════════════════════════════

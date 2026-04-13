@@ -141,17 +141,21 @@ MathJax = {
 
   <div class="binom-widget">
     <div class="binom-widget-title">Binomialkoeffizient \(\displaystyle\binom{n}{k}\) — interaktiv</div>
-    <p class="binom-widget-hint">Stelle \(n\) und \(k\) ein. Die Berechnung erfolgt <strong>exakt</strong> (über Ganzzahlarithmetik im Browser) — auch für sehr große Werte, bei denen ein Taschenrechner schnell an Grenzen stößt.</p>
+    <p class="binom-widget-hint">Stelle \(n\) und \(k\) mit Zahleneingabe oder <strong>Schieberegler</strong> ein. Die Berechnung erfolgt <strong>exakt</strong> (über Ganzzahlarithmetik im Browser) — auch für sehr große Werte, bei denen ein Taschenrechner schnell an Grenzen stößt.</p>
     <div class="binom-widget-controls">
       <div class="binom-field">
         <label for="binomN">\(n\)</label>
         <input type="number" id="binomN" min="0" max="8000" step="1" value="500"
           oninput="updateBinomialCoefficient()" aria-label="n für Binomialkoeffizient">
+        <input type="range" id="binomNRange" class="binom-field-range" min="0" max="8000" value="500" step="1"
+          aria-label="Schieberegler n für Binomialkoeffizient">
       </div>
       <div class="binom-field">
         <label for="binomK">\(k\)</label>
         <input type="number" id="binomK" min="0" max="8000" step="1" value="20"
           oninput="updateBinomialCoefficient()" aria-label="k für Binomialkoeffizient">
+        <input type="range" id="binomKRange" class="binom-field-range" min="0" max="500" value="20" step="1"
+          aria-label="Schieberegler k für Binomialkoeffizient (maximal n)">
       </div>
     </div>
     <div class="binom-widget-result" id="binomCoeffOut" role="status" aria-live="polite"></div>
@@ -341,7 +345,7 @@ MathJax = {
           <td style="padding:8px;">\(P(X \geq k - 0{,}5)\)</td>
         </tr>
         <tr style="border-bottom:1px solid #E8E8E8;">
-          <td style="padding:8px;">\(P(X < k)\)</td>
+          <td style="padding:8px;">\(P(X \lt k)\)</td>
           <td style="padding:8px;">\(P(X \leq k - 0{,}5)\)</td>
         </tr>
         <tr>
@@ -352,20 +356,42 @@ MathJax = {
     </div>
   </div>
 
-  <div class="geogebra-embed">
-    <p class="geogebra-embed-title">Interaktiv: Stetigkeitskorrektur (GeoGebra)</p>
-    <p style="font-size:0.92rem; color:var(--text); margin-bottom:12px;">Das Applet veranschaulicht den Zusammenhang zwischen <strong>Binomialverteilung</strong> und <strong>Normalverteilung</strong> und die Rolle der Stetigkeitskorrektur. Du kannst die Ansicht im eingebetteten Fenster bedienen oder das Material in einem neuen Tab öffnen.</p>
-    <div class="geogebra-iframe-wrap">
-      <iframe title="Stetigkeitskorrektur – GeoGebra-Applet"
-        src="https://www.geogebra.org/material/iframe/id/qQDHCg5S/border/false"
-        width="900" height="520"
-        allowfullscreen
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <div class="geogebra-embed sk-widget" id="skContinuityWidget">
+    <p class="geogebra-embed-title">Interaktiv: Stetigkeitskorrektur</p>
+    <p style="font-size:0.92rem; color:var(--text); margin-bottom:12px;">Diese Visualisierung läuft <strong>direkt im Browser</strong> (ohne GeoGebra): Binomialverteilung \(B(20;\, p)\), zugehörige Normalverteilung und Flächenvergleiche mit bzw. ohne Stetigkeitskorrektur für \(P(6 \le X \le 9)\). Stelle \(p\) mit dem Regler ein; die <strong>Lernschritte 0–4</strong> wählst du über der Grafik per Button.</p>
+
+    <div class="sk-widget-toolbar" role="group" aria-label="Einstellungen Stetigkeitskorrektur">
+      <label>
+        Erfolgswahrscheinlichkeit \(p\)
+        <span class="sk-widget-value"><span id="skValP">0,50</span></span>
+        <input type="range" id="skSliderP" min="5" max="95" value="50" step="1" aria-valuemin="0.05" aria-valuemax="0.95" aria-valuenow="0.5" aria-label="Parameter p der Binomialverteilung">
+      </label>
+      <button type="button" class="btn btn-hint sk-widget-reset" onclick="skWidgetReset()" title="p und Schritt auf Ausgang zurücksetzen" aria-label="Zurücksetzen">↺ Zurücksetzen</button>
     </div>
+
+    <div class="sk-widget-formulas" id="skFormulas">
+      <div class="sk-formula-line" id="skLineBinom"></div>
+      <div class="sk-formula-line" id="skLineIntNo" style="display:none;"></div>
+      <div class="sk-formula-line" id="skLineIntCorr" style="display:none;"></div>
+    </div>
+    <p class="sk-step-hint" id="skStepHint"></p>
+
+    <div class="sk-step-buttons" role="radiogroup" aria-label="Lernschritt 0 bis 4">
+      <span class="sk-step-buttons-label" id="skStepButtonsLabel">Lernschritt:</span>
+      <button type="button" class="sk-step-btn active" data-step="0" role="radio" aria-checked="true" aria-describedby="skStepButtonsLabel">Schritt 0</button>
+      <button type="button" class="sk-step-btn" data-step="1" role="radio" aria-checked="false" aria-describedby="skStepButtonsLabel">Schritt 1</button>
+      <button type="button" class="sk-step-btn" data-step="2" role="radio" aria-checked="false" aria-describedby="skStepButtonsLabel">Schritt 2</button>
+      <button type="button" class="sk-step-btn" data-step="3" role="radio" aria-checked="false" aria-describedby="skStepButtonsLabel">Schritt 3</button>
+      <button type="button" class="sk-step-btn" data-step="4" role="radio" aria-checked="false" aria-describedby="skStepButtonsLabel">Schritt 4</button>
+    </div>
+
+    <div class="geogebra-iframe-wrap sk-canvas-wrap">
+      <canvas id="skCanvas" width="900" height="520" aria-label="Diagramm Binomial- und Normalverteilung"></canvas>
+    </div>
+
     <p class="geogebra-embed-note">
-      <a href="https://www.geogebra.org/m/qQDHCg5S" target="_blank" rel="noopener noreferrer">GeoGebra-Material „Stetigkeitskorrektur“ in neuem Tab öffnen</a>
-      · Autor: Kurt Söser
+      Feste Parameter: \(n = 20\), Bereich \(6 \le X \le 9\). Integrale beziehen sich auf die Normaldichte \(N(x)\) mit \(\mu = n\cdot p\) und \(\sigma = \sqrt{n\cdot p\cdot(1-p)}\).
+      · Kurt Söser
     </p>
   </div>
 
@@ -502,17 +528,35 @@ MathJax = {
     <p style="font-size:0.92rem;">Nutze den eingebetteten <strong>Normalverteilungsrechner</strong>. Trage \(\mu\) und \(\sigma\) aus den Schritten oben ein und ermittle \(P(X \leq 260{,}5)\) (nach Stetigkeitskorrektur). Lies die Wahrscheinlichkeit am Rechner ab und gib sie unten ein — als Dezimalzahl (z.&nbsp;B. <code>0,81</code>) oder als Prozent (z.&nbsp;B. <code>81,3</code>).</p>
 
     <div class="geogebra-embed" style="margin-top:12px;">
-      <div class="geogebra-iframe-wrap">
-        <iframe title="Normalverteilungsrechner – GeoGebra"
-          src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
-          width="900" height="520"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="nv-rechner nv-rechner--embed">
+        <div class="nv-rechner-layout">
+          <div class="nv-rechner-sidebar">
+            <p class="nv-intervals-caption">Intervalle</p>
+            <div class="nv-mode-group" role="group" aria-label="Wahrscheinlichkeitsbereich">
+              <button type="button" class="nv-mode-btn" data-nv-mode="left" aria-pressed="false" title="P(X ≤ a)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M20 4v16M20 4h3M20 20h3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(X≤·)</span></button>
+              <button type="button" class="nv-mode-btn nv-mode-btn--active" data-nv-mode="between" aria-pressed="true" title="P(a ≤ X ≤ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="11" y1="12" x2="29" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(a≤X≤b)</span></button>
+              <button type="button" class="nv-mode-btn" data-nv-mode="two" aria-pressed="false" title="P(X ≤ a) + P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="2" y1="12" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="32" y1="12" x2="38" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(außen)</span></button>
+              <button type="button" class="nv-mode-btn" data-nv-mode="right" aria-pressed="false" title="P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16M12 4h4M12 20h4" stroke="currentColor" stroke-width="2" fill="none"/><line x1="16" y1="12" x2="36" y2="12" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="mode-interval-label">P(X≥·)</span></button>
+            </div>
+            <div class="nv-params">
+              <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
+              <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
+            </div>
+            <div class="nv-formula-display" aria-live="polite"></div>
+            <div class="nv-bounds">
+              <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+              <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+            </div>
+            <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+          </div>
+          <div class="nv-graph-wrap">
+            <canvas class="nv-canvas" width="520" height="380"></canvas>
+          </div>
+        </div>
       </div>
       <p class="geogebra-embed-note">
-        <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Applet in neuem Tab öffnen</a>
-        · Autor: Kurt Söser
+        <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Original GeoGebra-Rechner</a> zum Vergleich
+        · Kurt Söser
       </p>
     </div>
 
@@ -759,23 +803,41 @@ MathJax = {
     <div class="icon">ℹ️</div>
     <div>
       <strong>Optionale Infoseite</strong><br>
-      Dieser Schritt <strong>zählt nicht</strong> zur Fortschrittsanzeige oben — er dient nur zum Nachschlagen. Hier ist derselbe <strong>Normalverteilungsrechner</strong> wie in den Übungen eingebettet: <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Normalverteilungsrechner auf GeoGebra</a> (Kurt Söser).
+      Dieser Schritt <strong>zählt nicht</strong> zur Fortschrittsanzeige oben — er dient nur zum Nachschlagen. Hier ist derselbe <strong>integrierte Normalverteilungsrechner</strong> wie in den Übungen. Zum Vergleich: <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">GeoGebra online</a>
     </div>
   </div>
 
   <div class="geogebra-embed">
     <p class="geogebra-embed-title">Normalverteilungsrechner</p>
-    <div class="geogebra-iframe-wrap">
-      <iframe title="Normalverteilungsrechner – GeoGebra"
-        src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
-        width="900" height="520"
-        allowfullscreen
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="nv-rechner nv-rechner--embed">
+      <div class="nv-rechner-layout">
+        <div class="nv-rechner-sidebar">
+          <p class="nv-intervals-caption">Intervalle</p>
+          <div class="nv-mode-group" role="group" aria-label="Wahrscheinlichkeitsbereich">
+            <button type="button" class="nv-mode-btn" data-nv-mode="left" aria-pressed="false" title="P(X ≤ a)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M20 4v16M20 4h3M20 20h3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(X≤·)</span></button>
+            <button type="button" class="nv-mode-btn nv-mode-btn--active" data-nv-mode="between" aria-pressed="true" title="P(a ≤ X ≤ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="11" y1="12" x2="29" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(a≤X≤b)</span></button>
+            <button type="button" class="nv-mode-btn" data-nv-mode="two" aria-pressed="false" title="P(X ≤ a) + P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="2" y1="12" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="32" y1="12" x2="38" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(außen)</span></button>
+            <button type="button" class="nv-mode-btn" data-nv-mode="right" aria-pressed="false" title="P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16M12 4h4M12 20h4" stroke="currentColor" stroke-width="2" fill="none"/><line x1="16" y1="12" x2="36" y2="12" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="mode-interval-label">P(X≥·)</span></button>
+          </div>
+          <div class="nv-params">
+            <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
+            <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
+          </div>
+          <div class="nv-formula-display" aria-live="polite"></div>
+          <div class="nv-bounds">
+            <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+            <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+          </div>
+          <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+        </div>
+        <div class="nv-graph-wrap">
+          <canvas class="nv-canvas" width="520" height="380"></canvas>
+        </div>
+      </div>
     </div>
     <p class="geogebra-embed-note">
-      <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Applet in neuem Tab öffnen</a>
-      · Autor: Kurt Söser
+      <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Original GeoGebra-Rechner</a>
+      · Kurt Söser
     </p>
   </div>
 
@@ -951,18 +1013,22 @@ MathJax = {
 
 <!-- Schwebende Werkzeuge (immer sichtbar) -->
 <div class="floating-tools-wrap" id="floatingToolsWrap">
-  <div class="floating-tools-menu" id="floatingToolsMenu" role="menu" aria-label="Rechner und GeoGebra">
+  <div class="floating-tools-menu" id="floatingToolsMenu" role="menu" aria-label="Rechner und Verteilungen">
     <button type="button" role="menuitem" onclick="openCalculatorModal();">
       <span class="ft-icon" aria-hidden="true">🔢</span>
       <span>Taschenrechner</span>
     </button>
     <button type="button" role="menuitem" onclick="openGeoGebraFromFloatingTools();">
       <span class="ft-icon" aria-hidden="true">📊</span>
-      <span>Normalverteilung (GeoGebra)</span>
+      <span>Normalverteilungsrechner</span>
+    </button>
+    <button type="button" role="menuitem" onclick="openBinomFromFloatingTools();">
+      <span class="ft-icon" aria-hidden="true">📶</span>
+      <span>Binomialverteilungsrechner</span>
     </button>
   </div>
   <button type="button" class="floating-tools-fab" id="floatingToolsFab" onclick="toggleFloatingToolsMenu()"
-    aria-label="Werkzeuge: Taschenrechner oder GeoGebra" aria-expanded="false" aria-controls="floatingToolsMenu" title="Werkzeuge">🧮</button>
+    aria-label="Werkzeuge: Taschenrechner, Normal- und Binomialverteilungsrechner" aria-expanded="false" aria-controls="floatingToolsMenu" title="Werkzeuge">🧮</button>
 </div>
 
 <!-- Taschenrechner (Modal) -->
@@ -1005,24 +1071,110 @@ MathJax = {
 <!-- GeoGebra Normalverteilungsrechner (Modal für Übungen) -->
 <div id="geogebraModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="ggModalTitle" aria-hidden="true">
   <div class="gg-modal-backdrop" onclick="closeGeoGebraModal()"></div>
-  <div class="gg-modal-dialog">
+  <div class="gg-modal-dialog gg-modal-dialog--nv">
     <div class="gg-modal-header">
       <h2 id="ggModalTitle">Normalverteilungsrechner</h2>
       <button type="button" class="gg-modal-close" onclick="closeGeoGebraModal()" aria-label="Fenster schließen">&times;</button>
     </div>
     <div class="gg-modal-body" id="ggModalBody">
-      <p class="gg-modal-intro">Trage \(\mu\) und \(\sigma\) ein, wähle die passende Wahrscheinlichkeitsart und verwende die <strong>korrigierten Grenzen</strong> (Stetigkeitskorrektur). Den angezeigten Wert kannst du in die Übungsfelder übernehmen.</p>
-      <div class="geogebra-iframe-wrap">
-        <iframe id="geogebraModalFrame" title="Normalverteilungsrechner – GeoGebra"
-          data-src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
-          src="about:blank"
-          width="900" height="460"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <p class="gg-modal-intro">Trage \(\mu\) und \(\sigma\) ein, wähle den <strong>Intervalltyp</strong> wie in GeoGebra und die Grenzen — bei Binomialnäherung die <strong>korrigierten</strong> Grenzen. Den Wert unter <strong>P</strong> kannst du in die Übungsfelder übernehmen.</p>
+      <div class="nv-rechner" id="nvRechnerModalRoot">
+        <div class="nv-rechner-layout">
+          <div class="nv-rechner-sidebar">
+            <p class="nv-intervals-caption">Intervalle</p>
+            <div class="nv-mode-group" role="group" aria-label="Wahrscheinlichkeitsbereich">
+              <button type="button" class="nv-mode-btn" data-nv-mode="left" aria-pressed="false" title="P(X ≤ a)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M20 4v16M20 4h3M20 20h3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(X≤·)</span></button>
+              <button type="button" class="nv-mode-btn nv-mode-btn--active" data-nv-mode="between" aria-pressed="true" title="P(a ≤ X ≤ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="11" y1="12" x2="29" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(a≤X≤b)</span></button>
+              <button type="button" class="nv-mode-btn" data-nv-mode="two" aria-pressed="false" title="P(X ≤ a) + P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="2" y1="12" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="32" y1="12" x2="38" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(außen)</span></button>
+              <button type="button" class="nv-mode-btn" data-nv-mode="right" aria-pressed="false" title="P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16M12 4h4M12 20h4" stroke="currentColor" stroke-width="2" fill="none"/><line x1="16" y1="12" x2="36" y2="12" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="mode-interval-label">P(X≥·)</span></button>
+            </div>
+            <div class="nv-params">
+              <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
+              <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
+            </div>
+            <div class="nv-formula-display" aria-live="polite"></div>
+            <div class="nv-bounds">
+              <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+              <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+            </div>
+            <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+          </div>
+          <div class="nv-graph-wrap">
+            <canvas class="nv-canvas" width="520" height="380"></canvas>
+          </div>
+        </div>
       </div>
       <p class="gg-modal-footer">
-        <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Material in neuem Tab öffnen</a>
+        <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Original GeoGebra-Rechner</a> (Vergleich im Browser)
+        · Kurt Söser
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Binomialverteilungsrechner (Modal) -->
+<div id="binomModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="binomModalTitle" aria-hidden="true">
+  <div class="gg-modal-backdrop" onclick="closeBinomModal()"></div>
+  <div class="gg-modal-dialog gg-modal-dialog--nv">
+    <div class="gg-modal-header">
+      <h2 id="binomModalTitle">Binomialverteilungsrechner</h2>
+      <button type="button" class="gg-modal-close" onclick="closeBinomModal()" aria-label="Fenster schließen">&times;</button>
+    </div>
+    <div class="gg-modal-body" id="binomModalBody">
+      <p class="gg-modal-intro">Wähle \(n\), \(p\) und den <strong>Intervalltyp</strong> wie in GeoGebra — Histogramm, Grenzen per Eingabe oder ziehen, bei einseitigen Intervallen <strong>P</strong> eingeben für die Umkehr.</p>
+      <div class="bv-rechner" id="bvRechnerModalRoot">
+        <div class="bv-rechner-layout">
+          <div class="bv-rechner-sidebar">
+            <p class="bv-intervals-caption">Intervalle</p>
+            <div class="bv-mode-group" role="group" aria-label="Wahrscheinlichkeitsbereich">
+              <button type="button" class="bv-mode-btn bv-mode-btn--active" data-bv-mode="left" aria-pressed="true" title="P(X ≤ k)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M20 4v16M20 4h3M20 20h3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(X≤·)</span></button>
+              <button type="button" class="bv-mode-btn" data-bv-mode="between" aria-pressed="false" title="P(a ≤ X ≤ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="11" y1="12" x2="29" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(a≤X≤b)</span></button>
+              <button type="button" class="bv-mode-btn" data-bv-mode="two" aria-pressed="false" title="P(X ≤ a) + P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="2" y1="12" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="32" y1="12" x2="38" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(außen)</span></button>
+              <button type="button" class="bv-mode-btn" data-bv-mode="right" aria-pressed="false" title="P(X ≥ k)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16M12 4h4M12 20h4" stroke="currentColor" stroke-width="2" fill="none"/><line x1="16" y1="12" x2="36" y2="12" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="mode-interval-label">P(X≥·)</span></button>
+            </div>
+            <div class="bv-params">
+              <label class="bv-field"><span class="bv-field-label">n</span><input type="text" class="bv-n" value="20" inputmode="numeric" autocomplete="off" /></label>
+              <label class="bv-field"><span class="bv-field-label">p</span><input type="text" class="bv-p" value="0,5" inputmode="decimal" autocomplete="off" /></label>
+            </div>
+            <div class="bv-formula-display" aria-live="polite"></div>
+            <div class="bv-bounds">
+              <label class="bv-field bv-row-a"><span class="bv-field-label">k / a</span><input type="text" class="bv-a" value="12" inputmode="numeric" autocomplete="off" /></label>
+              <label class="bv-field bv-row-b"><span class="bv-field-label">b</span><input type="text" class="bv-b" value="15" inputmode="numeric" autocomplete="off" /></label>
+            </div>
+            <div class="bv-result-line"><strong>P</strong> = <input type="text" class="bv-prob-out" value="0,8684" aria-label="Wahrscheinlichkeit P" /></div>
+          </div>
+          <div class="bv-graph-wrap">
+            <div class="bv-graph-toolbar">
+              <div class="bv-stats" aria-live="polite"></div>
+              <div class="bv-toolbar-actions">
+                <button type="button" class="bv-table-toggle" aria-expanded="false" aria-controls="bvPmfTableApprox" title="Wahrscheinlichkeitstabelle P(X = k) ein- oder ausblenden">
+                  Tabelle P(X = k)
+                </button>
+                <button type="button" class="bv-normal-toggle" aria-pressed="false" title="Normalverteilung als Näherung (rot) ein- oder ausblenden">
+                  Normalverteilung
+                </button>
+              </div>
+            </div>
+            <div class="bv-graph-main">
+              <div class="bv-canvas-wrap">
+                <canvas class="bv-canvas" width="520" height="380"></canvas>
+              </div>
+              <aside class="bv-pmf-table-panel" id="bvPmfTableApprox" aria-hidden="true" aria-label="Verteilungstabelle">
+                <div class="bv-pmf-table-scroll">
+                  <table class="bv-pmf-table">
+                    <thead>
+                      <tr><th>k</th><th>P(X = k)</th></tr>
+                    </thead>
+                    <tbody class="bv-pmf-table-body"></tbody>
+                  </table>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="gg-modal-footer">
+        Vergleich: <a href="https://www.geogebra.org/m/yJxDBGQ3" target="_blank" rel="noopener noreferrer">GeoGebra Binomialrechner</a>
         · Kurt Söser
       </p>
     </div>
@@ -1040,6 +1192,9 @@ MathJax = {
 <script src="js/normalverteilung-lernpfad/09-geogebra-modal-uebungen.js"></script>
 <script src="js/normalverteilung-lernpfad/10-final-quiz.js"></script>
 <script src="js/normalverteilung-lernpfad/11-floating-tools.js"></script>
+<script src="js/normalverteilung-lernpfad/13-stetigkeitskorrektur-widget.js"></script>
+<script src="js/normalverteilung-lernpfad/14-normalverteilung-rechner-widget.js"></script>
+<script src="js/normalverteilung-lernpfad/15-binomialverteilung-rechner-widget.js"></script>
 <script src="js/normalverteilung-lernpfad/12-init.js"></script>
 
 </body>
