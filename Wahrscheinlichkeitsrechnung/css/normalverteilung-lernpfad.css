@@ -362,6 +362,33 @@ body {
   background: #fff; border: 1px solid rgba(59,130,196,0.22);
   border-radius: 12px; overflow: hidden; min-height: 260px;
 }
+.nv-graph-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
+  background: #fff;
+  border: 1px solid rgba(59,130,196,0.22);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.nv-graph-column > .nv-graph-wrap {
+  border: none;
+  border-radius: 0;
+}
+.nv-graph-below {
+  padding: 10px 12px 14px;
+  border-top: 1px solid rgba(59,130,196,0.15);
+  background: linear-gradient(180deg, #f8fafc, #fff);
+}
+.nv-graph-below .nv-formula-display {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+.nv-graph-below .nv-result-line {
+  margin-top: 8px;
+  padding-top: 8px;
+}
 .nv-canvas {
   display: block; width: 100%; vertical-align: top;
   touch-action: none;
@@ -447,6 +474,20 @@ body {
   background: #fff; border: 1px solid rgba(59,130,196,0.22);
   border-radius: 12px; overflow: hidden; min-height: 260px;
   display: flex; flex-direction: column;
+}
+.bv-graph-below {
+  padding: 10px 12px 14px;
+  border-top: 1px solid rgba(59,130,196,0.15);
+  background: linear-gradient(180deg, #f8fafc, #fff);
+  flex-shrink: 0;
+}
+.bv-graph-below .bv-formula-display {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+.bv-graph-below .bv-result-line {
+  margin-top: 8px;
+  padding-top: 8px;
 }
 .bv-graph-toolbar {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;

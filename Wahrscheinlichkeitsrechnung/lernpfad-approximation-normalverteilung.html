@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Normalverteilung als Näherung der Binomialverteilung</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script>
 MathJax = {
   tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
@@ -542,15 +543,19 @@ MathJax = {
               <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
               <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
             </div>
-            <div class="nv-formula-display" aria-live="polite"></div>
-            <div class="nv-bounds">
-              <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
-              <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
-            </div>
-            <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
           </div>
-          <div class="nv-graph-wrap">
-            <canvas class="nv-canvas" width="520" height="380"></canvas>
+          <div class="nv-graph-column">
+            <div class="nv-graph-wrap">
+              <canvas class="nv-canvas" width="520" height="380"></canvas>
+            </div>
+            <div class="nv-graph-below">
+              <div class="nv-formula-display" aria-live="polite"></div>
+              <div class="nv-bounds">
+                <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+                <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+              </div>
+              <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+            </div>
           </div>
         </div>
       </div>
@@ -784,6 +789,7 @@ MathJax = {
       <p id="finalMessage" style="margin-top:8px;"></p>
       <div class="badge-container" id="badgeContainer"></div>
     </div>
+    <button type="button" class="btn btn-check" onclick="downloadLernpfadPdf()" style="margin-top:14px;" title="Zusammenfassung und deine Ergebnisse als PDF speichern">PDF: Zusammenfassung &amp; Ergebnisse</button>
     <button class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:14px;">Quiz wiederholen</button>
   </div>
 
@@ -823,15 +829,19 @@ MathJax = {
             <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
             <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
           </div>
-          <div class="nv-formula-display" aria-live="polite"></div>
-          <div class="nv-bounds">
-            <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
-            <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
-          </div>
-          <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
         </div>
-        <div class="nv-graph-wrap">
-          <canvas class="nv-canvas" width="520" height="380"></canvas>
+        <div class="nv-graph-column">
+          <div class="nv-graph-wrap">
+            <canvas class="nv-canvas" width="520" height="380"></canvas>
+          </div>
+          <div class="nv-graph-below">
+            <div class="nv-formula-display" aria-live="polite"></div>
+            <div class="nv-bounds">
+              <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+              <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+            </div>
+            <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1092,15 +1102,19 @@ MathJax = {
               <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
               <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
             </div>
-            <div class="nv-formula-display" aria-live="polite"></div>
-            <div class="nv-bounds">
-              <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
-              <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
-            </div>
-            <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
           </div>
-          <div class="nv-graph-wrap">
-            <canvas class="nv-canvas" width="520" height="380"></canvas>
+          <div class="nv-graph-column">
+            <div class="nv-graph-wrap">
+              <canvas class="nv-canvas" width="520" height="380"></canvas>
+            </div>
+            <div class="nv-graph-below">
+              <div class="nv-formula-display" aria-live="polite"></div>
+              <div class="nv-bounds">
+                <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+                <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+              </div>
+              <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1136,12 +1150,6 @@ MathJax = {
               <label class="bv-field"><span class="bv-field-label">n</span><input type="text" class="bv-n" value="20" inputmode="numeric" autocomplete="off" /></label>
               <label class="bv-field"><span class="bv-field-label">p</span><input type="text" class="bv-p" value="0,5" inputmode="decimal" autocomplete="off" /></label>
             </div>
-            <div class="bv-formula-display" aria-live="polite"></div>
-            <div class="bv-bounds">
-              <label class="bv-field bv-row-a"><span class="bv-field-label">k / a</span><input type="text" class="bv-a" value="12" inputmode="numeric" autocomplete="off" /></label>
-              <label class="bv-field bv-row-b"><span class="bv-field-label">b</span><input type="text" class="bv-b" value="15" inputmode="numeric" autocomplete="off" /></label>
-            </div>
-            <div class="bv-result-line"><strong>P</strong> = <input type="text" class="bv-prob-out" value="0,8684" aria-label="Wahrscheinlichkeit P" /></div>
           </div>
           <div class="bv-graph-wrap">
             <div class="bv-graph-toolbar">
@@ -1170,6 +1178,14 @@ MathJax = {
                 </div>
               </aside>
             </div>
+            <div class="bv-graph-below">
+              <div class="bv-formula-display" aria-live="polite"></div>
+              <div class="bv-bounds">
+                <label class="bv-field bv-row-a"><span class="bv-field-label">k / a</span><input type="text" class="bv-a" value="12" inputmode="numeric" autocomplete="off" /></label>
+                <label class="bv-field bv-row-b"><span class="bv-field-label">b</span><input type="text" class="bv-b" value="15" inputmode="numeric" autocomplete="off" /></label>
+              </div>
+              <div class="bv-result-line"><strong>P</strong> = <input type="text" class="bv-prob-out" value="0,8684" aria-label="Wahrscheinlichkeit P" /></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1191,6 +1207,7 @@ MathJax = {
 <script src="js/normalverteilung-lernpfad/08-stetigkeit-praxis-hints.js"></script>
 <script src="js/normalverteilung-lernpfad/09-geogebra-modal-uebungen.js"></script>
 <script src="js/normalverteilung-lernpfad/10-final-quiz.js"></script>
+<script src="js/normalverteilung-lernpfad/16-pdf-export.js"></script>
 <script src="js/normalverteilung-lernpfad/11-floating-tools.js"></script>
 <script src="js/normalverteilung-lernpfad/13-stetigkeitskorrektur-widget.js"></script>
 <script src="js/normalverteilung-lernpfad/14-normalverteilung-rechner-widget.js"></script>

@@ -587,15 +587,19 @@ MathJax = {
             <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
             <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
           </div>
-          <div class="nv-formula-display" aria-live="polite"></div>
-          <div class="nv-bounds">
-            <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
-            <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
-          </div>
-          <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
         </div>
-        <div class="nv-graph-wrap">
-          <canvas class="nv-canvas" width="520" height="380"></canvas>
+        <div class="nv-graph-column">
+          <div class="nv-graph-wrap">
+            <canvas class="nv-canvas" width="520" height="380"></canvas>
+          </div>
+          <div class="nv-graph-below">
+            <div class="nv-formula-display" aria-live="polite"></div>
+            <div class="nv-bounds">
+              <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+              <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+            </div>
+            <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+          </div>
         </div>
       </div>
     </div>
@@ -708,15 +712,19 @@ MathJax = {
               <label class="nv-field"><span class="nv-field-label">μ</span><input type="text" class="nv-mu" value="0" inputmode="decimal" autocomplete="off" /></label>
               <label class="nv-field"><span class="nv-field-label">σ</span><input type="text" class="nv-sigma" value="1" inputmode="decimal" autocomplete="off" /></label>
             </div>
-            <div class="nv-formula-display" aria-live="polite"></div>
-            <div class="nv-bounds">
-              <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
-              <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
-            </div>
-            <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
           </div>
-          <div class="nv-graph-wrap">
-            <canvas class="nv-canvas" width="520" height="380"></canvas>
+          <div class="nv-graph-column">
+            <div class="nv-graph-wrap">
+              <canvas class="nv-canvas" width="520" height="380"></canvas>
+            </div>
+            <div class="nv-graph-below">
+              <div class="nv-formula-display" aria-live="polite"></div>
+              <div class="nv-bounds">
+                <label class="nv-field nv-row-a"><span class="nv-field-label">a</span><input type="text" class="nv-a" value="-1" inputmode="decimal" autocomplete="off" /></label>
+                <label class="nv-field nv-row-b"><span class="nv-field-label">b</span><input type="text" class="nv-b" value="1" inputmode="decimal" autocomplete="off" /></label>
+              </div>
+              <div class="nv-result-line"><strong>P</strong> = <input type="text" class="nv-prob-out" value="0,6827" readonly aria-label="Wahrscheinlichkeit P" /></div>
+            </div>
           </div>
         </div>
       </div>
@@ -751,12 +759,6 @@ MathJax = {
               <label class="bv-field"><span class="bv-field-label">n</span><input type="text" class="bv-n" value="20" inputmode="numeric" autocomplete="off" /></label>
               <label class="bv-field"><span class="bv-field-label">p</span><input type="text" class="bv-p" value="0,5" inputmode="decimal" autocomplete="off" /></label>
             </div>
-            <div class="bv-formula-display" aria-live="polite"></div>
-            <div class="bv-bounds">
-              <label class="bv-field bv-row-a"><span class="bv-field-label">k / a</span><input type="text" class="bv-a" value="12" inputmode="numeric" autocomplete="off" /></label>
-              <label class="bv-field bv-row-b"><span class="bv-field-label">b</span><input type="text" class="bv-b" value="15" inputmode="numeric" autocomplete="off" /></label>
-            </div>
-            <div class="bv-result-line"><strong>P</strong> = <input type="text" class="bv-prob-out" value="0,8684" aria-label="Wahrscheinlichkeit P" /></div>
           </div>
           <div class="bv-graph-wrap">
             <div class="bv-graph-toolbar">
@@ -784,6 +786,14 @@ MathJax = {
                   </table>
                 </div>
               </aside>
+            </div>
+            <div class="bv-graph-below">
+              <div class="bv-formula-display" aria-live="polite"></div>
+              <div class="bv-bounds">
+                <label class="bv-field bv-row-a"><span class="bv-field-label">k / a</span><input type="text" class="bv-a" value="12" inputmode="numeric" autocomplete="off" /></label>
+                <label class="bv-field bv-row-b"><span class="bv-field-label">b</span><input type="text" class="bv-b" value="15" inputmode="numeric" autocomplete="off" /></label>
+              </div>
+              <div class="bv-result-line"><strong>P</strong> = <input type="text" class="bv-prob-out" value="0,8684" aria-label="Wahrscheinlichkeit P" /></div>
             </div>
           </div>
         </div>
