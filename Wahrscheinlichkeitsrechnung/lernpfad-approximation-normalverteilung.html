@@ -113,6 +113,8 @@ body {
 }
 .tab-btn.completed-tab { color: var(--green); }
 .tab-btn.completed-tab::before { content: ''; }
+.tab-btn.tab-btn-optional { color: var(--text-light); }
+.tab-btn.tab-btn-optional .tab-num { background: #E8E8E8; border: 1px dashed #B0B0B0; }
 .tab-num {
   width: 28px; height: 28px; border-radius: 50%; display: flex;
   align-items: center; justify-content: center; font-weight: 800;
@@ -173,6 +175,72 @@ body {
   letter-spacing: 1px;
 }
 
+/* GeoGebra Embed (Schritt 4: Stetigkeitskorrektur) */
+.geogebra-embed {
+  margin: 22px 0;
+}
+.geogebra-embed-title {
+  font-weight: 700; color: var(--blue-dark); margin-bottom: 10px; font-size: 1rem;
+}
+.geogebra-embed-note {
+  font-size: 0.88rem; color: var(--text-light); margin-top: 10px; line-height: 1.5;
+}
+.geogebra-iframe-wrap {
+  position: relative; width: 100%; max-width: 900px; margin: 0 auto;
+  border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);
+  border: 1px solid rgba(59,130,196,0.25); background: #fff;
+}
+.geogebra-iframe-wrap iframe {
+  display: block; width: 100%; height: 520px; border: 0; vertical-align: top;
+}
+@media (max-width: 700px) {
+  .geogebra-iframe-wrap iframe { height: 420px; min-height: 360px; }
+}
+
+/* GeoGebra Modal (Übungen) */
+.gg-modal {
+  position: fixed; inset: 0; z-index: 2000;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px; box-sizing: border-box;
+}
+.gg-modal.open { display: flex; }
+.gg-modal-backdrop {
+  position: absolute; inset: 0; background: rgba(44, 62, 80, 0.55);
+  cursor: pointer;
+}
+.gg-modal-dialog {
+  position: relative; width: min(920px, 100%); max-height: min(92vh, 900px);
+  background: var(--bg-card); border-radius: var(--radius);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.25); overflow: hidden;
+  display: flex; flex-direction: column; z-index: 1;
+}
+.gg-modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; padding: 12px 16px; background: linear-gradient(135deg, var(--blue-light), #E8F4FF);
+  border-bottom: 1px solid rgba(59,130,196,0.2); flex-shrink: 0;
+}
+.gg-modal-header h2 {
+  margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--blue-dark);
+  font-family: 'Nunito', sans-serif;
+}
+.gg-modal-close {
+  border: none; background: rgba(255,255,255,0.7); width: 36px; height: 36px;
+  border-radius: 50%; font-size: 1.5rem; line-height: 1; cursor: pointer;
+  color: var(--text); flex-shrink: 0;
+}
+.gg-modal-close:hover { background: white; }
+.gg-modal-body { padding: 12px 16px 16px; overflow: auto; flex: 1; }
+.gg-modal-intro {
+  font-size: 0.9rem; color: var(--text); margin-bottom: 10px; line-height: 1.5;
+}
+.gg-modal-body .geogebra-iframe-wrap { max-width: 100%; }
+.gg-modal-body .geogebra-iframe-wrap iframe {
+  height: min(460px, 58vh); min-height: 320px;
+}
+.gg-modal-footer {
+  font-size: 0.85rem; color: var(--text-light); margin-top: 10px; text-align: center;
+}
+
 /* ── Comparison ── */
 .comparison {
   display: grid; grid-template-columns: 1fr 60px 1fr; gap: 10px;
@@ -222,6 +290,38 @@ body {
   padding: 2px 10px; border-radius: 10px; font-weight: 700;
   font-size: 0.85rem; min-width: 40px; text-align: center;
 }
+
+/* Binomialkoeffizient-Rechner (Tab „Warum Näherung?“) */
+.binom-widget {
+  margin-top: 14px; padding: 18px 20px; border-radius: var(--radius);
+  background: var(--blue-light); border: 1px solid rgba(59,130,196,0.25);
+}
+.binom-widget-title {
+  font-weight: 700; font-size: 1rem; color: var(--blue-dark); margin-bottom: 6px;
+}
+.binom-widget-hint {
+  font-size: 0.88rem; color: var(--text-light); margin-bottom: 14px;
+}
+.binom-widget-controls {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;
+}
+.binom-field label {
+  display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;
+}
+.binom-field input[type=number] {
+  width: 120px; padding: 8px 12px; border: 2px solid #C8D9E8; border-radius: 8px;
+  font-family: 'Nunito', sans-serif; font-size: 1rem;
+}
+.binom-field input[type=number]:focus {
+  border-color: var(--blue); outline: none;
+}
+.binom-widget-result {
+  margin-top: 14px; padding: 12px 14px; background: white; border-radius: 10px;
+  border: 1px solid rgba(59,130,196,0.2); font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.82rem; line-height: 1.45; word-break: break-all;
+}
+.binom-widget-result .binom-formula { font-family: 'Nunito', sans-serif; font-size: 0.9rem; margin-bottom: 8px; color: var(--text); }
+.binom-widget-result .binom-err { color: var(--red); font-family: 'Nunito', sans-serif; }
 
 /* ── Exercises ── */
 .exercise {
@@ -334,7 +434,7 @@ body {
     <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
   </div>
   <div class="progress-label">
-    <span id="progressText">Station 0 von 8 abgeschlossen</span>
+    <span id="progressText">Station 0 von 7 abgeschlossen</span>
     <span id="progressPercent">0 %</span>
   </div>
 </div>
@@ -357,7 +457,7 @@ body {
   <button class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Praxisbeispiel</button>
   <button class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Übungen</button>
   <button class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Abschlussquiz</button>
-  <button class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>GeoGebra</button>
+  <button class="tab-btn tab-btn-optional" onclick="switchTab(7)" title="Optionale Infoseite — zählt nicht für den Fortschritt"><span class="tab-num">8</span>Info GeoGebra</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
@@ -443,6 +543,24 @@ body {
     <div>
       <strong>Das Problem:</strong> Um das mit der Binomialverteilung exakt zu berechnen, müsste man <strong>11 einzelne Wahrscheinlichkeiten</strong> \(P(X=15) + P(X=16) + \ldots + P(X=25)\) berechnen — mit riesigen Binomialkoeffizienten wie \(\binom{500}{20}\). Das ist extrem aufwendig!
     </div>
+  </div>
+
+  <div class="binom-widget">
+    <div class="binom-widget-title">Binomialkoeffizient \(\displaystyle\binom{n}{k}\) — interaktiv</div>
+    <p class="binom-widget-hint">Stelle \(n\) und \(k\) ein. Die Berechnung erfolgt <strong>exakt</strong> (über Ganzzahlarithmetik im Browser) — auch für sehr große Werte, bei denen ein Taschenrechner schnell an Grenzen stößt.</p>
+    <div class="binom-widget-controls">
+      <div class="binom-field">
+        <label for="binomN">\(n\)</label>
+        <input type="number" id="binomN" min="0" max="8000" step="1" value="500"
+          oninput="updateBinomialCoefficient()" aria-label="n für Binomialkoeffizient">
+      </div>
+      <div class="binom-field">
+        <label for="binomK">\(k\)</label>
+        <input type="number" id="binomK" min="0" max="8000" step="1" value="20"
+          oninput="updateBinomialCoefficient()" aria-label="k für Binomialkoeffizient">
+      </div>
+    </div>
+    <div class="binom-widget-result" id="binomCoeffOut" role="status" aria-live="polite"></div>
   </div>
 
   <p style="margin-top:14px;">Die Lösung: Wenn \(n\) groß genug ist, kann man die Binomialverteilung durch die <strong>Normalverteilung annähern</strong> — eine stetige Verteilung, bei der man Wahrscheinlichkeiten bequem über die Verteilungsfunktion \(\Phi\) berechnen kann.</p>
@@ -640,6 +758,23 @@ body {
     </div>
   </div>
 
+  <div class="geogebra-embed">
+    <p class="geogebra-embed-title">Interaktiv: Stetigkeitskorrektur (GeoGebra)</p>
+    <p style="font-size:0.92rem; color:var(--text); margin-bottom:12px;">Das Applet veranschaulicht den Zusammenhang zwischen <strong>Binomialverteilung</strong> und <strong>Normalverteilung</strong> und die Rolle der Stetigkeitskorrektur. Du kannst die Ansicht im eingebetteten Fenster bedienen oder das Material in einem neuen Tab öffnen.</p>
+    <div class="geogebra-iframe-wrap">
+      <iframe title="Stetigkeitskorrektur – GeoGebra-Applet"
+        src="https://www.geogebra.org/material/iframe/id/qQDHCg5S/border/false"
+        width="900" height="520"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <p class="geogebra-embed-note">
+      <a href="https://www.geogebra.org/m/qQDHCg5S" target="_blank" rel="noopener noreferrer">GeoGebra-Material „Stetigkeitskorrektur“ in neuem Tab öffnen</a>
+      · Autor: Kurt Söser
+    </p>
+  </div>
+
   <!-- Exercise: Stetigkeitskorrektur -->
   <div class="exercise" id="ex_stetigkeit">
     <div class="exercise-header">
@@ -725,10 +860,10 @@ body {
     <div class="step">
       <div class="step-num">4</div>
       <div>
-        <strong>z-Wert berechnen und nachschlagen:</strong><br>
-        \(z = \dfrac{174{,}5 - 180}{4{,}24} = \dfrac{-5{,}5}{4{,}24} \approx -1{,}30\)<br><br>
-        \(P(X \geq 174{,}5) = 1 - \Phi(-1{,}30) = 1 - 0{,}0968 = 0{,}9032\)<br><br>
-        → Mit einer Wahrscheinlichkeit von ca. <strong>90,3 %</strong> sind mindestens 175 Bauteile einwandfrei.
+        <strong>Wahrscheinlichkeit mit dem Normalverteilungsrechner (GeoGebra):</strong><br>
+        Öffne den <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Normalverteilungsrechner</a>, trage \(\mu = 180\) und \(\sigma \approx 4{,}24\) ein und bestimme die Wahrscheinlichkeit für die <strong>obere Tail</strong>-Frage \(P(X \geq 174{,}5)\) (je nach App: \(1 - P(X \leq 174{,}5)\) oder direkt „rechts von …“).<br><br>
+        → Ergebnis: etwa <strong>90,3 %</strong> — mit dieser Wahrscheinlichkeit sind mindestens 175 Bauteile einwandfrei.<br><br>
+        <em>Optional — \(z\)-Standardisierung (klassischer Schulweg):</em> \(z = \dfrac{174{,}5 - 180}{4{,}24} \approx -1{,}30\), dann \(P(X \geq 174{,}5) = 1 - \Phi(-1{,}30) \approx 0{,}9032\). Den \(z\)-Wert brauchst du nur, wenn du mit der Tabelle \(\Phi\) arbeitest — der Rechner rechnet mit \(\mu\) und \(\sigma\) direkt.
       </div>
     </div>
   </div>
@@ -769,9 +904,37 @@ body {
       <input type="text" id="praxis_korrektur" placeholder="z. B. 260,5">
     </div>
 
-    <div class="input-group">
-      <label>Schritt 4: \(z\)-Wert \(=\)</label>
-      <input type="text" id="praxis_z" placeholder="auf 2 Dezimalen">
+    <p style="margin-top:18px; font-weight:600; color:var(--blue-dark);">Schritt 4: Wahrscheinlichkeit mit GeoGebra</p>
+    <p style="font-size:0.92rem;">Nutze den eingebetteten <strong>Normalverteilungsrechner</strong>. Trage \(\mu\) und \(\sigma\) aus den Schritten oben ein und ermittle \(P(X \leq 260{,}5)\) (nach Stetigkeitskorrektur). Lies die Wahrscheinlichkeit am Rechner ab und gib sie unten ein — als Dezimalzahl (z.&nbsp;B. <code>0,81</code>) oder als Prozent (z.&nbsp;B. <code>81,3</code>).</p>
+
+    <div class="geogebra-embed" style="margin-top:12px;">
+      <div class="geogebra-iframe-wrap">
+        <iframe title="Normalverteilungsrechner – GeoGebra"
+          src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
+          width="900" height="520"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <p class="geogebra-embed-note">
+        <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Applet in neuem Tab öffnen</a>
+        · Autor: Kurt Söser
+      </p>
+    </div>
+
+    <div class="input-group" style="margin-top:14px;">
+      <label>Schritt 4: \(P(X \leq 260{,}5) \approx\) (aus GeoGebra)</label>
+      <input type="text" id="praxis_prob" placeholder="z. B. 0,813 oder 81,3">
+    </div>
+
+    <div class="info-box concept" style="margin-top:18px;">
+      <div class="icon">📐</div>
+      <div>
+        <strong>Optional: \(z\)-Standardisierung üben</strong><br>
+        Statt den Rechner kann man die Wahrscheinlichkeit auch über die Standardnormalverteilung bestimmen: \(z = \dfrac{260{,}5 - \mu}{\sigma}\), dann \(P(X \leq 260{,}5) = \Phi(z)\). Das ist der klassische Weg mit der \(\Phi\)-Tabelle — für die Bewertung im nächsten Schritt <em>nicht</em> nötig, aber gut zum Üben.<br>
+        <label style="display:block; margin-top:10px; font-weight:600;">Optional — \(z\)-Wert \(=\)</label>
+        <input type="text" id="praxis_z" placeholder="nur wenn du den Schulweg üben willst" style="max-width:280px;">
+      </div>
     </div>
 
     <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -779,7 +942,8 @@ body {
       <button class="btn btn-hint" onclick="showHint('hint_praxis')">💡 Tipp</button>
     </div>
     <div class="feedback hint" id="hint_praxis" style="display:none;">
-      \(\mu = 300 \cdot 0{,}85 = 255\), \(\sigma = \sqrt{300 \cdot 0{,}85 \cdot 0{,}15}\). Stetigkeitskorrektur: bei \(\leq\) addiere \(+0{,}5\). Der \(z\)-Wert ist \(\frac{260{,}5 - \mu}{\sigma}\).
+      \(\mu = 300 \cdot 0{,}85 = 255\), \(\sigma = \sqrt{300 \cdot 0{,}85 \cdot 0{,}15} \approx 6{,}18\). Stetigkeitskorrektur: \(P(X \leq 260) \to P(X \leq 260{,}5)\). Im <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Normalverteilungsrechner</a> diese Werte eintragen und \(P(X \leq 260{,}5)\) ablesen.<br>
+      <em>Optional:</em> \(z = \dfrac{260{,}5 - 255}{6{,}18} \approx 0{,}89\), \(\Phi(0{,}89) \approx 0{,}813\).
     </div>
     <div class="feedback" id="fb_praxis"></div>
   </div>
@@ -795,6 +959,18 @@ body {
 <!-- ═══════════════════════════════════════════════ -->
 <div class="tab-panel" id="panel5">
   <div class="ribbon">Übungsaufgaben</div>
+
+  <div class="info-box success">
+    <div class="icon">🧮</div>
+    <div>
+      <strong>Wahrscheinlichkeit mit GeoGebra</strong><br>
+      Bei den Teilaufgaben zur <em>finalen Wahrscheinlichkeit</em> kannst du den eingebetteten <strong>Normalverteilungsrechner</strong> nutzen — er öffnet sich in einem eigenen Fenster über den Button.<br>
+      <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="openGeoGebraModal()">Normalverteilungsrechner öffnen</button>
+      <span style="font-size:0.85rem; color:var(--text-light); display:block; margin-top:8px;">
+        Material: <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Normalverteilungsrechner (GeoGebra)</a> · Kurt Söser
+      </span>
+    </div>
+  </div>
 
   <!-- Aufgabe 1 -->
   <div class="exercise" id="ex_a1">
@@ -814,15 +990,15 @@ body {
         <input type="text" id="a1_sigma" placeholder="auf 2 Dez.">
       </div>
     </div>
-    <p style="margin-top:12px;"><strong>b)</strong> Wie groß ist (näherungsweise) die Wahrscheinlichkeit, dass <strong>mehr als 150</strong> Personen zustimmen? Gib den \(z\)-Wert an.</p>
+    <p style="margin-top:12px;"><strong>b)</strong> Wie groß ist (näherungsweise) die Wahrscheinlichkeit, dass <strong>mehr als 150</strong> Personen zustimmen? Gib die <strong>finale Wahrscheinlichkeit</strong> an (Dezimalzahl oder Prozent) — z.&nbsp;B. mit dem <button type="button" class="btn btn-hint" style="padding:6px 12px; font-size:0.85rem;" onclick="openGeoGebraModal()">GeoGebra-Rechner</button>.</p>
     <div class="input-row">
       <div class="input-group">
         <label>Korrigierter Wert (Stetigkeitskorrektur)</label>
         <input type="text" id="a1_korr" placeholder="z. B. 150,5">
       </div>
       <div class="input-group">
-        <label>\(z\)-Wert \(\approx\)</label>
-        <input type="text" id="a1_z" placeholder="auf 2 Dez.">
+        <label>\(P(\text{mehr als 150}) \approx\)</label>
+        <input type="text" id="a1_prob" placeholder="z. B. 0,136 oder 13,6">
       </div>
     </div>
     <div style="margin-top:14px; display:flex; gap:10px;">
@@ -865,14 +1041,11 @@ body {
         <input type="text" id="a2_high" placeholder="">
       </div>
     </div>
+    <p style="margin-top:10px; font-size:0.9rem;">Finale Wahrscheinlichkeit (GeoGebra: <button type="button" class="btn btn-hint" style="padding:6px 12px; font-size:0.85rem;" onclick="openGeoGebraModal()">Rechner</button>):</p>
     <div class="input-row">
-      <div class="input-group">
-        <label>\(z_1 \approx\)</label>
-        <input type="text" id="a2_z1" placeholder="">
-      </div>
-      <div class="input-group">
-        <label>\(z_2 \approx\)</label>
-        <input type="text" id="a2_z2" placeholder="">
+      <div class="input-group" style="flex:1; min-width:220px;">
+        <label>\(P(25 \leq X \leq 35) \approx\)</label>
+        <input type="text" id="a2_prob" placeholder="z. B. 0,72 oder 71,5">
       </div>
     </div>
     <div style="margin-top:14px; display:flex; gap:10px;">
@@ -914,6 +1087,13 @@ body {
       <div class="input-group">
         <label>Obere Grenze (korrigiert)</label>
         <input type="text" id="a3_high" placeholder="">
+      </div>
+    </div>
+    <p style="margin-top:10px; font-size:0.9rem;">Finale Wahrscheinlichkeit (GeoGebra: <button type="button" class="btn btn-hint" style="padding:6px 12px; font-size:0.85rem;" onclick="openGeoGebraModal()">Rechner</button>):</p>
+    <div class="input-row">
+      <div class="input-group" style="flex:1; min-width:220px;">
+        <label>\(P(X = 50) \approx\)</label>
+        <input type="text" id="a3_prob" placeholder="z. B. 0,08 oder 8">
       </div>
     </div>
     <div style="margin-top:14px; display:flex; gap:10px;">
@@ -971,41 +1151,49 @@ body {
 
   <div class="tab-nav">
     <button class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
-    <button class="btn btn-next" onclick="switchTab(7)">Weiter: GeoGebra-Rechner →</button>
+    <button class="btn btn-next" onclick="switchTab(7)">Weiter: Info GeoGebra (optional) →</button>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
-<!-- TAB 8: GeoGebra-Wahrscheinlichkeitsrechner -->
+<!-- TAB 8: Info GeoGebra (optional) -->
 <!-- ═══════════════════════════════════════════════ -->
 <div class="tab-panel" id="panel7">
-  <div class="ribbon">GeoGebra-Rechner</div>
+  <div class="ribbon">Info GeoGebra <span style="font-weight:600; font-size:0.85rem; opacity:0.85;">(optional)</span></div>
 
-  <div class="info-box concept">
-    <div class="icon">🧮</div>
+  <div class="info-box success">
+    <div class="icon">ℹ️</div>
     <div>
-      <strong>GeoGebra-Wahrscheinlichkeitsrechner</strong><br>
-      Mit dem eingebetteten GeoGebra-Rechner kannst du Wahrscheinlichkeiten für die Normalverteilung direkt berechnen — ganz ohne Tabelle! Unten findest du den Rechner und eine Schritt-für-Schritt-Anleitung.
+      <strong>Optionale Infoseite</strong><br>
+      Dieser Schritt <strong>zählt nicht</strong> zur Fortschrittsanzeige oben — er dient nur zum Nachschlagen. Hier ist derselbe <strong>Normalverteilungsrechner</strong> wie in den Übungen eingebettet: <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Normalverteilungsrechner auf GeoGebra</a> (Kurt Söser).
     </div>
   </div>
 
-  <!-- Embedded GeoGebra -->
-  <div style="text-align:center; margin:20px 0;">
-    <iframe src="https://www.geogebra.org/classic#probability"
-      width="100%" height="550" style="border:2px solid var(--blue); border-radius:12px; max-width:850px;"
-      allowfullscreen></iframe>
-    <p style="font-size:0.8rem; color:var(--text-light); margin-top:6px;">GeoGebra Wahrscheinlichkeitsrechner — falls die Ansicht nicht geladen wird, <a href="https://www.geogebra.org/classic#probability" target="_blank" style="color:var(--blue);">hier klicken</a></p>
+  <div class="geogebra-embed">
+    <p class="geogebra-embed-title">Normalverteilungsrechner</p>
+    <div class="geogebra-iframe-wrap">
+      <iframe title="Normalverteilungsrechner – GeoGebra"
+        src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
+        width="900" height="520"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <p class="geogebra-embed-note">
+      <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Applet in neuem Tab öffnen</a>
+      · Autor: Kurt Söser
+    </p>
   </div>
 
   <!-- Anleitung -->
-  <h3 style="margin-top:28px; color:var(--blue-dark); font-family:'Patrick Hand',cursive; font-size:1.4rem;">Anleitung: So löst du Aufgaben mit GeoGebra</h3>
+  <h3 style="margin-top:28px; color:var(--blue-dark); font-family:'Patrick Hand',cursive; font-size:1.4rem;">Anleitung: So arbeitest du mit dem Normalverteilungsrechner</h3>
 
   <div class="stepper">
     <div class="step">
       <div class="step-num">1</div>
       <div>
-        <strong>Verteilung auswählen</strong><br>
-        Wähle oben im Dropdown-Menü die Verteilung <strong>„Normal"</strong> aus. (Standardmäßig ist oft schon die Normalverteilung ausgewählt.)
+        <strong>Rechner nutzen</strong><br>
+        Das Applet ist ein <strong>Normalverteilungsrechner</strong> — du trägst direkt \(\mu\) und \(\sigma\) ein (kein separates „Verteilung wählen" nötig wie im allgemeinen Wahrscheinlichkeitsrechner).
       </div>
     </div>
     <div class="step">
@@ -1113,9 +1301,9 @@ body {
   <div class="exercise">
     <div class="exercise-header">
       <span class="exercise-badge">Selbstcheck</span>
-      <span class="exercise-title">Überprüfe mit GeoGebra</span>
+      <span class="exercise-title">Überprüfe mit GeoGebra (freiwillig)</span>
     </div>
-    <p>Verwende den GeoGebra-Rechner oben, um folgende Aufgabe zu lösen:</p>
+    <p>Verwende den Normalverteilungsrechner oben, um folgende Aufgabe zu üben:</p>
     <p style="margin:10px 0;"><strong>Aufgabe:</strong> Eine faire Münze wird \(n = 100\)-mal geworfen. Wie groß ist die Wahrscheinlichkeit, dass <strong>höchstens 55</strong>-mal Kopf fällt?</p>
     <p>Berechne zuerst \(\mu\) und \(\sigma\), wende die Stetigkeitskorrektur an, und gib die Werte in GeoGebra ein.</p>
 
@@ -1170,7 +1358,7 @@ body {
 // ══════════════════════════════════════════════
 // GLOBAL STATE
 // ══════════════════════════════════════════════
-const TOTAL_SECTIONS = 8;
+const TOTAL_SECTIONS = 7;
 let completedSections = new Set();
 let mainChart = null;
 let currentTab = 0;
@@ -1196,6 +1384,9 @@ function switchTab(idx) {
   if (idx === 1 && !chartInitialized) {
     chartInitialized = true;
     setTimeout(() => updateMainChart(), 100);
+  }
+  if (idx === 1) {
+    setTimeout(() => updateBinomialCoefficient(), 120);
   }
 
   // Re-render MathJax for the visible panel
@@ -1274,6 +1465,99 @@ function checkQuizGroup(tabIdx, quizIds) {
   });
 
   if (allCorrect) markComplete(tabIdx + 1);
+}
+
+// ══════════════════════════════════════════════
+// BINOMIALKOEFFIZIENT (BigInt, Tab „Warum Näherung?“)
+// ══════════════════════════════════════════════
+function binomialCoefficientBigInt(n, k) {
+  if (!Number.isFinite(n) || !Number.isFinite(k)) return null;
+  let nn = Math.floor(n);
+  let kk = Math.floor(k);
+  if (nn < 0 || kk < 0) return null;
+  if (kk > nn) return null;
+  if (kk === 0 || kk === nn) return 1n;
+  if (kk > nn - kk) kk = nn - kk;
+  let N = BigInt(nn);
+  let K = BigInt(kk);
+  let c = 1n;
+  for (let i = 0n; i < K; i++) {
+    c = c * (N - i) / (i + 1n);
+  }
+  return c;
+}
+
+function updateBinomialCoefficient() {
+  const out = document.getElementById('binomCoeffOut');
+  const nEl = document.getElementById('binomN');
+  const kEl = document.getElementById('binomK');
+  if (!out || !nEl || !kEl) return;
+
+  const nMax = 8000;
+  let n = parseInt(nEl.value, 10);
+  let k = parseInt(kEl.value, 10);
+
+  if (Number.isNaN(n) || Number.isNaN(k)) {
+    out.innerHTML = '<span class="binom-err">Bitte gültige ganze Zahlen für \\(n\\) und \\(k\\) eingeben.</span>';
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([out]).catch(function () {});
+    }
+    return;
+  }
+  if (n < 0 || k < 0) {
+    out.innerHTML = '<span class="binom-err">\\(n\\) und \\(k\\) müssen nichtnegativ sein.</span>';
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([out]).catch(function () {});
+    }
+    return;
+  }
+  if (n > nMax) {
+    nEl.value = nMax;
+    n = nMax;
+  }
+  if (k > nMax) {
+    kEl.value = nMax;
+    k = nMax;
+  }
+  if (k > n) {
+    out.innerHTML = '<div class="binom-formula">\\(\\displaystyle\\binom{' + n + '}{' + k + '} = 0\\)</div>' +
+      '<span class="binom-err">Es gilt \\(k \\le n\\); sonst ist der Binomialkoeffizient \\(0\\).</span>';
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([out]).catch(function () {});
+    }
+    return;
+  }
+
+  const kEff = k < n - k ? k : n - k;
+  if (kEff > 3500) {
+    out.innerHTML = '<span class="binom-err">Für \\(\\min(k,\\, n-k) > 3500\\) würde die exakte Berechnung den Browser stark belasten. Bitte wähle kleinere Werte (z.&nbsp;B. \\(k\\) nahe \\(0\\) oder \\(n\\)).</span>';
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([out]).catch(function () {});
+    }
+    return;
+  }
+
+  const tic = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+  const coeff = binomialCoefficientBigInt(n, k);
+  const toc = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+  const ms = Math.round(toc - tic);
+
+  let s = coeff.toString();
+  let body;
+  if (s.length <= 160) {
+    body = s;
+  } else {
+    body = s.slice(0, 72) + ' … <span style="color:var(--text-light);font-family:\'Nunito\',sans-serif">(' +
+      s.length + ' Stellen)</span> … ' + s.slice(-72);
+  }
+
+  out.innerHTML =
+    '<div class="binom-formula">\\(\\displaystyle\\binom{' + n + '}{' + k + '} =\\)</div>' + body +
+    (ms > 50 ? '<div style="margin-top:10px;font-size:0.8rem;color:var(--text-light);font-family:\'Nunito\',sans-serif">Berechnet in ca. ' + ms + ' ms</div>' : '');
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([out]).catch(function () {});
+  }
 }
 
 // ══════════════════════════════════════════════
@@ -1436,6 +1720,13 @@ function checkRuleExercise() {
 function parseNum(str) {
   return parseFloat(str.replace(',', '.').trim());
 }
+/** Dezimalzahl (0,81) oder Prozent (81,3) → Wahrscheinlichkeit in [0, 1] */
+function parseProbability(str) {
+  const x = parseNum(str);
+  if (Number.isNaN(x)) return NaN;
+  if (x > 1 && x <= 100) return x / 100;
+  return x;
+}
 function approxEq(a, b, tol) {
   return Math.abs(a - b) <= (tol || 0.1);
 }
@@ -1481,7 +1772,9 @@ function checkPraxis() {
   const mu = parseNum(document.getElementById('praxis_mu').value);
   const sig = parseNum(document.getElementById('praxis_sigma').value);
   const korr = parseNum(document.getElementById('praxis_korrektur').value);
-  const z = parseNum(document.getElementById('praxis_z').value);
+  const prob = parseProbability(document.getElementById('praxis_prob').value);
+  const zOptRaw = document.getElementById('praxis_z').value.trim();
+  const zOpt = zOptRaw ? parseNum(zOptRaw) : NaN;
 
   const fb = document.getElementById('fb_praxis');
   let correct = 0;
@@ -1492,22 +1785,62 @@ function checkPraxis() {
   if (approxEq(mu, 255)) correct++; else details.push('\u03bc = 255');
   if (approxEq(sig, 6.18, 0.15)) correct++; else details.push('\u03c3 = \u221a(300\u00b70,85\u00b70,15) = \u221a38,25 \u2248 6,18');
   if (approxEq(korr, 260.5)) correct++; else details.push('Stetigkeitskorrektur: 260 + 0,5 = 260,5');
-  if (approxEq(z, 0.89, 0.15)) correct++; else details.push('z = (260,5 \u2212 255) / 6,18 \u2248 0,89');
+  if (!Number.isNaN(prob) && approxEq(prob, 0.8133, 0.03)) correct++;
+  else details.push('Wahrscheinlichkeit: im GeoGebra-Rechner P(X \u2264 260,5) \u2248 0,813 (bzw. 81,3 %)');
+
+  let zExtra = '';
+  if (zOptRaw) {
+    if (!Number.isNaN(zOpt) && approxEq(zOpt, 0.89, 0.15)) {
+      zExtra = '<br><span style="color:var(--green)">\u2705 Optional: z \u2248 0,89 passt zur Standardisierung.</span>';
+    } else {
+      zExtra = '<br><span style="color:var(--text-light)">Optional: z = (260,5 \u2212 255) / 6,18 \u2248 0,89</span>';
+    }
+  }
 
   if (correct >= 5) {
     fb.className = 'feedback correct';
     fb.innerHTML = '\u2705 Ausgezeichnet! ' + correct + ' von 6 richtig.' +
       (details.length > 0 ? '<br>Kleine Korrektur: ' + details.join(', ') : '') +
-      '<br>\u03a6(0,89) \u2248 0,8133 \u2192 P(X \u2264 260) \u2248 81,3 %';
+      '<br>P(X \u2264 260,5) \u2248 81,3 % (Normalverteilungsrechner).' + zExtra;
     markComplete(5);
   } else if (correct >= 3) {
     fb.className = 'feedback incorrect';
-    fb.innerHTML = '\ud83d\udfe0 ' + correct + ' von 6 richtig \u2014 fast! Korrekturen:<br>' + details.join('<br>');
+    fb.innerHTML = '\ud83d\udfe0 ' + correct + ' von 6 richtig \u2014 fast! Korrekturen:<br>' + details.join('<br>') + zExtra;
   } else {
     fb.className = 'feedback incorrect';
-    fb.innerHTML = '\u274c ' + correct + ' von 6 richtig. Schau dir den Tipp an.<br>' + details.join('<br>');
+    fb.innerHTML = '\u274c ' + correct + ' von 6 richtig. Schau dir den Tipp an.<br>' + details.join('<br>') + zExtra;
   }
   fb.style.display = 'block';
+}
+
+// ══════════════════════════════════════════════
+// GEOGEBRA-MODAL (Übungen)
+// ══════════════════════════════════════════════
+function openGeoGebraModal() {
+  const modal = document.getElementById('geogebraModal');
+  const frame = document.getElementById('geogebraModalFrame');
+  if (frame && frame.dataset.src && !frame.dataset.loaded) {
+    frame.src = frame.dataset.src;
+    frame.dataset.loaded = '1';
+  }
+  if (modal) {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  if (window.MathJax && MathJax.typesetPromise) {
+    var body = document.getElementById('ggModalBody');
+    if (body) MathJax.typesetPromise([body]).catch(function () {});
+  }
+}
+
+function closeGeoGebraModal() {
+  const modal = document.getElementById('geogebraModal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
 }
 
 // ══════════════════════════════════════════════
@@ -1517,15 +1850,16 @@ function checkA1() {
   const mu = parseNum(document.getElementById('a1_mu').value);
   const sig = parseNum(document.getElementById('a1_sigma').value);
   const korr = parseNum(document.getElementById('a1_korr').value);
-  const z = parseNum(document.getElementById('a1_z').value);
+  const prob = parseProbability(document.getElementById('a1_prob').value);
   const fb = document.getElementById('fb_a1');
   let correct = 0;
   if (approxEq(mu, 140)) correct++;
   if (approxEq(sig, 9.54, 0.15)) correct++;
   if (approxEq(korr, 150.5)) correct++;
-  if (approxEq(z, 1.10, 0.15)) correct++;
+  if (!Number.isNaN(prob) && approxEq(prob, 0.1357, 0.04)) correct++;
   if (correct === 4) {
-    fb.className = 'feedback correct'; fb.innerHTML = '\u2705 Perfekt!';
+    fb.className = 'feedback correct';
+    fb.innerHTML = '\u2705 Perfekt! P \u2248 13,6 % bzw. 0,136.';
   } else {
     fb.className = 'feedback incorrect';
     fb.innerHTML = '\u274c ' + correct + ' von 4 richtig. Klicke auf \u201eL\u00f6sung\u201c.';
@@ -1539,21 +1873,23 @@ function checkA2() {
   const sig = parseNum(document.getElementById('a2_sigma').value);
   const lo = parseNum(document.getElementById('a2_low').value);
   const hi = parseNum(document.getElementById('a2_high').value);
-  const z1 = parseNum(document.getElementById('a2_z1').value);
-  const z2 = parseNum(document.getElementById('a2_z2').value);
+  const prob = parseProbability(document.getElementById('a2_prob').value);
   const fb = document.getElementById('fb_a2');
   let correct = 0;
   if (approxEq(mu, 30)) correct++;
   if (approxEq(sig, 5.14, 0.15)) correct++;
   if (approxEq(lo, 24.5)) correct++;
   if (approxEq(hi, 35.5)) correct++;
-  if (approxEq(z1, -1.07, 0.15)) correct++;
-  if (approxEq(z2, 1.07, 0.15)) correct++;
-  if (correct >= 5) {
-    fb.className = 'feedback correct'; fb.innerHTML = '\u2705 Sehr gut!';
+  if (!Number.isNaN(prob) && approxEq(prob, 0.7154, 0.05)) correct++;
+  if (correct === 5) {
+    fb.className = 'feedback correct';
+    fb.innerHTML = '\u2705 Sehr gut! P \u2248 71,5 % bzw. 0,715.';
+  } else if (correct >= 4) {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\ud83d\udfe0 ' + correct + ' von 5 richtig \u2014 fast! Schau dir die L\u00f6sung an.';
   } else {
     fb.className = 'feedback incorrect';
-    fb.innerHTML = '\u274c ' + correct + ' von 6 richtig. Schau dir die L\u00f6sung an.';
+    fb.innerHTML = '\u274c ' + correct + ' von 5 richtig. Schau dir die L\u00f6sung an.';
   }
   fb.style.display = 'block';
   if (correct >= 4) checkStation6();
@@ -1564,18 +1900,23 @@ function checkA3() {
   const sig = parseNum(document.getElementById('a3_sigma').value);
   const lo = parseNum(document.getElementById('a3_low').value);
   const hi = parseNum(document.getElementById('a3_high').value);
+  const prob = parseProbability(document.getElementById('a3_prob').value);
   const fb = document.getElementById('fb_a3');
   let correct = 0;
   if (approxEq(mu, 50)) correct++;
   if (approxEq(sig, 5)) correct++;
   if (approxEq(lo, 49.5)) correct++;
   if (approxEq(hi, 50.5)) correct++;
-  if (correct === 4) {
+  if (!Number.isNaN(prob) && approxEq(prob, 0.0796, 0.025)) correct++;
+  if (correct === 5) {
     fb.className = 'feedback correct';
     fb.innerHTML = '\u2705 Richtig! P(X = 50) \u2248 P(49,5 \u2264 X \u2264 50,5) \u2248 8,0 %';
+  } else if (correct >= 4) {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\ud83d\udfe0 ' + correct + ' von 5 richtig \u2014 fast! Klicke auf \u201eL\u00f6sung\u201c.';
   } else {
     fb.className = 'feedback incorrect';
-    fb.innerHTML = '\u274c ' + correct + ' von 4 richtig. Klicke auf \u201eL\u00f6sung\u201c.';
+    fb.innerHTML = '\u274c ' + correct + ' von 5 richtig. Klicke auf \u201eL\u00f6sung\u201c.';
   }
   fb.style.display = 'block';
   if (correct >= 3) checkStation6();
@@ -1608,7 +1949,6 @@ function checkGeoGebra() {
     fb.className = 'feedback correct';
     fb.innerHTML = '\u2705 Sehr gut! Du kannst GeoGebra korrekt f\u00fcr die Normalapproximation einsetzen.' +
       (correct < 4 ? '<br>Kleiner Hinweis: Pr\u00fcfe nochmal alle Werte.' : '');
-    markComplete(8);
   } else {
     fb.className = 'feedback incorrect';
     fb.innerHTML = '\u274c ' + correct + ' von 4 richtig. Klicke auf \u201eL\u00f6sung\u201c f\u00fcr die vollst\u00e4ndige Rechnung.';
@@ -1769,8 +2109,39 @@ function resetFinalQuiz() {
 window.addEventListener('DOMContentLoaded', () => {
   updateProgress();
   buildFinalQuiz();
+  updateBinomialCoefficient();
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeGeoGebraModal();
+  });
 });
 </script>
+
+<!-- GeoGebra Normalverteilungsrechner (Modal für Übungen) -->
+<div id="geogebraModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="ggModalTitle" aria-hidden="true">
+  <div class="gg-modal-backdrop" onclick="closeGeoGebraModal()"></div>
+  <div class="gg-modal-dialog">
+    <div class="gg-modal-header">
+      <h2 id="ggModalTitle">Normalverteilungsrechner</h2>
+      <button type="button" class="gg-modal-close" onclick="closeGeoGebraModal()" aria-label="Fenster schließen">&times;</button>
+    </div>
+    <div class="gg-modal-body" id="ggModalBody">
+      <p class="gg-modal-intro">Trage \(\mu\) und \(\sigma\) ein, wähle die passende Wahrscheinlichkeitsart und verwende die <strong>korrigierten Grenzen</strong> (Stetigkeitskorrektur). Den angezeigten Wert kannst du in die Übungsfelder übernehmen.</p>
+      <div class="geogebra-iframe-wrap">
+        <iframe id="geogebraModalFrame" title="Normalverteilungsrechner – GeoGebra"
+          data-src="https://www.geogebra.org/material/iframe/id/CBzQg8zE/border/false"
+          src="about:blank"
+          width="900" height="460"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <p class="gg-modal-footer">
+        <a href="https://www.geogebra.org/m/CBzQg8zE" target="_blank" rel="noopener noreferrer">Material in neuem Tab öffnen</a>
+        · Kurt Söser
+      </p>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
