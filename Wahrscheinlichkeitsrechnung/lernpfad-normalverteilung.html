@@ -13,8 +13,10 @@ MathJax = {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 <link rel="stylesheet" href="css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="css/lernpfade-nav.css">
+<script src="js/lernpfade-nav.js" defer></script>
 </head>
-<body>
+<body data-current-page="nv-grund" data-page-type="lernpfad">
 
 <div class="progress-bar-container">
   <div class="progress-bar-track">
@@ -33,7 +35,8 @@ MathJax = {
   <p class="subtitle">Lernpfad: Glockenkurve verstehen — Begriffe, Faustregel, Standardisierung und Anwendungen, interaktiv und mit Übungen.</p>
   <span class="badge">HAK Steyr · Abendschule · Mathematik</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:640px; margin-left:auto; margin-right:auto;">
-    Verwandter Lernpfad (Vertiefung): <a href="lernpfad-approximation-normalverteilung.html" style="color:var(--blue-dark); font-weight:600;">Normalverteilung als Näherung der Binomialverteilung</a>
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht aller Lernpfade</a>
+    · Verwandter Lernpfad: <a href="lernpfad-approximation-normalverteilung.html" style="color:var(--blue-dark); font-weight:600;">NV als Näherung der Binomialverteilung</a>
   </p>
 </div>
 
@@ -259,17 +262,17 @@ MathJax = {
 
   <div class="info-box success">
     <div class="icon">🎮</div>
-    <div><strong>Interaktiv:</strong> Ziehe die Regler und beobachte die Glockenkurve.</div>
+    <div><strong>Interaktiv:</strong> Ziehe die Regler. Die <strong>\(x\)-Achse ist fest 0–100</strong>, die <strong>\(f(x)\)-Skala ebenfalls fest</strong> — so siehst du direkt, wie sich \(\mu\) und \(\sigma\) auf Lage und Höhe/Breite der Glocke auswirken (ohne automatischen Zoom).</div>
   </div>
 
   <div class="chart-controls">
     <div class="slider-group">
-      <label for="bellMu">\(\mu\)</label>
-      <input type="range" id="bellMu" min="400" max="600" value="500" step="1" oninput="updateBellChart()">
-      <span class="slider-value" id="valBellMu">500</span>
+      <label for="bellMu">\(\mu\) (0–100, verschiebt die Glocke)</label>
+      <input type="range" id="bellMu" min="0" max="100" value="50" step="1" oninput="updateBellChart()">
+      <span class="slider-value" id="valBellMu">50</span>
     </div>
     <div class="slider-group">
-      <label for="bellSigma">\(\sigma\)</label>
+      <label for="bellSigma">\(\sigma\) (Streuung)</label>
       <input type="range" id="bellSigma" min="1" max="20" value="5" step="1" oninput="updateBellChart()">
       <span class="slider-value" id="valBellSigma">5</span>
     </div>

@@ -289,18 +289,21 @@ function updateRuleChart() {
 }
 
 // ══════════════════════════════════════════════
-// CHART: μ und σ spielerisch
+// CHART: μ und σ spielerisch (festes x: 0–100, feste f-Skala)
 // ══════════════════════════════════════════════
+/** Sichtbares x-Intervall — immer gleich, damit Lage & Streuung vergleichbar sind */
+const BELL_X_MIN = 0;
+const BELL_X_MAX = 100;
+/** Obere Grenze f(x): genug Platz für σ = 1 (max. Dichte ≈ 0,399) */
+const BELL_Y_MAX = 0.42;
+
 function initBellChart() {
   const canvas = document.getElementById('bellChart');
   if (!canvas || typeof Chart === 'undefined') return;
 
   const mu = parseFloat(document.getElementById('bellMu').value);
   const sigma = parseFloat(document.getElementById('bellSigma').value);
-  const span = Math.max(sigma * 4, 1);
-  const xMin = mu - span;
-  const xMax = mu + span;
-  const pts = buildPDFPoints(mu, sigma, xMin, xMax, 180);
+  const pts = buildPDFPoints(mu, sigma, BELL_X_MIN, BELL_X_MAX, 220);
 
   const data = {
     datasets: [
@@ -323,17 +326,27 @@ function initBellChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: { duration: 200 },
       plugins: {
         legend: { display: true },
         title: {
           display: true,
-          text: 'Glockenkurve (Dichte)',
+          text: 'Glockenkurve (Dichte) — x von 0 bis 100',
           font: { family: 'Patrick Hand', size: 18 }
         }
       },
       scales: {
-        x: { type: 'linear', title: { display: true, text: 'x' } },
-        y: { title: { display: true, text: 'f(x)' }, beginAtZero: true }
+        x: {
+          type: 'linear',
+          min: BELL_X_MIN,
+          max: BELL_X_MAX,
+          title: { display: true, text: 'x' }
+        },
+        y: {
+          min: 0,
+          max: BELL_Y_MAX,
+          title: { display: true, text: 'f(x)' }
+        }
       }
     }
   };
@@ -353,11 +366,12 @@ function updateBellChart() {
     initBellChart();
     return;
   }
-  const span = Math.max(sigma * 4, 1);
-  const xMin = mu - span;
-  const xMax = mu + span;
-  const pts = buildPDFPoints(mu, sigma, xMin, xMax, 180);
+  const pts = buildPDFPoints(mu, sigma, BELL_X_MIN, BELL_X_MAX, 220);
   bellChart.data.datasets[0].data = pts;
+  bellChart.options.scales.x.min = BELL_X_MIN;
+  bellChart.options.scales.x.max = BELL_X_MAX;
+  bellChart.options.scales.y.min = 0;
+  bellChart.options.scales.y.max = BELL_Y_MAX;
   bellChart.update();
   updateBellLabels();
 }
@@ -367,6 +381,8 @@ function updateBellLabels() {
   const sigma = parseFloat(document.getElementById('bellSigma').value);
   const el = document.getElementById('bellInterpret');
   if (!el) return;
+  var streu =
+    sigma < 3 ? 'sehr schmale' : sigma > 12 ? 'breite' : 'mittlere';
   el.innerHTML =
     '<strong>Aktuell:</strong> \\(' +
     '\\mu = ' +
@@ -375,7 +391,7 @@ function updateBellLabels() {
     '\\sigma = ' +
     sigma +
     '\\) — ' +
-    (sigma < 1.2 ? 'sehr schmale' : sigma > 4 ? 'breite' : 'mittlere') +
+    streu +
     ' Streuung.';
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(function () {});
 }

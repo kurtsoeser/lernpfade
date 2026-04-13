@@ -1,0 +1,149 @@
+/* Globale Lernpfad-Navigation (Inhaltsverzeichnis) */
+:root {
+  --lp-nav-h: 44px;
+}
+
+.lernpfade-site-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 998;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 12px;
+  min-height: var(--lp-nav-h);
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--blue);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.lernpfade-site-nav .lernpfade-site-nav-title {
+  color: var(--text-light);
+  font-weight: 700;
+  margin-right: 8px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lernpfade-site-nav a {
+  color: var(--blue-dark);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.lernpfade-site-nav a:hover {
+  background: var(--blue-light);
+  color: var(--text);
+}
+
+.lernpfade-site-nav a.current {
+  background: var(--blue);
+  color: #fff;
+  pointer-events: none;
+}
+
+/* Lernpfad-Seiten: unter Fortschrittsleiste */
+body.has-lernpfade-nav[data-page-type="lernpfad"] .lernpfade-site-nav {
+  top: 46px;
+}
+
+body.has-lernpfade-nav[data-page-type="lernpfad"] .tab-bar {
+  top: calc(46px + var(--lp-nav-h));
+}
+
+body.has-lernpfade-nav[data-page-type="lernpfad"] .container {
+  padding-top: calc(60px + var(--lp-nav-h));
+}
+
+/* Index: keine Fortschrittsleiste */
+body.has-lernpfade-nav[data-page-type="index"] .lernpfade-site-nav {
+  top: 0;
+}
+
+body.has-lernpfade-nav[data-page-type="index"] .container {
+  padding-top: calc(20px + var(--lp-nav-h));
+}
+
+/* Index: Karten */
+.index-intro {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 28px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.index-card {
+  display: block;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  border: 2px solid transparent;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.index-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.index-card h2 {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1.45rem;
+  color: var(--blue-dark);
+  margin-bottom: 10px;
+}
+
+.index-card p {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.55;
+}
+
+.index-card .index-card-meta {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+@media (max-width: 700px) {
+  body.has-lernpfade-nav[data-page-type="lernpfad"] .container {
+    padding-top: calc(55px + var(--lp-nav-h));
+  }
+  body.has-lernpfade-nav[data-page-type="index"] .container {
+    padding-top: calc(16px + var(--lp-nav-h));
+  }
+  body.has-lernpfade-nav[data-page-type="lernpfad"] .tab-bar {
+    top: calc(40px + var(--lp-nav-h));
+  }
+  .lernpfade-site-nav {
+    justify-content: flex-start;
+    font-size: 0.75rem;
+  }
+  .lernpfade-site-nav a {
+    padding: 5px 8px;
+  }
+}
