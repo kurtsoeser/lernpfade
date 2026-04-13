@@ -1,0 +1,525 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap');
+
+:root {
+  --blue: #3B82C4;
+  --blue-light: #D6EAF8;
+  --blue-dark: #2563A0;
+  --gold: #F5C542;
+  --gold-light: #FFF8DC;
+  --green: #27AE60;
+  --green-light: #D5F5E3;
+  --red: #E74C3C;
+  --red-light: #FDEDEC;
+  --orange: #F39C12;
+  --bg: #FDF6E3;
+  --bg-card: #FFFFFF;
+  --text: #2C3E50;
+  --text-light: #5D6D7E;
+  --shadow: 0 4px 15px rgba(0,0,0,0.08);
+  --radius: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── Progress Bar ── */
+.progress-bar-container {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+  padding: 8px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.progress-bar-track {
+  background: #E8E8E8; border-radius: 10px; height: 10px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 10px; transition: width 0.5s ease;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+}
+.progress-label {
+  font-size: 0.75rem; color: var(--text-light); margin-top: 3px;
+  display: flex; justify-content: space-between;
+}
+
+/* ── Main ── */
+.container { max-width: 960px; margin: 0 auto; padding: 60px 20px 30px; }
+
+/* ── Hero ── */
+.hero {
+  text-align: center; padding: 40px 30px; margin-bottom: 0;
+  background: linear-gradient(135deg, var(--blue-light), var(--gold-light));
+  border-radius: var(--radius) var(--radius) 0 0; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50px; right: -50px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(59,130,196,0.1);
+}
+.hero h1 {
+  font-family: 'Patrick Hand', cursive; font-size: 2.2rem;
+  color: var(--blue-dark); margin-bottom: 8px;
+}
+.hero .subtitle { font-size: 1rem; color: var(--text-light); max-width: 600px; margin: 0 auto; }
+.hero .badge {
+  display: inline-block; margin-top: 12px; padding: 5px 16px;
+  background: var(--gold); border-radius: 20px; font-weight: 700;
+  font-size: 0.8rem; color: var(--text);
+}
+
+/* ── Tab Navigation ── */
+.tab-bar {
+  display: flex; background: white; border-bottom: 3px solid var(--blue);
+  border-radius: 0; overflow-x: auto; position: sticky; top: 46px;
+  z-index: 999; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.tab-btn {
+  flex: 1; min-width: 0; padding: 12px 8px; border: none;
+  background: white; cursor: pointer; transition: all 0.3s;
+  font-family: 'Nunito', sans-serif; font-size: 0.75rem; font-weight: 600;
+  color: var(--text-light); text-align: center; white-space: nowrap;
+  position: relative; display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+}
+.tab-btn:hover { background: var(--blue-light); }
+.tab-btn.active {
+  color: var(--blue-dark); background: var(--blue-light);
+}
+.tab-btn.active::after {
+  content: ''; position: absolute; bottom: -3px; left: 20%; right: 20%;
+  height: 3px; background: var(--blue); border-radius: 3px 3px 0 0;
+}
+.tab-btn.completed-tab { color: var(--green); }
+.tab-btn.completed-tab::before { content: ''; }
+.tab-btn.tab-btn-optional { color: var(--text-light); }
+.tab-btn.tab-btn-optional .tab-num { background: #E8E8E8; border: 1px dashed #B0B0B0; }
+.tab-num {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-weight: 800;
+  font-size: 0.8rem; background: #E8E8E8; color: var(--text-light);
+  transition: all 0.3s;
+}
+.tab-btn.active .tab-num { background: var(--blue); color: white; }
+.tab-btn.completed-tab .tab-num { background: var(--green); color: white; }
+
+/* ── Tab Content ── */
+.tab-panel {
+  display: none; background: var(--bg-card); padding: 30px;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: var(--shadow); animation: fadeIn 0.35s ease;
+  min-height: 400px;
+}
+.tab-panel.active { display: block; }
+
+/* ── Navigation Buttons ── */
+.tab-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 30px; padding-top: 20px;
+  border-top: 2px dashed #E8E8E8;
+}
+
+/* ── Ribbon Banner ── */
+.ribbon {
+  background: var(--gold); color: var(--text); font-family: 'Patrick Hand', cursive;
+  font-size: 1.3rem; padding: 8px 30px; text-align: center;
+  margin: 0 -30px 20px; position: relative;
+}
+.ribbon::before, .ribbon::after {
+  content: ''; position: absolute; bottom: -8px; border: 8px solid transparent;
+}
+.ribbon::before { left: 0; border-top-color: #c9a235; border-left-color: #c9a235; }
+.ribbon::after { right: 0; border-top-color: #c9a235; border-right-color: #c9a235; }
+
+/* ── Info Boxes ── */
+.info-box {
+  border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.info-box .icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.info-box.concept { background: var(--blue-light); border: 1px solid rgba(59,130,196,0.2); }
+.info-box.success { background: var(--green-light); border: 1px solid rgba(39,174,96,0.2); }
+.info-box.warning { background: #FFF3CD; border: 1px solid rgba(243,156,18,0.2); }
+.info-box.danger { background: var(--red-light); border: 1px solid rgba(231,76,60,0.2); }
+
+/* ── Formula Box ── */
+.formula-box {
+  background: linear-gradient(135deg, #F0F7FF, #E8F4FF);
+  border: 2px solid var(--blue); border-radius: 12px;
+  padding: 20px 24px; margin: 18px 0; text-align: center;
+}
+.formula-box .formula-label {
+  font-weight: 700; color: var(--blue-dark);
+  margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* GeoGebra Embed (Schritt 4: Stetigkeitskorrektur) */
+.geogebra-embed {
+  margin: 22px 0;
+}
+.geogebra-embed-title {
+  font-weight: 700; color: var(--blue-dark); margin-bottom: 10px; font-size: 1rem;
+}
+.geogebra-embed-note {
+  font-size: 0.88rem; color: var(--text-light); margin-top: 10px; line-height: 1.5;
+}
+.geogebra-iframe-wrap {
+  position: relative; width: 100%; max-width: 900px; margin: 0 auto;
+  border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);
+  border: 1px solid rgba(59,130,196,0.25); background: #fff;
+}
+.geogebra-iframe-wrap iframe {
+  display: block; width: 100%; height: 520px; border: 0; vertical-align: top;
+}
+@media (max-width: 700px) {
+  .geogebra-iframe-wrap iframe { height: 420px; min-height: 360px; }
+}
+
+/* GeoGebra Modal (Übungen) */
+.gg-modal {
+  position: fixed; inset: 0; z-index: 2000;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px; box-sizing: border-box;
+}
+.gg-modal.open { display: flex; }
+.gg-modal-backdrop {
+  position: absolute; inset: 0; background: rgba(44, 62, 80, 0.55);
+  cursor: pointer;
+}
+.gg-modal-dialog {
+  position: relative; width: min(920px, 100%); max-height: min(92vh, 900px);
+  background: var(--bg-card); border-radius: var(--radius);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.25); overflow: hidden;
+  display: flex; flex-direction: column; z-index: 1;
+}
+.gg-modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; padding: 12px 16px; background: linear-gradient(135deg, var(--blue-light), #E8F4FF);
+  border-bottom: 1px solid rgba(59,130,196,0.2); flex-shrink: 0;
+}
+.gg-modal-header h2 {
+  margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--blue-dark);
+  font-family: 'Nunito', sans-serif;
+}
+.gg-modal-close {
+  border: none; background: rgba(255,255,255,0.7); width: 36px; height: 36px;
+  border-radius: 50%; font-size: 1.5rem; line-height: 1; cursor: pointer;
+  color: var(--text); flex-shrink: 0;
+}
+.gg-modal-close:hover { background: white; }
+.gg-modal-body { padding: 12px 16px 16px; overflow: auto; flex: 1; }
+.gg-modal-intro {
+  font-size: 0.9rem; color: var(--text); margin-bottom: 10px; line-height: 1.5;
+}
+.gg-modal-body .geogebra-iframe-wrap { max-width: 100%; }
+.gg-modal-body .geogebra-iframe-wrap iframe {
+  height: min(460px, 58vh); min-height: 320px;
+}
+.gg-modal-footer {
+  font-size: 0.85rem; color: var(--text-light); margin-top: 10px; text-align: center;
+}
+
+/* ── Comparison ── */
+.comparison {
+  display: grid; grid-template-columns: 1fr 60px 1fr; gap: 10px;
+  align-items: center; margin: 20px 0;
+}
+.comp-card {
+  background: white; border-radius: 12px; padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;
+}
+.comp-card.binomial { border-top: 4px solid var(--blue); }
+.comp-card.normal { border-top: 4px solid var(--gold); }
+.comp-card h4 { margin-bottom: 8px; }
+.comp-arrow { text-align: center; font-size: 2rem; color: var(--green); }
+
+/* ── Stepper ── */
+.stepper { margin: 20px 0; }
+.step {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px dashed #E0E0E0; align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--blue);
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+}
+
+/* ── Interactive Charts ── */
+.chart-container { position: relative; margin: 20px auto; max-width: 100%; }
+.chart-controls {
+  display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0;
+  align-items: center; justify-content: center;
+}
+.slider-group { text-align: center; }
+.slider-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+.slider-group input[type=range] {
+  -webkit-appearance: none; width: 180px; height: 8px;
+  border-radius: 4px; background: #D6EAF8; outline: none;
+}
+.slider-group input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--blue); cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.slider-value {
+  display: inline-block; background: var(--blue); color: white;
+  padding: 2px 10px; border-radius: 10px; font-weight: 700;
+  font-size: 0.85rem; min-width: 40px; text-align: center;
+}
+
+/* Binomialkoeffizient-Rechner (Tab „Warum Näherung?“) */
+.binom-widget {
+  margin-top: 14px; padding: 18px 20px; border-radius: var(--radius);
+  background: var(--blue-light); border: 1px solid rgba(59,130,196,0.25);
+}
+.binom-widget-title {
+  font-weight: 700; font-size: 1rem; color: var(--blue-dark); margin-bottom: 6px;
+}
+.binom-widget-hint {
+  font-size: 0.88rem; color: var(--text-light); margin-bottom: 14px;
+}
+.binom-widget-controls {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;
+}
+.binom-field label {
+  display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;
+}
+.binom-field input[type=number] {
+  width: 120px; padding: 8px 12px; border: 2px solid #C8D9E8; border-radius: 8px;
+  font-family: 'Nunito', sans-serif; font-size: 1rem;
+}
+.binom-field input[type=number]:focus {
+  border-color: var(--blue); outline: none;
+}
+.binom-widget-result {
+  margin-top: 14px; padding: 12px 14px; background: white; border-radius: 10px;
+  border: 1px solid rgba(59,130,196,0.2); font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.82rem; line-height: 1.45; word-break: break-all;
+}
+.binom-widget-result .binom-formula { font-family: 'Nunito', sans-serif; font-size: 0.9rem; margin-bottom: 8px; color: var(--text); }
+.binom-widget-result .binom-err { color: var(--red); font-family: 'Nunito', sans-serif; }
+
+/* ── Exercises ── */
+.exercise {
+  background: #FAFBFC; border-radius: 12px; padding: 24px;
+  margin: 20px 0; border: 2px solid #E8E8E8;
+}
+.exercise-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.exercise-badge {
+  background: var(--orange); color: white; padding: 4px 14px;
+  border-radius: 16px; font-weight: 700; font-size: 0.8rem;
+}
+.exercise-title { font-weight: 700; font-size: 1.05rem; }
+
+.input-group { margin: 12px 0; }
+.input-group label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 0.9rem; }
+.input-group input, .input-group select {
+  width: 100%; padding: 10px 14px; border: 2px solid #D0D0D0;
+  border-radius: 8px; font-size: 1rem; font-family: 'Nunito', sans-serif;
+  transition: border-color 0.3s;
+}
+.input-group input:focus, .input-group select:focus {
+  border-color: var(--blue); outline: none;
+}
+.input-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.input-row .input-group { flex: 1; min-width: 140px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 24px; border: none; border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  font-size: 0.95rem; cursor: pointer; transition: all 0.3s;
+}
+.btn-check { background: var(--blue); color: white; }
+.btn-check:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.btn-hint { background: #F0F0F0; color: var(--text); }
+.btn-hint:hover { background: #E0E0E0; }
+.btn-next { background: var(--green); color: white; }
+.btn-next:hover { background: #219A52; }
+.btn-prev { background: #E8E8E8; color: var(--text); }
+.btn-prev:hover { background: #D0D0D0; }
+.btn-reset { background: #F0F0F0; color: var(--text-light); }
+
+.feedback {
+  margin-top: 14px; padding: 14px 18px; border-radius: 10px;
+  display: none; animation: fadeIn 0.3s ease;
+}
+.feedback.correct { display: block; background: var(--green-light); border: 1px solid var(--green); }
+.feedback.incorrect { display: block; background: var(--red-light); border: 1px solid var(--red); }
+.feedback.hint { display: block; background: var(--gold-light); border: 1px solid var(--gold); }
+
+/* ── Quiz ── */
+.quiz-option {
+  display: block; padding: 12px 18px; margin: 8px 0;
+  border: 2px solid #E0E0E0; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s; background: white;
+}
+.quiz-option:hover { border-color: var(--blue); background: var(--blue-light); }
+.quiz-option.selected { border-color: var(--blue); background: var(--blue-light); font-weight: 600; }
+.quiz-option.correct-answer { border-color: var(--green); background: var(--green-light); }
+.quiz-option.wrong-answer { border-color: var(--red); background: var(--red-light); }
+
+/* ── Final Quiz Stepper ── */
+.quiz-stepper { display: flex; gap: 6px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+.quiz-step-dot {
+  width: 30px; height: 30px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 0.75rem;
+  font-weight: 700; border: 2px solid #D0D0D0; background: white;
+  color: var(--text-light);
+}
+.quiz-step-dot.active { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+.quiz-step-dot.correct-dot { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.quiz-step-dot.wrong-dot { border-color: var(--red); background: var(--red-light); color: var(--red); }
+
+/* ── Badges ── */
+.badge-container { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 16px 0; }
+.earned-badge {
+  padding: 8px 18px; border-radius: 20px; font-weight: 700;
+  font-size: 0.85rem; animation: fadeIn 0.5s ease;
+}
+.earned-badge.bronze { background: #F0E0C8; color: #8B6914; }
+.earned-badge.silver { background: #E8E8E8; color: #555; }
+.earned-badge.gold { background: #FFF3B0; color: #8B6914; }
+
+/* ── Animations ── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .container { padding: 55px 10px 20px; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero { padding: 28px 16px; }
+  .tab-panel { padding: 20px 16px; }
+  .ribbon { margin: 0 -16px 20px; font-size: 1.1rem; }
+  .comparison { grid-template-columns: 1fr; }
+  .comp-arrow { transform: rotate(90deg); }
+  .slider-group input[type=range] { width: 130px; }
+  .tab-btn { padding: 10px 6px; font-size: 0.65rem; min-width: 48px; }
+  .tab-num { width: 24px; height: 24px; font-size: 0.7rem; }
+  .tab-bar { top: 40px; }
+}
+
+/* ── Schwebende Werkzeuge (Taschenrechner + GeoGebra) ── */
+.floating-tools-wrap {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: 'Nunito', sans-serif;
+  pointer-events: none;
+}
+.floating-tools-wrap * { pointer-events: auto; }
+
+.floating-tools-menu {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+  animation: fadeIn 0.2s ease;
+}
+.floating-tools-menu.open { display: flex; }
+
+.floating-tools-menu button {
+  min-width: 220px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(59,130,196,0.35);
+  background: white;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s, transform 0.15s;
+}
+.floating-tools-menu button:hover {
+  background: var(--blue-light);
+  transform: translateX(-2px);
+}
+.floating-tools-menu button .ft-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+
+.floating-tools-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  color: white;
+  font-size: 1.45rem;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(59,130,196,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.floating-tools-fab:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 24px rgba(59,130,196,0.5);
+}
+.floating-tools-fab[aria-expanded="true"] {
+  background: linear-gradient(135deg, var(--blue-dark), #1a4d7a);
+}
+
+/* Taschenrechner-Modal (nutzt .gg-modal-Struktur) */
+.calc-modal-dialog {
+  max-width: 300px !important;
+  width: min(300px, calc(100vw - 32px));
+}
+.calc-display-wrap {
+  margin-bottom: 12px;
+}
+.calc-display {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1.35rem;
+  font-family: ui-monospace, Consolas, monospace;
+  text-align: right;
+  border: 2px solid #D0D0D0;
+  border-radius: 10px;
+  background: #FAFBFC;
+  color: var(--text);
+}
+.calc-keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.calc-keys button {
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  border: 1px solid #D8D8D8;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: background 0.15s;
+}
+.calc-keys button:hover { background: var(--blue-light); }
+.calc-keys .calc-op { background: #E8F4FF; color: var(--blue-dark); }
+.calc-keys .calc-eq {
+  background: var(--green); color: white; border-color: var(--green);
+  grid-row: span 2;
+}
+.calc-keys .calc-eq:hover { filter: brightness(1.05); }
+.calc-keys .calc-wide { grid-column: span 2; }
