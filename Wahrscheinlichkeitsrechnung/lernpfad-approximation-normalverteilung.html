@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Normalverteilung als Näherung der Binomialverteilung</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap');
+
+:root {
+  --blue: #3B82C4;
+  --blue-light: #D6EAF8;
+  --blue-dark: #2563A0;
+  --gold: #F5C542;
+  --gold-light: #FFF8DC;
+  --green: #27AE60;
+  --green-light: #D5F5E3;
+  --red: #E74C3C;
+  --red-light: #FDEDEC;
+  --orange: #F39C12;
+  --bg: #FDF6E3;
+  --bg-card: #FFFFFF;
+  --text: #2C3E50;
+  --text-light: #5D6D7E;
+  --shadow: 0 4px 15px rgba(0,0,0,0.08);
+  --radius: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── Progress Bar ── */
+.progress-bar-container {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+  padding: 8px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.progress-bar-track {
+  background: #E8E8E8; border-radius: 10px; height: 10px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 10px; transition: width 0.5s ease;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+}
+.progress-label {
+  font-size: 0.75rem; color: var(--text-light); margin-top: 3px;
+  display: flex; justify-content: space-between;
+}
+
+/* ── Main ── */
+.container { max-width: 960px; margin: 0 auto; padding: 60px 20px 30px; }
+
+/* ── Hero ── */
+.hero {
+  text-align: center; padding: 40px 30px; margin-bottom: 0;
+  background: linear-gradient(135deg, var(--blue-light), var(--gold-light));
+  border-radius: var(--radius) var(--radius) 0 0; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50px; right: -50px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(59,130,196,0.1);
+}
+.hero h1 {
+  font-family: 'Patrick Hand', cursive; font-size: 2.2rem;
+  color: var(--blue-dark); margin-bottom: 8px;
+}
+.hero .subtitle { font-size: 1rem; color: var(--text-light); max-width: 600px; margin: 0 auto; }
+.hero .badge {
+  display: inline-block; margin-top: 12px; padding: 5px 16px;
+  background: var(--gold); border-radius: 20px; font-weight: 700;
+  font-size: 0.8rem; color: var(--text);
+}
+
+/* ── Tab Navigation ── */
+.tab-bar {
+  display: flex; background: white; border-bottom: 3px solid var(--blue);
+  border-radius: 0; overflow-x: auto; position: sticky; top: 46px;
+  z-index: 999; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.tab-btn {
+  flex: 1; min-width: 0; padding: 12px 8px; border: none;
+  background: white; cursor: pointer; transition: all 0.3s;
+  font-family: 'Nunito', sans-serif; font-size: 0.75rem; font-weight: 600;
+  color: var(--text-light); text-align: center; white-space: nowrap;
+  position: relative; display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+}
+.tab-btn:hover { background: var(--blue-light); }
+.tab-btn.active {
+  color: var(--blue-dark); background: var(--blue-light);
+}
+.tab-btn.active::after {
+  content: ''; position: absolute; bottom: -3px; left: 20%; right: 20%;
+  height: 3px; background: var(--blue); border-radius: 3px 3px 0 0;
+}
+.tab-btn.completed-tab { color: var(--green); }
+.tab-btn.completed-tab::before { content: ''; }
+.tab-num {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-weight: 800;
+  font-size: 0.8rem; background: #E8E8E8; color: var(--text-light);
+  transition: all 0.3s;
+}
+.tab-btn.active .tab-num { background: var(--blue); color: white; }
+.tab-btn.completed-tab .tab-num { background: var(--green); color: white; }
+
+/* ── Tab Content ── */
+.tab-panel {
+  display: none; background: var(--bg-card); padding: 30px;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: var(--shadow); animation: fadeIn 0.35s ease;
+  min-height: 400px;
+}
+.tab-panel.active { display: block; }
+
+/* ── Navigation Buttons ── */
+.tab-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 30px; padding-top: 20px;
+  border-top: 2px dashed #E8E8E8;
+}
+
+/* ── Ribbon Banner ── */
+.ribbon {
+  background: var(--gold); color: var(--text); font-family: 'Patrick Hand', cursive;
+  font-size: 1.3rem; padding: 8px 30px; text-align: center;
+  margin: 0 -30px 20px; position: relative;
+}
+.ribbon::before, .ribbon::after {
+  content: ''; position: absolute; bottom: -8px; border: 8px solid transparent;
+}
+.ribbon::before { left: 0; border-top-color: #c9a235; border-left-color: #c9a235; }
+.ribbon::after { right: 0; border-top-color: #c9a235; border-right-color: #c9a235; }
+
+/* ── Info Boxes ── */
+.info-box {
+  border-radius: 12px; padding: 18px 22px; margin: 16px 0;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.info-box .icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.info-box.concept { background: var(--blue-light); border: 1px solid rgba(59,130,196,0.2); }
+.info-box.success { background: var(--green-light); border: 1px solid rgba(39,174,96,0.2); }
+.info-box.warning { background: #FFF3CD; border: 1px solid rgba(243,156,18,0.2); }
+.info-box.danger { background: var(--red-light); border: 1px solid rgba(231,76,60,0.2); }
+
+/* ── Formula Box ── */
+.formula-box {
+  background: linear-gradient(135deg, #F0F7FF, #E8F4FF);
+  border: 2px solid var(--blue); border-radius: 12px;
+  padding: 20px 24px; margin: 18px 0; text-align: center;
+}
+.formula-box .formula-label {
+  font-weight: 700; color: var(--blue-dark);
+  margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── Comparison ── */
+.comparison {
+  display: grid; grid-template-columns: 1fr 60px 1fr; gap: 10px;
+  align-items: center; margin: 20px 0;
+}
+.comp-card {
+  background: white; border-radius: 12px; padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;
+}
+.comp-card.binomial { border-top: 4px solid var(--blue); }
+.comp-card.normal { border-top: 4px solid var(--gold); }
+.comp-card h4 { margin-bottom: 8px; }
+.comp-arrow { text-align: center; font-size: 2rem; color: var(--green); }
+
+/* ── Stepper ── */
+.stepper { margin: 20px 0; }
+.step {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px dashed #E0E0E0; align-items: flex-start;
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--blue);
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+}
+
+/* ── Interactive Charts ── */
+.chart-container { position: relative; margin: 20px auto; max-width: 100%; }
+.chart-controls {
+  display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0;
+  align-items: center; justify-content: center;
+}
+.slider-group { text-align: center; }
+.slider-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+.slider-group input[type=range] {
+  -webkit-appearance: none; width: 180px; height: 8px;
+  border-radius: 4px; background: #D6EAF8; outline: none;
+}
+.slider-group input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--blue); cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.slider-value {
+  display: inline-block; background: var(--blue); color: white;
+  padding: 2px 10px; border-radius: 10px; font-weight: 700;
+  font-size: 0.85rem; min-width: 40px; text-align: center;
+}
+
+/* ── Exercises ── */
+.exercise {
+  background: #FAFBFC; border-radius: 12px; padding: 24px;
+  margin: 20px 0; border: 2px solid #E8E8E8;
+}
+.exercise-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.exercise-badge {
+  background: var(--orange); color: white; padding: 4px 14px;
+  border-radius: 16px; font-weight: 700; font-size: 0.8rem;
+}
+.exercise-title { font-weight: 700; font-size: 1.05rem; }
+
+.input-group { margin: 12px 0; }
+.input-group label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 0.9rem; }
+.input-group input, .input-group select {
+  width: 100%; padding: 10px 14px; border: 2px solid #D0D0D0;
+  border-radius: 8px; font-size: 1rem; font-family: 'Nunito', sans-serif;
+  transition: border-color 0.3s;
+}
+.input-group input:focus, .input-group select:focus {
+  border-color: var(--blue); outline: none;
+}
+.input-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.input-row .input-group { flex: 1; min-width: 140px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 24px; border: none; border-radius: 10px;
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  font-size: 0.95rem; cursor: pointer; transition: all 0.3s;
+}
+.btn-check { background: var(--blue); color: white; }
+.btn-check:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.btn-hint { background: #F0F0F0; color: var(--text); }
+.btn-hint:hover { background: #E0E0E0; }
+.btn-next { background: var(--green); color: white; }
+.btn-next:hover { background: #219A52; }
+.btn-prev { background: #E8E8E8; color: var(--text); }
+.btn-prev:hover { background: #D0D0D0; }
+.btn-reset { background: #F0F0F0; color: var(--text-light); }
+
+.feedback {
+  margin-top: 14px; padding: 14px 18px; border-radius: 10px;
+  display: none; animation: fadeIn 0.3s ease;
+}
+.feedback.correct { display: block; background: var(--green-light); border: 1px solid var(--green); }
+.feedback.incorrect { display: block; background: var(--red-light); border: 1px solid var(--red); }
+.feedback.hint { display: block; background: var(--gold-light); border: 1px solid var(--gold); }
+
+/* ── Quiz ── */
+.quiz-option {
+  display: block; padding: 12px 18px; margin: 8px 0;
+  border: 2px solid #E0E0E0; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s; background: white;
+}
+.quiz-option:hover { border-color: var(--blue); background: var(--blue-light); }
+.quiz-option.selected { border-color: var(--blue); background: var(--blue-light); font-weight: 600; }
+.quiz-option.correct-answer { border-color: var(--green); background: var(--green-light); }
+.quiz-option.wrong-answer { border-color: var(--red); background: var(--red-light); }
+
+/* ── Final Quiz Stepper ── */
+.quiz-stepper { display: flex; gap: 6px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+.quiz-step-dot {
+  width: 30px; height: 30px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 0.75rem;
+  font-weight: 700; border: 2px solid #D0D0D0; background: white;
+  color: var(--text-light);
+}
+.quiz-step-dot.active { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+.quiz-step-dot.correct-dot { border-color: var(--green); background: var(--green-light); color: var(--green); }
+.quiz-step-dot.wrong-dot { border-color: var(--red); background: var(--red-light); color: var(--red); }
+
+/* ── Badges ── */
+.badge-container { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 16px 0; }
+.earned-badge {
+  padding: 8px 18px; border-radius: 20px; font-weight: 700;
+  font-size: 0.85rem; animation: fadeIn 0.5s ease;
+}
+.earned-badge.bronze { background: #F0E0C8; color: #8B6914; }
+.earned-badge.silver { background: #E8E8E8; color: #555; }
+.earned-badge.gold { background: #FFF3B0; color: #8B6914; }
+
+/* ── Animations ── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .container { padding: 55px 10px 20px; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero { padding: 28px 16px; }
+  .tab-panel { padding: 20px 16px; }
+  .ribbon { margin: 0 -16px 20px; font-size: 1.1rem; }
+  .comparison { grid-template-columns: 1fr; }
+  .comp-arrow { transform: rotate(90deg); }
+  .slider-group input[type=range] { width: 130px; }
+  .tab-btn { padding: 10px 6px; font-size: 0.65rem; min-width: 48px; }
+  .tab-num { width: 24px; height: 24px; font-size: 0.7rem; }
+  .tab-bar { top: 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 8 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Normalverteilung als Näherung</h1>
+  <p class="subtitle">Lernpfad: Von der Binomialverteilung zur Normalverteilung — interaktiv erkunden, üben und verstehen.</p>
+  <span class="badge">HAK Steyr · Abendschule · Mathematik</span>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Vorwissen</button>
+  <button class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Warum?</button>
+  <button class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Bedingungen</button>
+  <button class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Überführung</button>
+  <button class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Praxisbeispiel</button>
+  <button class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Übungen</button>
+  <button class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Abschlussquiz</button>
+  <button class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>GeoGebra</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 1: Vorwissen -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Was du schon weißt</div>
+
+  <p>Bevor wir die Normalverteilung als Näherung kennenlernen, wiederholen wir kurz die wichtigsten Begriffe der <strong>Binomialverteilung</strong>.</p>
+
+  <div class="info-box concept">
+    <div class="icon">📘</div>
+    <div>
+      <strong>Binomialverteilung \(X \sim B(n, p)\)</strong><br>
+      Ein Zufallsexperiment wird \(n\)-mal unabhängig durchgeführt. Bei jedem Versuch beträgt die Erfolgswahrscheinlichkeit \(p\). Die Zufallsvariable \(X\) zählt die Anzahl der Erfolge \(k\).
+    </div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">🔑</div>
+    <div>
+      <strong>Wichtige Kenngrößen:</strong><br>
+      <ul style="margin-top:6px;">
+        <li><strong>Erwartungswert:</strong> \(\mu = n \cdot p\)</li>
+        <li><strong>Standardabweichung:</strong> \(\sigma = \sqrt{n \cdot p \cdot (1 - p)}\)</li>
+        <li>\(n\) = Anzahl der Versuche, \(p\) = Erfolgswahrscheinlichkeit, \(k\) = Anzahl der Erfolge</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="margin-top:16px;"><strong>Eigenschaften der Binomialverteilung:</strong></p>
+  <ul style="margin:8px 0 8px 20px;">
+    <li>Die Zufallsvariable \(X\) ist <strong>diskret</strong> — sie nimmt nur ganzzahlige Werte \(k = 0, 1, 2, \ldots, n\) an.</li>
+    <li>Die Wahrscheinlichkeiten werden als <strong>Balkendiagramm</strong> (Stabdiagramm) dargestellt.</li>
+    <li>Für großes \(n\) nähert sich die Form einer <strong>glockenförmigen Kurve</strong>.</li>
+  </ul>
+
+  <!-- Quiz: Vorwissen -->
+  <div class="exercise" id="quiz1">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Vorwissen testen</span>
+    </div>
+    <p><strong>Frage 1:</strong> Welche Werte kann die Zufallsvariable \(X\) bei einer Binomialverteilung \(B(n, p)\) annehmen?</p>
+    <div class="quiz-options" data-quiz="q1_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Alle reellen Zahlen</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Nur ganzzahlige Werte von \(0\) bis \(n\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Nur positive reelle Zahlen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Nur die Werte \(0\) und \(1\)</div>
+    </div>
+    <div class="feedback" id="fb_q1_1"></div>
+
+    <p style="margin-top:20px;"><strong>Frage 2:</strong> Bei \(X \sim B(50;\; 0{,}3)\): Wie groß ist der Erwartungswert \(\mu\)?</p>
+    <div class="quiz-options" data-quiz="q1_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)"> \(\mu = 50\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)"> \(\mu = 0{,}3\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)"> \(\mu = 15\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)"> \(\mu = 10{,}5\)</div>
+    </div>
+    <div class="feedback" id="fb_q1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-check" onclick="checkQuizGroup(0, ['q1_1','q1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button class="btn btn-next" onclick="switchTab(1)">Weiter: Warum Näherung? →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 2: Warum eine Näherung? -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Diskret → Stetig</div>
+
+  <p>Stell dir vor, ein Unternehmen produziert \(n = 500\) Bauteile pro Tag mit einer Ausschussquote von \(p = 0{,}04\). Wie wahrscheinlich ist es, dass <em>zwischen 15 und 25</em> Bauteile fehlerhaft sind?</p>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Das Problem:</strong> Um das mit der Binomialverteilung exakt zu berechnen, müsste man <strong>11 einzelne Wahrscheinlichkeiten</strong> \(P(X=15) + P(X=16) + \ldots + P(X=25)\) berechnen — mit riesigen Binomialkoeffizienten wie \(\binom{500}{20}\). Das ist extrem aufwendig!
+    </div>
+  </div>
+
+  <p style="margin-top:14px;">Die Lösung: Wenn \(n\) groß genug ist, kann man die Binomialverteilung durch die <strong>Normalverteilung annähern</strong> — eine stetige Verteilung, bei der man Wahrscheinlichkeiten bequem über die Verteilungsfunktion \(\Phi\) berechnen kann.</p>
+
+  <div class="comparison">
+    <div class="comp-card binomial">
+      <h4 style="color:var(--blue)">Binomialverteilung</h4>
+      <p style="font-size:2rem">📊</p>
+      <p><strong>Diskret</strong></p>
+      <p style="font-size:0.85rem; color:var(--text-light)">Balkendiagramm<br>\(X\) nimmt nur ganzzahlige Werte an</p>
+    </div>
+    <div class="comp-arrow">→</div>
+    <div class="comp-card normal">
+      <h4 style="color:var(--orange)">Normalverteilung</h4>
+      <p style="font-size:2rem">🔔</p>
+      <p><strong>Stetig</strong></p>
+      <p style="font-size:0.85rem; color:var(--text-light)">Glockenkurve<br>\(X\) nimmt alle reellen Werte an</p>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">🎮</div>
+    <div><strong>Interaktiv:</strong> Verschiebe die Regler und beobachte, wie sich das Balkendiagramm der Binomialverteilung bei wachsendem \(n\) immer mehr der Glockenkurve annähert!</div>
+  </div>
+
+  <div class="chart-controls">
+    <div class="slider-group">
+      <label>Anzahl Versuche \(n\)</label>
+      <input type="range" id="sliderN" min="5" max="200" value="30" oninput="updateMainChart()">
+      <span class="slider-value" id="valN">30</span>
+    </div>
+    <div class="slider-group">
+      <label>Erfolgswahrscheinlichkeit \(p\)</label>
+      <input type="range" id="sliderP" min="5" max="95" value="50" oninput="updateMainChart()">
+      <span class="slider-value" id="valP">0,50</span>
+    </div>
+  </div>
+  <div id="conditionCheck" style="text-align:center; font-weight:600; margin:6px 0;"></div>
+  <div class="chart-container" style="height:340px;">
+    <canvas id="mainChart"></canvas>
+  </div>
+  <p id="chartMuSigma" style="text-align:center; font-size:0.9rem; color:var(--text-light);"></p>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(2)">Weiter: Bedingungen →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 3: Bedingungen -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Faustregel prüfen</div>
+
+  <p>Die Normalverteilung ist <strong>nicht immer</strong> eine gute Näherung der Binomialverteilung. Die Näherung funktioniert nur dann zuverlässig, wenn die Verteilung annähernd symmetrisch und glockenförmig ist. Dafür muss folgende <strong>Faustregel</strong> erfüllt sein:</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Faustregel für die Näherung</div>
+    \[ n \cdot p \geq 5 \quad \text{und} \quad n \cdot (1 - p) \geq 5 \]
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">💡</div>
+    <div>
+      <strong>Warum gerade diese Bedingung?</strong><br>
+      Die Bedingung stellt sicher, dass sowohl die Anzahl der erwarteten Erfolge als auch die Anzahl der erwarteten Misserfolge groß genug ist. Nur dann ist die Binomialverteilung ausreichend symmetrisch, sodass die Glockenkurve eine brauchbare Näherung liefert.
+    </div>
+  </div>
+
+  <div class="exercise" id="ex_rule">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Faustregel prüfen</span>
+    </div>
+    <p>Prüfe für die folgenden Situationen, ob die Normalverteilung als Näherung verwendet werden darf.</p>
+
+    <div style="margin:14px 0;">
+      <p><strong>a)</strong> \(n = 100, \; p = 0{,}08\)</p>
+      <div class="quiz-options" data-quiz="rule_a" data-correct="0">
+        <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">✅ Ja, Näherung erlaubt</div>
+        <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">❌ Nein, Näherung nicht erlaubt</div>
+      </div>
+      <div class="feedback" id="fb_rule_a"></div>
+    </div>
+
+    <div style="margin:14px 0;">
+      <p><strong>b)</strong> \(n = 20, \; p = 0{,}1\)</p>
+      <div class="quiz-options" data-quiz="rule_b" data-correct="1">
+        <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">✅ Ja, Näherung erlaubt</div>
+        <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">❌ Nein, Näherung nicht erlaubt</div>
+      </div>
+      <div class="feedback" id="fb_rule_b"></div>
+    </div>
+
+    <div style="margin:14px 0;">
+      <p><strong>c)</strong> \(n = 200, \; p = 0{,}9\)</p>
+      <div class="quiz-options" data-quiz="rule_c" data-correct="0">
+        <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">✅ Ja, Näherung erlaubt</div>
+        <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">❌ Nein, Näherung nicht erlaubt</div>
+      </div>
+      <div class="feedback" id="fb_rule_c"></div>
+    </div>
+
+    <div style="margin:14px 0;">
+      <p><strong>d)</strong> \(n = 40, \; p = 0{,}02\)</p>
+      <div class="quiz-options" data-quiz="rule_d" data-correct="1">
+        <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">✅ Ja, Näherung erlaubt</div>
+        <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">❌ Nein, Näherung nicht erlaubt</div>
+      </div>
+      <div class="feedback" id="fb_rule_d"></div>
+    </div>
+
+    <button class="btn btn-check" onclick="checkRuleExercise()">Alle überprüfen ✓</button>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(3)">Weiter: Überführung →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 4: Überführung Schritt für Schritt -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Begriffe &amp; Formeln</div>
+
+  <p>Um die Binomialverteilung in die Normalverteilung zu überführen, benötigst du <strong>drei Schritte</strong>:</p>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Faustregel prüfen</strong><br>
+        Stelle sicher, dass \(n \cdot p \geq 5\) und \(n \cdot (1 - p) \geq 5\) gelten.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Erwartungswert \(\mu\) und Standardabweichung \(\sigma\) berechnen</strong><br>
+        <div class="formula-box" style="margin-top:8px;">
+          \[\mu = n \cdot p \qquad \sigma = \sqrt{n \cdot p \cdot (1 - p)}\]
+        </div>
+        Die Binomialverteilung \(B(n, p)\) wird dann durch \(N(\mu, \sigma)\) angenähert.
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Stetigkeitskorrektur anwenden</strong><br>
+        Da die Binomialverteilung diskret und die Normalverteilung stetig ist, muss man bei der Näherung eine <strong>Stetigkeitskorrektur von \(\pm\,0{,}5\)</strong> berücksichtigen.
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box danger">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Stetigkeitskorrektur — warum?</strong><br>
+      Die Binomialverteilung kennt nur ganzzahlige Werte. Ein Balken bei \(k = 7\) im Stabdiagramm „gehört" eigentlich zum Intervall \([6{,}5;\; 7{,}5]\) unter der Glockenkurve. Deshalb wird jeder diskrete Wert um \(\pm\,0{,}5\) erweitert.
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Stetigkeitskorrektur – Übersetzungstabelle</div>
+    <div style="text-align:left; max-width:520px; margin:0 auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem;">
+        <tr style="border-bottom:2px solid var(--blue);">
+          <th style="padding:8px; text-align:left;">Binomial (exakt)</th>
+          <th style="padding:8px; text-align:left;">Normal (Näherung)</th>
+        </tr>
+        <tr style="border-bottom:1px solid #E8E8E8;">
+          <td style="padding:8px;">\(P(X = k)\)</td>
+          <td style="padding:8px;">\(P(k - 0{,}5 \leq X \leq k + 0{,}5)\)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #E8E8E8;">
+          <td style="padding:8px;">\(P(X \leq k)\)</td>
+          <td style="padding:8px;">\(P(X \leq k + 0{,}5)\)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #E8E8E8;">
+          <td style="padding:8px;">\(P(X \geq k)\)</td>
+          <td style="padding:8px;">\(P(X \geq k - 0{,}5)\)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #E8E8E8;">
+          <td style="padding:8px;">\(P(X < k)\)</td>
+          <td style="padding:8px;">\(P(X \leq k - 0{,}5)\)</td>
+        </tr>
+        <tr>
+          <td style="padding:8px;">\(P(X > k)\)</td>
+          <td style="padding:8px;">\(P(X \geq k + 0{,}5)\)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Exercise: Stetigkeitskorrektur -->
+  <div class="exercise" id="ex_stetigkeit">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Stetigkeitskorrektur anwenden</span>
+    </div>
+    <p>Übersetze die folgenden Wahrscheinlichkeiten der Binomialverteilung in die entsprechenden Ausdrücke mit Stetigkeitskorrektur für die Normalverteilung.</p>
+
+    <div class="input-group" style="margin-top:14px;">
+      <label><strong>a)</strong> \(P(X \leq 12)\) wird zu \(P(X \leq\) <input type="text" id="sk_a" style="width:70px; display:inline; padding:6px 10px;" placeholder="?"> \()\)</label>
+    </div>
+    <div class="input-group">
+      <label><strong>b)</strong> \(P(X = 20)\) wird zu \(P(\) <input type="text" id="sk_b1" style="width:70px; display:inline; padding:6px 10px;" placeholder="?"> \(\leq X \leq\) <input type="text" id="sk_b2" style="width:70px; display:inline; padding:6px 10px;" placeholder="?"> \()\)</label>
+    </div>
+    <div class="input-group">
+      <label><strong>c)</strong> \(P(X \geq 30)\) wird zu \(P(X \geq\) <input type="text" id="sk_c" style="width:70px; display:inline; padding:6px 10px;" placeholder="?"> \()\)</label>
+    </div>
+    <div class="input-group">
+      <label><strong>d)</strong> \(P(X > 45)\) wird zu \(P(X \geq\) <input type="text" id="sk_d" style="width:70px; display:inline; padding:6px 10px;" placeholder="?"> \()\)</label>
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn-check" onclick="checkStetigkeitskorrektur()">Überprüfen ✓</button>
+      <button class="btn btn-hint" onclick="showHint('hint_sk')">💡 Tipp</button>
+    </div>
+    <div class="feedback hint" id="hint_sk" style="display:none;">
+      Denke daran: Bei \(\leq\) wird \(+0{,}5\) addiert, bei \(\geq\) wird \(-0{,}5\) subtrahiert, bei \(=\) wird \(\pm\,0{,}5\) verwendet.
+    </div>
+    <div class="feedback" id="fb_sk"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(4)">Weiter: Praxisbeispiel →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 5: Praxisbeispiel -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Bedingungen &amp; Beispiel</div>
+
+  <div class="info-box concept">
+    <div class="icon">🏭</div>
+    <div>
+      <strong>Aufgabenstellung:</strong><br>
+      Eine Fabrik produziert \(n = 200\) Bauteile pro Schicht. Erfahrungsgemäß sind \(90\,\%\) der Bauteile einwandfrei, also \(p = 0{,}9\).<br><br>
+      Gesucht: Wie groß ist die Wahrscheinlichkeit, dass <strong>mindestens 175</strong> Bauteile einwandfrei sind?<br>
+      Also: \(P(X \geq 175)\) bei \(X \sim B(200;\; 0{,}9)\).
+    </div>
+  </div>
+
+  <p style="margin-top:16px;"><strong>Lösung Schritt für Schritt:</strong></p>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Faustregel prüfen:</strong><br>
+        \(n \cdot p = 200 \cdot 0{,}9 = 180 \geq 5\) ✅<br>
+        \(n \cdot (1-p) = 200 \cdot 0{,}1 = 20 \geq 5\) ✅<br>
+        → Näherung ist zulässig!
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Parameter berechnen:</strong><br>
+        \(\mu = n \cdot p = 200 \cdot 0{,}9 = 180\)<br>
+        \(\sigma = \sqrt{n \cdot p \cdot (1-p)} = \sqrt{200 \cdot 0{,}9 \cdot 0{,}1} = \sqrt{18} \approx 4{,}24\)<br>
+        → \(X\) wird angenähert durch \(N(180;\; 4{,}24)\)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Stetigkeitskorrektur:</strong><br>
+        Gesucht: \(P(X \geq 175)\)<br>
+        Mit Korrektur: \(P(X \geq 174{,}5)\)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <strong>z-Wert berechnen und nachschlagen:</strong><br>
+        \(z = \dfrac{174{,}5 - 180}{4{,}24} = \dfrac{-5{,}5}{4{,}24} \approx -1{,}30\)<br><br>
+        \(P(X \geq 174{,}5) = 1 - \Phi(-1{,}30) = 1 - 0{,}0968 = 0{,}9032\)<br><br>
+        → Mit einer Wahrscheinlichkeit von ca. <strong>90,3 %</strong> sind mindestens 175 Bauteile einwandfrei.
+      </div>
+    </div>
+  </div>
+
+  <!-- Guided Exercise -->
+  <div class="exercise" id="ex_praxis">
+    <div class="exercise-header">
+      <span class="exercise-badge">Geführte Übung</span>
+      <span class="exercise-title">Jetzt bist du dran!</span>
+    </div>
+    <p>Ein Versandunternehmen verschickt \(n = 300\) Pakete pro Tag. Die Wahrscheinlichkeit, dass ein Paket pünktlich ankommt, beträgt \(p = 0{,}85\).</p>
+    <p><strong>Frage:</strong> Wie groß ist die Wahrscheinlichkeit, dass <strong>höchstens 260</strong> Pakete pünktlich ankommen?</p>
+
+    <div class="input-row" style="margin-top:14px;">
+      <div class="input-group">
+        <label>Schritt 1: \(n \cdot p =\)</label>
+        <input type="text" id="praxis_np" placeholder="z. B. 255">
+      </div>
+      <div class="input-group">
+        <label>Schritt 1: \(n \cdot (1-p) =\)</label>
+        <input type="text" id="praxis_nq" placeholder="z. B. 45">
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Schritt 2: \(\mu =\)</label>
+        <input type="text" id="praxis_mu" placeholder="Erwartungswert">
+      </div>
+      <div class="input-group">
+        <label>Schritt 2: \(\sigma \approx\)</label>
+        <input type="text" id="praxis_sigma" placeholder="auf 2 Dezimalen">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Schritt 3: Stetigkeitskorrektur — \(P(X \leq 260)\) wird zu \(P(X \leq\) ... \()\)</label>
+      <input type="text" id="praxis_korrektur" placeholder="z. B. 260,5">
+    </div>
+
+    <div class="input-group">
+      <label>Schritt 4: \(z\)-Wert \(=\)</label>
+      <input type="text" id="praxis_z" placeholder="auf 2 Dezimalen">
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn-check" onclick="checkPraxis()">Überprüfen ✓</button>
+      <button class="btn btn-hint" onclick="showHint('hint_praxis')">💡 Tipp</button>
+    </div>
+    <div class="feedback hint" id="hint_praxis" style="display:none;">
+      \(\mu = 300 \cdot 0{,}85 = 255\), \(\sigma = \sqrt{300 \cdot 0{,}85 \cdot 0{,}15}\). Stetigkeitskorrektur: bei \(\leq\) addiere \(+0{,}5\). Der \(z\)-Wert ist \(\frac{260{,}5 - \mu}{\sigma}\).
+    </div>
+    <div class="feedback" id="fb_praxis"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(5)">Weiter: Übungen →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 6: Selbstständig üben -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Übungsaufgaben</div>
+
+  <!-- Aufgabe 1 -->
+  <div class="exercise" id="ex_a1">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe 1</span>
+      <span class="exercise-title">Wahlumfrage</span>
+    </div>
+    <p>Bei einer Wahl liegt die Zustimmung für eine Partei bei \(p = 0{,}35\). Es werden \(n = 400\) Personen befragt.</p>
+    <p><strong>a)</strong> Berechne \(\mu\) und \(\sigma\).</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label>\(\mu =\)</label>
+        <input type="text" id="a1_mu" placeholder="">
+      </div>
+      <div class="input-group">
+        <label>\(\sigma \approx\)</label>
+        <input type="text" id="a1_sigma" placeholder="auf 2 Dez.">
+      </div>
+    </div>
+    <p style="margin-top:12px;"><strong>b)</strong> Wie groß ist (näherungsweise) die Wahrscheinlichkeit, dass <strong>mehr als 150</strong> Personen zustimmen? Gib den \(z\)-Wert an.</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Korrigierter Wert (Stetigkeitskorrektur)</label>
+        <input type="text" id="a1_korr" placeholder="z. B. 150,5">
+      </div>
+      <div class="input-group">
+        <label>\(z\)-Wert \(\approx\)</label>
+        <input type="text" id="a1_z" placeholder="auf 2 Dez.">
+      </div>
+    </div>
+    <div style="margin-top:14px; display:flex; gap:10px;">
+      <button class="btn btn-check" onclick="checkA1()">Überprüfen ✓</button>
+      <button class="btn btn-hint" onclick="showHint('hint_a1')">💡 Lösung</button>
+    </div>
+    <div class="feedback hint" id="hint_a1" style="display:none;">
+      \(\mu = 400 \cdot 0{,}35 = 140\), \(\sigma = \sqrt{400 \cdot 0{,}35 \cdot 0{,}65} = \sqrt{91} \approx 9{,}54\).<br>
+      \(P(X > 150)\) → mit Korrektur: \(P(X \geq 150{,}5)\) → \(z = \frac{150{,}5 - 140}{9{,}54} \approx 1{,}10\).<br>
+      \(P(X > 150) \approx 1 - \Phi(1{,}10) = 1 - 0{,}8643 = 0{,}1357 \approx 13{,}6\,\%\).
+    </div>
+    <div class="feedback" id="fb_a1"></div>
+  </div>
+
+  <!-- Aufgabe 2 -->
+  <div class="exercise" id="ex_a2">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe 2</span>
+      <span class="exercise-title">Online-Shop Retouren</span>
+    </div>
+    <p>Ein Online-Shop weiß, dass \(p = 0{,}12\) aller Bestellungen retourniert werden. An einem Tag gehen \(n = 250\) Bestellungen ein.</p>
+    <p><strong>Frage:</strong> Wie groß ist die Wahrscheinlichkeit, dass <strong>zwischen 25 und 35</strong> Bestellungen (einschließlich) retourniert werden?</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label>\(\mu =\)</label>
+        <input type="text" id="a2_mu" placeholder="">
+      </div>
+      <div class="input-group">
+        <label>\(\sigma \approx\)</label>
+        <input type="text" id="a2_sigma" placeholder="auf 2 Dez.">
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Untere Grenze (korrigiert)</label>
+        <input type="text" id="a2_low" placeholder="">
+      </div>
+      <div class="input-group">
+        <label>Obere Grenze (korrigiert)</label>
+        <input type="text" id="a2_high" placeholder="">
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>\(z_1 \approx\)</label>
+        <input type="text" id="a2_z1" placeholder="">
+      </div>
+      <div class="input-group">
+        <label>\(z_2 \approx\)</label>
+        <input type="text" id="a2_z2" placeholder="">
+      </div>
+    </div>
+    <div style="margin-top:14px; display:flex; gap:10px;">
+      <button class="btn btn-check" onclick="checkA2()">Überprüfen ✓</button>
+      <button class="btn btn-hint" onclick="showHint('hint_a2')">💡 Lösung</button>
+    </div>
+    <div class="feedback hint" id="hint_a2" style="display:none;">
+      \(\mu = 250 \cdot 0{,}12 = 30\), \(\sigma = \sqrt{250 \cdot 0{,}12 \cdot 0{,}88} = \sqrt{26{,}4} \approx 5{,}14\).<br>
+      \(P(25 \leq X \leq 35)\) → mit Korrektur: \(P(24{,}5 \leq X \leq 35{,}5)\).<br>
+      \(z_1 = \frac{24{,}5 - 30}{5{,}14} \approx -1{,}07\), \(z_2 = \frac{35{,}5 - 30}{5{,}14} \approx 1{,}07\).<br>
+      \(P = \Phi(1{,}07) - \Phi(-1{,}07) = 0{,}8577 - 0{,}1423 = 0{,}7154 \approx 71{,}5\,\%\).
+    </div>
+    <div class="feedback" id="fb_a2"></div>
+  </div>
+
+  <!-- Aufgabe 3 -->
+  <div class="exercise" id="ex_a3">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe 3</span>
+      <span class="exercise-title">Münzwurf</span>
+    </div>
+    <p>Eine faire Münze (\(p = 0{,}5\)) wird \(n = 100\)-mal geworfen.</p>
+    <p><strong>Frage:</strong> Wie groß ist die Wahrscheinlichkeit, dass <strong>genau 50</strong>-mal Kopf fällt?</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label>\(\mu =\)</label>
+        <input type="text" id="a3_mu" placeholder="">
+      </div>
+      <div class="input-group">
+        <label>\(\sigma =\)</label>
+        <input type="text" id="a3_sigma" placeholder="">
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Untere Grenze (korrigiert)</label>
+        <input type="text" id="a3_low" placeholder="">
+      </div>
+      <div class="input-group">
+        <label>Obere Grenze (korrigiert)</label>
+        <input type="text" id="a3_high" placeholder="">
+      </div>
+    </div>
+    <div style="margin-top:14px; display:flex; gap:10px;">
+      <button class="btn btn-check" onclick="checkA3()">Überprüfen ✓</button>
+      <button class="btn btn-hint" onclick="showHint('hint_a3')">💡 Lösung</button>
+    </div>
+    <div class="feedback hint" id="hint_a3" style="display:none;">
+      \(\mu = 50\), \(\sigma = \sqrt{100 \cdot 0{,}5 \cdot 0{,}5} = 5\).<br>
+      \(P(X = 50)\) → mit Korrektur: \(P(49{,}5 \leq X \leq 50{,}5)\).<br>
+      \(z_1 = \frac{49{,}5 - 50}{5} = -0{,}10\), \(z_2 = \frac{50{,}5 - 50}{5} = 0{,}10\).<br>
+      \(P = \Phi(0{,}10) - \Phi(-0{,}10) = 0{,}5398 - 0{,}4602 = 0{,}0796 \approx 8{,}0\,\%\).
+    </div>
+    <div class="feedback" id="fb_a3"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(6)">Weiter: Abschlussquiz →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 7: Abschlussquiz & Zusammenfassung -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Merke!</div>
+
+  <div class="info-box success">
+    <div class="icon">📝</div>
+    <div>
+      <strong>Zusammenfassung — die wichtigsten Merksätze:</strong>
+      <ol style="margin-top:8px;">
+        <li>Die Binomialverteilung ist <strong>diskret</strong> (Balken), die Normalverteilung ist <strong>stetig</strong> (Glockenkurve).</li>
+        <li>Die Näherung ist nur zulässig, wenn \(n \cdot p \geq 5\) und \(n \cdot (1-p) \geq 5\).</li>
+        <li>Parameter der Normalverteilung: \(\mu = n \cdot p\), \(\sigma = \sqrt{n \cdot p \cdot (1-p)}\).</li>
+        <li>Beim Übergang diskret → stetig muss eine <strong>Stetigkeitskorrektur</strong> von \(\pm\,0{,}5\) angewendet werden.</li>
+        <li>Die Toolbox: \(\mu\), \(\sigma\), Faustregel!</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px; text-align:center;">Abschlussquiz (6 Fragen)</h3>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+
+  <div id="finalQuizContainer"></div>
+
+  <div id="finalResult" style="display:none; text-align:center; margin-top:24px;">
+    <div class="formula-box" style="background: linear-gradient(135deg, var(--green-light), #E8F8F0);">
+      <p style="font-size:1.3rem; font-weight:700;" id="finalScore"></p>
+      <p id="finalMessage" style="margin-top:8px;"></p>
+      <div class="badge-container" id="badgeContainer"></div>
+    </div>
+    <button class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:14px;">Quiz wiederholen</button>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button class="btn btn-next" onclick="switchTab(7)">Weiter: GeoGebra-Rechner →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 8: GeoGebra-Wahrscheinlichkeitsrechner -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">GeoGebra-Rechner</div>
+
+  <div class="info-box concept">
+    <div class="icon">🧮</div>
+    <div>
+      <strong>GeoGebra-Wahrscheinlichkeitsrechner</strong><br>
+      Mit dem eingebetteten GeoGebra-Rechner kannst du Wahrscheinlichkeiten für die Normalverteilung direkt berechnen — ganz ohne Tabelle! Unten findest du den Rechner und eine Schritt-für-Schritt-Anleitung.
+    </div>
+  </div>
+
+  <!-- Embedded GeoGebra -->
+  <div style="text-align:center; margin:20px 0;">
+    <iframe src="https://www.geogebra.org/classic#probability"
+      width="100%" height="550" style="border:2px solid var(--blue); border-radius:12px; max-width:850px;"
+      allowfullscreen></iframe>
+    <p style="font-size:0.8rem; color:var(--text-light); margin-top:6px;">GeoGebra Wahrscheinlichkeitsrechner — falls die Ansicht nicht geladen wird, <a href="https://www.geogebra.org/classic#probability" target="_blank" style="color:var(--blue);">hier klicken</a></p>
+  </div>
+
+  <!-- Anleitung -->
+  <h3 style="margin-top:28px; color:var(--blue-dark); font-family:'Patrick Hand',cursive; font-size:1.4rem;">Anleitung: So löst du Aufgaben mit GeoGebra</h3>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Verteilung auswählen</strong><br>
+        Wähle oben im Dropdown-Menü die Verteilung <strong>„Normal"</strong> aus. (Standardmäßig ist oft schon die Normalverteilung ausgewählt.)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>Parameter eingeben: \(\mu\) und \(\sigma\)</strong><br>
+        Gib den <strong>Erwartungswert \(\mu\)</strong> (mean) und die <strong>Standardabweichung \(\sigma\)</strong> (sd) ein, die du aus der Binomialverteilung berechnet hast:<br>
+        <span style="margin-left:20px;">\(\mu = n \cdot p\), \quad \sigma = \sqrt{n \cdot p \cdot (1-p)}\)</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Wahrscheinlichkeitsart wählen</strong><br>
+        Wähle den richtigen Modus je nach Fragestellung:
+        <ul style="margin:8px 0 0 16px;">
+          <li><strong>\(P(X \leq x)\)</strong> — Linksseitige Wahrscheinlichkeit (Fläche links)</li>
+          <li><strong>\(P(X \geq x)\)</strong> — Rechtsseitige Wahrscheinlichkeit (Fläche rechts)</li>
+          <li><strong>\(P(a \leq X \leq b)\)</strong> — Intervallwahrscheinlichkeit (Fläche zwischen a und b)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <strong>Grenzen eingeben (mit Stetigkeitskorrektur!)</strong><br>
+        Vergiss nicht: Du musst die <strong>korrigierten Werte</strong> eingeben, nicht die ursprünglichen. Wende vorher die Stetigkeitskorrektur an!
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <strong>Ergebnis ablesen</strong><br>
+        GeoGebra zeigt dir die gesuchte Wahrscheinlichkeit als <strong>schraffierte Fläche</strong> unter der Glockenkurve an. Der exakte Wert steht daneben.
+      </div>
+    </div>
+  </div>
+
+  <!-- Worked Example with GeoGebra -->
+  <h3 style="margin-top:28px; color:var(--blue-dark); font-family:'Patrick Hand',cursive; font-size:1.4rem;">Beispiel: Qualitätskontrolle mit GeoGebra lösen</h3>
+
+  <div class="info-box concept">
+    <div class="icon">🏭</div>
+    <div>
+      <strong>Aufgabe:</strong> \(n = 200\), \(p = 0{,}9\). Gesucht: \(P(X \geq 175)\).
+    </div>
+  </div>
+
+  <div class="stepper">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <strong>Vorarbeit (am Papier):</strong><br>
+        Faustregel: \(200 \cdot 0{,}9 = 180 \geq 5\) ✅, \(200 \cdot 0{,}1 = 20 \geq 5\) ✅<br>
+        \(\mu = 180\), \(\sigma = \sqrt{18} \approx 4{,}24\)<br>
+        Stetigkeitskorrektur: \(P(X \geq 175)\) → \(P(X \geq 174{,}5)\)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <strong>In GeoGebra eingeben:</strong><br>
+        Verteilung: <strong>Normal</strong><br>
+        \(\mu\) (mean): <strong>180</strong><br>
+        \(\sigma\) (sd): <strong>4.24</strong>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Modus wählen:</strong> Rechtsseitig (\(P(X \geq \ldots)\))
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <strong>Grenze eingeben:</strong> \(x = 174{,}5\) (den korrigierten Wert!)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <strong>Ergebnis ablesen:</strong> \(P(X \geq 174{,}5) \approx 0{,}9032\) → ca. <strong>90,3 %</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Wichtiger Hinweis zur Stetigkeitskorrektur:</strong><br>
+      GeoGebra rechnet mit der <em>stetigen</em> Normalverteilung. Die Stetigkeitskorrektur musst du <strong>selbst vorher anwenden</strong> — GeoGebra macht das nicht automatisch! Gib also immer die bereits korrigierten Grenzen ein (z. B. 174,5 statt 175).
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">💡</div>
+    <div>
+      <strong>Tipp für die sRDP:</strong><br>
+      Bei der Matura ist GeoGebra als Technologietool zugelassen. Du kannst den Wahrscheinlichkeitsrechner für Teil-2-Aufgaben verwenden. Achte darauf, dass du trotzdem \(\mu\), \(\sigma\) und die Stetigkeitskorrektur korrekt <strong>dokumentierst</strong> — der Rechenweg muss nachvollziehbar sein!
+    </div>
+  </div>
+
+  <!-- Quick self-check -->
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Selbstcheck</span>
+      <span class="exercise-title">Überprüfe mit GeoGebra</span>
+    </div>
+    <p>Verwende den GeoGebra-Rechner oben, um folgende Aufgabe zu lösen:</p>
+    <p style="margin:10px 0;"><strong>Aufgabe:</strong> Eine faire Münze wird \(n = 100\)-mal geworfen. Wie groß ist die Wahrscheinlichkeit, dass <strong>höchstens 55</strong>-mal Kopf fällt?</p>
+    <p>Berechne zuerst \(\mu\) und \(\sigma\), wende die Stetigkeitskorrektur an, und gib die Werte in GeoGebra ein.</p>
+
+    <div class="input-row" style="margin-top:14px;">
+      <div class="input-group">
+        <label>\(\mu =\)</label>
+        <input type="text" id="gg_mu" placeholder="">
+      </div>
+      <div class="input-group">
+        <label>\(\sigma =\)</label>
+        <input type="text" id="gg_sigma" placeholder="">
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label>Korrigierte Grenze</label>
+        <input type="text" id="gg_grenze" placeholder="z. B. 55,5">
+      </div>
+      <div class="input-group">
+        <label>Ergebnis aus GeoGebra \(\approx\)</label>
+        <input type="text" id="gg_result" placeholder="z. B. 0,8643">
+      </div>
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn-check" onclick="checkGeoGebra()">Überprüfen ✓</button>
+      <button class="btn btn-hint" onclick="showHint('hint_gg')">💡 Lösung</button>
+    </div>
+    <div class="feedback hint" id="hint_gg" style="display:none;">
+      \(\mu = 100 \cdot 0{,}5 = 50\), \(\sigma = \sqrt{100 \cdot 0{,}5 \cdot 0{,}5} = 5\).<br>
+      Stetigkeitskorrektur: \(P(X \leq 55)\) → \(P(X \leq 55{,}5)\).<br>
+      In GeoGebra: Normal, \(\mu = 50\), \(\sigma = 5\), linksseitig, Grenze 55,5.<br>
+      Ergebnis: \(P(X \leq 55{,}5) \approx 0{,}8643\) → ca. <strong>86,4 %</strong>.
+    </div>
+    <div class="feedback" id="fb_gg"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="btn btn-prev" onclick="switchTab(6)">← Zurück zum Abschlussquiz</button>
+    <div></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad erstellt für die HAK Steyr Abendschule · Mathematik
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════════════
+// GLOBAL STATE
+// ══════════════════════════════════════════════
+const TOTAL_SECTIONS = 8;
+let completedSections = new Set();
+let mainChart = null;
+let currentTab = 0;
+let chartInitialized = false;
+
+// ══════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════
+function switchTab(idx) {
+  currentTab = idx;
+  // Hide all panels
+  document.querySelectorAll('.tab-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === idx);
+  });
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  // Scroll to top of container
+  document.querySelector('.tab-bar').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Init chart on first visit to tab 1
+  if (idx === 1 && !chartInitialized) {
+    chartInitialized = true;
+    setTimeout(() => updateMainChart(), 100);
+  }
+
+  // Re-render MathJax for the visible panel
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([document.getElementById('panel' + idx)]);
+  }
+
+  // Ensure chart resizes
+  if (idx === 1 && mainChart) {
+    setTimeout(() => mainChart.resize(), 50);
+  }
+}
+
+// ══════════════════════════════════════════════
+// PROGRESS
+// ══════════════════════════════════════════════
+function updateProgress() {
+  const pct = Math.round((completedSections.size / TOTAL_SECTIONS) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPercent').textContent = pct + ' %';
+  document.getElementById('progressText').textContent =
+    `Station ${completedSections.size} von ${TOTAL_SECTIONS} abgeschlossen`;
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('completed-tab', completedSections.has(i + 1));
+  });
+}
+
+function markComplete(secNum) {
+  completedSections.add(secNum);
+  updateProgress();
+}
+
+// ══════════════════════════════════════════════
+// QUIZ SYSTEM
+// ══════════════════════════════════════════════
+function selectQuiz(el) {
+  const parent = el.closest('.quiz-options');
+  parent.querySelectorAll('.quiz-option').forEach(o => {
+    o.classList.remove('selected', 'correct-answer', 'wrong-answer');
+  });
+  el.classList.add('selected');
+}
+
+function checkQuizGroup(tabIdx, quizIds) {
+  let allCorrect = true;
+  quizIds.forEach(qid => {
+    const container = document.querySelector(`[data-quiz="${qid}"]`);
+    const correct = parseInt(container.dataset.correct);
+    const selected = container.querySelector('.quiz-option.selected');
+    const fb = document.getElementById('fb_' + qid);
+
+    if (!selected) {
+      fb.className = 'feedback incorrect';
+      fb.style.display = 'block';
+      fb.textContent = 'Bitte wähle eine Antwort aus.';
+      allCorrect = false;
+      return;
+    }
+
+    const idx = parseInt(selected.dataset.idx);
+    if (idx === correct) {
+      container.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+      selected.classList.add('correct-answer');
+      fb.className = 'feedback correct';
+      fb.style.display = 'block';
+      fb.textContent = '\u2705 Richtig!';
+    } else {
+      selected.classList.add('wrong-answer');
+      container.querySelectorAll('.quiz-option')[correct].classList.add('correct-answer');
+      fb.className = 'feedback incorrect';
+      fb.style.display = 'block';
+      fb.textContent = '\u274c Leider falsch. Die richtige Antwort ist markiert.';
+      allCorrect = false;
+    }
+  });
+
+  if (allCorrect) markComplete(tabIdx + 1);
+}
+
+// ══════════════════════════════════════════════
+// INTERACTIVE CHART
+// ══════════════════════════════════════════════
+function binomPMF(k, n, p) {
+  let logP = 0;
+  for (let i = 0; i < k; i++) {
+    logP += Math.log(n - i) - Math.log(i + 1);
+  }
+  logP += k * Math.log(p) + (n - k) * Math.log(1 - p);
+  return Math.exp(logP);
+}
+
+function normalPDF(x, mu, sigma) {
+  return (1 / (sigma * Math.sqrt(2 * Math.PI))) *
+    Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+}
+
+function updateMainChart() {
+  const n = parseInt(document.getElementById('sliderN').value);
+  const p = parseInt(document.getElementById('sliderP').value) / 100;
+  document.getElementById('valN').textContent = n;
+  document.getElementById('valP').textContent = p.toFixed(2).replace('.', ',');
+
+  const mu = n * p;
+  const sigma = Math.sqrt(n * p * (1 - p));
+
+  const np = n * p;
+  const nq = n * (1 - p);
+  const condEl = document.getElementById('conditionCheck');
+  if (np >= 5 && nq >= 5) {
+    condEl.innerHTML = '<span style="color:var(--green)">\u2705 Faustregel erf\u00fcllt: n\u00b7p = ' +
+      np.toFixed(1).replace('.', ',') + ' \u2265 5 und n\u00b7(1\u2212p) = ' +
+      nq.toFixed(1).replace('.', ',') + ' \u2265 5</span>';
+  } else {
+    condEl.innerHTML = '<span style="color:var(--red)">\u274c Faustregel NICHT erf\u00fcllt: n\u00b7p = ' +
+      np.toFixed(1).replace('.', ',') + (np < 5 ? ' < 5' : ' \u2265 5') + ' und n\u00b7(1\u2212p) = ' +
+      nq.toFixed(1).replace('.', ',') + (nq < 5 ? ' < 5' : ' \u2265 5') + '</span>';
+  }
+
+  document.getElementById('chartMuSigma').innerHTML =
+    '\u03bc = ' + mu.toFixed(2).replace('.', ',') + ' &nbsp;|&nbsp; \u03c3 = ' + sigma.toFixed(2).replace('.', ',');
+
+  const lo = Math.max(0, Math.floor(mu - 4 * sigma));
+  const hi = Math.min(n, Math.ceil(mu + 4 * sigma));
+
+  const labels = [];
+  const binomData = [];
+  const normalData = [];
+
+  for (let k = lo; k <= hi; k++) {
+    labels.push(k);
+    binomData.push(binomPMF(k, n, p));
+    normalData.push(normalPDF(k, mu, sigma));
+  }
+
+  if (mainChart) mainChart.destroy();
+
+  const ctx = document.getElementById('mainChart').getContext('2d');
+  mainChart = new Chart(ctx, {
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Binomialverteilung B(' + n + '; ' + p.toFixed(2) + ')',
+          data: binomData,
+          backgroundColor: 'rgba(59,130,196,0.6)',
+          borderColor: 'rgba(59,130,196,0.9)',
+          borderWidth: 1,
+          barPercentage: 1.0,
+          categoryPercentage: 1.0,
+          order: 2
+        },
+        {
+          type: 'line',
+          label: 'Normalverteilung N(' + mu.toFixed(1) + '; ' + sigma.toFixed(2) + ')',
+          data: normalData,
+          borderColor: '#F39C12',
+          borderWidth: 3,
+          pointRadius: 0,
+          fill: false,
+          tension: 0.4,
+          order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { family: "'Nunito'" } } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(4)
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'k (Anzahl Erfolge)', font: { family: "'Nunito'" } },
+          ticks: { maxTicksLimit: 20, font: { family: "'Nunito'" } }
+        },
+        y: {
+          title: { display: true, text: 'Wahrscheinlichkeit', font: { family: "'Nunito'" } },
+          ticks: { font: { family: "'Nunito'" } }
+        }
+      }
+    }
+  });
+
+  // Mark tab 2 as explored
+  markComplete(2);
+}
+
+// ══════════════════════════════════════════════
+// RULE CHECK EXERCISE
+// ══════════════════════════════════════════════
+function checkRuleExercise() {
+  const answers = {
+    rule_a: { correct: 0, explain: 'n\u00b7p = 100\u00b70,08 = 8 \u2265 5 \u2713 und n\u00b7(1\u2212p) = 92 \u2265 5 \u2713' },
+    rule_b: { correct: 1, explain: 'n\u00b7p = 20\u00b70,1 = 2 < 5 \u2717 \u2192 Bedingung nicht erf\u00fcllt!' },
+    rule_c: { correct: 0, explain: 'n\u00b7p = 200\u00b70,9 = 180 \u2265 5 \u2713 und n\u00b7(1\u2212p) = 20 \u2265 5 \u2713' },
+    rule_d: { correct: 1, explain: 'n\u00b7p = 40\u00b70,02 = 0,8 < 5 \u2717 \u2192 Bedingung nicht erf\u00fcllt!' }
+  };
+
+  let allCorrect = true;
+  Object.keys(answers).forEach(qid => {
+    const container = document.querySelector(`[data-quiz="${qid}"]`);
+    const selected = container.querySelector('.quiz-option.selected');
+    const fb = document.getElementById('fb_' + qid);
+
+    if (!selected) {
+      fb.className = 'feedback incorrect'; fb.style.display = 'block';
+      fb.textContent = 'Bitte w\u00e4hle eine Antwort.';
+      allCorrect = false; return;
+    }
+
+    const idx = parseInt(selected.dataset.idx);
+    if (idx === answers[qid].correct) {
+      selected.classList.add('correct-answer');
+      fb.className = 'feedback correct';
+      fb.innerHTML = '\u2705 Richtig! ' + answers[qid].explain;
+    } else {
+      selected.classList.add('wrong-answer');
+      fb.className = 'feedback incorrect';
+      fb.innerHTML = '\u274c Falsch. ' + answers[qid].explain;
+      allCorrect = false;
+    }
+    fb.style.display = 'block';
+  });
+
+  if (allCorrect) markComplete(3);
+}
+
+// ══════════════════════════════════════════════
+// STETIGKEITSKORREKTUR
+// ══════════════════════════════════════════════
+function parseNum(str) {
+  return parseFloat(str.replace(',', '.').trim());
+}
+function approxEq(a, b, tol) {
+  return Math.abs(a - b) <= (tol || 0.1);
+}
+
+function checkStetigkeitskorrektur() {
+  const a = parseNum(document.getElementById('sk_a').value);
+  const b1 = parseNum(document.getElementById('sk_b1').value);
+  const b2 = parseNum(document.getElementById('sk_b2').value);
+  const c = parseNum(document.getElementById('sk_c').value);
+  const d = parseNum(document.getElementById('sk_d').value);
+
+  const fb = document.getElementById('fb_sk');
+  let errors = [];
+  let correct = 0;
+
+  if (approxEq(a, 12.5)) correct++; else errors.push('a) P(X \u2264 12) \u2192 P(X \u2264 12,5)');
+  if (approxEq(b1, 19.5) && approxEq(b2, 20.5)) correct++; else errors.push('b) P(X = 20) \u2192 P(19,5 \u2264 X \u2264 20,5)');
+  if (approxEq(c, 29.5)) correct++; else errors.push('c) P(X \u2265 30) \u2192 P(X \u2265 29,5)');
+  if (approxEq(d, 45.5)) correct++; else errors.push('d) P(X > 45) \u2192 P(X \u2265 45,5)');
+
+  if (correct === 4) {
+    fb.className = 'feedback correct';
+    fb.innerHTML = '\u2705 Alles richtig! Du beherrschst die Stetigkeitskorrektur.';
+    markComplete(4);
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\u274c ' + correct + ' von 4 richtig. Korrektur:<br>' + errors.join('<br>');
+  }
+  fb.style.display = 'block';
+}
+
+function showHint(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+// ══════════════════════════════════════════════
+// PRAXIS EXERCISE
+// ══════════════════════════════════════════════
+function checkPraxis() {
+  const np = parseNum(document.getElementById('praxis_np').value);
+  const nq = parseNum(document.getElementById('praxis_nq').value);
+  const mu = parseNum(document.getElementById('praxis_mu').value);
+  const sig = parseNum(document.getElementById('praxis_sigma').value);
+  const korr = parseNum(document.getElementById('praxis_korrektur').value);
+  const z = parseNum(document.getElementById('praxis_z').value);
+
+  const fb = document.getElementById('fb_praxis');
+  let correct = 0;
+  let details = [];
+
+  if (approxEq(np, 255)) correct++; else details.push('n\u00b7p = 300 \u00b7 0,85 = 255');
+  if (approxEq(nq, 45)) correct++; else details.push('n\u00b7(1\u2212p) = 300 \u00b7 0,15 = 45');
+  if (approxEq(mu, 255)) correct++; else details.push('\u03bc = 255');
+  if (approxEq(sig, 6.18, 0.15)) correct++; else details.push('\u03c3 = \u221a(300\u00b70,85\u00b70,15) = \u221a38,25 \u2248 6,18');
+  if (approxEq(korr, 260.5)) correct++; else details.push('Stetigkeitskorrektur: 260 + 0,5 = 260,5');
+  if (approxEq(z, 0.89, 0.15)) correct++; else details.push('z = (260,5 \u2212 255) / 6,18 \u2248 0,89');
+
+  if (correct >= 5) {
+    fb.className = 'feedback correct';
+    fb.innerHTML = '\u2705 Ausgezeichnet! ' + correct + ' von 6 richtig.' +
+      (details.length > 0 ? '<br>Kleine Korrektur: ' + details.join(', ') : '') +
+      '<br>\u03a6(0,89) \u2248 0,8133 \u2192 P(X \u2264 260) \u2248 81,3 %';
+    markComplete(5);
+  } else if (correct >= 3) {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\ud83d\udfe0 ' + correct + ' von 6 richtig \u2014 fast! Korrekturen:<br>' + details.join('<br>');
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\u274c ' + correct + ' von 6 richtig. Schau dir den Tipp an.<br>' + details.join('<br>');
+  }
+  fb.style.display = 'block';
+}
+
+// ══════════════════════════════════════════════
+// EXERCISE A1/A2/A3
+// ══════════════════════════════════════════════
+function checkA1() {
+  const mu = parseNum(document.getElementById('a1_mu').value);
+  const sig = parseNum(document.getElementById('a1_sigma').value);
+  const korr = parseNum(document.getElementById('a1_korr').value);
+  const z = parseNum(document.getElementById('a1_z').value);
+  const fb = document.getElementById('fb_a1');
+  let correct = 0;
+  if (approxEq(mu, 140)) correct++;
+  if (approxEq(sig, 9.54, 0.15)) correct++;
+  if (approxEq(korr, 150.5)) correct++;
+  if (approxEq(z, 1.10, 0.15)) correct++;
+  if (correct === 4) {
+    fb.className = 'feedback correct'; fb.innerHTML = '\u2705 Perfekt!';
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\u274c ' + correct + ' von 4 richtig. Klicke auf \u201eL\u00f6sung\u201c.';
+  }
+  fb.style.display = 'block';
+  if (correct >= 3) checkStation6();
+}
+
+function checkA2() {
+  const mu = parseNum(document.getElementById('a2_mu').value);
+  const sig = parseNum(document.getElementById('a2_sigma').value);
+  const lo = parseNum(document.getElementById('a2_low').value);
+  const hi = parseNum(document.getElementById('a2_high').value);
+  const z1 = parseNum(document.getElementById('a2_z1').value);
+  const z2 = parseNum(document.getElementById('a2_z2').value);
+  const fb = document.getElementById('fb_a2');
+  let correct = 0;
+  if (approxEq(mu, 30)) correct++;
+  if (approxEq(sig, 5.14, 0.15)) correct++;
+  if (approxEq(lo, 24.5)) correct++;
+  if (approxEq(hi, 35.5)) correct++;
+  if (approxEq(z1, -1.07, 0.15)) correct++;
+  if (approxEq(z2, 1.07, 0.15)) correct++;
+  if (correct >= 5) {
+    fb.className = 'feedback correct'; fb.innerHTML = '\u2705 Sehr gut!';
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\u274c ' + correct + ' von 6 richtig. Schau dir die L\u00f6sung an.';
+  }
+  fb.style.display = 'block';
+  if (correct >= 4) checkStation6();
+}
+
+function checkA3() {
+  const mu = parseNum(document.getElementById('a3_mu').value);
+  const sig = parseNum(document.getElementById('a3_sigma').value);
+  const lo = parseNum(document.getElementById('a3_low').value);
+  const hi = parseNum(document.getElementById('a3_high').value);
+  const fb = document.getElementById('fb_a3');
+  let correct = 0;
+  if (approxEq(mu, 50)) correct++;
+  if (approxEq(sig, 5)) correct++;
+  if (approxEq(lo, 49.5)) correct++;
+  if (approxEq(hi, 50.5)) correct++;
+  if (correct === 4) {
+    fb.className = 'feedback correct';
+    fb.innerHTML = '\u2705 Richtig! P(X = 50) \u2248 P(49,5 \u2264 X \u2264 50,5) \u2248 8,0 %';
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\u274c ' + correct + ' von 4 richtig. Klicke auf \u201eL\u00f6sung\u201c.';
+  }
+  fb.style.display = 'block';
+  if (correct >= 3) checkStation6();
+}
+
+let station6Count = 0;
+function checkStation6() {
+  station6Count++;
+  if (station6Count >= 2) markComplete(6);
+}
+
+// ══════════════════════════════════════════════
+// GEOGEBRA EXERCISE
+// ══════════════════════════════════════════════
+function checkGeoGebra() {
+  const mu = parseNum(document.getElementById('gg_mu').value);
+  const sig = parseNum(document.getElementById('gg_sigma').value);
+  const grenze = parseNum(document.getElementById('gg_grenze').value);
+  const result = parseNum(document.getElementById('gg_result').value);
+
+  const fb = document.getElementById('fb_gg');
+  let correct = 0;
+
+  if (approxEq(mu, 50)) correct++;
+  if (approxEq(sig, 5)) correct++;
+  if (approxEq(grenze, 55.5)) correct++;
+  if (approxEq(result, 0.8643, 0.02)) correct++;
+
+  if (correct >= 3) {
+    fb.className = 'feedback correct';
+    fb.innerHTML = '\u2705 Sehr gut! Du kannst GeoGebra korrekt f\u00fcr die Normalapproximation einsetzen.' +
+      (correct < 4 ? '<br>Kleiner Hinweis: Pr\u00fcfe nochmal alle Werte.' : '');
+    markComplete(8);
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '\u274c ' + correct + ' von 4 richtig. Klicke auf \u201eL\u00f6sung\u201c f\u00fcr die vollst\u00e4ndige Rechnung.';
+  }
+  fb.style.display = 'block';
+}
+
+// ══════════════════════════════════════════════
+// FINAL QUIZ
+// ══════════════════════════════════════════════
+const finalQuizData = [
+  {
+    q: 'Welche Art von Verteilung ist die Binomialverteilung?',
+    opts: ['Stetig', 'Diskret', 'Symmetrisch', 'Normalverteilt'],
+    correct: 1,
+    explain: 'Die Binomialverteilung ist diskret \u2014 sie nimmt nur ganzzahlige Werte an.'
+  },
+  {
+    q: 'Wie lautet die Formel f\u00fcr die Standardabweichung bei \\(X \\sim B(n, p)\\)?',
+    opts: ['\\(\\sigma = n \\cdot p\\)', '\\(\\sigma = \\sqrt{n \\cdot p}\\)', '\\(\\sigma = \\sqrt{n \\cdot p \\cdot (1-p)}\\)', '\\(\\sigma = n \\cdot p \\cdot (1-p)\\)'],
+    correct: 2,
+    explain: 'Die Standardabweichung ist \u03c3 = \u221a(n\u00b7p\u00b7(1\u2212p)).'
+  },
+  {
+    q: 'Welche Bedingung muss f\u00fcr die Normalapproximation erf\u00fcllt sein?',
+    opts: ['\\(n \\geq 30\\)', '\\(n \\cdot p \\geq 5\\) und \\(n \\cdot (1-p) \\geq 5\\)', '\\(p = 0{,}5\\)', '\\(\\sigma \\geq 10\\)'],
+    correct: 1,
+    explain: 'Die Faustregel lautet: n\u00b7p \u2265 5 und n\u00b7(1\u2212p) \u2265 5.'
+  },
+  {
+    q: 'Was ist die Stetigkeitskorrektur?',
+    opts: ['Eine Rundungsregel f\u00fcr \u03c3', 'Die Erweiterung um \u00b10,5 beim \u00dcbergang diskret \u2192 stetig', 'Eine Formel zur Berechnung von \u03bc', 'Ein Verfahren zur z-Transformation'],
+    correct: 1,
+    explain: 'Die Stetigkeitskorrektur (\u00b10,5) gleicht den Unterschied zwischen diskreter und stetiger Verteilung aus.'
+  },
+  {
+    q: '\\(P(X \\leq 20)\\) wird mit Stetigkeitskorrektur zu:',
+    opts: ['\\(P(X \\leq 19{,}5)\\)', '\\(P(X \\leq 20{,}5)\\)', '\\(P(X \\leq 20)\\)', '\\(P(X \\leq 21)\\)'],
+    correct: 1,
+    explain: 'Bei \u2264 wird +0,5 addiert: P(X \u2264 20) \u2192 P(X \u2264 20,5).'
+  },
+  {
+    q: 'Bei \\(X \\sim B(200;\\; 0{,}9)\\): Wie gro\u00df ist \\(\\mu\\)?',
+    opts: ['\\(\\mu = 20\\)', '\\(\\mu = 90\\)', '\\(\\mu = 180\\)', '\\(\\mu = 200\\)'],
+    correct: 2,
+    explain: '\u03bc = n\u00b7p = 200 \u00b7 0,9 = 180.'
+  }
+];
+
+let currentFQ = 0;
+let fqAnswers = [];
+
+function buildFinalQuiz() {
+  const stepper = document.getElementById('finalQuizStepper');
+  stepper.innerHTML = '';
+  for (let i = 0; i < finalQuizData.length; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'quiz-step-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.id = 'fqDot' + i;
+    stepper.appendChild(dot);
+  }
+  fqAnswers = new Array(finalQuizData.length).fill(-1);
+  showFinalQuestion(0);
+}
+
+function showFinalQuestion(idx) {
+  currentFQ = idx;
+  const q = finalQuizData[idx];
+  const container = document.getElementById('finalQuizContainer');
+  let html = '<div class="exercise" style="animation:fadeIn 0.3s ease;">';
+  html += '<p style="font-weight:700; margin-bottom:12px;">Frage ' + (idx + 1) + ' von ' + finalQuizData.length + '</p>';
+  html += '<p>' + q.q + '</p>';
+  q.opts.forEach((opt, i) => {
+    const sel = fqAnswers[idx] === i ? ' selected' : '';
+    html += '<div class="quiz-option' + sel + '" onclick="selectFQ(' + i + ')">' + opt + '</div>';
+  });
+  html += '<div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">';
+  if (idx > 0) html += '<button class="btn btn-prev" onclick="showFinalQuestion(' + (idx-1) + ')">\u2190 Zur\u00fcck</button>';
+  if (idx < finalQuizData.length - 1) {
+    html += '<button class="btn btn-next" onclick="showFinalQuestion(' + (idx+1) + ')">Weiter \u2192</button>';
+  } else {
+    html += '<button class="btn btn-check" onclick="evaluateFinalQuiz()">Auswerten \u2713</button>';
+  }
+  html += '</div></div>';
+  container.innerHTML = html;
+
+  document.querySelectorAll('.quiz-step-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([container]);
+}
+
+function selectFQ(optIdx) {
+  fqAnswers[currentFQ] = optIdx;
+  document.querySelectorAll('#finalQuizContainer .quiz-option').forEach((o, i) => {
+    o.classList.toggle('selected', i === optIdx);
+  });
+}
+
+function evaluateFinalQuiz() {
+  let score = 0;
+  finalQuizData.forEach((q, i) => {
+    const dot = document.getElementById('fqDot' + i);
+    if (fqAnswers[i] === q.correct) { score++; dot.classList.add('correct-dot'); }
+    else { dot.classList.add('wrong-dot'); }
+  });
+
+  let html = '';
+  finalQuizData.forEach((q, i) => {
+    const isCorrect = fqAnswers[i] === q.correct;
+    html += '<div class="info-box ' + (isCorrect ? 'success' : 'danger') + '" style="margin:8px 0;">';
+    html += '<div class="icon">' + (isCorrect ? '\u2705' : '\u274c') + '</div><div>';
+    html += '<strong>Frage ' + (i+1) + ':</strong> ' + q.explain;
+    if (!isCorrect && fqAnswers[i] >= 0) {
+      html += '<br><em>Deine Antwort: ' + q.opts[fqAnswers[i]] + '</em>';
+    }
+    html += '</div></div>';
+  });
+  document.getElementById('finalQuizContainer').innerHTML = html;
+
+  document.getElementById('finalResult').style.display = 'block';
+  document.getElementById('finalScore').textContent = score + ' von ' + finalQuizData.length + ' richtig!';
+
+  const pct = Math.round(score / finalQuizData.length * 100);
+  let msg, badges;
+  if (pct === 100) {
+    msg = 'Perfekt! Du beherrschst die Normalapproximation!';
+    badges = '<span class="earned-badge gold">Gold \u2014 Normalverteilungs-Profi</span>';
+  } else if (pct >= 67) {
+    msg = 'Sehr gut! Nur noch wenige L\u00fccken.';
+    badges = '<span class="earned-badge silver">Silber \u2014 Fortgeschritten</span>';
+  } else {
+    msg = 'Schau dir die Erkl\u00e4rungen oben nochmal an und versuche es erneut!';
+    badges = '<span class="earned-badge bronze">Bronze \u2014 Guter Anfang</span>';
+  }
+  document.getElementById('finalMessage').textContent = msg;
+  document.getElementById('badgeContainer').innerHTML = badges;
+
+  if (score >= 4) markComplete(7);
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise();
+}
+
+function resetFinalQuiz() {
+  fqAnswers = new Array(finalQuizData.length).fill(-1);
+  document.getElementById('finalResult').style.display = 'none';
+  document.querySelectorAll('.quiz-step-dot').forEach(d => {
+    d.classList.remove('correct-dot', 'wrong-dot');
+  });
+  showFinalQuestion(0);
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  updateProgress();
+  buildFinalQuiz();
+});
+</script>
+
+</body>
+</html>
