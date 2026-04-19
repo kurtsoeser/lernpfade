@@ -57,6 +57,45 @@ MathJax = {
 }
 .fq-graph-pick { margin-top: 10px; }
 .fq-match-table select.fq-match-sel { font-family: Nunito, system-ui, sans-serif; }
+/* Quick-Check (Schritt 1): genug Weißraum wie beim Abschluss-Quiz */
+#kp0QuizContainer .kp0-question-card {
+  padding: 22px 26px 24px;
+  margin: 0;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+#kp0QuizContainer .kp0-question-card > p.kp0-q-lead {
+  margin: 0 0 14px 0;
+  line-height: 1.65;
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--text);
+}
+#kp0QuizContainer .kp0-question-card > p.kp0-q-text {
+  margin: 0 0 18px 0;
+  line-height: 1.65;
+}
+#kp0QuizContainer .kp0-question-card .quiz-options.kp0-quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
+#kp0QuizContainer .kp0-question-card .quiz-option {
+  margin: 0;
+  padding: 14px 20px;
+  line-height: 1.55;
+}
+#kp0QuizContainer .kp0-question-actions {
+  margin-top: 22px;
+  padding-top: 4px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#kp0QuizStepper { margin-bottom: 6px; }
 </style>
 </head>
 <body data-current-page="s6-kosten-preis" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
@@ -136,7 +175,7 @@ MathJax = {
       <strong>Wie dieser Lernpfad aufgebaut ist</strong>
       <p style="margin:8px 0 10px 0; line-height:1.65;">Oben in der Leiste geht es <strong>genau in dieser Reihenfolge</strong> weiter — das entspricht den neun Stationen (nicht einer „idealen“ Unterrichtsfolge, sondern dem, was du hier wirklich nacheinander öffnest):</p>
       <ol style="margin:0 0 0 20px; line-height:1.55; font-size:0.95rem;">
-        <li><strong>Einstieg</strong> — Imbiss-Beispiel, ME/GE, Quick-Check; darunter (aufklappbar) Lehrplan-Kompetenzen, Elastizitätsformeln und typische Fehler.</li>
+        <li><strong>Einstieg</strong> — Imbiss-Beispiel, ME/GE, Quick-Check (fünf Fragen zur Funktionsbetrachtung / Ableitung); darunter (aufklappbar) Lehrplan-Kompetenzen, Elastizitätsformeln und typische Fehler.</li>
         <li><strong>Kosten</strong> — Kostenfunktion, Fix/variabel, Kostenkehre; interaktive Verlaufstypen; Graphen-Quiz; <strong>Graph</strong> zum Kurzfassungs-Leitbeispiel mit markierter Kostenkehre; Übungen zur Kostenkehre.</li>
         <li><strong>Grenz &amp; Stück</strong> — Stückkosten, Grenzkosten, Betriebsoptimum und -minimum, kurz- und langfristige Preisuntergrenze.</li>
         <li><strong>Preis &amp; Markt</strong> — Nachfrage- und Angebotsfunktion, Höchst-/Mindestpreis, Gleichgewicht, Preis-Absatz-Miniaufgabe.</li>
@@ -227,30 +266,13 @@ MathJax = {
   <div class="exercise" style="margin-top:18px;">
     <div class="exercise-header">
       <span class="exercise-badge">Quick-Check</span>
-      <span class="exercise-title">Brücke zur Funktionsbetrachtung</span>
+      <span class="exercise-title">Funktionsbetrachtung &amp; Ableitung</span>
     </div>
-    <p style="margin-bottom:10px; line-height:1.65;">Ohne neue Formeln: Es geht darum, ob du <strong>die Idee der Ableitung</strong> als „Änderung bei einer Einheit mehr“ erkennst — wie im vorigen Kapitel bei lokalen Änderungsraten.</p>
-    <p><strong>Frage 1:</strong> \(K(x)\) sei die <strong>Gesamtkosten in GE</strong>, wenn \(x\) Stück produziert werden. Was beschreibt die <strong>erste Ableitung</strong> \(K'(x)\) in diesem Kontext am treffendsten?</p>
-    <div class="quiz-options" data-quiz="kp0_1" data-correct="1">
-      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Die Kosten <em>pro Stück im Durchschnitt</em> (also \(\overline{K}(x)=K(x)/x\)).</div>
-      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Ungefähr: <strong>Um wie viel GE</strong> sich die Gesamtkosten ändern, wenn man <strong>ein Stück mehr</strong> produziert (lokale Änderungsrate).</div>
-      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Den Verkaufspreis, den Kundinnen und Kunden maximal zahlen.</div>
-      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Die Menge, bei der der Gewinn automatisch am größten ist.</div>
-    </div>
-    <div class="feedback" id="fb_kp0_1"></div>
-
-    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die <strong>Kostenkehre</strong> bei einem typischen ertragsgesetzlichen Verlauf ist der Punkt, an dem …</p>
-    <div class="quiz-options" data-quiz="kp0_2" data-correct="2">
-      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">… die Gesamtkosten genau null sind.</div>
-      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">… Gewinn und Verlust gleich groß sind (Break-even).</div>
-      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">… sich das <strong>Krümmungsverhalten</strong> ändert: von „Kosten steigen <em>relativ langsamer</em>“ zu „Kosten steigen <em>relativ schneller</em>“ (Wendepunkt der Kostenfunktion).</div>
-      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">… der Stückpreis am Markt am höchsten ist.</div>
-    </div>
-    <div class="feedback" id="fb_kp0_2"></div>
-
-    <div style="margin-top:16px;">
-      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['kp0_1','kp0_2'])">Überprüfen ✓</button>
-    </div>
+    <p style="margin-bottom:10px; line-height:1.65;">Kurzer Abgleich mit dem <strong>Kapitel Funktionsbetrachtungen</strong>: <strong>Monotonie</strong> und <strong>Krümmung</strong> mit Hilfe von \(f'\) und \(f''\), der Begriff <strong>Ableitungsfunktion</strong> (u. a. grafisch deuten) sowie <strong>lokale Änderungsraten</strong> in verschiedenen Sachkontexten — ohne auf dieses Wirtschaftskapitel zugeschnittene Spezialbeispiele.</p>
+    <div id="kp0QuizStepper" class="quiz-stepper"></div>
+    <div id="kp0QuizContainer" style="margin-top:16px;"></div>
+    <div id="kp0QuizResult" style="display:none; margin-top:18px; padding-top:4px;"></div>
+    <button type="button" class="btn btn-hint" onclick="resetKp0Quiz()" style="margin-top:12px;">Quick-Check neu starten</button>
   </div>
 
   <div class="tab-nav">

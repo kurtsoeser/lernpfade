@@ -1,5 +1,5 @@
 /**
- * Lernpfad: Kosten- und Preistheorie (Semester 6)
+ * Lernpfad: Kosten- und Preistheorie (Kapitel Differential-Integralrechnung)
  */
 var TOTAL_SECTIONS = 9;
 var completedSections = new Set();
@@ -148,6 +148,201 @@ function checkQuizGroup(tabIdx, quizIds) {
   });
 
   if (allCorrect) markComplete(tabIdx + 1);
+}
+
+/** Einstieg: Quick-Check (5 Fragen), Schritt-für-Schritt wie Abschluss-Quiz */
+var currentKp0 = 0;
+var kp0Answers = [];
+
+var kp0QuizData = [
+  {
+    q: 'Sei \\(f\\) auf einem Intervall differenzierbar und dort überall \\(f\'(x)>0\\). Welche typische Aussage zum Graphen von \\(f\\) passt?',
+    opts: [
+      '\\(f\\) ist auf dem Intervall <strong>konstant</strong>.',
+      '\\(f\\) ist auf dem Intervall <strong>streng fallend</strong>.',
+      '\\(f\\) ist auf dem Intervall <strong>streng wachsend</strong>.',
+      '\\(f\\) hat auf dem Intervall <strong>notwendig einen Hochpunkt</strong>.'
+    ],
+    correct: 2,
+    explain:
+      'Monotonie: Aus \\(f\'(x)>0\\) folgt, dass \\(f\\) auf dem Intervall <strong>streng wächst</strong> (Ableitung als Steigung / lokale Zunahme).'
+  },
+  {
+    q: 'Sei \\(f\\) zweimal differenzierbar und auf einem Intervall gelte \\(f\'\'(x)<0\\). Wie lässt sich das <strong>Krümmungsverhalten</strong> von \\(f\\) dort üblich beschreiben?',
+    opts: [
+      'Der Graph ist <strong>konkav</strong> (rechtsgekrümmt; „Krümmung nach unten“).',
+      'Der Graph ist <strong>konvex</strong> (linksgekrümmt; „Krümmung nach oben“).',
+      'Der Graph ist <strong>notwendig eine Gerade</strong>.',
+      'Daraus folgt <strong>allein</strong> schon das Monotonieverhalten von \\(f\\) (ohne \\(f\'\\) zu kennen).'
+    ],
+    correct: 0,
+    explain:
+      'Krümmung: \\(f\'\'(x)<0\\) bedeutet <strong>konkav</strong> (rechtsgekrümmt). Die zweite Ableitung beschreibt die Änderung der Steigung — nicht direkt Monotonie von \\(f\\).'
+  },
+  {
+    q: 'Was beschreibt die <strong>Ableitungsfunktion</strong> \\(f\'\\) eines differenzierbaren \\(f\\) an der Stelle \\(x\\) am treffendsten?',
+    opts: [
+      'Den Funktionswert \\(f(x)\\).',
+      'Den „Flächeninhalt“ unter dem Graphen von \\(f\\) bis zur Stelle \\(x\\) (Integralbegriff).',
+      'Die <strong>Steigung der Tangente</strong> an den Graphen im Punkt \\((x,f(x))\\) — geometrisch dieselbe Idee wie eine <strong>lokale Änderungsrate</strong> von \\(f\\) an der Stelle \\(x\\).',
+      'Ausschließlich das Krümmungsverhalten, also ob der Graph konvex oder konkav ist.'
+    ],
+    correct: 2,
+    explain:
+      '\\(f\'(x)\\) ist die Steigung der Tangente bzw. der Wert der <strong>lokalen Änderungsrate</strong> von \\(f\\) an der Stelle \\(x\\). Krümmung steckt in \\(f\'\'\\), Flächen im Integral.'
+  },
+  {
+    q: 'Im Graphen von \\(f\\) steigt die Funktion auf einem Intervall <strong>monoton</strong> (nicht notwendig streng). Welche Bedingung an \\(f\'\\) ist dort im Allgemeinen passend?',
+    opts: [
+      '\\(f\'(x)<0\\) für alle \\(x\\) im Intervall.',
+      '\\(f\'(x)\\ge 0\\) für alle \\(x\\) im Intervall (Nullstellen von \\(f\'\\) sind dabei möglich).',
+      '\\(f\'\'(x)>0\\) für alle \\(x\\) im Intervall.',
+      '\\(f\'(x)=0\\) für alle \\(x\\) im Intervall.'
+    ],
+    correct: 1,
+    explain:
+      'Monoton <strong>wachsend</strong> erlaubt waagrechte Tangenten an einzelnen Stellen: dort gilt \\(f\'(x)=0\\), sonst \\(f\'(x)>0\\) — zusammen also \\(f\'(x)\\ge 0\\) auf dem ganzen Intervall.'
+  },
+  {
+    q: 'Die Menge \\(M(t)\\) einer Substanz im Reaktor hänge von der Zeit \\(t\\) ab (\\(M\\) in g, \\(t\\) in min). Was beschreibt \\(M\'(t_0)\\) sachlich am besten?',
+    opts: [
+      'Die Menge \\(M(0)\\) zu Beginn des Versuchs.',
+      'Die <strong>durchschnittliche</strong> Änderung von \\(M\\) zwischen \\(t=0\\) und \\(t=t_0\\).',
+      'Die maximale Menge, die im Versuch überhaupt erreicht werden kann.',
+      'Näherungsweise die <strong>momentane Änderungsrate</strong> von \\(M\\) bei \\(t_0\\) (z.&nbsp;B. in g/min) — also eine lokale Änderungsrate in einem anderen Themengebiet als „reine“ Kurvendiskussion.'
+    ],
+    correct: 3,
+    explain:
+      'Die Ableitung \\(M\'(t_0)\\) deutet die <strong>momentane</strong> Änderung der Menge pro Zeiteinheit an (lokale Änderungsrate), nicht den Mittelwert über ein Intervall.'
+  }
+];
+
+function buildKp0Quiz() {
+  var stepper = document.getElementById('kp0QuizStepper');
+  if (!stepper) return;
+  stepper.innerHTML = '';
+  for (var i = 0; i < kp0QuizData.length; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'quiz-step-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.id = 'kp0Dot' + i;
+    stepper.appendChild(dot);
+  }
+  kp0Answers = new Array(kp0QuizData.length).fill(-1);
+  showKp0Question(0);
+}
+
+function showKp0Question(idx) {
+  currentKp0 = idx;
+  var q = kp0QuizData[idx];
+  var wrap = document.getElementById('kp0QuizContainer');
+  var resultEl = document.getElementById('kp0QuizResult');
+  if (!wrap || !q) return;
+  if (resultEl) {
+    resultEl.style.display = 'none';
+    resultEl.innerHTML = '';
+  }
+
+  var html = '<div class="kp0-question-card" style="animation:fadeIn 0.3s ease;">';
+  html +=
+    '<p class="kp0-q-lead">Frage ' +
+    (idx + 1) +
+    ' von ' +
+    kp0QuizData.length +
+    '</p>';
+  html += '<p class="kp0-q-text">' + q.q + '</p>';
+  html += '<div class="quiz-options kp0-quiz-options">';
+  q.opts.forEach(function (opt, i) {
+    var sel = kp0Answers[idx] === i ? ' selected' : '';
+    html += '<div class="quiz-option' + sel + '" onclick="selectKp0(' + i + ')">' + opt + '</div>';
+  });
+  html += '</div>';
+  html += '<div class="kp0-question-actions">';
+  if (idx > 0)
+    html +=
+      '<button type="button" class="btn btn-prev" onclick="showKp0Question(' + (idx - 1) + ')">\u2190 Zur\u00fcck</button>';
+  if (idx < kp0QuizData.length - 1) {
+    html +=
+      '<button type="button" class="btn btn-next" onclick="showKp0Question(' +
+      (idx + 1) +
+      ')">Weiter \u2192</button>';
+  } else {
+    html +=
+      '<button type="button" class="btn btn-check" onclick="evaluateKp0Quiz()">Auswerten \u2713</button>';
+  }
+  html += '</div></div>';
+  wrap.innerHTML = html;
+
+  document.querySelectorAll('#kp0QuizStepper .quiz-step-dot').forEach(function (d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([wrap]).catch(function () {});
+}
+
+function selectKp0(optIdx) {
+  kp0Answers[currentKp0] = optIdx;
+  document.querySelectorAll('#kp0QuizContainer .quiz-option').forEach(function (o, i) {
+    o.classList.toggle('selected', i === optIdx);
+  });
+}
+
+function evaluateKp0Quiz() {
+  var score = 0;
+  kp0QuizData.forEach(function (q, i) {
+    var ok = kp0Answers[i] === q.correct;
+    if (ok) score++;
+    var dot = document.getElementById('kp0Dot' + i);
+    if (dot) {
+      dot.classList.remove('correct-dot', 'wrong-dot');
+      dot.classList.add(ok ? 'correct-dot' : 'wrong-dot');
+    }
+  });
+
+  if (score === kp0QuizData.length) markComplete(1);
+
+  var html = '';
+  kp0QuizData.forEach(function (q, i) {
+    var ok = kp0Answers[i] === q.correct;
+    html +=
+      '<div class="info-box ' + (ok ? 'success' : 'danger') + '" style="margin:8px 0;">';
+    html += '<div class="icon">' + (ok ? '\u2705' : '\u274c') + '</div><div>';
+    html += '<strong>Frage ' + (i + 1) + ':</strong> ' + q.explain;
+    if (!ok && kp0Answers[i] >= 0 && q.opts) {
+      html += '<br><em>Deine Antwort: ' + q.opts[kp0Answers[i]] + '</em>';
+    } else if (!ok && kp0Answers[i] < 0) {
+      html += '<br><em>Keine Antwort gewählt.</em>';
+    }
+    html += '</div></div>';
+  });
+
+  var res = document.getElementById('kp0QuizResult');
+  if (res) {
+    res.style.display = 'block';
+    res.innerHTML =
+      '<p style="font-weight:700; margin-bottom:8px;">Ergebnis: ' +
+      score +
+      ' von ' +
+      kp0QuizData.length +
+      ' richtig.</p>' +
+      html;
+  }
+  var wrap = document.getElementById('kp0QuizContainer');
+  if (wrap) wrap.innerHTML = '';
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([res]).catch(function () {});
+}
+
+function resetKp0Quiz() {
+  var res = document.getElementById('kp0QuizResult');
+  if (res) {
+    res.style.display = 'none';
+    res.innerHTML = '';
+  }
+  document.querySelectorAll('#kp0QuizStepper .quiz-step-dot').forEach(function (d) {
+    d.classList.remove('correct-dot', 'wrong-dot');
+  });
+  buildKp0Quiz();
 }
 
 /** Schritt 3: interaktive Kostenverläufe + Mini-Graphen für Quiz */
@@ -1358,6 +1553,7 @@ function resetFinalQuiz() {
 
 document.addEventListener('DOMContentLoaded', function () {
   switchTab(0);
+  buildKp0Quiz();
   buildFinalQuiz();
 
   window.requestAnimationFrame(function () {
