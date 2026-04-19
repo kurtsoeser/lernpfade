@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Kombinatorik &amp; Wahrscheinlichkeit</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="wk-grund" data-page-type="lernpfad" data-chapter-folder="Wahrscheinlichkeitsrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 7 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Kombinatorik &amp; Wahrscheinlichkeit</h1>
+  <p class="subtitle">Grundlagen: Zählverfahren (Fakultät, Binomialkoeffizient), klassische und statistische Wahrscheinlichkeit, Additions- und Multiplikationsregel, bedingte Wahrscheinlichkeit — mit Übungen und Quiz.</p>
+  <span class="badge">Einstieg</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    Als Nächstes: <a href="lernpfad-wahrscheinlichkeitsverteilungen.html" style="color:var(--blue-dark); font-weight:600;">Wahrscheinlichkeitsverteilungen</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Fakultät &amp; Binomial</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Laplace &amp; Statistik</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Addition</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Multiplikation</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Interaktiv</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Übungen &amp; Quiz</button>
+</div>
+
+<!-- ═══ STATION 1 ═══ -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg &amp; Ziele</div>
+
+  <p>In diesem Kapitel geht es um <strong>Zählverfahren</strong> und die <strong>Grundlagen der Wahrscheinlichkeit</strong>. Ziel ist, reale Situationen mathematisch korrekt zu beschreiben, Wahrscheinlichkeiten zu <strong>berechnen</strong>, sie zu <strong>deuten</strong> und <strong>argumentativ</strong> zu nutzen.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Du lernst u.&nbsp;a.:</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Fakultäten und Binomialkoeffizienten berechnen und deuten</li>
+        <li>klassische und statistische Wahrscheinlichkeiten unterscheiden</li>
+        <li>Additions- und Multiplikationsregeln korrekt anwenden</li>
+        <li>Ergebnisse im Sachkontext interpretieren und begründen</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Erste Einordnung</span>
+    </div>
+    <p><strong>Frage 1:</strong> Die Fakultät \(n!\) zählt vor allem …</p>
+    <div class="quiz-options" data-quiz="wg0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die Anzahl Teilmengen der Größe \(k\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Anordnungen (Permutationen) von \(n\) unterscheidbaren Objekten</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">immer die Trefferwahrscheinlichkeit bei \(n\) Versuchen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">die Fläche unter einer Dichtekurve</div>
+    </div>
+    <div class="feedback" id="fb_wg0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Beim <strong>klassischen</strong> Wahrscheinlichkeitsbegriff setzt man typischerweise voraus, dass …</p>
+    <div class="quiz-options" data-quiz="wg0_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">alle Elementarereignisse gleich wahrscheinlich sind (Laplace)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">man immer Häufigkeiten aus Daten schätzt</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(P(A\cap B)=P(A)\cdot P(B)\) gilt</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Ereignisse stets unabhängig sind</div>
+    </div>
+    <div class="feedback" id="fb_wg0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['wg0_1','wg0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Fakultät &amp; Binomialkoeffizient →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 2 ═══ -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Fakultät und Binomialkoeffizient</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Fakultät</h3>
+  <p>Die Fakultät einer natürlichen Zahl \(n\) schreibt man \(n!\) (sprich: „\(n\) Fakultät“) und definiert:</p>
+  <div class="formula-box">
+    <div class="formula-label">Definition</div>
+    \[ n! = n\cdot(n-1)\cdot(n-2)\cdots 2\cdot 1 \]
+    <p style="text-align:left; margin-top:10px; font-size:0.95rem;"><strong>Sonderfall:</strong> \(0! = 1\)</p>
+  </div>
+  <p><strong>Beispiel:</strong> \(5! = 5\cdot4\cdot3\cdot2\cdot1 = 120\)</p>
+  <div class="info-box success">
+    <div class="icon">👉</div>
+    <div><strong>Bedeutung:</strong> \(n!\) ist die Anzahl der <strong>verschiedenen Anordnungen (Permutationen)</strong> von \(n\) unterscheidbaren Objekten.</div>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:24px;">Binomialkoeffizient</h3>
+  <p>Der Binomialkoeffizient \(\binom{n}{k}\) zählt, wie viele Möglichkeiten es gibt, aus \(n\) Elementen <strong>genau \(k\)</strong> auszuwählen — <strong>ohne Reihenfolge</strong> (Kombinationen).</p>
+  <div class="formula-box">
+    <div class="formula-label">Berechnung</div>
+    \[ \binom{n}{k} = \frac{n!}{k!\,(n-k)!} \]
+  </div>
+  <p><strong>Beispiel:</strong> Aus 6 Personen werden 2 für eine Präsentation gewählt:</p>
+  \[ \binom{6}{2} = \frac{6!}{2!\cdot 4!} = 15 \]
+  <div class="info-box concept">
+    <div class="icon">👉</div>
+    <div><strong>Deutung:</strong> Es gibt <strong>15 verschiedene Zweiergruppen</strong>.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Kombinatorik</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(\binom{n}{k}\) beschreibt …</p>
+    <div class="quiz-options" data-quiz="wg1_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die Anzahl Reihenfolgen von \(n\) Objekten</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">die Wahrscheinlichkeit für \(k\) Treffer</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">wie viele \(k\)-Teilmengen aus \(n\) Elementen möglich sind (ohne Reihenfolge)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer den Wert \(n\cdot k\)</div>
+    </div>
+    <div class="feedback" id="fb_wg1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Es gilt \(\binom{5}{0}=\) …</p>
+    <div class="quiz-options" data-quiz="wg1_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">0</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">1</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">5</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">120</div>
+    </div>
+    <div class="feedback" id="fb_wg1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['wg1_1','wg1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Laplace &amp; Statistik →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 3 ═══ -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Klassische und statistische Wahrscheinlichkeit</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Klassischer Wahrscheinlichkeitsbegriff (Laplace)</h3>
+  <p>Gilt ein <strong>endlicher</strong> Ergebnisraum und sind alle Ergebnisse <strong>gleich wahrscheinlich</strong>, so ist</p>
+  <div class="formula-box">
+    <div class="formula-label">Laplace-Formel</div>
+    \[ P(E) = \frac{\text{Anzahl günstiger Ergebnisse}}{\text{Anzahl aller möglichen Ergebnisse}} \]
+  </div>
+  <p><strong>Beispiel:</strong> fairer Würfel, \(E\): „Augenzahl größer als 4“ — günstig sind 5 und 6:</p>
+  \[ P(E) = \frac{2}{6} = \frac{1}{3} \]
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">Statistischer Wahrscheinlichkeitsbegriff</h3>
+  <p>Wahrscheinlichkeit wird aus <strong>Häufigkeiten</strong> bei vielen Wiederholungen <strong>geschätzt</strong>:</p>
+  <div class="formula-box">
+    <div class="formula-label">Relative Häufigkeit</div>
+    \[ P(E) \approx \frac{\text{Anzahl des Eintretens von } E}{\text{Anzahl der Versuche}} \]
+  </div>
+  <p><strong>Beispiel:</strong> Von 200 Kund:innen kaufen 50 ein bestimmtes Produkt:</p>
+  \[ P(\text{Kauf}) \approx \frac{50}{200} = 0{,}25 \]
+  <div class="info-box concept">
+    <div class="icon">👉</div>
+    <div>Diese Wahrscheinlichkeit stützt sich auf <strong>empirische Daten</strong>, nicht auf ein idealisiertes Gleichwahrscheinlichkeitsmodell.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Begriffe</span>
+    </div>
+    <p><strong>Frage 1:</strong> Die Laplace-Formel ist direkt anwendbar, wenn …</p>
+    <div class="quiz-options" data-quiz="wg2_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">alle Elementarereignisse gleich wahrscheinlich sind</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">man immer eine Urne ohne Zurücklegen hat</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(P(A\cap B)=P(A)\cdot P(B)\) gilt</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(n\) gegen unendlich strebt</div>
+    </div>
+    <div class="feedback" id="fb_wg2_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Eine relative Kaufhäufigkeit von \(50/200\) interpretiert man typischerweise als …</p>
+    <div class="quiz-options" data-quiz="wg2_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">exakte Laplace-Wahrscheinlichkeit ohne Daten</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Beweis, dass genau 25 % aller Menschen kaufen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Näherung / Schätzung aus Beobachtungen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Varianz der Binomialverteilung</div>
+    </div>
+    <div class="feedback" id="fb_wg2_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['wg2_1','wg2_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Additionsregel →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 4 ═══ -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Additionsregel für Ereignisse</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Sich ausschließende Ereignisse</h3>
+  <p>Zwei Ereignisse heißen <strong>unvereinbar (sich ausschließend)</strong>, wenn sie <strong>nicht gleichzeitig</strong> eintreten können (\(A\cap B=\emptyset\)).</p>
+  <div class="formula-box">
+    <div class="formula-label">Addition bei Disjunktheit</div>
+    \[ P(A\cup B) = P(A) + P(B) \]
+  </div>
+  <p><strong>Beispiel Würfel:</strong> \(A\): „1 würfeln“, \(B\): „6 würfeln“ —</p>
+  \[ P(A\cup B) = \frac{1}{6} + \frac{1}{6} = \frac{1}{3} \]
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">Nicht ausschließende Ereignisse</h3>
+  <p>Können \(A\) und \(B\) gemeinsam eintreten, zählt der Schnitt doppelt — daher der <strong>allgemeine Additionssatz</strong>:</p>
+  <div class="formula-box">
+    <div class="formula-label">Additionssatz</div>
+    \[ P(A\cup B) = P(A) + P(B) - P(A\cap B) \]
+  </div>
+  <p><strong>Beispiel Abendschule:</strong> 60&nbsp;% arbeiten Vollzeit (\(A\)), 40&nbsp;% haben Kinder (\(B\)), 20&nbsp;% erfüllen beides (\(A\cap B\)):</p>
+  \[ P(A\cup B) = 0{,}6 + 0{,}4 - 0{,}2 = 0{,}8 \]
+  <div class="info-box success">
+    <div class="icon">👉</div>
+    <div><strong>Interpretation:</strong> 80&nbsp;% der Schüler:innen erfüllen <strong>mindestens eines</strong> der beiden Merkmale.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Addition</span>
+    </div>
+    <p><strong>Frage 1:</strong> Wann reicht \(P(A\cup B)=P(A)+P(B)\) <em>ohne</em> Korrekturterm?</p>
+    <div class="quiz-options" data-quiz="wg3_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">immer</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">wenn \(A\) und \(B\) sich ausschließen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">wenn \(A\) und \(B\) unabhängig sind</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">wenn \(P(A)=P(B)\)</div>
+    </div>
+    <div class="feedback" id="fb_wg3_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Warum wird \(P(A\cap B)\) im allgemeinen Additionssatz <strong>abgezogen</strong>?</p>
+    <div class="quiz-options" data-quiz="wg3_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">weil der Schnitt immer Wahrscheinlichkeit 1 hat</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">weil \(P(A)+P(B)\) sonst zu klein wäre</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">weil günstige Fälle im Schnitt sonst doppelt gezählt würden</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">weil \(A\cap B\) leer ist</div>
+    </div>
+    <div class="feedback" id="fb_wg3_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['wg3_1','wg3_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Multiplikation →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 5 ═══ -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Multiplikationsregel &amp; bedingte Wahrscheinlichkeit</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Unabhängige Ereignisse</h3>
+  <p>Zwei Ereignisse sind <strong>unabhängig</strong>, wenn das Eintreten des einen das andere nicht beeinflusst. Dann gilt die <strong>Multiplikationsregel</strong>:</p>
+  <div class="formula-box">
+    <div class="formula-label">Unabhängigkeit</div>
+    \[ P(A\cap B) = P(A) \cdot P(B) \]
+  </div>
+  <p><strong>Beispiel:</strong> zweimal faire Münze — „Kopf und Kopf“:</p>
+  \[ P = 0{,}5 \cdot 0{,}5 = 0{,}25 \]
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">Abhängige Ereignisse &amp; bedingte Wahrscheinlichkeit</h3>
+  <p>Das erste Ereignis kann die Wahrscheinlichkeit des zweiten ändern. Die <strong>bedingte Wahrscheinlichkeit</strong> (für \(P(A)\neq 0\)):</p>
+  <div class="formula-box">
+    <div class="formula-label">Definition</div>
+    \[ P(B\mid A) = \frac{P(A\cap B)}{P(A)} \]
+  </div>
+  <p><strong>Multiplikationssatz (allgemein):</strong></p>
+  \[ P(A\cap B) = P(A) \cdot P(B\mid A) \]
+
+  <p><strong>Beispiel Urne (ohne Zurücklegen):</strong> 5 rote, 3 blaue Kugeln — zwei Ziehungen:</p>
+  \[ P(\text{erste rot}) = \frac{5}{8}, \qquad P(\text{zweite rot}\mid\text{erste rot}) = \frac{4}{7} \]
+  \[ P(\text{beide rot}) = \frac{5}{8} \cdot \frac{4}{7} = \frac{20}{56} = \frac{5}{14} \]
+  <div class="info-box concept">
+    <div class="icon">👉</div>
+    <div><strong>Interpretation:</strong> Nach der ersten roten Kugel ändert sich die Zusammensetzung — daher ist die zweite Wahrscheinlichkeit <strong>bedingt</strong>.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Multiplikation &amp; Bedingung</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(P(A\cap B)=P(A)\cdot P(B)\) gilt sicher, wenn …</p>
+    <div class="quiz-options" data-quiz="wg4_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(A\) und \(B\) unabhängig sind (und die Faktoren existieren)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(A\) und \(B\) sich immer ausschließen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">immer, ohne Voraussetzung</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur bei Ziehung mit Zurücklegen</div>
+    </div>
+    <div class="feedback" id="fb_wg4_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(P(B\mid A)\) misst …</p>
+    <div class="quiz-options" data-quiz="wg4_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die Wahrscheinlichkeit von \(A\cap B\) ohne \(P(A)\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">wie wahrscheinlich \(B\) ist, <em>wenn</em> \(A\) eingetreten ist</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">immer dasselbe wie \(P(A\mid B)\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(P(A)+P(B)\)</div>
+    </div>
+    <div class="feedback" id="fb_wg4_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['wg4_1','wg4_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Interaktiv →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 6 ═══ -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Interaktive Rechner</div>
+
+  <p>Berechne <strong>Fakultäten</strong> und <strong>Binomialkoeffizienten</strong> — exakt mit ganzen Zahlen (BigInt im Browser). Für \(n!\) ist die Ausgabe auf <strong>\(n\le 30\)</strong> beschränkt (Lesbarkeit).</p>
+
+  <div class="exercise" style="margin-bottom:20px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Rechner</span>
+      <span class="exercise-title">Fakultät</span>
+    </div>
+    <div class="input-row" style="align-items:flex-end; gap:12px; flex-wrap:wrap;">
+      <div class="input-group">
+        <label for="wgFacN">\(n\)</label>
+        <input type="number" id="wgFacN" min="0" max="30" value="5" inputmode="numeric">
+      </div>
+      <button type="button" class="btn btn-check" id="wgCalcFac">Berechnen</button>
+    </div>
+    <p id="wgFacOut" style="margin-top:12px; font-family:ui-monospace,monospace; font-size:0.95rem; word-break:break-all;" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Rechner</span>
+      <span class="exercise-title">Binomialkoeffizient</span>
+    </div>
+    <div class="input-row" style="align-items:flex-end; gap:12px; flex-wrap:wrap;">
+      <div class="input-group">
+        <label for="wgBinN">\(n\)</label>
+        <input type="number" id="wgBinN" min="0" max="60" value="6" inputmode="numeric">
+      </div>
+      <div class="input-group">
+        <label for="wgBinK">\(k\)</label>
+        <input type="number" id="wgBinK" min="0" max="6" value="2" inputmode="numeric">
+      </div>
+      <button type="button" class="btn btn-check" id="wgCalcBin">Berechnen</button>
+    </div>
+    <p id="wgBinOut" style="margin-top:12px; font-size:0.95rem;" aria-live="polite"></p>
+  </div>
+
+  <div class="info-box success" style="margin-top:20px;">
+    <div class="icon">🔗</div>
+    <div>Später taucht \(\binom{n}{k}\) in der <strong>Binomialverteilung</strong> als Faktor in \(P(X=k)\) auf — siehe Lernpfad <a href="lernpfad-binomialverteilung.html" style="color:var(--blue-dark); font-weight:700;">Binomialverteilung</a>.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Einordnung</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(P(B\mid A)\) unterscheidet sich von \(P(B)\), wenn …</p>
+    <div class="quiz-options" data-quiz="wg5_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(A\) und \(B\) unabhängig sind</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(P(A)=0\) ist</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">das Eintreten von \(A\) die Chance für \(B\) ändert (Abhängigkeit)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer — ohne Ausnahme</div>
+    </div>
+    <div class="feedback" id="fb_wg5_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(\displaystyle\frac{5}{8}\cdot\frac{4}{7}\) im Urnenbeispiel steht für …</p>
+    <div class="quiz-options" data-quiz="wg5_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">zwei unabhängige Ziehungen mit Zurücklegen</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">zwei Ziehungen ohne Zurücklegen (bedingte zweite Wahrscheinlichkeit)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(P(A)+P(B)\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">die Laplace-Wahrscheinlichkeit eines Würfels</div>
+    </div>
+    <div class="feedback" id="fb_wg5_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['wg5_1','wg5_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Übungen &amp; Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 7 ═══ -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Übungen &amp; Abschlussquiz</div>
+
+  <div class="info-box concept">
+    <div class="icon">✅</div>
+    <div>
+      <strong>Kompetenzziel:</strong> Du kannst Fakultäten und Binomialkoeffizienten berechnen und deuten, klassische und statistische Wahrscheinlichkeiten unterscheiden, Additions- und Multiplikationsregeln anwenden und Ergebnisse im Kontext begründen.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung A</span>
+      <span class="exercise-title">Fakultät</span>
+    </div>
+    <p>Berechne \(5!\).</p>
+    <div class="input-group">
+      <label for="wg_u1">Antwort</label>
+      <input type="text" id="wg_u1" placeholder="120" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWgU1()">Überprüfen</button>
+    <div class="feedback" id="fb_wg_u1"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung B</span>
+      <span class="exercise-title">Binomialkoeffizient</span>
+    </div>
+    <p>Wie groß ist \(\binom{6}{2}\)?</p>
+    <div class="input-group">
+      <label for="wg_u2">Antwort</label>
+      <input type="text" id="wg_u2" placeholder="15" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWgU2()">Überprüfen</button>
+    <div class="feedback" id="fb_wg_u2"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung C</span>
+      <span class="exercise-title">Laplace</span>
+    </div>
+    <p>Fairer Würfel: Wie groß ist die Wahrscheinlichkeit für eine Augenzahl größer als 4? (Bruch oder Dezimalzahl)</p>
+    <div class="input-group">
+      <label for="wg_u3">Antwort</label>
+      <input type="text" id="wg_u3" placeholder="1/3" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWgU3()">Überprüfen</button>
+    <div class="feedback" id="fb_wg_u3"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung D</span>
+      <span class="exercise-title">Additionssatz</span>
+    </div>
+    <p>Mit \(P(A)=0{,}6\), \(P(B)=0{,}4\), \(P(A\cap B)=0{,}2\): Wie groß ist \(P(A\cup B)\)?</p>
+    <div class="input-group">
+      <label for="wg_u4">Antwort</label>
+      <input type="text" id="wg_u4" placeholder="0,8" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWgU4()">Überprüfen</button>
+    <div class="feedback" id="fb_wg_u4"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung E</span>
+      <span class="exercise-title">Urne ohne Zurücklegen</span>
+    </div>
+    <p>5 rote, 3 blaue Kugeln — zwei Ziehungen ohne Zurücklegen. Wie groß ist \(P(\text{beide rot})\)?</p>
+    <div class="input-group">
+      <label for="wg_u5">Antwort</label>
+      <input type="text" id="wg_u5" placeholder="5/14 oder 0,357…" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWgU5()">Überprüfen</button>
+    <div class="feedback" id="fb_wg_u5"></div>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:28px;">Abschlussquiz</h3>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+
+  <div id="finalResult" style="display:none; margin-top:20px;">
+    <div class="info-box success">
+      <div class="icon">🏆</div>
+      <div>
+        <strong id="finalScore"></strong>
+        <p id="finalMessage" style="margin-top:8px;"></p>
+        <div class="badge-container" id="badgeContainer"></div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-hint" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div><!-- container -->
+
+<div class="floating-tools-wrap">
+  <button type="button" class="floating-tools-fab" onclick="openCalculatorModal()"
+    aria-label="Taschenrechner öffnen" title="Taschenrechner">🧮</button>
+</div>
+
+<div id="calcModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="calcModalTitle" aria-hidden="true">
+  <div class="gg-modal-backdrop" onclick="closeCalculatorModal()"></div>
+  <div class="gg-modal-dialog calc-modal-dialog">
+    <div class="gg-modal-header">
+      <h2 id="calcModalTitle">Taschenrechner</h2>
+      <button type="button" class="gg-modal-close" onclick="closeCalculatorModal()" aria-label="Schließen">&times;</button>
+    </div>
+    <div class="gg-modal-body">
+      <div class="calc-display-wrap">
+        <input type="text" class="calc-display" id="calcDisplay" value="0" readonly inputmode="none" aria-live="polite">
+      </div>
+      <div class="calc-keys">
+        <button type="button" onclick="calcClear()">C</button>
+        <button type="button" onclick="calcBackspace()">⌫</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('/')">÷</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('*')">×</button>
+        <button type="button" onclick="calcPressDigit('7')">7</button>
+        <button type="button" onclick="calcPressDigit('8')">8</button>
+        <button type="button" onclick="calcPressDigit('9')">9</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('-')">−</button>
+        <button type="button" onclick="calcPressDigit('4')">4</button>
+        <button type="button" onclick="calcPressDigit('5')">5</button>
+        <button type="button" onclick="calcPressDigit('6')">6</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('+')">+</button>
+        <button type="button" onclick="calcPressDigit('1')">1</button>
+        <button type="button" onclick="calcPressDigit('2')">2</button>
+        <button type="button" onclick="calcPressDigit('3')">3</button>
+        <button type="button" class="calc-eq" onclick="calcEquals()">=</button>
+        <button type="button" class="calc-wide" onclick="calcPressDigit('0')">0</button>
+        <button type="button" onclick="calcPressDigit('.')">,</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--text-light); margin-top:12px;">Dezimalzahlen intern mit Punkt — Anzeige mit Komma.</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/wahrscheinlichkeit-grundlagen-lernpfad/app.js"></script>
+</body>
+</html>

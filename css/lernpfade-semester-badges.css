@@ -1,0 +1,39 @@
+/**
+ * Semester-Pillen: Farben pro registry-semesterId (s3–s8).
+ * Verwendung: .lp-sem-badge.lp-sem-badge--s3 … .lp-sem-badge--s8
+ */
+.lp-sem-badge--s3 {
+  background: #d1fae5;
+  color: #047857;
+  border-color: rgba(4, 120, 87, 0.38);
+}
+
+.lp-sem-badge--s4 {
+  background: #ede9fe;
+  color: #5b21b6;
+  border-color: rgba(91, 33, 182, 0.35);
+}
+
+.lp-sem-badge--s5 {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: rgba(180, 83, 9, 0.38);
+}
+
+.lp-sem-badge--s6 {
+  background: #ffe4e6;
+  color: #be123c;
+  border-color: rgba(190, 18, 60, 0.32);
+}
+
+.lp-sem-badge--s7 {
+  background: #cffafe;
+  color: #0e7490;
+  border-color: rgba(14, 116, 144, 0.38);
+}
+
+.lp-sem-badge--s8 {
+  background: #e0e7ff;
+  color: #3730a3;
+  border-color: rgba(55, 48, 163, 0.35);
+}

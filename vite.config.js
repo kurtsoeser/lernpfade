@@ -5,7 +5,7 @@ export default defineConfig({
   root: '.',
   server: {
     port: 5173,
-    open: '/Wahrscheinlichkeitsrechnung/index.html',
+    open: '/index.html',
   },
   build: {
     outDir: 'dist',

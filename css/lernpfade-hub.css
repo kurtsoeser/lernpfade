@@ -1,0 +1,438 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap');
+@import url('lernpfade-semester-badges.css');
+
+:root {
+  --blue: #3b82c4;
+  --blue-light: #d6eaf8;
+  --blue-dark: #2563a0;
+  --gold: #f5c542;
+  --gold-light: #fff8dc;
+  --bg: #fdf6e3;
+  --bg-card: #ffffff;
+  --text: #2c3e50;
+  --text-light: #5d6d7e;
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.hub-root {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+.hub-container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 32px 20px 40px;
+}
+
+.hub-hero {
+  text-align: center;
+  padding: 40px 28px;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, var(--blue-light), var(--gold-light));
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.hub-hero h1 {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 2.2rem;
+  color: var(--blue-dark);
+  margin-bottom: 8px;
+}
+
+.hub-hero .hub-subtitle {
+  font-size: 1rem;
+  color: var(--text-light);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.hub-hero .hub-badge {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 5px 16px;
+  background: var(--gold);
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.hub-intro {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 32px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.95rem;
+}
+
+.hub-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  justify-content: center;
+  margin-bottom: 36px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.hub-toc a {
+  color: var(--blue-dark);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
+}
+
+.hub-toc a:hover {
+  border-color: var(--blue);
+}
+
+.hub-region-title {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1.75rem;
+  color: var(--blue-dark);
+  margin: 44px 0 20px;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--blue);
+}
+
+.hub-region-title:first-of-type {
+  margin-top: 12px;
+}
+
+.hub-uberchapter-title {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1.55rem;
+  color: var(--blue-dark);
+}
+
+.hub-subchapter-heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  margin: 22px 0 12px;
+}
+
+.statistik-curriculum-block {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(37, 99, 160, 0.18);
+}
+
+.statistik-curriculum-block-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  margin-bottom: 14px;
+}
+
+.hub-section-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 24px 0 14px;
+}
+
+.hub-semester-block .hub-section-title {
+  color: var(--blue-dark);
+}
+
+.hub-grid {
+  margin-top: 4px;
+}
+
+/* Gesamtübersicht: Kartenraster (index.html lädt kein lernpfade-nav.css) */
+/* Gesamtübersicht: Kacheln immer eine Spalte, untereinander */
+.index-grid.hub-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  margin-top: 8px;
+  max-width: none;
+}
+
+.hub-index-card-shell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: var(--bg-card);
+  border: 2px solid transparent;
+  transition: border-color 0.2s, transform 0.2s;
+  overflow: hidden;
+}
+
+.hub-index-card-shell:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.hub-index-card-shell .hub-index-card {
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  width: 100%;
+  padding: 24px 24px 12px;
+}
+
+.hub-index-card-shell .hub-index-card:hover {
+  border-color: transparent;
+  transform: none;
+}
+
+.lp-sem-badge {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  border: 1px solid rgba(37, 99, 160, 0.25);
+}
+
+.hub-card-head,
+.chapter-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.hub-card-head h2,
+.chapter-card-head h2 {
+  margin-bottom: 0;
+}
+
+.hub-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.hub-chapter-tag {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Überkapitel: klickbare Pille → Bereich „Nach Kapitel“ (Tab-Sprungmarke) */
+.hub-chapter-pill {
+  display: inline-flex;
+  align-items: center;
+  margin: 4px 24px 20px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--blue-dark);
+  background: var(--blue-light);
+  border: 1px solid rgba(37, 99, 160, 0.28);
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.hub-chapter-pill:hover {
+  background: linear-gradient(135deg, var(--blue-light), #fff);
+  border-color: var(--blue);
+  box-shadow: 0 2px 8px rgba(37, 99, 160, 0.12);
+}
+
+.hub-chapter-pill:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.hub-coming-soon {
+  color: var(--text-light);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.hub-footer {
+  text-align: center;
+  padding: 36px 0 12px;
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+.hub-footer a {
+  color: var(--blue);
+}
+
+/* Karten: gleiche Basis wie lernpfade-nav .index-card — hier für Root-Pfade */
+.hub-index-card {
+  display: block;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  border: 2px solid transparent;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.hub-index-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.hub-index-card h2 {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1.45rem;
+  color: var(--blue-dark);
+}
+
+.hub-index-card p {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.55;
+}
+
+.hub-index-card .index-card-meta {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+@media (max-width: 700px) {
+  .hub-card-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hub-card-badges {
+    justify-content: flex-start;
+  }
+}
+
+/* ——— Tab-Navigation (Gesamtübersicht) ——— */
+.hub-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 4px 2px 8px;
+  border-bottom: 2px solid rgba(37, 99, 160, 0.2);
+}
+
+.hub-tabs--chapter {
+  max-height: none;
+}
+
+.hub-tab-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(37, 99, 160, 0.35);
+  background: var(--bg-card);
+  color: var(--blue-dark);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  flex: 0 1 auto;
+  max-width: 100%;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.hub-tab-btn:hover {
+  border-color: var(--blue);
+  box-shadow: var(--shadow);
+}
+
+.hub-tab-btn--active {
+  background: linear-gradient(135deg, var(--blue-light), #fff);
+  border-color: var(--blue);
+  box-shadow: 0 2px 10px rgba(37, 99, 160, 0.15);
+}
+
+.hub-tab-panels {
+  min-height: 120px;
+}
+
+.hub-tab-panel[hidden] {
+  display: none !important;
+}
+
+.hub-tab-panel--chapter .hub-chapter-tab-inner {
+  padding-top: 4px;
+}
+
+.hub-chapter-panel-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  margin: 0 0 16px;
+  line-height: 1.35;
+}
+
+.hub-empty-hint {
+  grid-column: 1 / -1;
+  color: var(--text-light);
+  font-style: italic;
+  padding: 12px 8px;
+  margin: 0;
+}
+
+/* Überkapitel-Buchstabe (A–J) neben Kapitelüberschriften */
+.hub-hero h1.lp-chapter-title-with-letter,
+.hero h1.lp-chapter-title-with-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.lp-chapter-letter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.35rem;
+  height: 2.35rem;
+  padding: 0 8px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--blue-dark);
+  background: var(--gold);
+  border: 3px solid var(--blue-dark);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 rgba(37, 99, 160, 0.2);
+  flex-shrink: 0;
+}

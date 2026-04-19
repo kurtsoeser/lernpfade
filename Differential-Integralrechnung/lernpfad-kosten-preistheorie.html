@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Kosten- und Preistheorie</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.kp-canvas-card { text-align: center; margin-top: 14px; }
+.kp-canvas-card canvas { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid #E2E8F0; background: #FBFCFE; }
+.kp-sliders { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: center; margin: 16px 0 8px; }
+.kp-sliders label { font-weight: 600; color: var(--text); font-size: 0.9rem; }
+.kp-sliders input[type="range"] { width: 180px; vertical-align: middle; }
+.kp-canvas-note { font-size: 0.85rem; color: var(--text-light); margin-top: 8px; max-width: 520px; margin-left: auto; margin-right: auto; }
+.source-note { font-size: 0.82rem; color: var(--text-light); margin-top: 10px; padding: 10px 12px; background: #F8FAFC; border-radius: 10px; border-left: 4px solid var(--blue); }
+.kv-applet-wrap { margin-top: 14px; }
+.kv-type-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0 6px; }
+.kv-type-btn {
+  padding: 8px 14px; border-radius: 999px; border: 2px solid var(--blue); background: #fff;
+  font-family: Nunito, sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; color: var(--blue-dark);
+}
+.kv-type-btn:hover { background: var(--blue-light); }
+.kv-type-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.kv-graph-quiz { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 640px) {
+  .kv-graph-quiz { grid-template-columns: repeat(4, 1fr); }
+}
+.quiz-option.kv-graph-opt { min-height: 120px; justify-content: flex-start; padding-top: 10px; }
+.quiz-option.kv-graph-opt canvas { display: block; margin: 0 auto 6px; border-radius: 8px; border: 1px solid #E2E8F0; background: #FAFAFA; }
+.kv-graph-cap { font-size: 0.78rem; color: var(--text-light); font-weight: 700; }
+.kp-ggb-wrap {
+  width: 100%;
+  max-width: 1000px;
+  margin: 16px auto 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  box-shadow: var(--shadow);
+  background: #fff;
+  min-height: 420px;
+}
+.kp-ggb-wrap iframe {
+  display: block;
+  width: 100%;
+  height: min(72vh, 640px);
+  border: 0;
+}
+.fq-graph-pick { margin-top: 10px; }
+.fq-match-table select.fq-match-sel { font-family: Nunito, system-ui, sans-serif; }
+</style>
+</head>
+<body data-current-page="s6-kosten-preis" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 9 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Kosten- und Preistheorie</h1>
+  <p class="subtitle">Für die HAK im Abendunterricht: Wirtschaftliche Fragen mit Funktionen beantworten — und dabei genau das nutzen, was du bei der <strong>Funktionsbetrachtung</strong> schon trainiert hast: Steigung, Krümmung, Ableitung.</p>
+  <span class="badge">6. Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    <a href="lernpfad-ableitungen-funktionsbetrachtungen.html" style="color:var(--blue-dark); font-weight:600;">← Funktionsbetrachtungen</a>
+    · <a href="lernpfad-optimierungsprozesse.html" style="color:var(--blue-dark); font-weight:600;">Optimierungsprozesse →</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kosten</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Grenz &amp; Stück</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Preis &amp; Markt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Erlös &amp; Gewinn</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Beispiele</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>GeoGebra</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Merksätze</button>
+  <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Quiz</button>
+</div>
+
+<!-- 1 Einstieg -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg &amp; Einheiten</div>
+  <p style="font-size:1.02rem; line-height:1.7;">In der <strong>Kosten- und Preistheorie</strong> geht es um Alltagsfragen aus Betrieb und Markt: <em>Wie viel darf ich verlangen?</em> <em>Lohnt sich eine zusätzliche Einheit noch?</em> <em>Ab wann ist der Stand oder die Produktion überhaupt im Plus?</em> Statt zu raten, beschreibt man Preis, Menge, Kosten und Erlös mit <strong>Funktionen</strong> — und nutzt die <strong>Ableitung</strong>, um Steigungen und Krümmung wirtschaftlich zu deuten.</p>
+  <p style="line-height:1.65;">Das passt gut zur <strong>HAK im Abendunterricht</strong>: Du bringst oft schon Berufserfahrung mit — und hier lernst du, genau diese Erfahrung mit den gleichen mathematischen Werkzeugen zu untermauern, die du im Unterricht brauchst.</p>
+
+  <div class="info-box success" style="margin:16px 0;">
+    <div class="icon">↩️</div>
+    <div>
+      <strong>Anknüpfung: Funktionsbetrachtungen (vorheriges Kapitel)</strong>
+      <p style="margin:8px 0 8px 0; line-height:1.65;">Dort hast du unter anderem geübt (Lehrplan-Kern):</p>
+      <ul style="margin:0 0 0 18px; line-height:1.65;">
+        <li><strong>Eigenschaften von Funktionen</strong> — insbesondere <strong>Monotonie</strong> und <strong>Krümmungsverhalten</strong> — mit Hilfe der <strong>Ableitungsfunktionen</strong> erklären und berechnen.</li>
+        <li>Den Begriff der <strong>Ableitungsfunktion</strong> beschreiben, sie <strong>grafisch darstellen</strong> und ihren <strong>Verlauf deuten</strong>.</li>
+        <li><strong>Ableitungsfunktionen</strong> zur Beschreibung von Sachverhalten aus <strong>unterschiedlichen Themengebieten</strong> einsetzen, damit <strong>lokale Änderungsraten</strong> berechnet und <strong>interpretiert</strong> werden.</li>
+      </ul>
+      <p style="margin:10px 0 0 0; line-height:1.65;">In diesem Kapitel ist das Themengebiet eben <strong>Wirtschaft</strong>: Die erste Ableitung ist z.&nbsp;B. oft „Kostenzuwachs bei <em>einer</em> Einheit mehr“ (Grenzkosten) oder die Steigung des Erlöses; die zweite Ableitung hilft bei Wendepunkten — etwa der <strong>Kostenkehre</strong>, wo der Kostenverlauf von „flacher werdend“ zu „steiler werdend“ wechselt.</p>
+    </div>
+  </div>
+
+  <div class="info-box concept" style="margin:16px 0;">
+    <div class="icon">🥪</div>
+    <div>
+      <strong>Konkret mitdenken: kleiner Imbiss nach Feierabend</strong>
+      <p style="margin:8px 0 8px 0; line-height:1.65;">Jemand verkauft an einem Abend belegte Brötchen am Markt. \(x\) sei die Anzahl verkaufter Stück, in <strong>ME</strong> (z.&nbsp;B. 1&nbsp;ME = 1 Stück). Die <strong>Gesamtkosten</strong> setzen sich grob so zusammen:</p>
+      <ul style="margin:0 0 8px 18px; line-height:1.65;">
+        <li><strong>Fix</strong> (Miete kleiner Stand, Vorbereitung): einmal <strong>48&nbsp;GE</strong> — auch wenn \(x=0\) wäre, entsteht ein Großteil davon.</li>
+        <li><strong>Variabel</strong> (Brötchen, Belag, Becher): rund <strong>2,20&nbsp;GE</strong> pro verkauftem Stück.</li>
+      </ul>
+      <p style="margin:0 0 8px 0; line-height:1.65;">Bei <strong>40 verkauften Stück</strong> sind das etwa <strong>\(48 + 2{,}20\cdot 40 = 136\)</strong>&nbsp;GE Gesamtkosten. Wird <strong>jedes Stück für 4,50&nbsp;GE</strong> verkauft, ist der Erlös <strong>\(40\cdot 4{,}50 = 180\)</strong>&nbsp;GE — also rund <strong>44&nbsp;GE Gewinn</strong> an diesem Abend (vereinfacht, ohne weitere Nebenkosten). Später im Lernpfad schreibst du solche Zusammenhänge allgemein als \(K(x)\), \(E(x)\), \(G(x)=E(x)-K(x)\) und fragst: Wo liegt das Maximum? Wo ist die Gewinnschwelle? Das sind dieselben Fragen wie bei einer <strong>Kurvendiskussion</strong> — nur mit wirtschaftlichen Namen.</p>
+    </div>
+  </div>
+
+  <div class="info-box concept" style="margin:16px 0;">
+    <div class="icon">🧭</div>
+    <div>
+      <strong>Wie dieser Lernpfad aufgebaut ist</strong>
+      <p style="margin:8px 0 10px 0; line-height:1.65;">Oben in der Leiste geht es <strong>genau in dieser Reihenfolge</strong> weiter — das entspricht den neun Stationen (nicht einer „idealen“ Unterrichtsfolge, sondern dem, was du hier wirklich nacheinander öffnest):</p>
+      <ol style="margin:0 0 0 20px; line-height:1.55; font-size:0.95rem;">
+        <li><strong>Einstieg</strong> — Imbiss-Beispiel, ME/GE, Quick-Check; darunter (aufklappbar) Lehrplan-Kompetenzen, Elastizitätsformeln und typische Fehler.</li>
+        <li><strong>Kosten</strong> — Kostenfunktion, Fix/variabel, Kostenkehre; interaktive Verlaufstypen; Graphen-Quiz; <strong>Graph</strong> zum Kurzfassungs-Leitbeispiel mit markierter Kostenkehre; Übungen zur Kostenkehre.</li>
+        <li><strong>Grenz &amp; Stück</strong> — Stückkosten, Grenzkosten, Betriebsoptimum und -minimum, kurz- und langfristige Preisuntergrenze.</li>
+        <li><strong>Preis &amp; Markt</strong> — Nachfrage- und Angebotsfunktion, Höchst-/Mindestpreis, Gleichgewicht, Preis-Absatz-Miniaufgabe.</li>
+        <li><strong>Erlös &amp; Gewinn</strong> — Erlös, Gewinn, Break-even-Idee, Deckungsbeitrag, Elastizität (Punkt), Cournot / Grenzlogik, kleine Rechenübung.</li>
+        <li><strong>Beispiele</strong> — längere Aufgaben (Gewinnzone, Einheiten, Grenzkosten-Intervalle …).</li>
+        <li><strong>GeoGebra</strong> — eingebettetes Applet (Kosten, Preis, Erlös, Gewinn, Kennpunkte).</li>
+        <li><strong>Merksätze</strong> — kompakte Merksätze und Kurzfassung „ein Satz pro Begriff“ <em>vor</em> dem Quiz.</li>
+        <li><strong>Quiz</strong> — Abschluss mit Multiple Choice, <strong>Zuordnungen</strong> und <strong>grafischen</strong> Kurvenauswahlen.</li>
+      </ol>
+      <p style="margin:10px 0 0 0; line-height:1.6; font-size:0.92rem; color:var(--text-light);">Hinweis: Inhaltlich hängen Markt, Kosten und Gewinn zusammen — in diesem Lernpfad kommen die <strong>Kosten zuerst</strong>, dann die <strong>klassische Marktlogik</strong> (Station 4), danach <strong>Erlös &amp; Gewinn</strong> (Station 5).</p>
+    </div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">📐</div>
+    <div>
+      <strong>Einheiten (ME und GE)</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Wie im Beispiel: <strong>ME</strong> zählt, was produziert oder verkauft wird; <strong>GE</strong> ist die Geldeinheit im Aufgabenmodell. Manchmal ist 1&nbsp;ME = viele echte Stück — dann beim Umrechnen auf Euro oder Stück aufpassen.</p>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Liegt eine rechnerische Grenze knapp unter einer ganzen Stückzahl, entscheidet der <strong>Sachverhalt</strong> (noch Verlust?): in Textaufgaben wird oft <strong>aufrunden</strong>, wenn eine weitere Einheit den Unterschied macht.</p>
+    </div>
+  </div>
+
+  <details class="kp-details-box" style="margin-top:16px; padding:12px 14px; border-radius:12px; border:1px solid #E8E8E8; background:#fafafa;">
+    <summary style="cursor:pointer; font-weight:700;">Lehrplan: Kompetenzen, Elastizität (Formeln) &amp; typische Fehler</summary>
+    <div style="margin-top:12px;">
+      <p style="margin-bottom:10px;">Aus der kompetenzorientierten Schlussformulierung (Lehrplan / Prüfungsvorbereitung) — als Checkliste nutzbar:</p>
+  <ol style="margin:0 0 14px 22px; line-height:1.7; font-size:0.95rem;">
+    <li>Nachfrage- und Angebotsfunktionen bestimmen; Eigenschaften beschreiben; <strong>Höchstpreis, Mindestpreis, Sättigungsmenge, Marktgleichgewicht</strong> berechnen, <strong>grafisch darstellen und interpretieren</strong>.</li>
+    <li><strong>Punktelastizität</strong> und <strong>Bogenelastizität</strong> erklären, berechnen und Ergebnisse sachgerecht deuten.</li>
+    <li>Typische <strong>Kostenverläufe</strong> (degressiv, progressiv) beschreiben und interpretieren.</li>
+    <li>Die <strong>ertragsgesetzliche Kostenfunktion</strong> als Polynom 3. Grades beschreiben und berechnen.</li>
+    <li>Zentrale Begriffe (<strong>Kostenkehre, Betriebsoptimum, langfristige PUG, Betriebsminimum, kurzfristige PUG, Break-even, Gewinnzone, Cournotscher Punkt, Deckungsbeitrag, Erlösmaximum</strong>) berechnen und interpretieren.</li>
+    <li>Den Begriff der <strong>Grenzfunktion</strong> beschreiben, wirtschaftlich deuten und anwenden.</li>
+      </ol>
+      <div class="info-box concept" style="margin-bottom:14px;">
+    <div class="icon">🔗</div>
+    <div>
+      <strong>Wirtschaftliche Gesamtzusammenhang</strong> (roter Faden)
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li><strong>Nachfragefunktion</strong> — Verhalten der Käufer:innen</li>
+        <li><strong>Angebotsfunktion</strong> — Verhalten der Anbieter:innen</li>
+        <li><strong>Marktgleichgewicht</strong> — Schnitt \(p_N=p_A\)</li>
+        <li><strong>Kosten-, Erlös-, Gewinnfunktion</strong> — Betrieb &amp; Absatz</li>
+        <li><strong>Elastizität</strong> — Reaktion der Nachfrage auf Preis</li>
+        <li><strong>Grenzfunktionen</strong> — Ableitungen („pro zusätzlicher ME“)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Prüfungen verlangen oft <strong>rechnerische Lösung und inhaltliche Deutung</strong> (z.&nbsp;B. Gleichgewicht, Gewinnzone, Elastizität) — nicht nur „Zahl steht da“.</p></div>
+  </div>
+  <div class="info-box concept" style="margin-top:14px;">
+    <div class="icon">📉</div>
+    <div>
+      <strong>Elastizität (Kurzfassung + Vertiefung)</strong>
+      <p style="margin:8px 0 6px 0;">Ist die Nachfrage als <strong>Preis in Abhängigkeit von der Menge</strong> \(p(x)\) gegeben, verwendet die Kurzfassung oft die <strong>Punktelastizität</strong></p>
+      \[\varepsilon(x)=-\frac{x\cdot p'(x)}{p(x)}\]
+      <p style="margin:8px 0 6px 0;">Das Minus macht \(\varepsilon\) bei <em>fallender</em> Nachfrage (\(p'&lt;0\)) <strong>positiv</strong>. Einordnung laut Kurzfassung: \(\varepsilon&gt;1\) elastisch, \(\varepsilon=1\) einheitselastisch, \(\varepsilon&lt;1\) unelastisch.</p>
+      <p style="margin:8px 0 6px 0;">Alternativ (andere Schulbücher): \(\eta=\dfrac{\mathrm d x}{\mathrm d p}\cdot\dfrac{p}{x}\). Zum Vergleich gilt dann \(\varepsilon=-\dfrac{1}{\eta}\) — <strong>die Grenzen 1 wechseln die Seite</strong>; dieser Lernpfad folgt bei Aufgaben der Form \(\varepsilon=-\frac{x p'}{p}\).</p>
+      <p style="margin:8px 0 6px 0;"><strong>Bogenelastizität</strong> zwischen \((x_1,p_1)\) und \((x_2,p_2)\) (Mittelwerte \(\overline{x}=\frac{x_1+x_2}{2}\), \(\overline{p}=\frac{p_1+p_2}{2}\)):</p>
+      \[\varepsilon_B=\left|\frac{x_2-x_1}{p_2-p_1}\cdot\frac{\overline{p}}{\overline{x}}\right|\]
+      <p style="margin:8px 0 6px 0; font-size:0.9rem;">Beispiel aus der Kurzfassung: \((10,80)\) und \((20,60)\) liefert \(\varepsilon_B\approx 2{,}33\) — in diesem Bogen <strong>elastisch</strong>, weil der Wert größer als \(1\) ist.</p>
+      <p style="margin:10px 0 0 0; font-size:0.88rem; color:var(--text-light);">Hinweis sRDP: Elastizität ist im Mathe.zone-Skript teils als nicht prüfungsrelevant markiert — hier drin, weil sie in deinen Zusammenfassungen vorkommt.</p>
+    </div>
+  </div>
+  
+<div class="info-box concept" style="margin-top:14px;">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Typische Fehlerquellen</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Markt: Höchst- vs. Mindestpreis, Sättigungsmenge, Gleichgewicht nicht durch <em>Gleichsetzen</em> gesucht.</li>
+        <li>Elastizität: <strong>Definition</strong> (\(\varepsilon=-\frac{x p'}{p}\) vs. \(\frac{\mathrm d x}{\mathrm d p}\frac{p}{x}\)) und <strong>Punkt vs. Bogen</strong> nicht verwechseln.</li>
+        <li>Kosten: Stückkosten vs. Grenzkosten; Kostenkehre vs. Betriebsoptimum; kurz- vs. langfristige PUG.</li>
+        <li>Gewinn: Break-even vs. Gewinnmaximum; <strong>Deckungsbeitrag ist noch nicht Gewinn</strong> (Fixkosten fehlen noch).</li>
+        <li>Cournot / Erlös: <strong>Erlösmaximum</strong> (\(E'=0\)) und <strong>Gewinnmaximum</strong> (\(G'=0\) bzw. \(E'=K'\)) nicht unreflektiert gleichsetzen, sobald Kosten ins Spiel kommen.</li>
+      </ul>
+    </div>
+  </div>
+    </div>
+  </details>
+
+  <div class="source-note">
+    Grundlagen: <strong>Mathe.zone</strong> (2020), deine <strong>Vertiefung</strong> und die <strong>Kurzfassung Kosten- und Preistheorie</strong>. Merke: <strong>Betriebsoptimum</strong> = günstigste <em>gesamte</em> Stückkosten (Minimum von \(\overline{K}(x)=K(x)/x\)), nicht einfach „\(K'(x)=0\)“ der Gesamtkosten.
+  </div>
+
+  <div class="exercise" style="margin-top:18px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Brücke zur Funktionsbetrachtung</span>
+    </div>
+    <p style="margin-bottom:10px; line-height:1.65;">Ohne neue Formeln: Es geht darum, ob du <strong>die Idee der Ableitung</strong> als „Änderung bei einer Einheit mehr“ erkennst — wie im vorigen Kapitel bei lokalen Änderungsraten.</p>
+    <p><strong>Frage 1:</strong> \(K(x)\) sei die <strong>Gesamtkosten in GE</strong>, wenn \(x\) Stück produziert werden. Was beschreibt die <strong>erste Ableitung</strong> \(K'(x)\) in diesem Kontext am treffendsten?</p>
+    <div class="quiz-options" data-quiz="kp0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Die Kosten <em>pro Stück im Durchschnitt</em> (also \(\overline{K}(x)=K(x)/x\)).</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Ungefähr: <strong>Um wie viel GE</strong> sich die Gesamtkosten ändern, wenn man <strong>ein Stück mehr</strong> produziert (lokale Änderungsrate).</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Den Verkaufspreis, den Kundinnen und Kunden maximal zahlen.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Die Menge, bei der der Gewinn automatisch am größten ist.</div>
+    </div>
+    <div class="feedback" id="fb_kp0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die <strong>Kostenkehre</strong> bei einem typischen ertragsgesetzlichen Verlauf ist der Punkt, an dem …</p>
+    <div class="quiz-options" data-quiz="kp0_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">… die Gesamtkosten genau null sind.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">… Gewinn und Verlust gleich groß sind (Break-even).</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">… sich das <strong>Krümmungsverhalten</strong> ändert: von „Kosten steigen <em>relativ langsamer</em>“ zu „Kosten steigen <em>relativ schneller</em>“ (Wendepunkt der Kostenfunktion).</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">… der Stückpreis am Markt am höchsten ist.</div>
+    </div>
+    <div class="feedback" id="fb_kp0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['kp0_1','kp0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Kosten →</button>
+  </div>
+</div>
+
+<!-- 2 Kostenfunktion -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Kostenfunktion &amp; Kostenkehre</div>
+  <p>Die <strong>Kostenfunktion</strong> \(K(x)\) ordnet der produzierten Menge \(x\ge 0\) die Gesamtkosten zu. Wichtige Zerlegung:</p>
+  <ul style="margin:10px 0 10px 22px; line-height:1.65;">
+    <li><strong>Fixkosten:</strong> \(K_f = K(0)\) (bei Polynomen oft das Absolutglied — allgemein immer \(K(0)\) verwenden).</li>
+    <li><strong>Variable Kosten:</strong> \(K_v(x)=K(x)-K_f\).</li>
+    <li><strong>Kostenkehre</strong> (nur sinnvoll bei ertragsgesetzlichem Verlauf): Wendepunkt von \(K\), also Lösung von \(K''(x)=0\) (mit Vorzeichenwechsel von \(K''\)).</li>
+  </ul>
+  <div class="info-box concept">
+    <div class="icon">📈</div>
+    <div>
+      <strong>Vier Verlaufstypen</strong> (Idealisierungen)
+      <ul style="margin:8px 0 0 18px;">
+        <li>linear: konstanter Kostenzuwachs pro ME</li>
+        <li>progressiv: zunehmende Zuwächse (positive Krümmung)</li>
+        <li>degressiv: abnehmende Zuwächse (negative Krümmung)</li>
+        <li>ertragsgesetzlich: zuerst degressiv, ab Kostenkehre progressiv</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ribbon" style="margin-top:18px;">Interaktiv: Kostenverläufe</div>
+  <p>Wähle einen <strong>Idealtyp</strong> — die Grafik zeigt schematisch <strong>Gesamtkosten</strong> \(K(x)\) über der Menge \(x\) (gleiche Achsenskala zum Vergleich). In der Praxis werden oft nur Ausschnitte betrachtet; hier geht es um die <strong>typische Krümmung</strong> und die <strong>Grenzkosten</strong> \(K'\) (Steigung).</p>
+  <div class="kv-applet-wrap kp-canvas-card">
+    <canvas id="kostenVerlaufCanvas" width="520" height="300" aria-label="Kostenverlauf Diagramm"></canvas>
+    <div class="kv-type-bar" id="kvTypeBar" role="group" aria-label="Verlaufstyp wählen">
+      <button type="button" class="kv-type-btn" data-kv-t="0" onclick="setKvAppletType(0)">Linear</button>
+      <button type="button" class="kv-type-btn" data-kv-t="1" onclick="setKvAppletType(1)">Degressiv</button>
+      <button type="button" class="kv-type-btn" data-kv-t="2" onclick="setKvAppletType(2)">Progressiv</button>
+      <button type="button" class="kv-type-btn active" data-kv-t="3" onclick="setKvAppletType(3)">Ertragsgesetzlich</button>
+    </div>
+    <p class="kp-canvas-note" id="kvAppletHint"></p>
+  </div>
+
+  <div class="exercise" style="margin-top:20px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Graphen</span>
+      <span class="exercise-title">Zulässige Kostenverläufe?</span>
+    </div>
+    <p><strong>1)</strong> Welches Diagramm zeigt <strong>keinen</strong> üblichen Gesamtkostenverlauf? (Annahme: mit wachsender Produktionsmenge steigen die Gesamtkosten nicht — \(K\) fällt nicht.)</p>
+    <div class="quiz-options kv-graph-quiz" data-quiz="kp2_mg1" data-correct="0">
+      <div class="quiz-option kv-graph-opt" data-idx="0" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="falling" aria-hidden="true"></canvas><span class="kv-graph-cap">A</span></div>
+      <div class="quiz-option kv-graph-opt" data-idx="1" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="linear" aria-hidden="true"></canvas><span class="kv-graph-cap">B</span></div>
+      <div class="quiz-option kv-graph-opt" data-idx="2" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="degressiv" aria-hidden="true"></canvas><span class="kv-graph-cap">C</span></div>
+      <div class="quiz-option kv-graph-opt" data-idx="3" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="progressiv" aria-hidden="true"></canvas><span class="kv-graph-cap">D</span></div>
+    </div>
+    <div class="feedback" id="fb_kp2_mg1"></div>
+
+    <p style="margin-top:20px;"><strong>2)</strong> Welches Diagramm passt am ehesten zu einem <strong>ertragsgesetzlichen</strong> Verlauf (S-Form, Wendepunkt / Kostenkehre)?</p>
+    <div class="quiz-options kv-graph-quiz" data-quiz="kp2_mg2" data-correct="2">
+      <div class="quiz-option kv-graph-opt" data-idx="0" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="linear" aria-hidden="true"></canvas><span class="kv-graph-cap">A</span></div>
+      <div class="quiz-option kv-graph-opt" data-idx="1" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="progressiv" aria-hidden="true"></canvas><span class="kv-graph-cap">B</span></div>
+      <div class="quiz-option kv-graph-opt" data-idx="2" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="erg" aria-hidden="true"></canvas><span class="kv-graph-cap">C</span></div>
+      <div class="quiz-option kv-graph-opt" data-idx="3" onclick="selectQuiz(this)"><canvas width="132" height="84" data-kv-shape="degressiv" aria-hidden="true"></canvas><span class="kv-graph-cap">D</span></div>
+    </div>
+    <div class="feedback" id="fb_kp2_mg2"></div>
+
+    <p style="margin-top:20px;"><strong>3)</strong> Auf einem Intervall ist der Kostenverlauf <strong>durchweg degressiv</strong>. Welche Aussage zur Krümmung trifft dort typischerweise zu?</p>
+    <div class="quiz-options" data-quiz="kp2_mg3" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(K''(x) &gt; 0\) (rechtsgekrümmt)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(K''(x) &lt; 0\) (linksgekrümmt)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(K''(x) = 0\) überall</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(K'(x) &lt; 0\) (Kosten fallen)</div>
+    </div>
+    <div class="feedback" id="fb_kp2_mg3"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['kp2_mg1','kp2_mg2','kp2_mg3'])">Graphen-Quiz prüfen ✓</button>
+    </div>
+  </div>
+
+  <p style="margin-top:14px;"><strong>Ertragsgesetzliche Kosten</strong> werden oft als <strong>kubisches Polynom</strong> modelliert:</p>
+  \[K(x)=ax^3+bx^2+cx+d,\quad a&gt;0,\quad d=K_f.\]
+  <p>Wirtschaftlich: zuerst <strong>degressiv</strong> (\(K''&lt;0\)), an der <strong>Kostenkehre</strong> Wechsel, danach <strong>progressiv</strong> (\(K''&gt;0\)). Sind <strong>vier Bedingungen</strong> gegeben (z.&nbsp;B. \(K(0)\), ein Kostenwert, eine Grenzkosteninformation, Lage der Kostenkehre \(K''=0\)), lassen sich \(a,b,c,d\) aus einem <strong>linearen Gleichungssystem</strong> bestimmen.</p>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">💡</div>
+    <div>
+      <strong>Beispiel aus der Vertiefung:</strong> \(K(x)=0{,}05x^3-3x^2+70x+200\). Fixkosten \(200\); Kostenkehre mit \(K''(x)=0{,}3x-6=0\) bei \(x=20\) (links degressiv, rechts progressiv). Betriebsoptimum und -minimum liegen <em>nicht</em> automatisch an der Kostenkehre — sie kommen aus den <em>Stückkosten</em> bzw. <em>variablen Stückkosten</em>.
+    </div>
+  </div>
+  <div class="info-box concept kp-canvas-card" style="margin-top:12px;">
+    <div class="icon">📘</div>
+    <div>
+      <strong>Graph zum Kurzfassungs-Leitbeispiel</strong>
+      <p style="margin:8px 0 10px 0; line-height:1.65;">\(K(x)=0{,}02x^3-1{,}2x^2+30x+200\). Die <strong>Kostenkehre</strong> ist der <strong>Wendepunkt</strong> der Kostenkurve — dort wechselt die Krümmung (links eher degressiv: \(K''&lt;0\), rechts progressiv: \(K''&gt;0\)). Aus \(K''(x)=0{,}12x-2{,}4=0\) folgt hier \(x=20\).</p>
+      <canvas id="kpLeitGraphCanvas" width="520" height="300" aria-label="Gesamtkosten K von x mit markierter Kostenkehre"></canvas>
+      <p class="kp-canvas-note" id="kpLeitGraphHint"></p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quiz</span>
+      <span class="exercise-title">Kostenkehre</span>
+    </div>
+    <p>\(K(x)=0{,}1x^3-3x^2+40x+300\). Wo liegt die Kostenkehre (nur \(x\)-Koordinate)?</p>
+    <div class="quiz-options" data-quiz="kp2_kehre" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(x=0\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(x=6\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(x=10\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(x=40\)</div>
+    </div>
+    <div class="feedback" id="fb_kp2_kehre"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['kp2_kehre'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="exercise" style="margin-top:16px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quiz</span>
+      <span class="exercise-title">Zweite Kostenfunktion</span>
+    </div>
+    <p>\(K(x)=0{,}05x^3-3x^2+70x+200\). Wo liegt die Kostenkehre?</p>
+    <div class="quiz-options" data-quiz="kp2_kehre2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(x=10\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(x=15\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(x=20\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(x=31{,}96\)</div>
+    </div>
+    <div class="feedback" id="fb_kp2_kehre2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['kp2_kehre2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 4 Grenz- und Stückkosten -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Stückkosten, Grenzkosten, Betrieb</div>
+  <p><strong>Stückkosten (Durchschnittskosten):</strong> \(\overline{K}(x)=\dfrac{K(x)}{x}\) für \(x&gt;0\).</p>
+  <p><strong>Variable Stückkosten:</strong> \(\overline{K}_v(x)=\dfrac{K_v(x)}{x}\).</p>
+  <p><strong>Grenzkosten:</strong> \(K'(x)\).</p>
+  <div class="info-box concept">
+    <div class="icon">⚙️</div>
+    <div>
+      <strong>Betriebsoptimum</strong> \(x_{\mathrm{opt}}\): Minimum von \(\overline{K}(x)\). Notwendige Bedingung (für \(x&gt;0\)): \(\overline{K}'(x)=0\) — äquivalent zum Schnittpunkt
+      \[K'(x)=\overline{K}(x)=\frac{K(x)}{x}.\]
+      <strong>Langfristige Preisuntergrenze:</strong> \(\overline{K}(x_{\mathrm{opt}})\).
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">⚙️</div>
+    <div>
+      <strong>Betriebsminimum</strong> \(x_{\min}\): Minimum von \(\overline{K}_v(x)\). Entsprechend gilt dort \(K'(x)=\overline{K}_v(x)\).
+      <strong>Kurzfristige Preisuntergrenze:</strong> \(\overline{K}_v(x_{\min})\) (Fixkosten werden nicht gedeckt).
+    </div>
+  </div>
+  <p style="margin-top:10px; font-size:0.88rem; color:var(--text-light);"><em>Didaktik:</em> In manchen Skripten steht beim Betriebsoptimum irrtümlich nur „\(K'(x)=0\)“ — das wäre ein Extremum der <em>Gesamtkosten</em>, nicht der Stückkosten. Merke dir die Bedingung \(K'(x)=\overline{K}(x)\).</p>
+
+  <div class="kp-canvas-card" id="kpGkTangentWrap">
+    <p style="line-height:1.65; max-width:640px; margin:0 auto 10px; text-align:left; font-size:0.96rem;">Am selben <strong>Leitbeispiel</strong> \(K(x)=0{,}02x^3-1{,}2x^2+30x+200\) wie in Station „Kosten“: Die <strong>Grenzkosten</strong> \(K'(x)\) sind die <strong>Steigung der Tangente</strong> an den Graphen von \(K\) — also der (lokale) Zuwachs der Gesamtkosten pro weiterer ME. Bewege den Berührpunkt:</p>
+    <div class="kp-sliders">
+      <label for="kpGkXSlider">Berührpunkt \(x\): <strong id="kpGkXVal">15</strong>&nbsp;ME</label>
+      <input type="range" id="kpGkXSlider" min="2" max="46" step="0.2" value="15" oninput="kpGkSliderInput()">
+    </div>
+    <canvas id="kpGkTangentCanvas" width="640" height="400" aria-label="Grafik Gesamtkosten mit beweglicher Tangente"></canvas>
+    <p class="kp-canvas-note" id="kpGkTangentHint"></p>
+  </div>
+
+  <div class="kp-canvas-card" style="margin-top:22px;" id="kpStueckGraphWrap">
+    <p style="line-height:1.65; max-width:640px; margin:0 auto 10px; text-align:left; font-size:0.96rem;">Die <strong>Stückkosten</strong> \(\overline{K}(x)=K(x)/x\) bilden eine <strong>eigene Kurve</strong> über der Menge \(x&gt;0\). Die tiefste Stelle (hier markiert) ist das <strong>Betriebsoptimum</strong>; dort gilt \(K'(x)=\overline{K}(x)\) (Grenzkostenkurve und Stückkostenkurve schneiden sich).</p>
+    <canvas id="kpStueckGraphCanvas" width="640" height="380" aria-label="Grafik der Stückkostenfunktion K mit Querstrich über x"></canvas>
+    <p class="kp-canvas-note" id="kpStueckGraphHint"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Muster wie in Aufgaben</span>
+      <span class="exercise-title">Zuordnung</span>
+    </div>
+    <p>Polynomkosten 3. Grades. Welche Gleichung passt zur Aussage?</p>
+    <p><strong>Aussage:</strong> „Grenzkosten- und Stückkostenkurve schneiden sich bei 10&nbsp;ME.“</p>
+    <div class="quiz-options" data-quiz="kp3_schnitt" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\overline{K}(10)=K'(10)\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(K(10)=100\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(K''(10)=0\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\dfrac{K'(10)}{10}=10\)</div>
+    </div>
+    <div class="feedback" id="fb_kp3_schnitt"></div>
+    <p style="margin-top:16px;"><strong>Aussage:</strong> „Stückkosten bei 10&nbsp;ME betragen 10&nbsp;GE/ME.“</p>
+    <div class="quiz-options" data-quiz="kp3_stk" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\overline{K}(10)=K'(10)\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(K(10)=100\) (bzw. \(\overline{K}(10)=10\))</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(K''(10)=0\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(K'(10)=0\)</div>
+    </div>
+    <div class="feedback" id="fb_kp3_stk"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['kp3_schnitt','kp3_stk'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="exercise" style="margin-top:16px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Eingabe</span>
+      <span class="exercise-title">Kostenkehre (Zahlen)</span>
+    </div>
+    <p>Für \(K(x)=0{,}1x^3-3x^2+40x+300\): berechne die \(x\)-Koordinate der Kostenkehre.</p>
+    <p style="margin:8px 0;"><input type="text" id="kp_bo_input" placeholder="x = ?" style="max-width:120px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
+    <button type="button" class="btn btn-check" onclick="checkBoExercise()">Prüfen</button>
+    <div class="feedback" id="fb_kp_bo" style="display:none;"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 5 Preis & Markt -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Preisfunktionen &amp; Gleichgewicht</div>
+  <p><strong>Angebotsseite \(p_A(x)\):</strong> Preis, den Produzent:innen bei Menge \(x\) fordern — typisch <strong>steigend</strong>. Häufige Schulform: \(p_A(x)=c+d\,x\) mit \(d&gt;0\); <strong>Mindestpreis (Angebotsbeginn)</strong> \(p_A(0)=c\).</p>
+  <p><strong>Nachfrageseite \(p_N(x)\):</strong> maximaler Preis, bei dem noch Menge \(x\) verkauft werden kann — typisch <strong>fallend</strong>. Standard: <strong>Preis-Absatz-Funktion</strong> \(p_N(x)=a-b\,x\) mit \(b&gt;0\).</p>
+  <ul style="margin:10px 0 10px 22px;">
+    <li><strong>Höchstpreis (Prohibitivpreis):</strong> \(p_N(0)=a\)</li>
+    <li><strong>Sättigungsmenge:</strong> positive Lösung von \(p_N(x)=0\), hier \(x=a/b\)</li>
+  </ul>
+  <p><strong>Marktgleichgewicht:</strong> Gleichsetzen \(p_N(x)=p_A(x)\) und nach \(x\) (Gleichgewichtsmenge \(x^\ast\)) auflösen; \(p^\ast\) durch Einsetzen in eine der beiden Funktionen.</p>
+  <div class="info-box concept">
+    <div class="icon">📐</div>
+    <div>
+      <strong>Rechenbeispiel (Kurzfassung)</strong><br>
+      \(p_N(x)=100-2x\), \(p_A(x)=10+x\). Gleichsetzen: \(100-2x=10+x\) \(\Rightarrow\) \(3x=90\) \(\Rightarrow\) <strong>\(x^\ast=30\)</strong>. Einsetzen: \(p^\ast=100-2\cdot 30=40\) (GE/ME). <em>Deutung:</em> Bei \(30\) ME und \(40\) GE/ME ist der Markt im Gleichgewicht — angebotene und nachgefragte Menge stimmen überein.<br>
+      <span style="font-size:0.88rem; color:var(--text-light);">Zum Vergleich: mit \(p_A(x)=20+x\) käme \(x^\ast=\frac{80}{3}\approx 26{,}67\), \(p^\ast\approx 46{,}67\) — gleiche Nachfrage, anderes Angebotsniveau.</span>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Grafik (\(p\)-\(x\)-Diagramm):</strong> Nachfragekurve fällt, Angebotskurve steigt; der Schnitt ist \((x^\ast,p^\ast)\). Achsenbeschriftung und markante Achsenabschnitte (Höchstpreis, Sättigungsmenge, Mindestpreis) in Prüfungen oft <strong>schriftlich erklären</strong>, nicht nur einzeichnen.
+    </div>
+  </div>
+  <p style="margin-top:10px; font-size:0.9rem;">Hinweis zur Modellierung: In Aufgaben heißt die fallende Preisfunktion oft schlicht \(p(x)\) (Nachfrage/Preis-Absatz). Die Bedingung \(p_A(x)\ge \overline{K}_v(x)\) bleibt wichtig, damit das Angebot die variablen Stückkosten nicht unterschreitet.</p>
+
+  <div class="kp-canvas-card" id="kpMarktPreisWrap" style="margin-top:18px;">
+    <p style="line-height:1.65; max-width:680px; margin:0 auto 12px; text-align:left; font-size:0.96rem;"><strong>Interaktiv (\(p\)-\(x\)-Diagramm):</strong> <span style="color:#1D4ED8;">Blaue Kurve</span> = Nachfrage-Preis \(p_N(x)=a-b\,x\) (Preis-Absatz, fallend). <span style="color:#C2410C;">Orange Kurve</span> = Angebotsforderung \(p_A(x)=c+d\,x\) (steigend). Die Regler ändern die Parameter — der <strong>Schnittpunkt</strong> ist das Marktgleichgewicht \((x^\ast,p^\ast)\), sofern es im sinnvollen Bereich liegt.</p>
+    <div class="kp-sliders" style="max-width:680px; margin-left:auto; margin-right:auto;">
+      <label>Nachfrage \(a\) (Höchstpreis): <strong id="kpMarktAVal">100</strong></label>
+      <input type="range" id="kpMarktA" min="55" max="130" step="1" value="100" oninput="kpMarktSliderInput()">
+      <label>Nachfrage \(b\) (Neigung): <strong id="kpMarktBVal">2</strong></label>
+      <input type="range" id="kpMarktB" min="0.5" max="5" step="0.1" value="2" oninput="kpMarktSliderInput()">
+      <label>Angebot \(c\) (Mindestpreis): <strong id="kpMarktCVal">10</strong></label>
+      <input type="range" id="kpMarktC" min="0" max="55" step="1" value="10" oninput="kpMarktSliderInput()">
+      <label>Angebot \(d\) (Neigung): <strong id="kpMarktDVal">1</strong></label>
+      <input type="range" id="kpMarktD" min="0.2" max="3.5" step="0.1" value="1" oninput="kpMarktSliderInput()">
+    </div>
+    <canvas id="kpMarktPreisCanvas" width="640" height="400" aria-label="Preis-Mengen-Diagramm Nachfrage und Angebot"></canvas>
+    <p class="kp-canvas-note" id="kpMarktPreisHint"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Markt</span>
+      <span class="exercise-title">Gleichgewichtsmenge</span>
+    </div>
+    <p>Für \(p_N(x)=100-2x\) und \(p_A(x)=10+x\): welche <strong>Gleichgewichtsmenge</strong> \(x^\ast\) passt?</p>
+    <div class="quiz-options" data-quiz="kp4_xgg" data-correct="3">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(x^\ast=20\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(x^\ast=25\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(x^\ast=\dfrac{80}{3}\approx 26{,}67\) (wäre Gleichgewicht bei \(p_A=20+x\))</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(x^\ast=30\)</div>
+    </div>
+    <div class="feedback" id="fb_kp4_xgg"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['kp4_xgg'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Preis-Absatz</span>
+      <span class="exercise-title">Wie in Aufgabe (d)</span>
+    </div>
+    <p>\(p(x)=p_H-20x\), \(p(5)=300\). Dann ist \(p_H\) gleich …</p>
+    <div class="quiz-options" data-quiz="kp4_ph" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">280</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">380</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">400</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">420</div>
+    </div>
+    <div class="feedback" id="fb_kp4_ph"></div>
+    <p style="margin-top:14px; font-size:0.9rem;"><strong>Interpretation der Steigung \(-20\):</strong> Pro zusätzliche verkaufte ME sinkt der erzielbare Preis um 20&nbsp;GE/ME (lineares Modell — <em>Knappheitspreis</em> sinkt mit größerem Absatz).</p>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['kp4_ph'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 6 Erlös & Gewinn -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Erlös, Gewinn, Zone, Cournot</div>
+  <p>Bei vollständigem Absatz: <strong>Erlös</strong> \(E(x)=x\cdot p(x)\) (hier \(p\) typischerweise die <strong>Preis-Absatz-Funktion</strong> der Nachfrage). <strong>Gewinn</strong> \(G(x)=E(x)-K(x)\).</p>
+  <ul style="margin:10px 0 10px 22px; line-height:1.65;">
+    <li><strong>Untere / obere Gewinngrenze:</strong> Nullstellen von \(G\) bzw. Schnittpunkte \(E=K\) (Break-even).</li>
+    <li><strong>Gewinnzone:</strong> dazwischen liegt \(G(x)&gt;0\) — typisch bei <strong>nach unten gekrümmtem Erlös</strong> und <strong>steigenden Gesamtkosten</strong> ein endliches Intervall.</li>
+    <li><strong>Deckungsbeitrag:</strong> \(D(x)=DB(x)=E(x)-K_v(x)\) — deckt zuerst die <strong>Fixkosten</strong>; erst der darüber liegende Anteil wird zum Gewinn.</li>
+  </ul>
+  <div class="ribbon" style="margin-top:18px;">Erlösmaximum · Cournotscher Punkt · Gewinnmaximum</div>
+  <p>Beispiel aus der Vertiefung: \(p(x)=100-2x\), also</p>
+  \[E(x)=x(100-2x)=100x-2x^2.\]
+  <p><strong>Erlösmaximum:</strong> \(E'(x)=100-4x=0\) liefert \(x=25\), \(p(25)=50\), \(E(25)=1250\). Der Punkt \((25,\,50)\) auf der Nachfragekurve heißt oft <strong>Cournotscher Punkt</strong> (hier: Maximum des Erlöses entlang der Nachfrage).</p>
+  <p><strong>Wichtig:</strong> Sobald <strong>Kosten</strong> \(K(x)\) dazukommen, liegt das <strong>Gewinnmaximum</strong> im Allgemeinen <em>nicht</em> an derselben Stelle wie das Erlösmaximum: dort gilt \(G'(x)=0\) bzw. \(E'(x)=K'(x)\) (<strong>Grenzerlös = Grenzkosten</strong>). In der Vertiefung liegt dieses \(x\) bei den gewählten Zahlen näher bei \(22{,}3\) — nicht bei \(25\).</p>
+  <div class="info-box concept">
+    <div class="icon">🔧</div>
+    <div>
+      <strong>Grenzfunktionen</strong> (Ableitungen als Näherung „pro zusätzlicher ME“): Grenzkosten \(K'\), Grenzerlös \(E'\), Grenzgewinn \(G'=E'-K'\). <strong>Gewinnmaximum (innen):</strong> \(G'=0\) \(\Leftrightarrow\) \(E'=K'\).
+    </div>
+  </div>
+  <div class="info-box concept">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Grafisch</strong> (\(K,E,G\) über \(x\)): Ist \(E\) linear durch den Ursprung, ist die <strong>Steigung</strong> von \(E\) der konstante <strong>Stückpreis</strong>. Die <strong>Gewinnfunktion</strong> ist die vertikale Differenz \(E-K\); die <strong>maximale Gewinnhöhe</strong> entspricht dem größten Abstand der Graphen (unter Regularität oft bei \(E'=K'\)).
+    </div>
+  </div>
+
+  <div class="ribbon" style="margin-top:20px;">Interaktiv: Kosten, Erlös, Gewinn</div>
+  <p style="line-height:1.65; max-width:720px;">Das eingebettete GeoGebra-Applet entspricht dem Material <strong>„Kosten – Erlös – Gewinn“</strong>: gemeinsame Darstellung von <strong>\(K(x)\)</strong>, <strong>\(E(x)\)</strong> und <strong>\(G(x)=E(x)-K(x)\)</strong> mit den typischen grauen <strong>Steigungsstreifen</strong> (Abstand \(E-K\) gleich \(G\)). Über die <strong>drei markierten Punkte</strong> kannst du Kurven und damit Schnittpunkte und Gewinnzone explorieren — wie in der Original-App.</p>
+  <p class="source-note" style="margin-top:10px;">
+    <strong>Material:</strong> <a href="https://www.geogebra.org/m/qHEyGz2t" target="_blank" rel="noopener noreferrer">GeoGebra „Kosten - Erlös - Gewinn“</a> (Michael Langer) — bei eingeschränkter Einbettung (z.&nbsp;B. Firewall) den Link im neuen Tab öffnen.
+  </p>
+  <div class="kp-ggb-wrap">
+    <iframe
+      id="ggbKegIframe"
+      title="GeoGebra: Kosten, Erlös und Gewinn"
+      width="1000"
+      height="640"
+      style="border:0;"
+      allow="fullscreen"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      data-ggb-src="https://www.geogebra.org/material/iframe/id/qHEyGz2t/width/1000/height/640/border/888888"
+    ></iframe>
+  </div>
+  <p class="kp-canvas-note" style="margin-top:12px;">Tipp: Beim ersten Wechsel zu dieser Station lädt das Applet automatisch. Vollbild und Reset erreichst du über die GeoGebra-Steuerleiste im Fenster.</p>
+
+  <div class="info-box concept" style="margin-bottom:14px;">
+    <div class="icon">📉</div>
+    <div>
+      <strong>Punktelastizität (Kurzfassung)</strong> zu \(p(x)=100-2x\): \(p'(x)=-2\), also
+      \[\varepsilon(x)=-\frac{x\cdot p'(x)}{p(x)}=\frac{2x}{100-2x}.\]
+      Beispiele: \(\varepsilon(20)=\dfrac{40}{60}\approx 0{,}67&lt;1\) → <strong>unelastisch</strong>; \(\varepsilon(25)=\dfrac{50}{50}=1\) → <strong>einheitselastisch</strong> (hier liegt auch das Erlösmaximum / Cournot auf der linearen Nachfrage mit Sättigungsmenge \(50\)).
+    </div>
+  </div>
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Elastizität</span>
+      <span class="exercise-title">Punktelastizität</span>
+    </div>
+    <p>Für \(p(x)=100-2x\) und die Form \(\varepsilon(x)=-\dfrac{x\cdot p'(x)}{p(x)}\): Wie ist die Nachfrage bei <strong>\(x=20\)</strong> einzuordnen?</p>
+    <div class="quiz-options" data-quiz="kp5_eps" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">unelastisch (\(\varepsilon&lt;1\))</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">einheitselastisch (\(\varepsilon=1\))</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">elastisch (\(\varepsilon&gt;1\))</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">vollkommen unelastisch (\(\varepsilon=0\))</div>
+    </div>
+    <div class="feedback" id="fb_kp5_eps"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['kp5_eps'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="exercise" style="margin-top:16px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Deckungsbeitrag</span>
+      <span class="exercise-title">Begriff</span>
+    </div>
+    <p>Ein <strong>positiver Deckungsbeitrag</strong> \(D(x)=E(x)-K_v(x)\) bedeutet sicher …</p>
+    <div class="quiz-options" data-quiz="kp5_db" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Der Gewinn \(G(x)\) ist positiv.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Die variablen Kosten sind gedeckt; ob <em>Gewinn</em> bleibt, hängt von den Fixkosten ab.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Die Fixkosten sind immer voll gedeckt.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Das Betriebsoptimum ist erreicht.</div>
+    </div>
+    <div class="feedback" id="fb_kp5_db"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['kp5_db'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Mini-Aufgabe</span>
+      <span class="exercise-title">Variable Kosten</span>
+    </div>
+    <p>\(K(x)=0{,}1x^3-3x^2+40x+300\). Wie groß ist \(K_v(10)\) in GE?</p>
+    <p style="margin:8px 0;"><input type="text" id="kp_kv_input" placeholder="Zahl" style="max-width:140px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
+    <button type="button" class="btn btn-check" onclick="checkKvExercise()">Prüfen</button>
+    <div class="feedback" id="fb_kp_kv" style="display:none;"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 7 Beispiele -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Rechenbeispiele (Prüfungsniveau)</div>
+  <div class="info-box concept" style="margin-bottom:16px;">
+    <div class="icon">💶</div>
+    <div>
+      <strong>Vertiefung: Gewinnzone mit konkreten Funktionen</strong><br>
+      Mit \(E(x)=100x-2x^2\) und \(K(x)=0{,}05x^3-3x^2+70x+200\) ist \(G(x)=E(x)-K(x)\). Die <strong>Break-even-Mengen</strong> liegen in diesem Modell näherungsweise bei \(x_1\approx 5{,}86\) und \(x_2\approx 34{,}14\); dazwischen gilt \(G(x)&gt;0\). Oberhalb von \(x_2\) übersteigen die Kosten den Erlös wieder (typisch bei kubischem Kostenwachstum und parabelförmigem Erlös).
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-bottom:16px;">
+    <div class="icon">📗</div>
+    <div>
+      <strong>Kurzfassung / gleiches \(E\), andere \(K\):</strong> \(E(x)=100x-2x^2\) mit \(K(x)=0{,}02x^3-1{,}2x^2+30x+200\) ergibt die in der Zusammenfassung genannten <strong>Break-even</strong>-Näherungen \(x\approx 2{,}97\) und \(x\approx 40{,}44\) sowie die <strong>Gewinnzone</strong> dazwischen. <strong>Deckungsbeitrag</strong> \(DB(x)=E(x)-K_v(x)\): z.&nbsp;B. \(DB(20)=920\) GE (Erlös abzüglich variabler Kosten — Fixkosten und Gewinn folgen danach).
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Bauteil B</span>
+      <span class="exercise-title">Erlösfunktion aus \(E=G+K\)</span>
+    </div>
+    <p>\(K(x)=2x^3-60x^2+700x+6000\), \(G(x)=-40x^2+1200x-6000\). Bestimme \(a,b,c\) in \(E(x)=ax^3+bx^2+cx\).</p>
+    <p style="margin:10px 0;">
+      \(a\) = <input type="text" id="kp_a" style="width:70px; padding:8px 10px; border-radius:10px; border:2px solid #E8E8E8;">
+      &nbsp; \(b\) = <input type="text" id="kp_b" style="width:90px; padding:8px 10px; border-radius:10px; border:2px solid #E8E8E8;">
+      &nbsp; \(c\) = <input type="text" id="kp_c" style="width:90px; padding:8px 10px; border-radius:10px; border:2px solid #E8E8E8;">
+    </p>
+    <button type="button" class="btn btn-check" onclick="checkErlösExercise()">Prüfen</button>
+    <div class="feedback" id="fb_kp_erl" style="display:none;"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:18px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Bauteil B</span>
+      <span class="exercise-title">Gewinn pro Stück (Einheiten!)</span>
+    </div>
+    <p>Maximiere \(G(x)=-40x^2+1200x-6000\). Bei dieser Menge: \(1\) ME \(=10\,000\) Stück, \(1\) GE \(=100\) €. Wie groß ist der <strong>Gewinn pro Stück in Euro</strong>?</p>
+    <p style="margin:8px 0;"><input type="text" id="kp_gewst" placeholder="Euro/Stück" style="max-width:140px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
+    <button type="button" class="btn btn-check" onclick="checkGewinnStückExercise()">Prüfen</button>
+    <div class="feedback" id="fb_kp_gewst" style="display:none;"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:18px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Grenzkosten</span>
+      <span class="exercise-title">Intervall \(K'(x)\le 700\)</span>
+    </div>
+    <p>\(K'(x)=6x^2-120x+700\). Für welche \(x\) gilt \(K'(x)\le 700\) (größtes zusammenhängendes Intervall mit \(x\ge 0\))?</p>
+    <div class="quiz-options" data-quiz="kp6_intervall" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\([0;\,15]\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\([0;\,20]\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\([10;\,25]\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\([15;\,25]\)</div>
+    </div>
+    <div class="feedback" id="fb_kp6_intervall"></div>
+    <p style="margin-top:12px;"><strong>Betriebsminimum-Gleichung (Auswahl):</strong> Für \(K\) wie oben ist \(K_v(x)=2x^3-60x^2+700x\), also \(\overline{K}_v(x)=2x^2-60x+700\). Minimum: Ableitung \(4x-60=0\).</p>
+    <div class="quiz-options" data-quiz="kp6_bm" data-correct="3">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(6x^2-120x+700=0\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(12x-120=0\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(6x^2-120x=0\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(4x-60=0\)</div>
+    </div>
+    <div class="feedback" id="fb_kp6_bm"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['kp6_intervall','kp6_bm'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="info-box concept" style="margin-top:16px;">
+    <div class="icon">🏗️</div>
+    <div>
+      <strong>Glasfassaden-Klammern</strong> (längeres Textbeispiel): \(K(x)=10^{-5}x^3-0{,}025x^2+24x+3500\) mit \(x\) in Stück, \(K\) in €, Verkauf 20&nbsp;€/Stück → \(G(x)=20x-K(x)\). Typische Teilfragen: \(\overline{K}(x)\) aufstellen, Minimum von \(\overline{K}\) mit \(\overline{K}'(x)=0\), Minimum nachweisen mit \(\overline{K}''(x)&gt;0\), Gewinnbereich \(G(x)\ge 0\) (Nullstellen / Näherung).
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 8 GeoGebra -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">GeoGebra: Kosten, Preis, Erlös &amp; Gewinn</div>
+  <p>Hier ist das <strong>vollständige Applet</strong> eingebettet (wie in deinem Material): du kannst <strong>Kostenfunktion</strong> \(K(x)\) und <strong>Preis-Absatz-Funktion</strong> \(p(x)\) eingeben, <strong>Erlös</strong> \(E(x)=x\cdot p(x)\) und <strong>Gewinn</strong> \(G(x)=E(x)-K(x)\) ein- und ausblenden sowie Kennpunkte (u. a. Kostenkehre, Höchstpreis, Sättigungsmenge, Gewinnbereich) über die Kontrollkästchen steuern.</p>
+  <div class="info-box concept">
+    <div class="icon">🔗</div>
+    <div>
+      <strong>Material:</strong> <a href="https://www.geogebra.org/m/jxuxvr6K" target="_blank" rel="noopener noreferrer">GeoGebra „Kosten- und Preistheorie“</a> (Kurt Söser) — bei eingeschränkter Einbettung (z.&nbsp;B. strenge Firewall) den Link im neuen Tab öffnen.
+    </div>
+  </div>
+  <div class="kp-ggb-wrap">
+    <iframe
+      id="ggbKostenIframe"
+      title="GeoGebra Applet: Kosten- und Preistheorie"
+      width="1000"
+      height="640"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"
+      data-ggb-src="https://www.geogebra.org/material/iframe/id/jxuxvr6K/width/1000/height/640/border/888888"
+    ></iframe>
+  </div>
+  <p class="kp-canvas-note" style="margin-top:12px;">Tipp: Nach dem Wechsel zu dieser Station lädt das Applet automatisch. Vollbild und weitere GeoGebra-Funktionen erreichst du über die Steuerleiste im iframe bzw. über den direkten Link.</p>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 8 Merksätze & Kurzfassung -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Merksätze &amp; Kurzfassung</div>
+  <p style="line-height:1.65;">Zum <strong>Abschluss</strong> vor dem Quiz: kompakte <strong>Merksätze</strong> und die <strong>Kurzfassung „ein Satz pro Begriff“</strong> — nach Bedarf aufklappen und für die Prüfung oder als Spickzettel nutzen.</p>
+  <details class="kp-details-box" style="margin-top:14px; padding:12px 14px; border-radius:12px; border:1px solid #E8E8E8; background:#fafafa;">
+    <summary style="cursor:pointer; font-weight:700;">Merksätze 1–10 (Prüfung)</summary>
+    <ol style="margin:12px 0 0 22px; line-height:1.65; font-size:0.93rem;">
+      <li>Nachfrage meist <strong>fallend</strong>, Angebot meist <strong>steigend</strong>.</li>
+      <li>Marktgleichgewicht: <strong>\(p_N(x)=p_A(x)\)</strong> lösen.</li>
+      <li>Punktelastizität (hier): <strong>Preisempfindlichkeit an einer Stelle</strong> — \(\varepsilon=-\frac{x p'}{p}\).</li>
+      <li>Ertragsgesetzliche Kosten: typisch <strong>kubisch</strong>, zuerst degressiv, später progressiv.</li>
+      <li><strong>Kostenkehre</strong> = Wendepunkt von \(K\) (\(K''=0\)).</li>
+      <li><strong>Betriebsminimum</strong> \(\Rightarrow\) kurzfristige Preisuntergrenze (Minimum von \(\overline{K}_v\)).</li>
+      <li><strong>Betriebsoptimum</strong> \(\Rightarrow\) langfristige Preisuntergrenze (Minimum von \(\overline{K}\)).</li>
+      <li>Break-even: <strong>\(E(x)=K(x)\)</strong> bzw. \(G(x)=0\).</li>
+      <li><strong>Cournotscher Punkt</strong> bei <em>linearer</em> Nachfrage: Erlösmaximum — oft bei <strong>halber Sättigungsmenge</strong>.</li>
+      <li>Grenzfunktionen = <strong>Ableitungen</strong> („Änderung pro zusätzlicher ME“).</li>
+    </ol>
+  </details>
+  <details class="kp-details-box" style="margin-top:12px; padding:12px 14px; border-radius:12px; border:1px solid #E8E8E8; background:#fafafa;">
+    <summary style="cursor:pointer; font-weight:700;">Kurzfassung: ein Satz pro Begriff</summary>
+    <dl style="margin:12px 0 0 0; font-size:0.9rem; line-height:1.55;">
+      <dt style="font-weight:600; margin-top:8px;">Nachfragefunktion</dt><dd>zeigt, zu welchem Preis eine Menge nachgefragt wird.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Angebotsfunktion</dt><dd>zeigt, zu welchem Preis eine Menge angeboten wird.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Höchstpreis</dt><dd>Preis bei Menge \(0\) auf der Nachfrageseite.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Mindestpreis</dt><dd>kleinster Preis, ab dem angeboten wird (\(p_A(0)\)).</dd>
+      <dt style="font-weight:600; margin-top:8px;">Sättigungsmenge</dt><dd>Menge, bei der \(p_N(x)=0\).</dd>
+      <dt style="font-weight:600; margin-top:8px;">Marktgleichgewicht</dt><dd>Angebot und Nachfrage stimmen überein.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Punkt- / Bogenelastizität</dt><dd>Preisempfindlichkeit an einem Punkt bzw. auf einem Preis-Mengen-Bogen.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Degressiv / progressiv</dt><dd>Kosten steigen unter- bzw. überproportional.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Kostenkehre</dt><dd>Wechsel von degressiv zu progressiv (Wendepunkt).</dd>
+      <dt style="font-weight:600; margin-top:8px;">Betriebsminimum / -optimum</dt><dd>Minimum von \(\overline{K}_v\) bzw. \(\overline{K}\) (variable bzw. gesamte Stückkosten).</dd>
+      <dt style="font-weight:600; margin-top:8px;">Kurz- / langfristige PUG</dt><dd>Minimum von \(\overline{K}_v\) bzw. \(\overline{K}\).</dd>
+      <dt style="font-weight:600; margin-top:8px;">Break-even / Gewinnzone</dt><dd>\(G=0\) bzw. \(G&gt;0\) zwischen den Schnittpunkten \(E=K\).</dd>
+      <dt style="font-weight:600; margin-top:8px;">Deckungsbeitrag</dt><dd>\(E-K_v\) — deckt Fixkosten und trägt zum Gewinn bei.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Cournotscher Punkt</dt><dd>Erlösmaximum auf linearer Nachfrage.</dd>
+      <dt style="font-weight:600; margin-top:8px;">Grenzfunktion</dt><dd>Ableitung — Änderung bei einer zusätzlichen ME.</dd>
+    </dl>
+  </details>
+  <div class="info-box concept" style="margin-top:14px;">
+    <div class="icon">🧭</div>
+    <div>
+      <strong>Merksätze (ultrakurz)</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li><strong>Markt:</strong> Nachfrage fällt, Angebot steigt; Gleichgewicht = Schnitt \(p_N=p_A\).</li>
+        <li><strong>Elastizität (Form aus Kurzfassung):</strong> \(\varepsilon=-\frac{x p'}{p}\) — dort \(\varepsilon&gt;1\) elastisch, \(\varepsilon&lt;1\) unelastisch.</li>
+        <li><strong>Kosten:</strong> degressiv = langsamer steigend; progressiv = stärker steigend; <strong>Kostenkehre</strong> = Wendepunkt.</li>
+        <li><strong>PUG:</strong> langfristig = Minimum von \(\overline{K}\); kurzfristig = Minimum von \(\overline{K}_v\).</li>
+        <li><strong>Erfolg:</strong> Break-even \(G=0\); Gewinnzone zwischen den Gewinngrenzen; <strong>Gewinnmaximum</strong> mit \(E'=K'\); <strong>Erlösmaximum</strong> mit \(E'=0\) (bei \(E=x\cdot p(x)\)).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(8)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 9 Quiz -->
+<div class="tab-panel" id="panel8">
+  <div class="ribbon">Abschluss-Quiz</div>
+  <p><strong>12 Aufgaben</strong> — Multiple Choice, <strong>Zuordnung</strong> (Dropdowns) und <strong>grafische Auswahl</strong> (Kurven lesen). Skript, Vertiefung und Prüfungsmuster.</p>
+  <div id="finalQuizStepper" class="quiz-stepper"></div>
+  <div id="finalQuizContainer" style="margin-top:16px;"></div>
+
+  <div id="finalResult" style="display:none; margin-top:20px;">
+    <div class="info-box success">
+      <div class="icon">🏆</div>
+      <div>
+        <strong id="finalScore"></strong>
+        <p id="finalMessage" style="margin-top:8px;"></p>
+        <div class="badge-container" id="badgeContainer"></div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-hint" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(7)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Kosten- und Preistheorie<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/kosten-preistheorie-lernpfad/app.js"></script>
+</body>
+</html>

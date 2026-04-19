@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Dynamische Investitionsrechnung</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<link rel="stylesheet" href="css/dyn-inv-rechner.css">
+<script src="../../../js/lernpfade-registry.js"></script>
+<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="fin-dyn-inv" data-page-type="lernpfad" data-chapter-folder="Finanzmathematik/dynamische-investitionsrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 11 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Dynamische Investitionsrechnung</h1>
+  <p class="subtitle"><strong>Methoden, Beispiele &amp; Excel-Umsetzung</strong> — Kapitalwertmethode, interner und modifizierter interner Zinssatz, Investitionsanalyse und sachliche Interpretation der Kennzahlen.</p>
+  <span class="badge">Finanzmathematik · 7.&nbsp;Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht dieses Unterkapitels</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Finanzmathematik (Überblick)</a>
+    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    Als Nächstes: <a href="../kurs-rentabilitaetsrechnung/lernpfad-kurs-rentabilitaetsrechnung.html" style="color:var(--blue-dark); font-weight:600;">Kurs- und Rentabilitätsrechnung</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kapitalwert</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>IKV</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>MIRR</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Analyse</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Überblick</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Excel</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Fehler</button>
+  <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Kompetenzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(9)"><span class="tab-num">10</span>Mini-Quiz</button>
+  <button type="button" class="tab-btn" onclick="switchTab(10)"><span class="tab-num">11</span>Rechner</button>
+</div>
+
+<!-- 1 -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg &amp; Lernziele</div>
+
+  <p>Die <strong>dynamische Investitionsrechnung</strong> bewertet Investitionen, indem sie alle relevanten Zahlungsströme über die Zeit erfasst, auf einen Bezugszeitpunkt abzinst und daraus Kennzahlen ableitet. Excel unterstützt die Berechnung und die anschließende Analyse.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Lernziele</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Kapitalwertmethode, Methode des internen Zinssatzes und modifizierter interner Zinssatz <strong>beschreiben und anwenden</strong></li>
+        <li><strong>Investitionsanalysen durchführen</strong> und Investitionen <strong>bewerten</strong></li>
+        <li>Excel als Tool für <strong>Berechnung und Analyse</strong> gezielt nutzen</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box success" style="margin-top:14px;">
+    <div class="icon">📐</div>
+    <div>
+      <strong>Abgrenzung</strong>
+      <p style="margin:0;">Im Gegensatz zur statischen Rechnung fließen <strong>Zeitpunkt und Höhe</strong> der Zahlungen ein — durch Abzinsung wird der <strong>Zeitwert des Geldes</strong> berücksichtigt.</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Kapitalwert →</button>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">1. Kapitalwertmethode</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Definition</h3>
+  <p>Die Kapitalwertmethode berechnet, <strong>wie viel eine Investition heute wert ist</strong>, wenn alle zukünftigen Rückflüsse auf den heutigen Zeitpunkt abgezinst werden.</p>
+  <div class="formula-box">
+    <div class="formula-label">Kapitalwert</div>
+    \[ \text{Kapitalwert} = \sum \text{Barwerte aller Rückflüsse} - \text{Anfangsinvestition} \]
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Beispiel aus der Datei</h3>
+  <ul style="margin:8px 0 12px 20px; line-height:1.65;">
+    <li>Objektpreis (Anfangsinvestition): <strong>260.000&nbsp;€</strong></li>
+    <li>Jährliche Einnahmen: <strong>80.000&nbsp;€</strong>, jährliche Ausgaben: <strong>20.000&nbsp;€</strong></li>
+    <li>Zusätzliche Investitionen: <strong>45.000&nbsp;€</strong> (Jahr&nbsp;1), <strong>40.000&nbsp;€</strong> (Jahr&nbsp;3)</li>
+    <li>Verkaufserlös nach 5 Jahren: <strong>60.000&nbsp;€</strong></li>
+    <li>Kalkulatorischer Zinssatz: <strong>3&nbsp;%</strong></li>
+  </ul>
+
+  <p><strong>Vorgehen:</strong></p>
+  <ol style="margin:6px 0 12px 20px; line-height:1.65;">
+    <li>Cashflows pro Jahr: Einnahmen − Ausgaben − Sonderinvestitionen (Verkaufserlös im letzten Jahr zusätzlich)</li>
+    <li>Jeden Cashflow mit dem passenden Abzinsungsfaktor auf den heutigen Wert bringen</li>
+    <li>Summe der Barwerte minus Anfangsinvestition = Kapitalwert</li>
+  </ol>
+
+  <p><strong>Netto-Cashflows (vereinfachte Darstellung):</strong></p>
+  <div style="overflow-x:auto; margin:12px 0;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.88rem; background:#fff; border:1px solid #E8E8E8; border-radius:8px;">
+      <thead>
+        <tr style="background:var(--blue-light);">
+          <th style="padding:10px 8px; text-align:left; border-bottom:1px solid #ddd;">Jahr</th>
+          <th style="padding:10px 8px; text-align:right; border-bottom:1px solid #ddd;">Netto-CF</th>
+          <th style="padding:10px 8px; text-align:right; border-bottom:1px solid #ddd;">Barwert (3&nbsp;%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:8px; border-bottom:1px solid #eee;">0</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">−260.000&nbsp;€</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">−260.000&nbsp;€</td></tr>
+        <tr><td style="padding:8px; border-bottom:1px solid #eee;">1</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">15.000&nbsp;€</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">≈ 14.563&nbsp;€</td></tr>
+        <tr><td style="padding:8px; border-bottom:1px solid #eee;">2</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">60.000&nbsp;€</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">≈ 56.558&nbsp;€</td></tr>
+        <tr><td style="padding:8px; border-bottom:1px solid #eee;">3</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">20.000&nbsp;€</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">≈ 18.300&nbsp;€</td></tr>
+        <tr><td style="padding:8px; border-bottom:1px solid #eee;">4</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">60.000&nbsp;€</td><td style="padding:8px; text-align:right; border-bottom:1px solid #eee;">≈ 53.310&nbsp;€</td></tr>
+        <tr><td style="padding:8px;">5</td><td style="padding:8px; text-align:right;">120.000&nbsp;€</td><td style="padding:8px; text-align:right;">≈ 103.511&nbsp;€</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Abzinsungsfaktor Jahr \(t\): \(\displaystyle \frac{1}{(1+0{,}03)^t}\). <strong>Kapitalwert (gerundet):</strong> etwa <strong>−13.756&nbsp;€</strong> — bei 3&nbsp;% Kalkulationszins ist das Projekt <strong>nicht</strong> vorteilhaft (siehe auch Station&nbsp;3).</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">Kapitalwertkurve</h3>
+  <p>Trägt man den <strong>Kapitalwert</strong> in Abhängigkeit vom <strong>kalkulatorischen Zinssatz</strong> \(i\) auf, entsteht die <strong>Kapitalwertkurve</strong> \(\mathrm{KW}(i)\). Sie zeigt auf einen Blick, ab welchem Zins die Investition noch attraktiv ist:</p>
+  <div class="formula-box">
+    <div class="formula-label">Kapitalwert als Funktion von \(i\)</div>
+    \[ \mathrm{KW}(i) = \sum_{t=0}^{n} \frac{CF_t}{(1+i)^t} \]
+  </div>
+  <ul style="margin:10px 0 14px 20px; line-height:1.65;">
+    <li>Bei <strong>konventioneller</strong> Zahlungsreihe (zuerst Auszahlungen, später Rückflüsse) fällt \(\mathrm{KW}(i)\) typischerweise <strong>monoton</strong> mit steigendem \(i\) — höherer Zins mindert die Gewichte der Zukunft.</li>
+    <li>Der <strong>Schnittpunkt</strong> der Kurve mit der Achse \(\mathrm{KW}=0\) liefert den <strong>internen Zinssatz (IKV)</strong>: dort ist die Investition gerade noch „grenzwertig“.</li>
+    <li>Liegt der gewählte Kalkulationszins <strong>links vom IKV</strong> (also <strong>niedriger</strong>), ist \(\mathrm{KW}(i) &gt; 0\) — die Investition ist nach Kapitalwertkriterium <strong>vorteilhaft</strong>. Liegt er <strong>rechts</strong> (höher), ist der Kapitalwert <strong>negativ</strong> (wie im Einführungsbeispiel bei 3&nbsp;% und IKV \(\approx\) 1,51&nbsp;%).</li>
+    <li>Die <strong>Steigung</strong> der Kurve in einem Bereich beschreibt die <strong>Sensitivität</strong>: flach = Kapitalwert reagiert wenig auf Zinsänderungen, steil = kleine Zinsverschiebungen ändern die Bewertung stark.</li>
+  </ul>
+  <p>In Excel erzeugt man eine solche Darstellung, indem man in einer Spalte verschiedene Zinssätze vorgibt und daneben jeweils den Kapitalwert rechnet — dann <strong>Liniendiagramm</strong> (Kapitalwert über Zinssatz). Die <strong>Zielwertsuche</strong> entspricht dem Punkt, an dem die Kurve die Nulllinie schneidet.</p>
+
+  <div class="kw-applet" id="kw-applet-root">
+    <h3>Interaktive Kapitalwertkurve (Einführungsbeispiel)</h3>
+    <p style="margin:0 0 10px 0; font-size:0.9rem;">Cashflows Jahre 1–5 wie oben; in Jahr&nbsp;0 steckt die <strong>Anschaffungsauszahlung</strong> (negativer Cashflow). Wähle <strong>Kalkulationszins</strong>, <strong>Anschaffungspreis</strong> und optional eine <strong>Sensitivität</strong>.</p>
+    <p style="margin:0 0 12px 0; font-size:0.86rem; color:var(--text-light,#555);"><strong>Anschaffungspreis:</strong> Wird der Preis bei gleichen übrigen Zahlungsströmen <strong>höher</strong>, sinkt der Kapitalwert <strong>für jeden Zinssatz um genau diese Differenz</strong> — die Kapitalwertkurve verschiebt sich <strong>parallel nach unten</strong>. Der <strong>IKV</strong> (Schnittpunkt mit \(\mathrm{KW}=0\)) wandert nach <strong>links</strong> (die Rendite bricht früher ein).</p>
+    <div class="kw-applet-controls">
+      <div class="kw-select-row">
+        <label for="kw-scenario">Zahlungsreihe</label>
+        <select id="kw-scenario" aria-label="Szenario Zahlungsreihe">
+          <option value="standard">Einführungsbeispiel (Standard)</option>
+          <option value="verkauf">Sensitivität: Verkaufserlös +25.000&nbsp;€ (Jahr&nbsp;5)</option>
+          <option value="kosten">Sensitivität: +10.000&nbsp;€ Auszahlung in Jahr&nbsp;1</option>
+        </select>
+      </div>
+      <div class="kw-slider-row">
+        <label for="kw-price-slider">Anschaffungspreis (Jahr&nbsp;0, Auszahlung)</label>
+        <input type="range" id="kw-price-slider" min="230000" max="290000" step="1000" value="260000" aria-valuemin="230000" aria-valuemax="290000" aria-valuenow="260000" aria-label="Anschaffungspreis Euro">
+      </div>
+      <div class="kw-slider-row">
+        <label for="kw-rate-slider">Kalkulatorischer Zinssatz <em>i</em> (Schieberegler)</label>
+        <input type="range" id="kw-rate-slider" min="0" max="10" step="0.05" value="3" aria-valuemin="0" aria-valuemax="10" aria-valuenow="3" aria-label="Kalkulatorischer Zinssatz Prozent">
+      </div>
+    </div>
+    <div class="kw-readout">
+      <span>Anschaffungspreis: <strong id="kw-price-read">260.000&nbsp;€</strong></span>
+      <span>Gewählter Zins: <strong id="kw-rate-read">3,000&nbsp;%</strong></span>
+      <span>Kapitalwert dazu: <strong id="kw-npv-read">—</strong></span>
+    </div>
+    <div class="kw-readout" id="kw-readout-compare" style="display:none;">
+      <span>Δ KW zur Basis-Kurve (260.000&nbsp;€), konstant: <strong id="kw-delta-read">—</strong></span>
+      <span>IKV Basis (260.000&nbsp;€): <strong id="kw-irr-ref-read">—</strong></span>
+      <span>IKV mit gewähltem Preis: <strong id="kw-irr-read">—</strong></span>
+    </div>
+    <div class="kw-readout" id="kw-readout-single">
+      <span>IKV (Schnittpunkt mit 0): <strong id="kw-irr-read-only">—</strong></span>
+    </div>
+    <div class="kw-canvas-wrap">
+      <canvas id="kwCurveCanvas" width="900" height="320" aria-label="Diagramm Kapitalwert über Zinssatz"></canvas>
+    </div>
+    <div class="kw-legend">
+      <span><span class="kw-leg-dash" aria-hidden="true"></span>Basis \(\mathrm{KW}(i)\) bei 260.000&nbsp;€ (gestrichelt)</span>
+      <span><span class="kw-dot" style="background:#1976d2;"></span>Kapitalwertkurve mit gewähltem Anschaffungspreis</span>
+      <span><span class="kw-dot" style="background:#757575;"></span>Nulllinie \(\mathrm{KW}=0\)</span>
+      <span><span class="kw-dot" style="background:#78909c;"></span>IKV Basis</span>
+      <span><span class="kw-dot" style="background:#2e7d32;"></span>IKV gewählter Preis</span>
+      <span><span class="kw-dot" style="background:#f57c00;"></span>gewählter Kalkulationszins</span>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">✓</div>
+    <div>
+      <strong>Interpretation</strong>
+      <ul style="margin:6px 0 0 18px;">
+        <li>Kapitalwert <strong>&gt; 0</strong>: Investition ist vorteilhaft (Wertsteigerung gegenüber Alternative am Kapitalmarkt).</li>
+        <li>Kapitalwert <strong>&lt; 0</strong>: nicht investieren (oder Alternative suchen).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box warning" style="margin-top:14px;">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Excel-Tipp</strong>
+      <ul style="margin:6px 0 0 18px;">
+        <li>Cashflows in Spalten erfassen.</li>
+        <li>Abzinsungsfaktoren: <code>=1/(1+Zinssatz)^Jahr</code></li>
+        <li>Barwerte: <code>=Cashflow*Abzinsungsfaktor</code></li>
+        <li>Kapitalwert: <code>=SUMME(Barwerte)</code> (Anfangsinvestition bereits als negativer Cashflow in Zeile 0)</li>
+        <li>Funktion (deutsch je nach Version <code>KAPITALWERT</code> bzw. <code>NBW</code>, englisch <code>NPV</code>): Zukunftswerte ab Periode&nbsp;1 abzinsen und <strong>Anschaffungsauszahlung extra addieren</strong> — in der Praxis die Hilfe zur jeweiligen Excel-Sprache beachten.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: IKV →</button>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">2. Methode des internen Zinssatzes (IKV)</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Definition</h3>
+  <p>Der <strong>interne Zinssatz</strong> ist jener Zinssatz, bei dem der Kapitalwert der Investition <strong>genau null</strong> ist. Er beschreibt die <strong>effektive Verzinsung</strong> der Investition aus der Zahlungsreihe heraus.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Beispiel</h3>
+  <p>Mit den gleichen Cashflows wie bei der Kapitalwertmethode liegt der interne Zinssatz bei etwa <strong>1,51&nbsp;%</strong>. Solange der kalkulatorische Zinssatz <strong>unterhalb</strong> dieses Wertes liegt, ist der Kapitalwert positiv; <strong>oberhalb von ca. 1,51&nbsp;%</strong> wird der Kapitalwert negativ — die Investition ist dann nach Kapitalwertkriterium abzulehnen.</p>
+
+  <div class="info-box success">
+    <div class="icon">✓</div>
+    <div>
+      <strong>Interpretation</strong>
+      <ul style="margin:6px 0 0 18px;">
+        <li><strong>IKV &gt; kalkulatorischer Zinssatz</strong> → Investition vorteilhaft.</li>
+        <li><strong>IKV &lt; kalkulatorischer Zinssatz</strong> → nicht investieren (hier: 1,51&nbsp;% &lt; 3&nbsp;%).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box warning" style="margin-top:14px;">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Excel-Tipp</strong>
+      <ul style="margin:6px 0 0 18px;">
+        <li>Cashflows in einer Zeile/Spalte inkl. <strong>Anfangsinvestition als negativer Wert</strong>.</li>
+        <li>Funktion: <code>=IKV(Cashflows)</code> (englisch <code>IRR</code>).</li>
+      </ul>
+      <p style="margin:10px 0 0 0;"><strong>Zielwertsuche:</strong> Zielzelle = Kapitalwert (bzw. NPV-Formel), Zielwert = 0, veränderbare Zelle = Zinssatz — Excel liefert den Zins, bei dem der Kapitalwert null wird (analog zum Screenshot aus der Unterrichtsdatei).</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: MIRR →</button>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">3. Modifizierter interner Zinssatz (MIRR)</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Definition</h3>
+  <p>Der <strong>modifizierte interne Zinssatz (MIRR)</strong> geht davon aus, dass Zwischenrückflüsse <strong>nicht</strong> zum internen Zinssatz, sondern zu einem <strong>realistischen Wiederveranlagungszinssatz</strong> angelegt werden. Damit ist er in vielen Fällen <strong>praxisnäher</strong> als der IKV.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Beispiel</h3>
+  <p>Rückflüsse werden zu <strong>2,5&nbsp;%</strong> wiederveranlagt; Finanzierung bzw. Kalkulationszins für die Logik der Funktion bleibt z.&nbsp;B. <strong>3&nbsp;%</strong>. Der modifizierte interne Zinssatz liegt bei etwa <strong>1,76&nbsp;%</strong>. Im konkreten Zahlenbeispiel liegt dieser Wert <strong>unter</strong> dem gewählten Wiederveranlagungssatz — das passt zur Gesamteinschätzung (vgl. negativer Kapitalwert bei 3&nbsp;%); in der Praxis immer <strong>alle Kriterien und Annahmen</strong> gemeinsam bewerten.</p>
+
+  <div class="info-box success">
+    <div class="icon">✓</div>
+    <div>
+      <strong>Interpretation</strong>
+      <p style="margin:0;">Der MIRR berücksichtigt explizit unterschiedliche Sätze für Finanzierung und Wiederveranlagung — sinnvoll, wenn der IKV unrealistische Reinvestitionsannahmen nahelegt.</p>
+      <p style="margin:8px 0 0 0;">Im Überblick (Station&nbsp;6): Vergleich z.&nbsp;B. mit dem <strong>Wiederveranlagungszinssatz</strong> bzw. der geforderten Rendite je nach Aufgabenstellung.</p>
+    </div>
+  </div>
+
+  <div class="info-box warning" style="margin-top:14px;">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Excel-Tipp</strong>
+      <p style="margin:0;"><code>=MIRR(Cashflows;Finanzierungszinssatz;Wiederveranlagungszinssatz)</code></p>
+      <p style="margin:8px 0 0 0;">Beispiel: <code>=MIRR(A1:A6;0,03;0,025)</code></p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Analyse →</button>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">4. Investitionsanalyse &amp; Bewertung</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Vorgehen</h3>
+  <ol style="margin:8px 0 14px 20px; line-height:1.65;">
+    <li>Alle relevanten Zahlungsströme erfassen: Einnahmen, Ausgaben, Sonderinvestitionen, Verkaufserlös.</li>
+    <li>Kapitalwert, IKV und MIRR berechnen.</li>
+    <li>Ergebnisse interpretieren:
+      <ul style="margin-top:6px;">
+        <li>Kapitalwert <strong>&gt; 0</strong> → vorteilhaft</li>
+        <li><strong>IKV &gt; Kalkulationszinssatz</strong> → vorteilhaft</li>
+        <li><strong>MIRR &gt; Wiederveranlagungszinssatz</strong> (bzw. Vergleich mit geforderter Rendite je nach Aufgabe) → häufig als zusätzliches Kriterium genutzt</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Excel als Analyse-Tool</h3>
+  <ul style="margin:6px 0 0 20px; line-height:1.65;">
+    <li><strong>Cashflow-Tabellen</strong> — übersichtliche Darstellung aller Zahlungsströme</li>
+    <li><strong>Diagramme</strong> — Kapitalwertkurve (Kapitalwert bei verschiedenen Zinssätzen)</li>
+    <li><strong>Zielwertsuche</strong> — interner Zinssatz bzw. Grenzzins ermitteln</li>
+    <li><strong>MIRR</strong> — modifizierten Zinssatz mit realistischer Wiederveranlagung berechnen</li>
+  </ul>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Überblick →</button>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">5. Zusammenfassung der Methoden</div>
+
+  <div style="overflow-x:auto; margin:12px 0;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.88rem; background:#fff; border:1px solid #E8E8E8;">
+      <thead>
+        <tr style="background:var(--blue-light);">
+          <th style="padding:10px 8px; text-align:left; border:1px solid #ddd;">Methode</th>
+          <th style="padding:10px 8px; text-align:left; border:1px solid #ddd;">Aussage</th>
+          <th style="padding:10px 8px; text-align:left; border:1px solid #ddd;">Excel (deutsch / englisch)</th>
+          <th style="padding:10px 8px; text-align:left; border:1px solid #ddd;">Interpretation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;"><strong>Kapitalwert</strong></td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;">Wert der Investition heute</td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;"><code>KAPITALWERT</code>/<code>NBW</code> · <code>NPV</code></td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;">&gt; 0: vorteilhaft</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;"><strong>IKV</strong></td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;">Effektive Verzinsung</td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;"><code>IKV</code> · <code>IRR</code></td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;">&gt; Kalkulationszins: vorteilhaft</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;"><strong>MIRR</strong></td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;">Verzinsung mit Wiederveranlagung</td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;"><code>MIRR</code></td>
+          <td style="padding:10px 8px; border:1px solid #eee; vertical-align:top;">&gt; Wiederveranlagungszinssatz: vorteilhaft (im Unterrichtsmodell)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.86rem; color:var(--text-light);">Excel-Funktionsnamen können je nach Sprachversion variieren; die Logik (Zahlungsreihe, Zinssätze) bleibt gleich.</p>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Excel-Workflow →</button>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">6. Praxisbeispiel: Excel-Workflow</div>
+
+  <ol style="margin:8px 0 0 20px; line-height:1.75;">
+    <li><strong>Cashflows erfassen</strong> — Spalten für Jahre, Einnahmen, Ausgaben, Sonderinvestitionen, Verkaufserlös; daraus Netto-Cashflow je Periode.</li>
+    <li><strong>Kapitalwert berechnen</strong> — Abzinsungsfaktoren, Barwerte, Summe; oder passende Kapitalwert-Funktion inkl. korrekter Behandlung der Anfangsinvestition.</li>
+    <li><strong>Internen Zinssatz bestimmen</strong> — <code>IKV</code>/<code>IRR</code> oder Zielwertsuche auf Kapitalwert = 0.</li>
+    <li><strong>MIRR</strong> — Finanzierungs- und Wiederveranlagungszinssatz setzen, Funktion auswerten.</li>
+    <li><strong>Interpretation</strong> — Investition nur durchführen, wenn die Kennzahlen zur Entscheidungsregel passen (einheitlich mit gewähltem Kalkulationszins und Annahmen).</li>
+  </ol>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Fehlerquellen →</button>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">7. Typische Fehlerquellen</div>
+
+  <ul style="margin:8px 0 0 20px; line-height:1.7;">
+    <li>Anfangsinvestition als <strong>negativer</strong> Cashflow am Zeitpunkt 0 erfassen</li>
+    <li>Sonderinvestitionen im <strong>richtigen Jahr</strong> verbuchen</li>
+    <li>Verkaufserlös am Ende als <strong>positiver</strong> Zahlungseingang</li>
+    <li>Bei IKV/MIRR die <strong>gesamte</strong> Zahlungsreihe vollständig und in der richtigen Reihenfolge angeben</li>
+    <li>Bei NPV-Funktionen: Zeitraum der Diskontierung (Periode 0 vs. 1) und Sprachversion der Funktion <strong>gegenrechnen</strong></li>
+  </ul>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(8)">Weiter: Kompetenzen →</button>
+  </div>
+</div>
+
+<!-- 9 -->
+<div class="tab-panel" id="panel8">
+  <div class="ribbon">8. Kompetenzorientierte Schlussformulierung</div>
+
+  <p>Die Schüler:innen können:</p>
+  <ul style="margin:8px 0 0 20px; line-height:1.7;">
+    <li>Kapitalwertmethode, IKV und MIRR <strong>beschreiben und anwenden</strong></li>
+    <li>Investitionsanalysen mit Excel <strong>durchführen und bewerten</strong></li>
+    <li>Excel-Tools wie Kapitalwert-, IKV- und MIRR-Funktion sowie die <strong>Zielwertsuche</strong> gezielt einsetzen</li>
+    <li>Ergebnisse <strong>sachlich interpretieren und begründen</strong></li>
+  </ul>
+
+  <div class="info-box concept" style="margin-top:20px;">
+    <div class="icon">📚</div>
+    <div>
+      <strong>Merkhilfe</strong>
+      <p style="margin:0;">Kapitalwert = „Wert heute“, IKV = „Grenzzins der Zahlungsreihe“, MIRR = „IKV mit realistischer Wiederveranlagung“. Alle drei gemeinsam einsetzen reduziert Fehlinterpretationen.</p>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(7)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(9)">Weiter: Mini-Quiz →</button>
+  </div>
+</div>
+
+<!-- 10 Mini-Quiz -->
+<div class="tab-panel" id="panel9">
+  <div class="ribbon">Mini-Quiz</div>
+
+  <p>Kurz selbst prüfen: Begriffe und Entscheidungsregeln aus dem Lernpfad (Kapitalwert, IKV, MIRR, Cashflows, Excel).</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">5 Fragen</span>
+      <span class="exercise-title">Wissen checken</span>
+    </div>
+
+    <p><strong>1.</strong> Der <strong>Kapitalwert</strong> einer Investition ist <em>positiv</em>. Nach Kapitalwertkriterium ist die Investition dann …</p>
+    <div class="quiz-options" data-quiz="di_q1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">vorteilhaft (lohnt sich gegenüber der abgezinsten Alternative)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">nicht vorteilhaft</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">immer die beste aller denkbaren Alternativen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">ohne Angabe des IKV nicht beurteilbar</div>
+    </div>
+    <div class="feedback" id="fb_di_q1"></div>
+
+    <p style="margin-top:22px;"><strong>2.</strong> Der <strong>interne Zinssatz (IKV)</strong> ist jener Zinssatz, bei dem …</p>
+    <div class="quiz-options" data-quiz="di_q2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die Summe der nominalen Cashflows maximal ist</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">der Kapitalwert der Investition genau null ist</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">der kalkulatorische Zinssatz vorgegeben wird</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">die Abschreibung der Anschaffungskosten endet</div>
+    </div>
+    <div class="feedback" id="fb_di_q2"></div>
+
+    <p style="margin-top:22px;"><strong>3.</strong> Klassische <strong>IKV-Entscheidungsregel</strong> (ein Projekt, konventionelle Zahlungsreihe): Die Investition ist vorteilhaft, wenn …</p>
+    <div class="quiz-options" data-quiz="di_q3" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">IKV &lt; kalkulatorischer Zinssatz</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">IKV = 0</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">IKV &gt; kalkulatorischer Zinssatz</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">IKV = MIRR</div>
+    </div>
+    <div class="feedback" id="fb_di_q3"></div>
+
+    <p style="margin-top:22px;"><strong>4.</strong> Der <strong>MIRR</strong> unterscheidet sich vom IKV vor allem dadurch, dass …</p>
+    <div class="quiz-options" data-quiz="di_q4" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">gar keine Diskontierung der Zahlungsströme erfolgt</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Zwischenrückflüsse mit einem gesonderten Wiederveranlagungszinssatz verzinst werden</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nur die Anfangsinvestition in die Formel eingeht</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">der Kapitalwert immer positiv ist</div>
+    </div>
+    <div class="feedback" id="fb_di_q4"></div>
+
+    <p style="margin-top:22px;"><strong>5.</strong> In der <strong>Zahlungsreihe</strong> für IKV/MIRR gehört die Anfangsinvestition typischerweise …</p>
+    <div class="quiz-options" data-quiz="di_q5" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">als positiver Cashflow in Jahr 0</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">erst in Jahr 1 als positiver Zahlungseingang</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">als negativer Cashflow in Jahr 0 (Zeitpunkt der Auszahlung)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur in der Bilanz, nicht in der Investitionsrechnung</div>
+    </div>
+    <div class="feedback" id="fb_di_q5"></div>
+
+    <div style="margin-top:20px;">
+      <button type="button" class="btn btn-check" onclick="checkDynQuiz()">Alle Antworten prüfen ✓</button>
+    </div>
+    <div class="feedback" id="fb_di_quiz_summary" style="display:none; margin-top:14px;"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(8)">← Zurück: Kompetenzen</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(10)">Weiter: Rechner →</button>
+  </div>
+</div>
+
+<!-- 11 Investitionsrechner -->
+<div class="tab-panel" id="panel10">
+  <div class="ribbon">Interaktiver Investitionsrechner</div>
+
+  <p>Eingaben wie in Excel: <strong>Einnahmen</strong> und <strong>Ausgaben</strong> je Jahr, Zinssätze links. Es werden berechnet: <strong>Barwerte</strong> (mit kalkulatorischem Zins), <strong>Wiederveranlagung</strong> (Aufzinsung der Rückflüsse bis Jahr&nbsp;5 mit Wiederveranlagungszinssatz), <strong>Kapitalwert</strong>, <strong>IKV</strong>, <strong>MIRR</strong> und die <strong>Annuität des Kapitalwerts</strong> (Vergleich gleichwertiger jährlicher Betrag über die erkannte Projektlaufzeit <em>n</em>).</p>
+
+  <div class="xls-wrap">
+    <div class="xls-grid">
+      <div class="xls-params">
+        <div class="xls-block xls-block--yellow">
+          <h4>Kalkulatorischer Zinssatz</h4>
+          <div class="xls-row">
+            <label for="di-rate-kalk"><em>i</em> (p.a.)</label>
+            <input type="text" class="xls-in" id="di-rate-kalk" value="3" inputmode="decimal" aria-label="Kalkulatorischer Zinssatz Prozent">
+          </div>
+          <div class="xls-row">
+            <span>Aufzinsungsfaktor <em>r</em> = 1 + <em>i</em></span>
+            <span class="xls-read" id="di-r-kalk">103&nbsp;%</span>
+          </div>
+        </div>
+        <div class="xls-block xls-block--blue">
+          <h4>MIRR · Finanzierung</h4>
+          <div class="xls-row">
+            <label for="di-rate-fin"><em>i</em> Finanzierung (p.a.)</label>
+            <input type="text" class="xls-in" id="di-rate-fin" value="3" inputmode="decimal" aria-label="Finanzierungszinssatz Prozent">
+          </div>
+          <div class="xls-row">
+            <span>Faktor <em>r</em></span>
+            <span class="xls-read" id="di-r-fin">103&nbsp;%</span>
+          </div>
+        </div>
+        <div class="xls-block xls-block--blue">
+          <h4>MIRR · Wiederveranlagung</h4>
+          <div class="xls-row">
+            <label for="di-rate-reinvest"><em>i</em> Wiederveranl. (p.a.)</label>
+            <input type="text" class="xls-in" id="di-rate-reinvest" value="2,5" inputmode="decimal" aria-label="Wiederveranlagungszinssatz Prozent">
+          </div>
+          <div class="xls-row">
+            <span>Faktor <em>r</em></span>
+            <span class="xls-read" id="di-r-reinvest">102,5&nbsp;%</span>
+          </div>
+        </div>
+        <div class="xls-block xls-block--orange">
+          <h4>Interner Zinssatz (IKV)</h4>
+          <div class="xls-row">
+            <span>mit Formel (numerisch)</span>
+            <strong class="xls-read" id="di-ikv">—</strong>
+          </div>
+          <div class="xls-row">
+            <span>Kapitalwert bei IKV (Kontrolle ≈ 0)</span>
+            <strong class="xls-read" id="di-npv-ikv">—</strong>
+          </div>
+        </div>
+        <div class="xls-block xls-block--pink">
+          <h4>Modifizierter IZ (MIRR)</h4>
+          <div class="xls-row">
+            <span>QIKV / MIRR</span>
+            <strong class="xls-read" id="di-mirr">—</strong>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="xls-scroll">
+          <table class="xls-table" aria-label="Cashflow und Barwerte">
+            <thead>
+              <tr>
+                <th>Zeitpunkt</th>
+                <th>Einnahmen</th>
+                <th>Ausgaben</th>
+                <th>Rückflüsse / Cash-Flow</th>
+                <th>Barwert der Rückflüsse</th>
+                <th>Wiederveranlagung (Ende Jahr&nbsp;5)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-inc-0" value="0" aria-label="Einnahmen Jahr 0"></td>
+                <td class="xls-cell-inv"><input type="text" class="xls-in" style="width:100%;max-width:none;color:#fff;background:transparent;border-color:rgba(255,255,255,0.5)" id="di-exp-0" value="260000" aria-label="Ausgaben Jahr 0"></td>
+                <td id="di-cf-0" class="xls-num">—</td>
+                <td id="di-pv-0" class="xls-num">—</td>
+                <td id="di-fv-0" class="xls-num">—</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-inc-1" value="80000" aria-label="Einnahmen Jahr 1"></td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-exp-1" value="65000" aria-label="Ausgaben Jahr 1"></td>
+                <td id="di-cf-1" class="xls-num">—</td>
+                <td id="di-pv-1" class="xls-num">—</td>
+                <td id="di-fv-1" class="xls-num">—</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-inc-2" value="80000" aria-label="Einnahmen Jahr 2"></td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-exp-2" value="20000" aria-label="Ausgaben Jahr 2"></td>
+                <td id="di-cf-2" class="xls-num">—</td>
+                <td id="di-pv-2" class="xls-num">—</td>
+                <td id="di-fv-2" class="xls-num">—</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-inc-3" value="80000" aria-label="Einnahmen Jahr 3"></td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-exp-3" value="60000" aria-label="Ausgaben Jahr 3"></td>
+                <td id="di-cf-3" class="xls-num">—</td>
+                <td id="di-pv-3" class="xls-num">—</td>
+                <td id="di-fv-3" class="xls-num">—</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-inc-4" value="80000" aria-label="Einnahmen Jahr 4"></td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-exp-4" value="20000" aria-label="Ausgaben Jahr 4"></td>
+                <td id="di-cf-4" class="xls-num">—</td>
+                <td id="di-pv-4" class="xls-num">—</td>
+                <td id="di-fv-4" class="xls-num">—</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-inc-5" value="140000" aria-label="Einnahmen Jahr 5 inkl. Verkauf"></td>
+                <td><input type="text" class="xls-in" style="width:100%;max-width:none" id="di-exp-5" value="20000" aria-label="Ausgaben Jahr 5"></td>
+                <td id="di-cf-5" class="xls-num">—</td>
+                <td id="di-pv-5" class="xls-num">—</td>
+                <td id="di-fv-5" class="xls-num">—</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Σ</td>
+                <td id="di-sum-inc">—</td>
+                <td id="di-sum-exp">—</td>
+                <td id="di-sum-cf">—</td>
+                <td id="di-sum-pv">—</td>
+                <td id="di-sum-fv">—</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="xls-summary">
+          <div class="xls-sum-row">
+            <span>Gewinn/Verlust (statisch)</span>
+            <strong id="di-statisch">—</strong>
+          </div>
+          <div class="xls-sum-row xls-sum-row--yellow">
+            <span>Gewinn/Verlust (dynamisch) · <strong>Kapitalwert</strong></span>
+            <strong id="di-dynamisch">—</strong>
+          </div>
+          <div class="xls-sum-row">
+            <span>Nettobarwert (Jahr 1–5, abgezinst)</span>
+            <strong id="di-nettobar">—</strong>
+          </div>
+          <div class="xls-sum-row">
+            <span>Barwert Jahr 0 (Investition)</span>
+            <strong id="di-invest-saldo">—</strong>
+          </div>
+          <div class="xls-sum-row xls-sum-row--orange">
+            <span><strong>Kapitalwert</strong> (Summe Barwerte)</span>
+            <strong id="di-kapitalwert">—</strong>
+          </div>
+          <div class="xls-sum-row">
+            <span><strong>Annuität</strong> des Kapitalwerts (<em>n</em> = <span id="di-n-proj">5</span>, Zins = kalk.)</span>
+            <strong id="di-ann">—</strong>
+          </div>
+        </div>
+
+        <p class="xls-hint"><strong>Formeln (kompakt):</strong> Cashflow<sub><em>t</em></sub> = Einnahmen<sub><em>t</em></sub> − Ausgaben<sub><em>t</em></sub>. Barwert<sub><em>t</em></sub> = Cashflow<sub><em>t</em></sub> / (1 + <em>i</em><sub>kalk</sub>)<sup><em>t</em></sup>. Wiederveranlagung (Ende Jahr&nbsp;5): Cashflow<sub><em>t</em></sub> · (1 + <em>i</em><sub>rein</sub>)<sup>5−<em>t</em></sup>. Kapitalwert = Summe aller Barwerte. <strong>IKV:</strong> Zinssatz, bei dem die Summe der Barwerte null wird (hier numerisch: Newton, sonst Bisektion). <strong>MIRR</strong> (wie Excel <code>MIRR</code>): Endwert der positiven Zahlungen (Wiederveranlagung) geteilt durch den Barwert der negativen Zahlungen zum Finanzierungssatz — dann ( … )<sup>1/5</sup> − 1. <strong>Annuität:</strong> Kapitalwert · <em>i</em>(1 + <em>i</em>)<sup><em>n</em></sup> / ((1 + <em>i</em>)<sup><em>n</em></sup> − 1) mit <em>i</em> = kalkulatorischer Zins und <em>n</em> = letztes Jahr mit Einnahme oder Ausgabe ab Jahr&nbsp;1.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(9)">← Zurück: Mini-Quiz</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Dynamische Investitionsrechnung<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/dynamische-investitionsrechnung-lernpfad/app.js"></script>
+<script src="js/dynamische-investitionsrechnung-lernpfad/kapitalwert-kurve.js"></script>
+<script src="js/dynamische-investitionsrechnung-lernpfad/invest-rechner.js"></script>
+</body>
+</html>

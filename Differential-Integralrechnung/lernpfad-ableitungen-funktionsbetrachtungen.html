@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Ableitungen &amp; Funktionsbetrachtungen</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="s6-ableitungen" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 3 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Differenzialrechnung: Ableitungen &amp; Funktionsbetrachtungen</h1>
+  <p class="subtitle">Ableitungsfunktion, Differentiationsregeln und Kurvendiskussion — Inhalte werden ausgebaut.</p>
+  <span class="badge">6. Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    <a href="lernpfad-grundlagen-differenzialrechnung.html" style="color:var(--blue-dark); font-weight:600;">← Grundlagen Differenzialrechnung</a>
+    · <a href="lernpfad-kosten-preistheorie.html" style="color:var(--blue-dark); font-weight:600;">Kosten- und Preistheorie →</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg</div>
+  <p>Du vertiefst den <strong>Differenzialquotienten</strong> zur <strong>Ableitungsfunktion</strong>, übst alle üblichen Differentiationsregeln und nutzt die Ableitung zur Beschreibung von Funktionsgraphik und ökonomischen Größen.</p>
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Geplanter Schwerpunkt</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Ableitung lesen, skizzieren und mit der Ausgangsfunktion verknüpfen</li>
+        <li>Regelwerk sicher anwenden — inklusive \( \mathrm{e}^x \) und \( \ln \)</li>
+        <li>Monotonie und Krümmung rechnerisch und am Graphen</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Kompetenzen →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Kompetenzen &amp; Ziele (Lehrplan)</div>
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Den Begriff der <strong>Ableitungsfunktion</strong> beschreiben, diese grafisch darstellen und deren Verlauf deuten.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Ableitungsfunktionen zur Beschreibung von Sachverhalten aus unterschiedlichen Themengebieten einsetzen, damit <strong>lokale Änderungsraten</strong> berechnen und interpretieren.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Mit Hilfe der <strong>Summen-, Faktor-, Ketten-, Produkt- und Quotientenregel</strong>, <strong>Potenz- und Polynomfunktionen</strong> sowie <strong>Exponentialfunktionen zur Basis&nbsp;e</strong> und die <strong>natürliche Logarithmusfunktion</strong> ableiten.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Eigenschaften von Funktionen, insbesondere <strong>Monotonie- und Krümmungsverhalten</strong> mit Hilfe der Ableitungsfunktionen erklären und berechnen.</p></div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Inhalt in Arbeit</div>
+  <p>Hier folgen vertiefende Stationen, Übungen und ggf. interaktive Hilfen.</p>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Ableitungen &amp; Funktionsbetrachtungen<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/lernpfad-platzhalter-app.js"></script>
+</body>
+</html>

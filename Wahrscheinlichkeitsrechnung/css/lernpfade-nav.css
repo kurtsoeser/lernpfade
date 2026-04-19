@@ -1,20 +1,24 @@
-/* Globale Lernpfad-Navigation (Inhaltsverzeichnis) */
+@import url('../../css/lernpfade-semester-badges.css');
+
+/* Globale Lernpfad-Navigation (fix nur die Menüzeile auf Lernpfad-Seiten) */
 :root {
-  --lp-nav-h: 44px;
+  --lp-nav-h: 48px;
 }
 
+/* ── Kapitel-Index & ähnlich: nur schmale Nav-Leiste ── */
 .lernpfade-site-nav {
   position: fixed;
   left: 0;
   right: 0;
+  top: 0;
   z-index: 998;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px 12px;
   min-height: var(--lp-nav-h);
-  padding: 8px 16px;
+  padding: 6px 14px;
   background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(8px);
   border-bottom: 2px solid var(--blue);
@@ -24,48 +28,243 @@
   font-weight: 600;
 }
 
+.lernpfade-site-nav-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  width: 100%;
+}
+
 .lernpfade-site-nav .lernpfade-site-nav-title {
   color: var(--text-light);
   font-weight: 700;
-  margin-right: 8px;
-  font-size: 0.8rem;
+  margin-right: 4px;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
-.lernpfade-site-nav a {
+.lp-nav-hub {
   color: var(--blue-dark);
   text-decoration: none;
   padding: 6px 12px;
   border-radius: 10px;
   transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
 }
 
-.lernpfade-site-nav a:hover {
+.lp-nav-hub:hover {
   background: var(--blue-light);
   color: var(--text);
 }
 
-.lernpfade-site-nav a.current {
+/* Dropdowns (details/summary) */
+.lernpfade-site-nav details.lp-nav-dd {
+  position: relative;
+}
+
+.lernpfade-site-nav details.lp-nav-dd > summary {
+  list-style: none;
+  cursor: pointer;
+  color: var(--blue-dark);
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
+}
+
+.lernpfade-site-nav details.lp-nav-dd > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lernpfade-site-nav details.lp-nav-dd > summary::after {
+  content: ' ▾';
+  font-size: 0.7em;
+  opacity: 0.85;
+}
+
+.lernpfade-site-nav details.lp-nav-dd[open] > summary {
+  background: var(--blue-light);
+}
+
+.lernpfade-site-nav details.lp-nav-dd > summary:hover {
+  background: var(--blue-light);
+}
+
+.lp-nav-dd-panel {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  min-width: 220px;
+  max-width: min(96vw, 360px);
+  max-height: min(72vh, 520px);
+  overflow: auto;
+  background: #fff;
+  border: 1px solid rgba(37, 99, 160, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  z-index: 1200;
+  padding: 8px 0;
+}
+
+.lp-nav-dd--global .lp-nav-dd-panel {
+  left: auto;
+  right: 0;
+  min-width: min(96vw, 420px);
+  max-width: min(96vw, 520px);
+}
+
+.lp-nav-dd-panel--local {
+  display: flex;
+  flex-direction: column;
+}
+
+.lp-nav-dd-panel--local a {
+  display: block;
+  padding: 8px 16px;
+  color: var(--blue-dark);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.lp-nav-dd-panel--local a:hover {
+  background: var(--blue-light);
+}
+
+.lp-nav-dd-panel--local a.current {
   background: var(--blue);
   color: #fff;
   pointer-events: none;
 }
 
-/* Lernpfad-Seiten: unter Fortschrittsleiste */
-body.has-lernpfade-nav[data-page-type="lernpfad"] .lernpfade-site-nav {
-  top: 46px;
+.lp-global-menu-scroll {
+  max-height: min(68vh, 480px);
+  overflow: auto;
+  padding: 4px 10px 12px;
 }
 
-body.has-lernpfade-nav[data-page-type="lernpfad"] .tab-bar {
-  top: calc(46px + var(--lp-nav-h));
+.lp-global-menu-inner {
+  font-size: 0.82rem;
 }
 
+.lp-sem-accordion {
+  border-bottom: 1px solid #e8eef5;
+  margin: 0;
+}
+
+.lp-sem-accordion:last-child {
+  border-bottom: none;
+}
+
+.lp-sem-accordion > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 8px;
+  font-weight: 800;
+  color: var(--blue-dark);
+}
+
+.lp-sem-accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lp-sem-accordion-body {
+  padding: 0 4px 10px 12px;
+}
+
+.lp-chapter-block {
+  margin-bottom: 12px;
+}
+
+.lp-chapter-block-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-light);
+  margin: 8px 0 4px;
+}
+
+.lp-path-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lp-path-list a {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 8px;
+  color: var(--blue-dark);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.lp-path-list a:hover {
+  background: var(--blue-light);
+}
+
+.lp-path-list a.current {
+  background: var(--blue);
+  color: #fff;
+  pointer-events: none;
+}
+
+.lp-menu-fallback {
+  padding: 12px;
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+/* ── Lernpfad: nur Nav fix; Hero → Schritte → Fortschritt → Inhalt im Fluss ── */
 body.has-lernpfade-nav[data-page-type="lernpfad"] .container {
-  padding-top: calc(60px + var(--lp-nav-h));
+  padding-top: calc(16px + var(--lp-nav-h));
 }
 
-/* Index: keine Fortschrittsleiste */
+body.has-lernpfade-nav[data-page-type="lernpfad"] .lp-steps-progress-wrap {
+  position: sticky;
+  top: var(--lp-nav-h);
+  z-index: 997;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+}
+
+body.has-lernpfade-nav[data-page-type="lernpfad"] .lp-steps-progress-wrap .tab-bar {
+  position: relative;
+  top: auto;
+  box-shadow: none;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+body.has-lernpfade-nav[data-page-type="lernpfad"] .progress-bar-container {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  inset: auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  z-index: auto;
+  /* etwas Luft links/rechts wie früher bei fixed-Layout (normalverteilung: 20px) */
+  padding: 8px 20px 10px;
+  margin: 0;
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom: 2px solid var(--blue);
+}
+
+/* Index: nur Nav-Leiste */
 body.has-lernpfade-nav[data-page-type="index"] .lernpfade-site-nav {
   top: 0;
 }
@@ -129,21 +328,107 @@ body.has-lernpfade-nav[data-page-type="index"] .container {
   color: var(--blue);
 }
 
+.lp-sem-badge {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  border: 1px solid rgba(37, 99, 160, 0.25);
+}
+
+.chapter-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.chapter-card-head h2 {
+  margin-bottom: 0;
+}
+
+.chapter-index-grid--stack {
+  display: block;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chapter-index-placeholder {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 16px;
+  line-height: 1.55;
+}
+
+.chapter-competency-list {
+  margin: 8px 0 0 20px;
+  text-align: left;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.chapter-competency-list li {
+  margin-bottom: 12px;
+}
+
 @media (max-width: 700px) {
+  .chapter-card-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --lp-nav-h: 56px;
+  }
   body.has-lernpfade-nav[data-page-type="lernpfad"] .container {
-    padding-top: calc(55px + var(--lp-nav-h));
+    padding-top: calc(12px + var(--lp-nav-h));
   }
   body.has-lernpfade-nav[data-page-type="index"] .container {
     padding-top: calc(16px + var(--lp-nav-h));
   }
-  body.has-lernpfade-nav[data-page-type="lernpfad"] .tab-bar {
-    top: calc(40px + var(--lp-nav-h));
-  }
   .lernpfade-site-nav {
-    justify-content: flex-start;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
   }
-  .lernpfade-site-nav a {
-    padding: 5px 8px;
+  .lernpfade-site-nav details.lp-nav-dd > summary {
+    padding: 5px 10px;
   }
+}
+
+/* Überkapitel-Buchstabe (A–J) — Kapitel- und Lernpfad-Seiten */
+.hub-hero h1.lp-chapter-title-with-letter,
+.hero h1.lp-chapter-title-with-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.lp-chapter-letter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.35rem;
+  height: 2.35rem;
+  padding: 0 8px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--blue-dark);
+  background: var(--gold);
+  border: 3px solid var(--blue-dark);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 rgba(37, 99, 160, 0.2);
+  flex-shrink: 0;
 }

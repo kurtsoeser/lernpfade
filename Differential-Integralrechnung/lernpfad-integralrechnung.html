@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Integralrechnung</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="s6-integral" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 3 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Integralrechnung</h1>
+  <p class="subtitle">Bestimmtes und unbestimmtes Integral, Stammfunktion, Flächen und wirtschaftliche Anwendungen — Inhalte werden ausgebaut.</p>
+  <span class="badge">6. Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    <a href="lernpfad-optimierungsprozesse.html" style="color:var(--blue-dark); font-weight:600;">← Optimierungsprozesse</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg</div>
+  <p>Vom <strong>Flächenproblem</strong> zum bestimmten Integral und zurück zur <strong>Stammfunktion</strong> — inklusive Wirtschaftsinterpretation über <strong>Grenzgrößen</strong> und Zahlungsströme.</p>
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Geplanter Schwerpunkt</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Integrationsbegriffe und Graphik (Funktion, Stammfunktion) verknüpfen</li>
+        <li>Standardintegrale sicher berechnen und Flächen interpretieren</li>
+        <li>Betriebswirtschaftliche Anwendungen ausgeben und erklären</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Kompetenzen →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Kompetenzen &amp; Ziele (Lehrplan)</div>
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Den Begriff des <strong>bestimmten Integrals</strong> auf Grundlage des intuitiven Grenzwertbegriffs erläutern, diesen als Grenzwert einer <strong>Summe von Produkten</strong> deuten und beschreiben.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Den Begriff der <strong>Stammfunktion</strong> sowie den Zusammenhang zwischen Funktion, Stammfunktion und ihrer grafischen Darstellung beschreiben; den Begriff des <strong>unbestimmten Integrals</strong> und den Zusammenhang mit der Stammfunktion beschreiben.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Stammfunktionen von <strong>Potenz- und Polynomfunktionen</strong> sowie der Funktionen \(f(x)=1/x\) und \(f(x)=a\,\mathrm{e}^{k x}\) mit Hilfe der notwendigen Integrationsregeln berechnen.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Das bestimmte Integral als <strong>orientierten Flächeninhalt</strong> deuten und damit Berechnungen durchführen.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Die Integralrechnung auf <strong>wirtschaftliche Anwendungen</strong>, insbesondere auf Stammfunktionen von Grenzfunktionen und <strong>kontinuierliche Zahlungsströme</strong> anwenden, Berechnungen durchführen sowie die Ergebnisse interpretieren und damit argumentieren.</p></div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Inhalt in Arbeit</div>
+  <p>Hier folgen Herleitungsschritte, Übungen und Anwendungen aus der Betriebswirtschaft.</p>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Integralrechnung<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/lernpfad-platzhalter-app.js"></script>
+</body>
+</html>

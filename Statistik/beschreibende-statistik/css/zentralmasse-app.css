@@ -1,0 +1,180 @@
+/* Interaktive Zentralmaße — nur für #bsZentralmasseApp */
+.zm-app {
+  margin-top: 4px;
+  padding: 14px 16px 16px;
+  background: linear-gradient(135deg, #f8fbff 0%, #fffdf5 100%);
+  border: 1px solid #e0e8f0;
+  border-radius: 14px;
+}
+
+.zm-app-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.zm-app-toolbar span {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-right: 4px;
+}
+
+.zm-btn-small {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid #e8e8e8;
+  background: #fff;
+  color: var(--blue-dark);
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.zm-btn-small:hover {
+  background: var(--blue-light);
+  border-color: var(--blue);
+}
+
+.zm-data-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.zm-data-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.zm-data-cell label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.zm-data-cell input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 2px solid #e8e8e8;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+}
+
+.zm-data-cell input:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+.zm-chart-wrap {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eef2f6;
+  padding: 10px 8px 6px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.zm-chart-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 118px;
+}
+
+.zm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  justify-content: center;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 6px;
+}
+
+.zm-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zm-legend i {
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.zm-legend .zm-leg-mean i {
+  background: var(--blue);
+}
+.zm-legend .zm-leg-median i {
+  background: var(--green);
+}
+.zm-legend .zm-leg-mode i {
+  background: var(--orange);
+}
+.zm-legend .zm-leg-geom i {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid #8e44ad;
+  border-radius: 0;
+  background: transparent;
+}
+
+.zm-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.zm-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid #eef2f6;
+}
+
+.zm-stat-card h4 {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.zm-stat-card .zm-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.zm-stat-card .zm-sub {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.zm-stat-card.zm-stat-warn .zm-val {
+  color: var(--orange);
+}
+
+.zm-app-hint {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-top: 10px;
+  line-height: 1.5;
+}

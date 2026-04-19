@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Grundlagen Differenzialrechnung</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="s6-diff-grund" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 3 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Grundlagen Differenzialrechnung</h1>
+  <p class="subtitle">Grenzwert, Stetigkeit, Differenzenquotient und Einstieg in die Ableitung — Inhalte werden ausgebaut.</p>
+  <span class="badge">6. Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a>
+    · Weiter: <a href="lernpfad-ableitungen-funktionsbetrachtungen.html" style="color:var(--blue-dark); font-weight:600;">Ableitungen &amp; Funktionsbetrachtungen</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg</div>
+  <p>Im ersten Block der Differenzialrechnung stehen <strong>Grenzwert und Stetigkeit</strong> sowie der <strong>Differenzenquotient</strong> als Vorbereitung für die Ableitung im Mittelpunkt.</p>
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Geplanter Schwerpunkt</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Intuition für Grenzwert und Stetigkeit gewinnen und damit argumentieren</li>
+        <li>Differenzenquotient in Kontextaufgaben einsetzen und Ergebnisse deuten</li>
+        <li>Übergang zum Differenzialquotienten und Steigung von Sekante und Tangente</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Kompetenzen →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Kompetenzen &amp; Ziele (Lehrplan)</div>
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Die Begriffe <strong>Grenzwert</strong> und <strong>Stetigkeit</strong> von Funktionen intuitiv erfassen und damit argumentieren.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Den <strong>Differenzenquotienten</strong> auf Problemstellungen anwenden, Berechnungen durchführen und die Ergebnisse interpretieren.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Den Zusammenhang zwischen <strong>Differenzen- und Differenzialquotient</strong> beschreiben und diese sowohl als mittlere bzw. lokale Änderungsraten als auch als Sekanten- bzw. Tangentensteigung interpretieren.</p></div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Inhalt in Arbeit</div>
+  <p>Hier folgen Stationen mit Erklärungen, Visualisierungen und Aufgaben.</p>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Grundlagen Differenzialrechnung<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/lernpfad-platzhalter-app.js"></script>
+</body>
+</html>

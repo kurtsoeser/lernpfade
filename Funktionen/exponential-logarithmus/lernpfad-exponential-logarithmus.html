@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Exponential- und Logarithmusrechnung</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../../js/lernpfade-registry.js"></script>
+<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="s5-exp-log" data-page-type="lernpfad" data-chapter-folder="Funktionen/exponential-logarithmus">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 3 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Exponential- und Logarithmusrechnung/-funktion</h1>
+  <p class="subtitle">Logarithmusgesetze, Umkehrfunktion, Graphen, Exponentialgleichungen — Inhalte werden ergänzt.</p>
+  <span class="badge">5.&nbsp;Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel-Übersicht</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Funktionen (Überblick)</a>
+    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    Weiter: <a href="../../../Wachstumsprozesse/linear/index.html" style="color:var(--blue-dark); font-weight:600;">Lineare Wachstumsprozesse</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg</div>
+  <p>Exponential- und Logarithmusfunktionen als <strong>Umkehrpaar</strong>, mit algebraischen und grafischen Werkzeugen.</p>
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Kompetenzen (Lehrplan)</div>
+  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Den Begriff des <strong>Logarithmus</strong> beschreiben.</p></div></div>
+  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;"><strong>Logarithmische Rechengesetze</strong> anwenden.</p></div></div>
+  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Den Begriff der <strong>Exponentialfunktion</strong> und deren <strong>Eigenschaften</strong> beschreiben.</p></div></div>
+  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Den Begriff der <strong>Logarithmusfunktion</strong> als Umkehrfunktion der Exponentialfunktion und ihre Eigenschaften beschreiben.</p></div></div>
+  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;"><strong>Exponentialfunktionen grafisch darstellen</strong>.</p></div></div>
+  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Mit Hilfe des Logarithmus <strong>Exponentialgleichungen</strong> vom Typ \(a^{k x}=b\) nach der Variablen \(x\) auflösen.</p></div></div>
+  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;"><strong>Komplexere Exponentialgleichungen</strong> mit Einsatz von Technologie lösen.</p></div></div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Inhalt in Arbeit</div>
+  <p>Erarbeitung der Stationen folgt.</p>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Exponential- und Logarithmusrechnung<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/lernpfad-platzhalter-app.js"></script>
+</body>
+</html>

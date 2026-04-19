@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Datentypen, Häufigkeiten &amp; grafische Darstellung</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="stat-grund-desk" data-page-type="lernpfad" data-chapter-folder="Statistik/grundlagen">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 8 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Deskriptive Grundlagen</h1>
+  <p class="subtitle">Datentypen, Häufigkeitsverteilungen und grafische Darstellungen — mit dem <strong>5-Schritte-Modell</strong> der problembezogenen Datenanalyse, Vertiefung und Abschlussquiz (Lehrplanbaustein 03).</p>
+  <span class="badge">7. Semester · Statistik</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Grundlagen der Statistik</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Datentypen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Erhebung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Häufigkeiten</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Grafiken</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Argumentieren</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Vertiefung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Quiz</button>
+</div>
+
+<!-- STATION 1 -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg &amp; Arbeitsmodell</div>
+
+  <p>In der <strong>deskriptiven Statistik</strong> geht es darum, Daten <strong>systematisch zu erfassen, zu ordnen, darzustellen und zu interpretieren</strong>. Es geht nicht primär um Prognosen, sondern darum, bereits erhobene Daten verständlich aufzubereiten und inhaltlich zu deuten.</p>
+  <p>Im <strong>wirtschaftlichen Kontext</strong> — etwa Kund:innenbefragungen, Verkaufszahlen, Zufriedenheits- oder Personalstatistiken — entscheidet die <strong>korrekte Erkennung der Datenart</strong>, welche Auswertungen erlaubt sind, welche Darstellung passt und wie Ergebnisse argumentativ abgesichert werden können.</p>
+
+  <div class="info-box concept">
+    <div class="icon">📋</div>
+    <div>
+      <strong>Problembezogene Datenanalyse in 5 Schritten</strong>
+      <ol style="margin:10px 0 0 20px; line-height:1.65;">
+        <li><strong>Fragestellung klären</strong> — Was soll mit den Daten herausgefunden werden?</li>
+        <li><strong>Datentyp bestimmen</strong> — Welches Merkmal / Skalenniveau liegt vor?</li>
+        <li><strong>Daten erheben und ordnen</strong> — Wie werden Daten gesammelt und sinnvoll strukturiert?</li>
+        <li><strong>Geeignete Darstellung wählen</strong> — Welche Grafik oder Tabelle passt zu Fragestellung und Datentyp?</li>
+        <li><strong>Ergebnisse interpretieren und begründen</strong> — Was sagt die Darstellung aus — und <em>warum</em> genau diese Form?</li>
+      </ol>
+      <p style="margin-top:10px; font-size:0.95rem;">👉 Statistik ist hier vor allem <strong>sachlogisches Entscheiden und Argumentieren</strong>, nicht nur Rechnen.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Modell &amp; Zielsetzung</span>
+    </div>
+    <p><strong>Frage 1:</strong> Der wichtigste Unterschied zwischen deskriptiver Auswertung und „Zukunft vorhersagen“ in diesem Kapitel ist …</p>
+    <div class="quiz-options" data-quiz="sg0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Deskriptiv wendet man nur Balkendiagramme an, nie Tabellen.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Deskriptiv werden vorliegende Daten aufbereitet und gedeutet — nicht primär prognostiziert.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Deskriptiv ist dasselbe wie inferenzstatistisches Testen.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Deskriptiv verbietet jede Prozentangabe.</div>
+    </div>
+    <div class="feedback" id="fb_sg0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Schritt 5 („Ergebnisse interpretieren und begründen“) betont vor allem …</p>
+    <div class="quiz-options" data-quiz="sg0_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die schönste Farbwahl der Grafik</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">das automatische Entfernen von Ausreißern</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">fachliche Deutung und Begründung der gewählten Darstellung</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">das Weglassen der Achsenbeschriftung</div>
+    </div>
+    <div class="feedback" id="fb_sg0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['sg0_1','sg0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Datentypen →</button>
+  </div>
+</div>
+
+<!-- STATION 2 -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Datentypen / Skalenniveaus</div>
+
+  <p>Grundlage jeder Auswertung: <strong>Welche Art von Daten liegt vor?</strong> Es werden drei zentrale Typen unterschieden:</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">A. Nominalskaliert</h3>
+  <p><strong>Definition:</strong> Kategorien oder Bezeichnungen <strong>ohne natürliche Reihenfolge</strong>. Es lässt sich nur gleich vs. verschieden unterscheiden — nicht „mehr“ oder „besser“ in einem sinnvollen Rangsinne.</p>
+  <p><strong>Beispiele:</strong> Wohnort, Abteilung, Nationalität, Zahlungsmethode, Lieblingsmarke.</p>
+  <div class="info-box success">
+    <div class="icon">📊</div>
+    <div><strong>Folge:</strong> Sinnvoll ist vor allem <strong>Zählen von Häufigkeiten</strong> und Anteilen. Ein <strong>Mittelwert</strong> ist nicht interpretierbar.</div>
+  </div>
+  <p><strong>Typische Fragen:</strong> Welche Marke wurde am häufigsten gewählt? Wie viele Schüler:innen kommen aus welcher Gemeinde?</p>
+  <p><strong>Grafiken (oft):</strong> Balken-, Säulendiagramm; Kreisdiagramm bei Anteilen.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">B. Ordinalskaliert</h3>
+  <p><strong>Definition:</strong> Es gibt eine <strong>natürliche Reihenfolge</strong>, aber <strong>Abstände</strong> zwischen Ausprägungen sind <strong>nicht verlässlich gleich</strong> oder nicht sinnvoll messbar.</p>
+  <p><strong>Beispiele:</strong> Schulnoten; Zufriedenheit (sehr gut → schlecht); Rangplätze; Prioritäten hoch / mittel / gering.</p>
+  <div class="info-box success">
+    <div class="icon">⚖️</div>
+    <div><strong>Folge:</strong> Rangvergleiche ja — aber <strong>„Differenz wie bei Metrik“</strong> ist kritisch. Der Abstand „sehr zufrieden“ zu „zufrieden“ muss nicht wie „zufrieden“ zu „neutral“ sein.</div>
+  </div>
+  <p><strong>Grafiken (oft):</strong> Balken/Säule; geordnete Häufigkeitstabellen.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">C. Metrisch</h3>
+  <p><strong>Definition:</strong> Zahlen mit <strong>sinnvoll interpretierbaren Abständen</strong>; Rechnen mit Summen, Differenzen, Mittelwerten ist fachlich oft angezeigt.</p>
+  <p><strong>Beispiele:</strong> Alter, Körpergröße, Umsatz, Einkommen, Fahrzeit, Stückzahlen.</p>
+  <div class="info-box success">
+    <div class="icon">📈</div>
+    <div><strong>Folge:</strong> Breiteste Auswertungsmöglichkeiten — neben Häufigkeiten auch <strong>Lage- und Streuungsmaße</strong> (im nächsten großen Kapitel vertieft).</div>
+  </div>
+  <p><strong>Grafiken (u. a.):</strong> Säulen, Histogramm, Liniendiagramm bei Zeitverläufen, Punktediagramme in Spezialfällen.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Zuordnung</span>
+    </div>
+    <p><strong>Frage 1:</strong> „Priorität der Aufgabe: hoch — mittel — gering“ ist typischerweise …</p>
+    <div class="quiz-options" data-quiz="sg1_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nominalskaliert</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">ordinalskaliert</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">metrisch</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nicht einordenbar</div>
+    </div>
+    <div class="feedback" id="fb_sg1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> „Umsatz in Euro pro Monat“ ist …</p>
+    <div class="quiz-options" data-quiz="sg1_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nominalskaliert, weil Euro ein Symbol ist</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">ordinalskaliert, weil größer mehr ist</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">metrisch, weil Beträge und Abstände sinnvoll interpretierbar sind</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer nominal, weil Währung keine Zahlen erlaubt</div>
+    </div>
+    <div class="feedback" id="fb_sg1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['sg1_1','sg1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<!-- STATION 3 -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Daten erheben &amp; zuordnen</div>
+
+  <p>Bevor dargestellt wird, müssen Daten <strong>erhoben</strong> werden — passend zur Fragestellung.</p>
+  <p><strong>Formen:</strong> Befragung (Fragebogen), Beobachtung, Messung, Auswertung vorhandener Daten (Umsätze, Anmeldungen, Bestellungen, …).</p>
+
+  <div class="info-box concept">
+    <div class="icon">🚌</div>
+    <div>
+      <strong>Beispiel 1:</strong> „Mit welchem Verkehrsmittel kommst du überwiegend zur Schule?“ — Antworten: Auto, Bus, Bahn, Fahrrad, zu Fuß.<br>
+      👉 <strong>Nominalskaliert:</strong> Kategorien ohne sinnvolle Rangfolge.
+    </div>
+  </div>
+  <div class="info-box concept">
+    <div class="icon">🍽️</div>
+    <div>
+      <strong>Beispiel 2:</strong> „Wie zufrieden bist du mit dem Schulbuffet?“ — sehr zufrieden … sehr unzufrieden.<br>
+      👉 <strong>Ordinalskaliert:</strong> klare Ordnung, aber Abstände zwischen Stufen nicht automatisch gleich.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Mini-Quiz</span>
+      <span class="exercise-title">Erhebung</span>
+    </div>
+    <p><strong>Frage:</strong> Welche Aussage zur Datenerhebung ist am passendsten?</p>
+    <div class="quiz-options" data-quiz="sg2_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Die Erhebung soll zur Fragestellung passen — sonst werden Antworten schwer interpretierbar.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Die Erhebung ist unabhängig von der Frage — man sammelt immer möglichst viele Daten.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Nur Messungen zählen als Erhebung — Befragungen sind keine Statistik.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Vorhandene Daten dürfen nie verwendet werden.</div>
+    </div>
+    <div class="feedback" id="fb_sg2_1"></div>
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['sg2_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter →</button>
+  </div>
+</div>
+
+<!-- STATION 4 -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Häufigkeitsverteilungen</div>
+
+  <p>Eine Häufigkeitsverteilung zeigt, <strong>wie oft</strong> Ausprägungen vorkommen.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Absolute Häufigkeit</h3>
+  <p>Gibt an, <strong>wie oft</strong> ein Wert vorkommt.</p>
+  <p><strong>Beispiel</strong> (n = 20): Bus 8, Auto 5, Bahn 3, Fahrrad 2, zu Fuß 2 — die <strong>8</strong> ist die absolute Häufigkeit für „Bus“.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Relative Häufigkeit</h3>
+  <p>Anteil am Ganzen — besonders wichtig zum Vergleich von Gruppen unterschiedlicher Größe.</p>
+  <div class="formula-box">
+    <div class="formula-label">Formel</div>
+    \[ h = \frac{\text{absolute Häufigkeit}}{n} \]
+  </div>
+  <p><strong>Beispiel Bus:</strong> \(h = \dfrac{8}{20} = 0{,}4 = 40\,\%\).</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Rechnen</span>
+      <span class="exercise-title">Relative Häufigkeit</span>
+    </div>
+    <p>In einer Klasse mit <strong>20</strong> Personen fahren <strong>8</strong> mit dem Bus. Wie groß ist die relative Häufigkeit? (Gib <strong>0,4</strong> oder <strong>40</strong> für 40&nbsp;% ein.)</p>
+    <p><input type="text" id="sg_freq_input" placeholder="z. B. 0,4 oder 40" style="max-width:220px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
+    <button type="button" class="btn btn-check" onclick="checkStatFreqExercise()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_sg_freq" style="display:none;"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter →</button>
+  </div>
+</div>
+
+<!-- STATION 5 -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Grafische Darstellung</div>
+
+  <p>Eine Grafik ist gut, wenn sie zur <strong>Fragestellung</strong> passt, Daten <strong>korrekt</strong> abbildet und <strong>leicht interpretierbar</strong> ist. Die Wahl ist <strong>zu begründen</strong>.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Balken- / Säulendiagramm</h3>
+  <p><strong>Geeignet für:</strong> nominal, ordinal, oft auch gruppierte metrische Daten.</p>
+  <p><strong>Vorteil:</strong> direkter Kategorienvergleich, Unterschiede gut sichtbar.</p>
+  <p><strong>Beispiel:</strong> bevorzugte Verkehrsmittel — Vergleich der Häufigkeiten.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Kreisdiagramm</h3>
+  <p><strong>Geeignet für:</strong> <strong>Anteile eines Ganzen</strong> (relative Häufigkeiten).</p>
+  <p><strong>Vorteil:</strong> Zusammensetzung des Ganzen.</p>
+  <p><strong>Nachteil:</strong> bei vielen Kategorien unübersichtlich; kleine Unterschiede schwer erkennbar.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Liniendiagramm</h3>
+  <p><strong>Geeignet für:</strong> <strong>zeitliche Entwicklungen</strong> und metrische Verläufe.</p>
+  <p><strong>Vorteil:</strong> Trends und Schwankungen werden deutlich.</p>
+  <p><strong>Beispiel:</strong> Umsatz von Jänner bis Dezember.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Grafikwahl</span>
+    </div>
+    <p><strong>Frage 1:</strong> Schwerpunkt „<strong>Wie verteilt sich ein Budget auf Ausgabenkategorien?</strong>“ — typisch oft …</p>
+    <div class="quiz-options" data-quiz="sg4_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Liniendiagramm ohne Zeitbezug</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Kreisdiagramm (Anteile) oder Balken mit Anteilen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Streudiagramm ohne Achsen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur eine reine Textliste ohne Grafik</div>
+    </div>
+    <div class="feedback" id="fb_sg4_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Umsatz über 12 Monate — idealer Fokus …</p>
+    <div class="quiz-options" data-quiz="sg4_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Kreisdiagramm mit 12 gleich großen Segmenten ohne Bedeutung</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Balkendiagramm ohne Zeitachse, wenn keine Ordnung existiert</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Liniendiagramm über die Zeit (Monate)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">ein Histogramm mit einer Kategorie</div>
+    </div>
+    <div class="feedback" id="fb_sg4_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['sg4_1','sg4_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter →</button>
+  </div>
+</div>
+
+<!-- STATION 6 -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Problembezogen argumentieren</div>
+
+  <p>Ziel: nicht nur eine Grafik „hinzumalen“, sondern <strong>begründen</strong>, warum diese Darstellung passt.</p>
+
+  <div class="info-box concept">
+    <div class="icon">❓</div>
+    <div>
+      <strong>Leitfragen</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Welcher <strong>Datentyp</strong> liegt vor? (nominal / ordinal / metrisch)</li>
+        <li>Was soll sichtbar werden? <strong>Vergleich</strong> von Kategorien? <strong>Anteil</strong> am Ganzen? <strong>Verlauf</strong> über die Zeit?</li>
+        <li>Welche Darstellung macht die Aussage <strong>am klarsten</strong>?</li>
+      </ul>
+      <p style="margin-top:10px;">Merksatz: <strong>Balken/Säule → Vergleich</strong> · <strong>Kreis → Anteile</strong> · <strong>Linie → Verlauf</strong></p>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">💬</div>
+    <div>
+      <strong>Beispiel (Auszug):</strong> „Wie zufrieden sind Teilnehmer:innen mit dem Unterricht?“ — <strong>ordinal</strong>.<br>
+      <strong>Geeignet:</strong> Balken/Säule mit geordneten Stufen — Häufigkeiten gut vergleichbar.<br>
+      <strong>Kreis:</strong> möglich für Anteile, Stufenvergleich oft weniger klar.<br>
+      <strong>Linie ohne Zeit:</strong> meist ungeeignet — suggeriert einen Verlauf, der nicht da ist.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Entscheid</span>
+      <span class="exercise-title">Begründung</span>
+    </div>
+    <p>Du hast <strong>nominalskalierte</strong> Lieblingsmarken und willst zeigen, welche Marke am häufigsten genannt wurde. Was ist die <strong>primäre</strong> sinnvolle Aussage / Grafikidee?</p>
+    <div class="quiz-options" data-quiz="sg5_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Balkendiagramm der Häufigkeiten — direkter Kategorienvergleich</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Liniendiagramm über Marken ohne Zeit — zeigt „Trend“</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Mittelwert der Markennamen berechnen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Histogramm mit Klassen für Markennamen</div>
+    </div>
+    <div class="feedback" id="fb_sg5_1"></div>
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['sg5_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter →</button>
+  </div>
+</div>
+
+<!-- STATION 7 -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Vertiefung, Fehler, Merksätze &amp; Durchgängiges Beispiel</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Was wirklich zählt</h3>
+  <p>Nicht nur Merksätze wie „nominal = Namen“ — die <strong>Kompetenz</strong> ist: Der Datentyp entscheidet, welche Aussagen <strong>zulässig</strong> sind.</p>
+
+  <div class="info-box concept">
+    <div class="icon">📝</div>
+    <div>
+      <strong>Schulnoten (ordinal):</strong> 1 besser als 2 — ja. Ob der Abstand 1→2 derselbe ist wie 3→4 — <strong>nicht garantiert</strong> → Vorsicht bei Rechenoperationen und Mittelwerten.
+    </div>
+  </div>
+  <div class="info-box concept">
+    <div class="icon">💶</div>
+    <div>
+      <strong>Monatsumsätze (metrisch):</strong> Differenzen und Vielfache sind sinnvoll interpretierbar; Mittelwerte oft fachlich sinnvoll (Kontext beachten).
+    </div>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Typische Fehlerquellen</h3>
+  <ul style="margin-left:20px; line-height:1.65;">
+    <li>Datentyp falsch zuordnen</li>
+    <li>Kreisdiagramm bei zu vielen Kategorien</li>
+    <li>Liniendiagramm ohne sinnvollen zeitlichen / geordneten Verlauf</li>
+    <li>absolute und relative Häufigkeit verwechseln</li>
+    <li>Grafik ohne Interpretation / ohne Begründung der Wahl</li>
+  </ul>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Merksätze</h3>
+  <ul style="margin-left:20px; line-height:1.65;">
+    <li><strong>nominal</strong> — nur unterscheiden · <strong>ordinal</strong> — ordnen, Abstände kritisch · <strong>metrisch</strong> — messen &amp; rechnen (Abstände sinnvoll)</li>
+    <li><strong>absolute H.</strong> = Anzahl · <strong>relative H.</strong> = Anteil / Prozent</li>
+    <li><strong>Balken/Säule</strong> = Vergleich · <strong>Kreis</strong> = Anteile · <strong>Linie</strong> = Verlauf</li>
+  </ul>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Durchgängiges Beispiel: Anreise (n = 25)</h3>
+  <p><strong>Fragestellung:</strong> Wie verteilt sich die Anreise? — <strong>Datentyp:</strong> Verkehrsmittel nominal. — <strong>Häufigkeiten:</strong> Bus 10, Auto 6, Bahn 4, Fahrrad 3, zu Fuß 2.</p>
+  <p><strong>Relativ (Auszug):</strong> Bus \(10/25 = 40\,\%\), Auto \(24\,\%\), Bahn \(16\,\%\), Fahrrad \(12\,\%\), zu Fuß \(8\,\%\).</p>
+  <p><strong>Darstellung:</strong> Balken/Säule zum Vergleich; Kreis für Anteile möglich.</p>
+  <p><strong>Interpretation:</strong> häufigster Modus Bus (40&nbsp;%); kleine Gruppe zu Fuß/Fahrrad — ggf. hohe Nutzung ÖV; <strong>Kontext</strong> mitdenken.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Check</span>
+      <span class="exercise-title">Vertiefung</span>
+    </div>
+    <p>Warum ist „Differenz der Noten 1 und 4 halbiert ergibt mittlere Note“ <strong>fachlich heikel</strong>?</p>
+    <div class="quiz-options" data-quiz="sg6_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Weil Noten immer metrisch sind</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Weil Noten ordinal sind — Abstände nicht als gleich interpretierbar</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Weil man Differenzen bei Ordinaldaten immer exakt messen darf</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Weil Balkendiagramme verboten sind</div>
+    </div>
+    <div class="feedback" id="fb_sg6_1"></div>
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['sg6_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="info-box success" style="margin-top:20px;">
+    <div class="icon">🎓</div>
+    <div>
+      <strong>Kompetenzen (Kern):</strong> Datentypen beschreiben und zuordnen · Daten erheben · absolute/relative Häufigkeiten · passende Grafiken wählen · Darstellung problembezogen begründen · Ergebnisse im Sachzusammenhang deuten.
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Zum Abschlussquiz →</button>
+  </div>
+</div>
+
+<!-- STATION 8 -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Abschlussquiz</div>
+
+  <p>Teste dein Verständnis in mehreren Fragen — danach erhältst du eine kurze Auswertung.</p>
+
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+
+  <div id="finalResult" class="final-quiz-result" style="display:none;">
+    <div class="info-box success">
+      <div class="icon">🏆</div>
+      <div>
+        <strong id="finalScore"></strong>
+        <p id="finalMessage" style="margin-top:8px;"></p>
+        <div class="badge-container" id="badgeContainer"></div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-hint" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Grundlagen Statistik<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/deskriptive-grundlagen-lernpfad/app.js"></script>
+</body>
+</html>

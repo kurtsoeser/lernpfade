@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kompetenzen · Teil A (GK) &amp; HAK (W2) · Lernpfade Mathematik</title>
+<link rel="stylesheet" href="css/lernpfade-hub.css">
+<style>
+.kompetenz-page { text-align: left; max-width: 900px; margin: 0 auto; }
+.kompetenz-page h2 { margin-top: 2.2rem; font-size: 1.35rem; color: var(--blue-dark); border-bottom: 2px solid var(--blue-light); padding-bottom: 0.35rem; }
+.kompetenz-page h3 { margin-top: 1.4rem; font-size: 1.1rem; color: var(--text); }
+.kompetenz-meta { color: var(--text-light); font-size: 0.92rem; margin-bottom: 1.25rem; }
+.kompetenz-toc { background: var(--bg-card); border-radius: var(--radius); padding: 1rem 1.25rem; box-shadow: var(--shadow); margin: 1.25rem 0; }
+.kompetenz-toc ul { margin: 0.5rem 0 0 1rem; }
+.kompetenz-toc a { color: var(--blue-dark); font-weight: 600; }
+.kompetenz-table { width: 100%; border-collapse: collapse; margin: 0.75rem 0 1.5rem; font-size: 0.92rem; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.kompetenz-table th { background: var(--blue-dark); color: #fff; text-align: left; padding: 10px 12px; font-weight: 700; }
+.kompetenz-table td { padding: 10px 12px; border-bottom: 1px solid rgba(37,99,160,0.12); vertical-align: top; }
+.kompetenz-table tr:last-child td { border-bottom: none; }
+.kompetenz-table .nr { width: 5.75rem; font-weight: 800; color: var(--blue-dark); white-space: nowrap; }
+tr.comp-gk td { background: var(--bg-card); }
+tr.comp-hak td { background: rgba(214, 175, 90, 0.2); }
+tr.comp-gk + tr.comp-hak td { border-top: 2px solid var(--blue-dark); }
+.kompetenz-table tr.comp-hak .nr { color: #6b4e0f; }
+.kompetenz-legend-panel {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.15rem;
+  margin: 0 0 1.35rem;
+  font-size: 0.9rem;
+  border: 1px solid rgba(37, 99, 160, 0.22);
+  box-shadow: var(--shadow);
+}
+.kompetenz-legend-panel .kompetenz-legend-title { margin: 0 0 0.4rem; font-size: 0.95rem; color: var(--blue-dark); font-weight: 800; }
+.kompetenz-legend-panel ul { list-style: none; margin: 0; padding: 0; }
+.kompetenz-legend-panel li { display: flex; align-items: center; gap: 0.65rem; margin: 0.4rem 0; }
+.kompetenz-legend-swatch {
+  width: 1.6rem;
+  height: 1.05rem;
+  border-radius: 5px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.kompetenz-legend-swatch--gk { background: var(--bg-card); }
+.kompetenz-legend-swatch--hak { background: rgba(214, 175, 90, 0.32); }
+.kompetenz-details { margin: 0.5rem 0 1rem; }
+.kompetenz-details summary { cursor: pointer; font-weight: 700; color: var(--blue-dark); }
+.kompetenz-details .inner { margin-top: 0.5rem; padding: 0.75rem 1rem; background: var(--gold-light); border-radius: 10px; font-size: 0.9rem; }
+.kompetenz-callout { background: linear-gradient(135deg, var(--blue-light), var(--gold-light)); border-radius: var(--radius); padding: 1rem 1.25rem; margin: 1.25rem 0; border-left: 4px solid var(--blue); }
+.kompetenz-callout h2 { margin-top: 0; border: none; }
+.map-table .lp { font-weight: 800; color: var(--blue-dark); width: 2rem; }
+.hub-hero .kompetenz-hero-note { font-size: 0.88rem; margin-top: 10px; }
+</style>
+</head>
+<body class="hub-root">
+
+<div class="hub-container kompetenz-page">
+
+<header class="hub-hero">
+  <h1>Kompetenzen Mathematik</h1>
+  <p class="hub-subtitle">Mathematische Grundkompetenzen im gemeinsamen Kern (SRDP · Teil&nbsp;A) und schulformspezifische Kompetenzen Cluster HAK (W2) — mit Deskriptoren, Formulierungen und Kommentaren.</p>
+  <p class="kompetenz-hero-note">Offizielle PDFs im Projekt: <a href="srdp_am_kompetenzen_2018_teil_a-2019-09-05.pdf" style="color: var(--blue-dark); font-weight: 600;">Teil&nbsp;A · Grundkompetenzen</a> (Stand 09.09.2019) und <a href="srdp_am_kompetenzen_begriffe_2018_hak-2022-17-06.pdf" style="color: var(--blue-dark); font-weight: 600;">HAK · schulformspezifische Kompetenzen und Begriffe (W2)</a> (Stand 17.06.2022). Die HTML-Seite fasst den Inhalt zusammen; maßgeblich sind die Dokumente.</p>
+  <span class="hub-badge">Referenz · HAK Steyr</span>
+</header>
+
+<p class="hub-intro" style="text-align:center;">
+  <a href="index.html" style="color: var(--blue-dark); font-weight: 700;">← Zurück zur Lernpfad-Übersicht</a><br>
+  <span style="display:inline-block;margin-top:10px;">
+    <a href="srdp_am_kompetenzen_2018_teil_a-2019-09-05.pdf" style="color: var(--blue-dark); font-weight: 700;">PDF Teil&nbsp;A · Grundkompetenzen</a>
+    · <a href="srdp_am_kompetenzen_begriffe_2018_hak-2022-17-06.pdf" style="color: var(--blue-dark); font-weight: 700;">PDF HAK · Kompetenzen &amp; Begriffe (W2)</a>
+  </span>
+</p>
+
+<nav class="kompetenz-toc" aria-label="Inhalt Kompetenzseite">
+  <strong>Inhalt</strong>
+  <ul>
+    <li><a href="#zuordnung">Zuordnung zu den Lernpfad-Überkapiteln</a></li>
+    <li><a href="#gk1">1 · Zahlen und Maße</a></li>
+    <li><a href="#gk2">2 · Algebra und Geometrie</a> <span style="color: var(--text-light); font-weight: 400;">(inkl. HAK Matrizen)</span></li>
+    <li><a href="#gk3">3 · Funktionale Zusammenhänge</a> <span style="color: var(--text-light); font-weight: 400;">(inkl. HAK Finanz)</span></li>
+    <li><a href="#gk4">4 · Analysis</a> <span style="color: var(--text-light); font-weight: 400;">(inkl. HAK Kosten/Preis)</span></li>
+    <li><a href="#gk5">5 · Stochastik</a> <span style="color: var(--text-light); font-weight: 400;">(inkl. HAK Stochastik)</span></li>
+    <li><a href="#hak-w2">HAK (W2) — Verweis &amp; PDF</a></li>
+    <li><a href="#struktur">Struktur der Lernpfade überdenken</a></li>
+  </ul>
+</nav>
+
+<section class="kompetenz-callout" id="zuordnung">
+  <h2>Zuordnung zu den Lernpfad-Überkapiteln (A–J)</h2>
+  <p class="kompetenz-meta">Die Buchstaben entsprechen der aktuellen Navigation auf der <a href="index.html">Gesamtübersicht</a> (Tabs dort in derselben Reihenfolge A–J wie unten).</p>
+  <table class="kompetenz-table map-table">
+    <thead>
+      <tr><th>GK / HAK</th><th>Überkapitel</th><th>Hinweis</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>GK 1 · Zahlen und Maße</td><td><span class="lp">A</span> <a href="Grundlagen/index.html">Grundlagen</a></td><td>Zahlenmengen, Maße, Prozent, Gleitkomma, Terme, Formeln …</td></tr>
+      <tr><td>GK 2 · Algebra und Geometrie</td><td><span class="lp">B</span> <a href="Gleichungen/index.html">Gleichungen</a>, <span class="lp">C</span> <a href="Matrizen/index.html">Matrizen</a>, <span class="lp">D</span> <a href="Trigonometrie/index.html">Trigonometrie</a></td><td>Lineare/quadratische Gleichungen, LGS, Trigonometrie; Matrizen siehe HAK&nbsp;W2.</td></tr>
+      <tr><td>GK 2 · Logarithmen (Teil)</td><td><span class="lp">E</span> <a href="Funktionen/index.html">Funktionen</a> (Exp./Log.)</td><td>Deskriptor 2.3 — im Fach oft mit Exponentialfunktion gekoppelt.</td></tr>
+      <tr><td>GK 3 · Funktionale Zusammenhänge</td><td><span class="lp">E</span> Funktionen, <span class="lp">G</span> <a href="Wachstumsprozesse/index.html">Wachstums- und Abnahmeprozesse</a></td><td>Modelle linear/exponentiell; Parameter und Kontext.</td></tr>
+      <tr><td>GK 3 / HAK · Finanz &amp; Modelle</td><td><span class="lp">F</span> <a href="Finanzmathematik/index.html">Finanzmathematik</a></td><td>Zins, Rente, Tilgung; ergänzend dynamische Investition (7.&nbsp;Sem.) gemäß W2.</td></tr>
+      <tr><td>GK 4 · Analysis</td><td><span class="lp">H</span> <a href="Differential-Integralrechnung/index.html">Differential- und Integralrechnung</a></td><td>Grenzwert, Ableitung, Integral; HAK ergänzt Kosten-/Preistheorie und Optimierung.</td></tr>
+      <tr><td>GK 5 · Stochastik</td><td><span class="lp">I</span> <a href="Statistik/index.html">Statistik</a>, <span class="lp">J</span> <a href="Wahrscheinlichkeitsrechnung/index.html">Wahrscheinlichkeitsrechnung</a></td><td>Deskriptive Anteile und Wahrscheinlichkeit/Verteilungen.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<aside class="kompetenz-legend-panel" id="kompetenz-legend" aria-label="Legende Grundkompetenzen und HAK">
+  <p class="kompetenz-legend-title">Darstellung in den Tabellen</p>
+  <ul>
+    <li><span class="kompetenz-legend-swatch kompetenz-legend-swatch--gk" aria-hidden="true"></span> <strong>Teil&nbsp;A</strong> — mathematische Grundkompetenzen (GK), Nummerierung z.&nbsp;B. 2.1, 5.3 …</li>
+    <li><span class="kompetenz-legend-swatch kompetenz-legend-swatch--hak" aria-hidden="true"></span> <strong>HAK</strong> — schulformspezifischer Auszug Cluster&nbsp;W2 (Codes B_W… und B_W2…), in den Abschnitten 2–5 unter den jeweiligen GK-Deskriptoren.</li>
+  </ul>
+</aside>
+
+<section id="gk1">
+  <h2>1 · Zahlen und Maße</h2>
+  <p class="kompetenz-meta">Mathematische Grundkompetenzen im gemeinsamen Kern — gültig ab Matura 2017/2018.</p>
+  <table class="kompetenz-table">
+    <thead><tr><th class="nr">Nr.</th><th>Formulierung des Deskriptors (Inhalt und Handlung)</th></tr></thead>
+    <tbody>
+      <tr class="comp-gk"><td class="nr">1.1</td><td>mit natürlichen, ganzen, rationalen und reellen Zahlen rechnen, ihre Zusammenhänge interpretieren und damit argumentieren und sie auf der Zahlengeraden veranschaulichen</td></tr>
+      <tr class="comp-gk"><td class="nr">1.2</td><td>Zahlen in Fest- und Gleitkommadarstellung in der Form ± a · 10<sup>k</sup> mit 1 ≤ a &lt; 10 und a ∈ ℝ, k ∈ ℤ verstehen und anwenden</td></tr>
+      <tr class="comp-gk"><td class="nr">1.3</td><td>Vielfache und Teile von Einheiten mit den entsprechenden Zehnerpotenzen (inkl. der Bedeutungen der Begriffe „Nano-“ bis „Tera-“) sowie Größen als Kombination von Maßzahl und Maßeinheit verstehen und anwenden</td></tr>
+      <tr class="comp-gk"><td class="nr">1.4</td><td>Ergebnisse beim Rechnen mit Zahlen abschätzen (überschlagsrechnen) und in kontextbezogener Genauigkeit angeben (kaufmännisch runden)</td></tr>
+      <tr class="comp-gk"><td class="nr">1.5</td><td>Zahlenangaben in Prozent und Promille im Kontext verstehen und anwenden</td></tr>
+      <tr class="comp-gk"><td class="nr">1.6</td><td>den Betrag einer Zahl verstehen und anwenden</td></tr>
+    </tbody>
+  </table>
+  <details class="kompetenz-details"><summary>Kommentar 1.1</summary><div class="inner">ℕ = {0, 1, 2, …}</div></details>
+</section>
+
+<section id="gk2">
+  <h2>2 · Algebra und Geometrie</h2>
+  <p class="kompetenz-meta">Unter den GK-Deskriptoren folgen die HAK-Auszüge zu <strong>Matrizen</strong> (Cluster&nbsp;W2).</p>
+  <table class="kompetenz-table">
+    <thead><tr><th class="nr">Nr. / Code</th><th>Formulierung des Deskriptors (Inhalt und Handlung)</th></tr></thead>
+    <tbody>
+      <tr class="comp-gk"><td class="nr">2.1</td><td>mit Termen rechnen</td></tr>
+      <tr class="comp-gk"><td class="nr">2.2</td><td>Rechenregeln für Potenzen mit ganzzahligen und rationalen Exponenten verstehen und anwenden; Potenz- und Wurzelschreibweise ineinander überführen</td></tr>
+      <tr class="comp-gk"><td class="nr">2.3</td><td>Rechengesetze für Logarithmen verstehen und anwenden</td></tr>
+      <tr class="comp-gk"><td class="nr">2.4</td><td>Probleme aus Anwendungsgebieten durch lineare Gleichungen mit einer Unbekannten modellieren, diese lösen und die Lösungen interpretieren; im Kontext argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">2.5</td><td>Formeln aus der elementaren Geometrie anwenden, erstellen und im Kontext interpretieren und begründen</td></tr>
+      <tr class="comp-gk"><td class="nr">2.6</td><td>Zusammenhänge zwischen Größen durch eine Formel modellieren, die Formel umformen und die gegenseitige Abhängigkeit der Größen interpretieren und erklären</td></tr>
+      <tr class="comp-gk"><td class="nr">2.7</td><td>Probleme aus Anwendungsgebieten durch lineare Gleichungssysteme in zwei Variablen modellieren, diese lösen, die möglichen Lösungsfälle grafisch veranschaulichen und interpretieren; im Kontext argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">2.8</td><td>Probleme aus Anwendungsgebieten durch lineare Gleichungssysteme in mehreren Variablen modellieren, diese mittels Technologieeinsatz lösen; das Ergebnis in Bezug auf die Problemstellung interpretieren; im Kontext argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">2.9</td><td>Probleme aus Anwendungsgebieten durch quadratische Gleichungen mit einer Variablen modellieren, reelle Lösungen quadratischer Gleichungen ermitteln und die verschiedenen möglichen Lösungsfälle interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">2.10</td><td>Exponentialgleichungen vom Typ a<sup>k·x</sup> = b nach x auflösen</td></tr>
+      <tr class="comp-gk"><td class="nr">2.11</td><td>Polynomgleichungen, Exponentialgleichungen und Gleichungen mit trigonometrischen Funktionen in einer Variablen mittels Technologieeinsatz lösen und das Ergebnis interpretieren</td></tr>
+      <tr class="comp-gk"><td class="nr">2.12</td><td>Sinus, Cosinus und Tangens von Winkeln zwischen 0° und 90° als Seitenverhältnisse im rechtwinkligen Dreieck verstehen und anwenden</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_2.1</td><td>wirtschaftliche Sachverhalte mit Matrizen modellieren, die Matrixelemente interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_2.2</td><td>Addition, Subtraktion und Multiplikation geeigneter Matrizen sowie die Berechnung der Inversen invertierbarer Matrizen mittels Technologieeinsatz durchführen</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_2.3</td><td>ein- oder zweistufige Produktionsprozesse mithilfe von Gozinto-Graphen modellieren, in diesem Kontext mit Matrizen rechnen, dabei interpretieren und argumentieren</td></tr>
+    </tbody>
+  </table>
+  <details class="kompetenz-details"><summary>Kommentare 2.1, 2.3, 2.5, 2.6</summary>
+    <div class="inner">
+      <p><strong>2.1:</strong> keine Polynomdivision und keine Partialbruchzerlegung.</p>
+      <p><strong>2.3:</strong> log<sub>a</sub>(b · c) = log<sub>a</sub>(b) + log<sub>a</sub>(c); log<sub>a</sub>(b/c) = log<sub>a</sub>(b) − log<sub>a</sub>(c); log<sub>a</sub>(b<sup>r</sup>) = r · log<sub>a</sub>(b).</p>
+      <p><strong>2.5:</strong> Inhalte der elementaren Geometrie (u. a. Ähnlichkeit, Satz des Pythagoras, Dreiecke, Vierecke, Kreis, Körper); Längen, Flächen- und Rauminhalte in anwendungsbezogenen Problemen.</p>
+      <p><strong>2.6:</strong> Formeln aus verschiedenen Gebieten (Technik, Wirtschaft, Naturwissenschaft); Abhängigkeiten variabler Größen deuten.</p>
+    </div>
+  </details>
+  <details class="kompetenz-details"><summary>HAK · Matrizen — Begriffe und Hinweise (Auszug)</summary>
+    <div class="inner">
+      <p>Vektor, Zeilen-/Spaltenvektor, Skalar; quadratische Matrix, transponierte Matrix, Einheitsmatrix; Gozinto-Graph. Matrizen in Aufgaben präzise benennen (z. B. „A beschreibt den Rohstoffbedarf …“).</p>
+    </div>
+  </details>
+</section>
+
+<section id="gk3">
+  <h2>3 · Funktionale Zusammenhänge</h2>
+  <p class="kompetenz-meta">Anschließend HAK-Auszüge zu <strong>Finanzmathematik, Zahlungsströmen und Wachstumsmodellen</strong> im Wirtschaftskontext (W2).</p>
+  <table class="kompetenz-table">
+    <thead><tr><th class="nr">Nr. / Code</th><th>Formulierung des Deskriptors (Inhalt und Handlung)</th></tr></thead>
+    <tbody>
+      <tr class="comp-gk"><td class="nr">3.1</td><td>eine Funktion in einem geeigneten Definitionsbereich als eindeutige Zuordnung verstehen und als Darstellung der Abhängigkeit zwischen Größen interpretieren; den Graphen einer gegebenen Funktion mittels Technologieeinsatz darstellen, Funktionswerte ermitteln und den Verlauf des Graphen im Kontext interpretieren</td></tr>
+      <tr class="comp-gk"><td class="nr">3.2</td><td>Zusammenhänge aus Anwendungsgebieten durch lineare Funktionen modellieren, damit Berechnungen durchführen, die Ergebnisse interpretieren und damit argumentieren; Graphen von linearen Funktionen skizzieren und die Parameter kontextbezogen interpretieren; den Zusammenhang zwischen einer linearen Gleichung in zwei Variablen und einer linearen Funktion verstehen und anwenden</td></tr>
+      <tr class="comp-gk"><td class="nr">3.3</td><td>Graphen von Potenzfunktionen (y = c · x<sup>n</sup> mit n ∈ ℤ, c ∈ ℝ sowie die im Katalog genannten Wurzelformen) skizzieren, Definitions- und Wertemenge angeben, Eigenschaften (Symmetrie, Polstelle, asymptotisches Verhalten) an Graphen interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">3.4</td><td>Null-, Extrem- und Wendestellen sowie das Monotonieverhalten bei Polynomfunktionen bestimmen, interpretieren und damit argumentieren, zugehörige Graphen skizzieren; bei Polynomfunktionen 2. Grades vom Typ f(x) = a · x² + b mit a, b ∈ ℝ die Parameter interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">3.5</td><td>Graphen von Exponentialfunktionen skizzieren, Exponentialfunktionen als Wachstums- und Abnahmemodelle interpretieren, die Verdoppelungszeit und die Halbwertszeit berechnen und im Kontext deuten sowie die Parameter von Exponentialfunktionen interpretieren</td></tr>
+      <tr class="comp-gk"><td class="nr">3.6</td><td>lineare Funktionen und Exponentialfunktionen strukturell vergleichen, die Angemessenheit einer Beschreibung mittels linearer Funktionen oder mittels Exponentialfunktionen im Kontext beurteilen</td></tr>
+      <tr class="comp-gk"><td class="nr">3.7</td><td>die Nullstellen einer Funktion gegebenenfalls mittels Technologieeinsatz bestimmen und als Lösungen einer Gleichung interpretieren</td></tr>
+      <tr class="comp-gk"><td class="nr">3.8</td><td>Schnittpunkte zweier Funktionsgraphen gegebenenfalls mittels Technologieeinsatz bestimmen und diese im Kontext interpretieren</td></tr>
+      <tr class="comp-gk"><td class="nr">3.9</td><td>anwendungsbezogene Problemstellungen mit geeigneten Funktionstypen (lineare Funktion, Polynomfunktion bis zum Grad 3 und Exponentialfunktion) modellieren</td></tr>
+      <tr class="comp-gk"><td class="nr">3.10</td><td>Graphen von f(x) = sin(x), f(x) = cos(x) und f(x) = tan(x) mit Winkeln im Bogenmaß skizzieren und die Eigenschaften dieser Funktionen interpretieren und damit argumentieren; den Zusammenhang zwischen Grad- und Bogenmaß verstehen und anwenden; die Zusammenhänge im Einheitskreis verstehen und anwenden</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_3.1</td><td>Ein- und Auszahlungen auf einer Zeitachse veranschaulichen und gegebene grafische Darstellungen interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_3.2</td><td>unregelmäßige Zahlungsströme auf Grundlage der Zinseszinsrechnung modellieren; Berechnungen für Barwert, Endwert und Zinssatz durchführen; die Ergebnisse interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_3.3</td><td>bei Rentenrechnung unter Verwendung geometrischer Reihen modellieren; Barwert, Endwert, Ratenhöhe, Laufzeit und Zinssatz berechnen und die Ergebnisse interpretieren; im Kontext argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_3.4</td><td>bei Sparformen, Krediten und Schuldtilgung modellieren; zugehörige Berechnungen durchführen, deren Ergebnisse interpretieren; im Kontext argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_3.5</td><td>geeignete Modelle für die Beschreibung von Änderungsprozessen (linear, exponentiell, beschränkt, logistisch) aufstellen, mit den zugehörigen Funktionen Berechnungen durchführen und sie grafisch darstellen, Ansätze, Lösungswege und Ergebnisse interpretieren; im Kontext argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_3.6</td><td>Kapitalwert, internen Zinssatz und modifizierten internen Zinssatz von Investitionen berechnen, interpretieren; im Kontext argumentieren</td></tr>
+    </tbody>
+  </table>
+  <details class="kompetenz-details"><summary>Kommentare 3.1, 3.5, 3.9</summary>
+    <div class="inner">
+      <p><strong>3.1:</strong> Funktionen können abschnittsweise definiert sein; Variablen und Parameter kontextbezogen benennen.</p>
+      <p><strong>3.5:</strong> prototypische Verläufe für f(x) = a · b<sup>x</sup> + c und f(x) = a · e<sup>λ·x</sup> + c kennen; Parameter in Kontexten deuten.</p>
+      <p><strong>3.9:</strong> u. a. Kosten-, Erlös- und Gewinnfunktion; grundlegende Begriffe der Zinseszinsrechnung.</p>
+    </div>
+  </details>
+  <details class="kompetenz-details"><summary>HAK · Finanzmathematik / Wachstum — Begriffe (Auszug)</summary>
+    <div class="inner">
+      <p>Zeitachse, Zinssatz, einfache Verzinsung, Zinseszinsen, Auf-/Abzinsen, effektiver Jahreszinssatz, Tilgungsplan, Annuität u. a.; Wachstum: Änderungsfaktor, Sättigungswert; Investition: Kapitalwert, interner Zinssatz, modifizierter interner Zinssatz, Rückflüsse …</p>
+    </div>
+  </details>
+</section>
+
+<section id="gk4">
+  <h2>4 · Analysis</h2>
+  <p class="kompetenz-meta">Anschließend HAK-Auszüge zu <strong>Kosten-, Erlös- und Gewinnmodellen</strong> sowie Marktgleichgewicht (W2).</p>
+  <table class="kompetenz-table">
+    <thead><tr><th class="nr">Nr. / Code</th><th>Formulierung des Deskriptors (Inhalt und Handlung)</th></tr></thead>
+    <tbody>
+      <tr class="comp-gk"><td class="nr">4.1</td><td>Grenzwerte und Stetigkeit von Funktionen auf der Basis eines intuitiven Begriffsverständnisses interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">4.2</td><td>Differenzen- und Differenzialquotient als mittlere bzw. lokale Änderungsraten interpretieren, damit anwendungsbezogen modellieren, rechnen und argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">4.3</td><td>Regeln zum Berechnen von Ableitungsfunktionen von Potenz-, Polynom- und Exponentialfunktionen und Funktionen, die aus diesen zusammengesetzt sind, verstehen und anwenden: Faktorregel, Summenregel, Produktregel, Kettenregel</td></tr>
+      <tr class="comp-gk"><td class="nr">4.4</td><td>Monotonieverhalten, Steigung der Tangente und Steigungswinkel, lokale Extrema, qualitatives Krümmungsverhalten, Wendepunkte von Funktionen am Graphen ablesen, mithilfe der Ableitungen modellieren, berechnen, interpretieren und argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">4.5</td><td>den Zusammenhang zwischen Funktion und ihrer Ableitungsfunktion bzw. einer Stammfunktion interpretieren und erklären; bei gegebenem Graphen einer Funktion den Graphen der zugehörigen Ableitungsfunktion skizzieren</td></tr>
+      <tr class="comp-gk"><td class="nr">4.6</td><td>Regeln zum Berechnen von Stammfunktionen von Potenz- und Polynomfunktionen verstehen und anwenden</td></tr>
+      <tr class="comp-gk"><td class="nr">4.7</td><td>das bestimmte Integral auf der Grundlage eines intuitiven Grenzwertbegriffes als Grenzwert einer Produktsumme interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">4.8</td><td>das bestimmte Integral als orientierten Flächeninhalt verstehen und anwenden</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_4.1</td><td>bei Aufgabenstellungen in wirtschaftlichen Kontexten Kosten-, Nachfrage-, Erlös- und Gewinnfunktionen mithilfe von Polynomfunktionen modellieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_4.2</td><td>typische Verläufe der Graphen der Preisfunktion der Nachfrage, der Erlösfunktion, der Kostenfunktion und der Gewinnfunktion skizzieren, darstellen und interpretieren; Nullstellen, Extremwerte und Wendepunkt berechnen, interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_4.3</td><td>Betriebsoptimum und langfristige Preisuntergrenze sowie Betriebsminimum und kurzfristige Preisuntergrenze mithilfe der (variablen) Stückkostenfunktion bestimmen, in diesem Kontext modellieren, interpretieren und argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_4.4</td><td>wirtschaftliche Grenzfunktionen als Ableitungsfunktionen modellieren, berechnen und interpretieren; Stammfunktionen von Grenzfunktionen ermitteln und den Zusammenhang der beiden Funktionen erklären</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_4.5</td><td>bei Aufgabenstellungen in wirtschaftlichen Kontexten mit der Angebotsfunktion modellieren; das Marktgleichgewicht ermitteln und interpretieren</td></tr>
+    </tbody>
+  </table>
+  <details class="kompetenz-details"><summary>Kommentare 4.2, 4.4, 4.5</summary>
+    <div class="inner">
+      <p><strong>4.2:</strong> Zusammenhang Weg–Geschwindigkeit–Beschleunigung vorausgesetzt; nicht das Grenzwertbestimmen bei Differenzenquotienten.</p>
+      <p><strong>4.4:</strong> „Qualitatives Krümmungsverhalten“ meint die Bedeutung des Vorzeichens der 2. Ableitung.</p>
+      <p><strong>4.5:</strong> Integral als Gesamteffekt von Änderungsraten; außer Weg/Geschwindigkeit keine Pflicht, physikalische Größen selbst zu benennen.</p>
+    </div>
+  </details>
+  <details class="kompetenz-details"><summary>HAK · Kosten- und Preistheorie (Auszug)</summary>
+    <div class="inner">
+      <p>Nachfrage-/Angebotsfunktion als Menge in Abhängigkeit vom Preis; in Schulbüchern oft Umkehrfunktionen p<sub>N</sub>(x), p<sub>A</sub>(x). Begriffe u. a.: Preis-Absatz-Funktion, Erlösfunktion, Stückkosten, ertragsgesetzliche Kostenfunktion, Cournot’scher Punkt, Grenzkosten, Grenzerlös, Gleichgewichtspreis …</p>
+    </div>
+  </details>
+</section>
+
+<section id="gk5">
+  <h2>5 · Stochastik</h2>
+  <p class="kompetenz-meta">Anschließend HAK-Auszüge zu <strong>Normalverteilung, Regression, Korrelation</strong> und erweiterten Wahrscheinlichkeitsregeln (W2).</p>
+  <table class="kompetenz-table">
+    <thead><tr><th class="nr">Nr. / Code</th><th>Formulierung des Deskriptors (Inhalt und Handlung)</th></tr></thead>
+    <tbody>
+      <tr class="comp-gk"><td class="nr">5.1</td><td>Daten statistisch aufbereiten, Häufigkeitsverteilungen (absolute und relative Häufigkeiten) bestimmen und interpretieren; Daten in Form von Kreis- und Balken-/Säulendiagrammen sinnstiftend veranschaulichen, diese Darstellungen interpretieren und damit anwendungsbezogen argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">5.2</td><td>Lage- und Streuungsmaße empirischer Daten berechnen, interpretieren und damit argumentieren; Boxplots erstellen und interpretieren</td></tr>
+      <tr class="comp-gk"><td class="nr">5.3</td><td>den klassischen Wahrscheinlichkeitsbegriff nach Laplace verstehen und anwenden; den Zusammenhang zwischen Wahrscheinlichkeiten und relativen Häufigkeiten verstehen und anwenden</td></tr>
+      <tr class="comp-gk"><td class="nr">5.4</td><td>mehrstufige Zufallsexperimente („Ziehen mit/ohne Zurücklegen“) mit Baumdiagrammen modellieren, Wahrscheinlichkeiten mithilfe von Pfadregeln (Additions- und Multiplikationssatz) berechnen und Baumdiagramme interpretieren und damit argumentieren</td></tr>
+      <tr class="comp-gk"><td class="nr">5.5</td><td>mit der Binomialverteilung modellieren, ihre Anwendung begründen, Wahrscheinlichkeiten und Erwartungswert berechnen und die Ergebnisse kontextbezogen interpretieren</td></tr>
+      <tr class="comp-gk"><td class="nr">5.6</td><td>mit der Wahrscheinlichkeitsdichte und der Verteilungsfunktion der Normalverteilung modellieren, Wahrscheinlichkeiten und Quantile berechnen und die Ergebnisse kontextbezogen interpretieren, Erwartungswert μ und Standardabweichung σ interpretieren und deren Auswirkungen auf den Graphen der zugehörigen Wahrscheinlichkeitsdichte erklären</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_5.1</td><td>Erwartungswert bzw. Standardabweichung einer normalverteilten Zufallsvariablen bei bekannten Bedingungen (Wahrscheinlichkeit, Intervallgrenzen) mittels Technologieeinsatz bestimmen</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_5.2</td><td>lineare, quadratische, kubische und exponentielle Regression bei zweidimensionalen Datenmengen erklären, mittels Technologieeinsatz zugehörige Regressionsfunktionen bestimmen, grafisch darstellen, Ergebnisse interpretieren und im Regressionskontext argumentieren; Methode der kleinsten Quadrate erklären und interpretieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W_5.3</td><td>Korrelationskoeffizient nach Pearson mittels Technologieeinsatz ermitteln und interpretieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_5.4</td><td>den Additionssatz für einander nicht ausschließende Ereignisse und den Multiplikationssatz für abhängige Ereignisse (bedingte Wahrscheinlichkeit) verstehen und anwenden, Berechnungen durchführen; im Kontext interpretieren und argumentieren</td></tr>
+      <tr class="comp-hak"><td class="nr">B_W2_5.5</td><td>die mittlere prozentuelle Änderung mithilfe des geometrischen Mittels berechnen, interpretieren und damit argumentieren</td></tr>
+    </tbody>
+  </table>
+  <details class="kompetenz-details"><summary>Kommentare 5.2 und 5.6 (Auszug)</summary>
+    <div class="inner">
+      <p><strong>5.2:</strong> u. a. Median, arithmetisches Mittel, Standardabweichung, Quartil, Spannweite, (Inter)quartilsabstand; Varianzformeln s² und s²<sub>n−1</sub> — in der Reifeprüfung Teil&nbsp;A beide als richtig anerkannt.</p>
+      <p><strong>5.6:</strong> u. a. Wahrscheinlichkeiten für X &lt; k, X &gt; k, k₁ &lt; X &lt; k₂ (auch mit ≤); bei vorgegebener Wahrscheinlichkeit Intervallgrenzen ermitteln.</p>
+    </div>
+  </details>
+  <details class="kompetenz-details"><summary>HAK · Stochastik — Begriffe (Auszug)</summary>
+    <div class="inner">
+      <p>Punktwolke, Regressionsgerade/-linie, Regressionsfunktion, Vierfeldertafel.</p>
+    </div>
+  </details>
+</section>
+
+<section id="hak-w2">
+  <h2>Schulformspezifische Kompetenzen · Cluster HAK (W2)</h2>
+  <p class="kompetenz-meta">Die Auszüge aus dem offiziellen PDF sind in die Abschnitte <a href="#gk2">2 · Algebra und Geometrie</a> (Matrizen), <a href="#gk3">3 · Funktionale Zusammenhänge</a> (Finanz/Wachstum), <a href="#gk4">4 · Analysis</a> (Kosten/Preis) und <a href="#gk5">5 · Stochastik</a> eingebettet — dort als <strong>gold unterlegte Tabellenzeilen</strong> (Klasse HAK) erkennbar; siehe auch die <a href="#kompetenz-legend">Legende zur Darstellung</a>.</p>
+  <p class="kompetenz-meta">Vollständiger Wortlaut und Begriffserläuterungen: <a href="srdp_am_kompetenzen_begriffe_2018_hak-2022-17-06.pdf">PDF „Schulformspezifische Kompetenzen und Begriffe im Cluster HAK (W2)“</a> (Stand 17.06.2022).</p>
+</section>
+
+<section id="struktur">
+  <h2>Struktur der Lernpfade überdenken</h2>
+  <p>Aus Sicht des gemeinsamen Kerns bilden <strong>Zahlen und Maße</strong> (GK&nbsp;1) und ein großer Teil von <strong>Algebra</strong> (GK&nbsp;2) die Basis — das entspricht in den Lernpfaden vor allem <strong>A · Grundlagen</strong> und <strong>B · Gleichungen</strong> (sowie <strong>C · Matrizen</strong>, <strong>D · Trigonometrie</strong>). <strong>Funktionale Zusammenhänge</strong> (GK&nbsp;3) und die wirtschaftlichen Erweiterungen (HAK&nbsp;3–4) sind eng mit <strong>E · Funktionen</strong>, <strong>F · Finanzmathematik</strong>, <strong>G · Wachstumsprozesse</strong> und <strong>H · Differential-/Integralrechnung</strong> verzahnt. <strong>Stochastik</strong> (GK&nbsp;5) liegt bei <strong>I · Statistik</strong> und <strong>J · Wahrscheinlichkeitsrechnung</strong>. <strong>Matrizen</strong> sind im GK nicht als eigener Block ausgewiesen, im HAK-Cluster&nbsp;W2 jedoch zentral.</p>
+  <p><strong>Mögliche nächste Schritte:</strong> (1) In jedem Lernpfad die passenden GK-/HAK-Codes als Tags ergänzen. (2) Beide offiziellen PDFs (Teil&nbsp;A und HAK&nbsp;W2) sind oben verlinkt — bei Abweichungen immer die PDF-Fassung zugrunde legen. — Die Kapitel-Tabs der Gesamtübersicht folgen bereits der Reihenfolge <strong>A–J</strong> wie in der Zuordnungstabelle.</p>
+</section>
+
+<footer class="hub-footer">
+  HAK Steyr Abendschule · Mathematik · Kompetenzübersicht<br>
+  <a href="index.html">Lernpfade</a> ·
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer">by kurtrocks</a>
+</footer>
+
+</div>
+</body>
+</html>

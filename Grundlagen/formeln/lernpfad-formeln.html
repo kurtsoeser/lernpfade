@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Formeln</title>
+<script>
+MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../../js/lernpfade-registry.js"></script>
+<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="s3-p08" data-page-type="lernpfad" data-chapter-folder="Grundlagen/formeln">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+</div>
+<div class="container">
+<div class="hero">
+  <h1>Formeln</h1>
+  <p class="subtitle">Lineare Formeln in mehreren Variablen; rationale Potenzen — Inhalte werden ergänzt.</p>
+  <span class="badge">3.&nbsp;Semester · Thema 08</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    <a href="../terme/index.html" style="color:var(--blue-dark); font-weight:600;">← 07 Terme</a>
+    · <a href="../../Gleichungen/lineare-gleichungen/index.html" style="color:var(--blue-dark); font-weight:600;">Lineare Gleichungen (Gleichungen) →</a>
+  </p>
+</div>
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+</div>
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg</div>
+  <p>Einstieg in <strong>Formeln mit mehreren Größen</strong>: nach einer Variable auflösen und Abhängigkeiten deuten.</p>
+  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+</div>
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Kompetenzen (Lehrplan)</div>
+  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;"><strong>Lineare Gleichungen (Formeln)</strong> in mehreren Variablen nach einer variablen Größe explizieren, die gegenseitige Abhängigkeit der Größen interpretieren und erklären.</p></div></div>
+  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">In Formeln, die auch <strong>Potenzen mit rationalen Exponenten</strong> enthalten, die gegenseitige Abhängigkeit der Größen interpretieren, erklären und nach einer variablen Größe explizieren.</p></div></div>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+</div>
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Inhalt in Arbeit</div>
+  <p>Material und Übungen folgen.</p>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+</div>
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Formeln<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+</div>
+<script src="js/lernpfad-platzhalter-app.js"></script>
+</body>
+</html>

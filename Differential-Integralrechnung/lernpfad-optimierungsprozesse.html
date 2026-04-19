@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Optimierungsprozesse</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="s6-optimierung" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 3 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Optimierungsprozesse</h1>
+  <p class="subtitle">Optimierung unter Nebenbedingungen und Methode der kleinsten Quadrate — Inhalte werden ausgebaut.</p>
+  <span class="badge">6. Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    <a href="lernpfad-kosten-preistheorie.html" style="color:var(--blue-dark); font-weight:600;">← Kosten- und Preistheorie</a>
+    · <a href="lernpfad-integralrechnung.html" style="color:var(--blue-dark); font-weight:600;">Integralrechnung →</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg</div>
+  <p>Du löst typische <strong>Optimierungsaufgaben</strong> mit Nebenbedingungen und begegnest der <strong>linearen Ausgleichsrechnung</strong> als Werkzeug zur Modellanpassung.</p>
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Geplanter Schwerpunkt</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Standardmodelle (Produkt/Summe unter linearen Bindungen) sicher aufstellen</li>
+        <li>Prinzip der kleinsten Quadrate verständlich erklären und Gütekriterien bewerten</li>
+        <li>Optional: Technologie (GTR/Software) zur Modellfunktion einsetzen</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Kompetenzen →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Kompetenzen &amp; Ziele (Lehrplan)</div>
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Die Idee der Optimierung unter <strong>einschränkenden Bedingungen</strong> erklären und anhand der Modelle <strong>Hauptbedingung \(a\cdot b\)</strong> unter Nebenbedingung \(a+b=\mathrm{konst.}\) bzw. Hauptbedingung \(a+b\) unter Nebenbedingung \(a\cdot b=\mathrm{konst.}\) modellieren und berechnen.</p></div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div><p style="margin:0;">Das Prinzip der <strong>Methode der kleinsten Quadrate</strong> und die zugrundeliegenden Ideen erläutern und die <strong>Güte der Ergebnisse</strong> bewerten; mit Technologieeinsatz für vorgegebene Modellfunktionen mit Hilfe der Methode der kleinsten Quadrate <strong>Funktionsgleichungen bestimmen</strong>.</p></div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Inhalt in Arbeit</div>
+  <p>Hier folgen Aufgabenklassen, Beispiele und ggf. Rechnerhinweise.</p>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Optimierungsprozesse<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/lernpfad-platzhalter-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Beschreibende Statistik</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<link rel="stylesheet" href="css/zentralmasse-app.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="stat-beschreibend" data-page-type="lernpfad" data-chapter-folder="Statistik/beschreibende-statistik">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 9 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Beschreibende Statistik</h1>
+  <p class="subtitle">Lage, Streuung, Zusammenhang und Konzentration — mit dem <strong>Vier-Perspektiven-Modell</strong>, österreichischer Fachsprache.</p>
+  <span class="badge">7. Semester · Mathematik</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Beschreibende Statistik</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Zentralmaße</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Wahl Lage</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Streuung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Boxplot</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Pearson</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Lorenz · Gini</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Vertiefung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Quiz</button>
+</div>
+
+<!-- 1 -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg &amp; Vier-Perspektiven-Modell</div>
+
+  <p>Die <strong>beschreibende Statistik</strong> bereitet Daten so auf, dass ihre <strong>wichtigsten Eigenschaften</strong> kompakt, verständlich und fachlich korrekt beschrieben werden können. Sie beantwortet zunächst nicht das „Warum“, sondern strukturiert die <strong>Beobachtung</strong>:</p>
+  <ul style="margin:10px 0 10px 22px; line-height:1.65;">
+    <li><strong>Wo</strong> liegen die Daten typischerweise? (Lage)</li>
+    <li><strong>Wie stark</strong> streuen sie? (Streuung)</li>
+    <li><strong>Wie hängen</strong> zwei Merkmale zusammen? (Zusammenhang)</li>
+    <li><strong>Wie gleich oder ungleich</strong> ist eine Verteilung? (Konzentration)</li>
+  </ul>
+  <p>Praxis: Umsätze, Einkommen, Noten, Befragungen, Zeitreihen, Zufriedenheit, Vermögen, Marktanteile.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🔭</div>
+    <div>
+      <strong>Vier Perspektiven (didaktisches Modell)</strong>
+      <ol style="margin:10px 0 0 20px; line-height:1.65;">
+        <li><strong>Lage</strong> — Wo liegt ein typischer Wert?</li>
+        <li><strong>Streuung</strong> — Wie stark unterscheiden sich die Werte?</li>
+        <li><strong>Zusammenhang</strong> — Wie stark hängen zwei Merkmale zusammen?</li>
+        <li><strong>Konzentration</strong> — Wie gleich oder ungleich ist eine Verteilung?</li>
+      </ol>
+      <p style="margin-top:10px;">👉 Keine lose Formelsammlung, sondern <strong>Blickwinkel zur Analyse</strong>.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Einordnung</span>
+    </div>
+    <p><strong>Frage 1:</strong> Welche Frage passt am ehesten zur <strong>Perspektive „Streuung“</strong>?</p>
+    <div class="quiz-options" data-quiz="bs0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Wie groß ist der Marktanteil eines Unternehmens?</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Wie weit liegen die Werte typischerweise auseinander?</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Welcher Wert ist am häufigsten?</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Liegen zwei Merkmale auf einer Geraden?</div>
+    </div>
+    <div class="feedback" id="fb_bs0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die <strong>Lorenzkurve</strong> ordnet sich vor allem welcher Perspektive zu?</p>
+    <div class="quiz-options" data-quiz="bs0_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nur Lage</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">nur Streuung im Boxplot</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Konzentration / Ungleichverteilung</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Pearson-Korrelation</div>
+    </div>
+    <div class="feedback" id="fb_bs0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['bs0_1','bs0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Zentralmaße (Lage)</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">A. Arithmetisches Mittel</h3>
+  <p>Der <strong>Durchschnitt</strong> aller Werte. Für \(n\) Werte \(x_1,\ldots,x_n\):</p>
+  <div class="formula-box">
+    <div class="formula-label">Definition</div>
+    \[ \bar{x} = \frac{x_1 + x_2 + \dots + x_n}{n} \]
+  </div>
+  <p><strong>Beispiel:</strong> \(10,12,14,16,18\) → \(\bar{x} = 70/5 = 14\). <strong>Sinnvoll:</strong> nur bei <strong>metrischen</strong> Daten; <strong>empfindlich gegen Ausreißer</strong> (z. B. \(10,11,12,13,50\) → \(\bar{x}=19{,}2\)).</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">B. Median</h3>
+  <p>Mittlerer Wert der <strong>geordneten</strong> Reihe — bei gerader Anzahl Mittel der beiden mittleren Werte. <strong>Robust</strong> gegen Extremwerte; sinnvoll für <strong>ordinal</strong> und <strong>metrisch</strong>, nicht für <strong>nominal</strong>.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">C. Modus</h3>
+  <p><strong>Häufigste</strong> Ausprägung — für <strong>nominal, ordinal und metrisch</strong> verwendbar (z. B. häufigste Marke).</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">D. Geometrisches Mittel</h3>
+  <p>Für <strong>positive</strong> metrische Werte bei <strong>multiplikativen</strong> Prozessen (Wachstumsfaktoren, Renditen, Indizes):</p>
+  \[ \bar{x}_g = \sqrt[n]{x_1 \cdot x_2 \cdot \dots \cdot x_n} \]
+  <p><strong>Beispiel:</strong> Faktoren \(1{,}10,\,1{,}20,\,0{,}90\) → \(\bar{x}_g \approx 1{,}059\) (≈ 5,9 % mittlere jährliche Veränderung). <strong>Nicht</strong> für nominal/ordinal; Vorsicht bei Null/negativen Werten.</p>
+
+  <div class="info-box concept" style="margin-top:22px;">
+    <div class="icon">🧮</div>
+    <div style="flex:1; min-width:0;">
+      <strong>Interaktiv: alle Zentralmaße live</strong>
+      <p style="margin:8px 0 4px;">Passe die Daten an (Komma oder Punkt). Die Grafik zeigt die Werte auf der Achse; Linien markieren arithmetisches Mittel, Median, Modus und — falls möglich — das geometrische Mittel.</p>
+      <div id="bsZentralmasseApp" class="zm-app">
+        <div class="zm-app-toolbar">
+          <span>Beispiele:</span>
+          <button type="button" class="zm-btn-small" data-zm-preset-standard>10 … 18 (gleichmäßig)</button>
+          <button type="button" class="zm-btn-small" data-zm-preset-outlier>10 … 13, 50 (Ausreißer)</button>
+          <button type="button" class="zm-btn-small" data-zm-preset-factors>Wachstumsfaktoren</button>
+          <span style="margin-left:6px;">Anzahl:</span>
+          <button type="button" class="zm-btn-small" data-zm-add>Wert +</button>
+          <button type="button" class="zm-btn-small" data-zm-remove>Wert −</button>
+        </div>
+        <div data-zm-grid class="zm-data-grid"></div>
+        <div class="zm-chart-wrap">
+          <div data-zm-chart></div>
+          <div class="zm-legend">
+            <span class="zm-leg-mean"><i></i> Arithm. Mittel</span>
+            <span class="zm-leg-median"><i></i> Median</span>
+            <span class="zm-leg-mode"><i></i> Modus</span>
+            <span class="zm-leg-geom"><i></i> Geom. Mittel</span>
+          </div>
+        </div>
+        <div class="zm-stats">
+          <div class="zm-stat-card">
+            <h4>Arithmetisches Mittel \(\bar{x}\)</h4>
+            <div class="zm-val" data-zm-mean>—</div>
+            <div class="zm-sub">Summe geteilt durch \(n\); reagiert stark auf Extremwerte.</div>
+          </div>
+          <div class="zm-stat-card">
+            <h4>Median</h4>
+            <div class="zm-val" data-zm-median>—</div>
+            <div class="zm-sub">Mitte der sortierten Reihe (bei geradem \(n\) Mittel der beiden mittleren).</div>
+          </div>
+          <div class="zm-stat-card">
+            <h4>Modus</h4>
+            <div class="zm-val" data-zm-mode>—</div>
+            <div class="zm-sub" data-zm-mode-sub></div>
+          </div>
+          <div class="zm-stat-card zm-stat-geom">
+            <h4>Geometrisches Mittel \(\bar{x}_g\)</h4>
+            <div class="zm-val" data-zm-geom>—</div>
+            <div class="zm-sub" data-zm-geom-sub></div>
+          </div>
+        </div>
+        <p class="zm-app-hint"><strong>Tipp:</strong> Erhöhe nur einen Wert stark (Ausreißer) und beobachte, wie sich Mittel und Median unterscheiden. Setze einen Wert auf \(0\) oder negativ, um zu sehen, warum \(\bar{x}_g\) dann nicht sinnvoll ist.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Mittelwert</span>
+    </div>
+    <p>Punkte: \(10,12,14,16,18\). Berechne \(\bar{x}\).</p>
+    <p><input type="text" id="bs_mean_input" placeholder="z. B. 14" style="max-width:200px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
+    <button type="button" class="btn btn-check" onclick="checkBsMeanExercise()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_bs_mean" style="display:none;"></div>
+
+    <p style="margin-top:22px;"><strong>Frage:</strong> Welches Zentralmaß ist bei <strong>nominalskalierten</strong> Lieblingsmarken primär sinnvoll?</p>
+    <div class="quiz-options" data-quiz="bs1_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">arithmetisches Mittel</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Median</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Modus</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">geometrisches Mittel</div>
+    </div>
+    <div class="feedback" id="fb_bs1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage:</strong> Das geometrische Mittel eignet sich vor allem bei …</p>
+    <div class="quiz-options" data-quiz="bs1_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Wachstumsfaktoren / multiplikativen Entwicklungen (positive Werte)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">reinen Kategorien ohne Reihenfolge</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Schulnoten ohne weitere Begründung</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Daten mit beliebig negativen Faktoren ohne Transformation</div>
+    </div>
+    <div class="feedback" id="fb_bs1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['bs1_1','bs1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Welches Zentralmaß — wann?</div>
+
+  <div class="info-box concept">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Überblick nach Skalenniveau</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li><strong>Nominal:</strong> Modus ✓ — Mittel, Median, geom. Mittel ✗</li>
+        <li><strong>Ordinal:</strong> Median, Modus ✓ — Mittel nur mit fachlicher Vorsicht / Begründung</li>
+        <li><strong>Metrisch:</strong> Mittel, Median, Modus; geom. Mittel bei multiplikativen Sachverhalten</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>Entscheidung:</strong> gleich gewichtete Werte oft Mittel · Ausreißer → Median · häufigste Kategorie → Modus · Wachstum → geom. Mittel</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Situationen</span>
+    </div>
+    <p><strong>Frage 1:</strong> Einkommen mit einem extrem hohen Top-Wert — welche Lagegröße beschreibt die „typische“ Person oft <strong>besser</strong>?</p>
+    <div class="quiz-options" data-quiz="bs2_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">immer das arithmetische Mittel</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">der Median (robuster)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nur der Modus</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">der Pearson-Koeffizient</div>
+    </div>
+    <div class="feedback" id="fb_bs2_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Zufriedenheitsstufen von „sehr zufrieden“ bis „sehr unzufrieden“ — primär …</p>
+    <div class="quiz-options" data-quiz="bs2_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nominal, weil Wörter</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">metrisch mit garantiert gleichen Abständen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">ordinal — Reihenfolge ja, Abstände nicht automatisch gleich</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">ohne Ordnung</div>
+    </div>
+    <div class="feedback" id="fb_bs2_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['bs2_1','bs2_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Streuungsmaße</div>
+
+  <p>Zwei Reihen können <strong>dieselbe mittlere Lage</strong> haben und doch <strong>völlig verschieden</strong> streuen (z. B. alle 10 vs. 2,6,10,14,18).</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Spannweite</h3>
+  <p>\(R = x_{\max} - x_{\min}\) — einfach, aber nur Extremwerte, <strong>ausreißerempfindlich</strong>.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:16px;">Quartile · IQR</h3>
+  <p>\(Q_1,Q_2\) (Median),\(Q_3\) teilen die geordnete Reihe. <strong>IQR</strong> \(= Q_3-Q_1\): Streuung der <strong>mittleren 50 %</strong>, robuster als \(R\).</p>
+  <p><strong>Beispiel:</strong> \(2,4,5,7,8,10,12,13,15\) — \(Q_2=8\); untere Hälfte \(2,4,5,7\) → \(Q_1=(4+5)/2=4{,}5\); obere \(10,12,13,15\) → \(Q_3=(12+13)/2=12{,}5\).</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:16px;">Varianz &amp; Standardabweichung</h3>
+  <p><strong>Varianz</strong> (hier Populationsformel wie im Lehrstoff):</p>
+  \[ \sigma^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i-\bar{x})^2 \]
+  <p><strong>Standardabweichung</strong> \(\sigma=\sqrt{\sigma^2}\) — wieder in Original<strong>einheit</strong>, oft anschaulicher.</p>
+  <p><strong>Mini-Beispiel:</strong> \(2,4,6\), \(\bar{x}=4\) → Abweichungen \(-2,0,2\), Quadrate \(4,0,4\) → \(\sigma^2 = 8/3 \approx 2{,}67\), \(\sigma \approx 1{,}63\).</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Rechnen</span>
+      <span class="exercise-title">Spannweite</span>
+    </div>
+    <p>Filialumsätze (Tsd. €): \(20,22,25,25,58\). Spannweite \(R\)?</p>
+    <p><input type="text" id="bs_range_input" placeholder="z. B. 38" style="max-width:200px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
+    <button type="button" class="btn btn-check" onclick="checkBsRangeExercise()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_bs_range" style="display:none;"></div>
+
+    <p style="margin-top:22px;"><strong>Frage 1:</strong> Die Varianz ist …</p>
+    <div class="quiz-options" data-quiz="bs3_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">immer in der gleichen Einheit wie die Daten</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">in quadrierten Einheiten — deshalb oft die Standardabweichung zur Deutung</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nur für nominale Daten definiert</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">identisch mit der Spannweite</div>
+    </div>
+    <div class="feedback" id="fb_bs3_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Der IQR misst …</p>
+    <div class="quiz-options" data-quiz="bs3_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die Streuung der mittleren 50 % (\(Q_3-Q_1\))</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">nur den kleinsten Wert</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">die Korrelation</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">die Konzentration nach Lorenz</div>
+    </div>
+    <div class="feedback" id="fb_bs3_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['bs3_1','bs3_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Boxplot</div>
+
+  <p>Der <strong>Boxplot</strong> fasst Lage und Streuung kompakt: Minimum, \(Q_1\), Median, \(Q_3\), Maximum (bzw. Whisker nach Konvention). <strong>Box</strong> von \(Q_1\) bis \(Q_3\), <strong>Median</strong> in der Box.</p>
+  <p><strong>Deutung:</strong> Median nahe \(Q_1\) → nach oben ausgedehnt; unterschiedlich lange Antennen → <strong>Schiefe</strong>; breite Box → große Streuung der mittleren 50 %. Gut zum <strong>Vergleich</strong> mehrerer Gruppen.</p>
+  <p><strong>Beispiel</strong> \(3,5,6,7,8,10,12,13,15\): Min 3, \(Q_1=5{,}5\), Median 8, \(Q_3=12{,}5\), Max 15 (Konventionen im Unterricht abstimmen).</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Lesen</span>
+      <span class="exercise-title">Boxplot</span>
+    </div>
+    <p>Eine <strong>sehr breite Box</strong> im Vergleich zu einer zweiten Gruppe bedeutet typischerweise …</p>
+    <div class="quiz-options" data-quiz="bs4_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die Daten sind sicher normalverteilt</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">es gibt keine Streuung</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">die mittleren 50 % streuen stärker (größerer IQR)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Pearson-\(r\) ist nahe 1</div>
+    </div>
+    <div class="feedback" id="fb_bs4_1"></div>
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['bs4_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Korrelation nach Pearson</div>
+
+  <p>Maß für den <strong>linearen</strong> Zusammenhang zweier <strong>metrischer</strong> Merkmale: \(-1 \le r \le 1\).</p>
+  <div class="formula-box">
+    <div class="formula-label">Formel (Merksatz: Kovarianz / Produkt der Streuungen)</div>
+    \[ r = \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum (x_i-\bar{x})^2 \cdot \sum (y_i-\bar{y})^2}} \]
+  </div>
+  <p><strong>Interpretation:</strong> \(r=1\) perfekt positiv linear, \(r=-1\) perfekt negativ, \(r\approx 0\) kein <strong>linearer</strong> Zusammenhang (kann trotzdem nicht-linear zusammenhängen!).</p>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Fachlich:</strong> Korrelation \(\neq\) Kausalität · nur linear · metrische Merkmale · Lernzeit/Punkte-Beispiel: positiver Trend möglich, dritte Variablen (Motivation, Vorwissen) denkbar.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Verständnis</span>
+      <span class="exercise-title">Pearson</span>
+    </div>
+    <p><strong>Frage 1:</strong> Zwei Merkmale hängen <strong>deutlich zusammen</strong>, aber der Zusammenhang ist <strong>krumm</strong> (U-Form). Pearson-\(r\) kann …</p>
+    <div class="quiz-options" data-quiz="bs5_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nur +1 oder −1 sein</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">nahe 0 sein, obwohl ein Zusammenhang besteht</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nie negativ sein</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer die Ursache angeben</div>
+    </div>
+    <div class="feedback" id="fb_bs5_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> „Hohe Korrelation beweist, dass X die Ursache von Y ist.“</p>
+    <div class="quiz-options" data-quiz="bs5_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">stimmt immer</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">stimmt nur bei nominalen Daten</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">falsch — Kausalität braucht fachliche Theorie/Design, nicht nur \(r\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">stimmt nur für den Median</div>
+    </div>
+    <div class="feedback" id="fb_bs5_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['bs5_1','bs5_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Lorenzkurve &amp; Gini-Koeffizient</div>
+
+  <p><strong>Konzentrationsmaße</strong> — wie <strong>gleich oder ungleich</strong> verteilt? (Einkommen, Vermögen, Marktanteile, Umsätze …)</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Lorenzkurve</h3>
+  <p><strong>x-Achse:</strong> kumulierter Anteil der Einheiten (z. B. Personen geordnet nach aufsteigendem Einkommen). <strong>y-Achse:</strong> kumulierter Anteil der Merkmalssumme (z. B. Einkommen).</p>
+  <p><strong>Gleichverteilungslinie (45°):</strong> z. B. 20 % der Personen haben 20 % des Einkommens usw. Liegt die Lorenzkurve <strong>darunter</strong>, ist die Verteilung <strong>ungleicher</strong>.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Gini-Koeffizient \(G\)</h3>
+  <p>\(0 \le G \le 1\) — aus dem Verhältnis der Fläche zwischen Gleichverteilungslinie und Lorenzkurve zur Fläche unter der Gleichverteilungslinie. <strong>\(G=0\):</strong> vollkommene Gleichheit · <strong>\(G\) groß:</strong> starke Konzentration.</p>
+  <p><strong>Beispielidee:</strong> Einkommen \(1,1,2,6\) — sichtbare Ungleichheit, Lorenz weit unter 45°, \(G\) deutlich &gt; 0.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Check</span>
+      <span class="exercise-title">Konzentration</span>
+    </div>
+    <p>Ein <strong>steigender Gini-Wert</strong> (im gleichen Kontext verglichen) bedeutet typischerweise …</p>
+    <div class="quiz-options" data-quiz="bs6_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">stärkere Ungleichverteilung / Konzentration</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">vollkommene Gleichverteilung</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Pearson-\(r=0\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">kleinere Standardabweichung immer</div>
+    </div>
+    <div class="feedback" id="fb_bs6_1"></div>
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['bs6_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter →</button>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Beispiel, Fehler, Merksätze, Kompetenz</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Durchgängiges Beispiel: Filialumsätze</h3>
+  <p>Daten (Tsd. €): \(20,22,25,25,58\).</p>
+  <ul style="margin-left:20px; line-height:1.65;">
+    <li>\(\bar{x} = 150/5 = 30\)</li>
+    <li>Median (geordnet): \(25\)</li>
+    <li>Modus: \(25\)</li>
+    <li>Spannweite: \(58-20=38\)</li>
+  </ul>
+  <p>👉 Der Ausreißer 58 zieht das <strong>Mittel</strong> nach oben; <strong>Median/Modus</strong> beschreiben die „typische“ Filiale hier oft <strong>besser</strong>. Verteilung <strong>rechtsschief</strong>.</p>
+  <p><em>Hinweis:</em> Quartile können je nach Schul-/Softwarekonvention leicht variieren — im Unterricht eine Methode vereinbaren.</p>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Typische Fehler</h3>
+  <ul style="margin-left:20px; line-height:1.65; font-size:0.95rem;">
+    <li>Mittel bei ungeeignetem Skalenniveau · Median ohne Sortierung · Modus mit Median verwechseln</li>
+    <li>Spannweite/Quartile falsch · Varianz vs. Standardabweichung · \(r=0\) als „kein Zusammenhang“ · Korrelation = Kausalität</li>
+    <li>Lorenz vs. 45°-Linie verwechseln · Gini ohne Kontext deuten</li>
+  </ul>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Merksätze</h3>
+  <ul style="margin-left:20px; line-height:1.65;">
+    <li>Mittel = Durchschnitt · Median = Mitte · Modus = häufigster Wert · geom. Mittel ≈ mittlerer Wachstumsfaktor</li>
+    <li>Spannweite = Max−Min · Quartile vierteilen · Varianz quadriert · \(\sigma\) in Originaleinheit</li>
+    <li>Pearson: linear, nicht kausal · Lorenz/Gini: Ungleichheit</li>
+  </ul>
+
+  <div class="info-box success">
+    <div class="icon">🎓</div>
+    <div>
+      <strong>Kern:</strong> Eine Datenmenge ist erst sinnvoll beschrieben, wenn du <strong>Lage, Streuung, Zusammenhang</strong> (falls relevant) und <strong>Verteilungsaspekte/Konzentration</strong> (falls relevant) betrachtest.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Final-Check</span>
+      <span class="exercise-title">Kernaussage</span>
+    </div>
+    <p>Die beschreibende Statistik ist sinnvoll als …</p>
+    <div class="quiz-options" data-quiz="bs7_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">reine Formelsammlung ohne Kontext</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Instrument, Daten aus mehreren Perspektiven fachlich zu ordnen und zu deuten</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">reines Zeichnen von Kreisdiagrammen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Beweis von Kausalität durch \(r\)</div>
+    </div>
+    <div class="feedback" id="fb_bs7_1"></div>
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(7, ['bs7_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(8)">Zum Quiz →</button>
+  </div>
+</div>
+
+<!-- 9 -->
+<div class="tab-panel" id="panel8">
+  <div class="ribbon">Abschlussquiz</div>
+
+  <p>Achte auf <strong>Skalenniveau</strong>, <strong>Streuung</strong>, <strong>Interpretation von \(r\)</strong> und <strong>Konzentration</strong>.</p>
+
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+
+  <div id="finalResult" style="display:none; margin-top:20px;">
+    <div class="info-box success">
+      <div class="icon">🏆</div>
+      <div>
+        <strong id="finalScore"></strong>
+        <p id="finalMessage" style="margin-top:8px;"></p>
+        <div class="badge-container" id="badgeContainer"></div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-hint" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(7)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Beschreibende Statistik<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/beschreibende-statistik-lernpfad/zentralmasse-interaktiv.js" defer></script>
+<script src="js/beschreibende-statistik-lernpfad/app.js" defer></script>
+</body>
+</html>

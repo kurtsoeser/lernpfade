@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Wahrscheinlichkeitsverteilungen</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="wv-dist" data-page-type="lernpfad" data-chapter-folder="Wahrscheinlichkeitsrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 7 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Wahrscheinlichkeitsverteilungen</h1>
+  <p class="subtitle">Lernpfad: Zufallsvariablen, PMF/PDF, Verteilungsfunktion, Erwartungswert und Streuung — mit interaktiven Grafiken, Übungen und Quiz.</p>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:640px; margin-left:auto; margin-right:auto;">
+    Einstieg: <a href="lernpfad-wahrscheinlichkeit-grundlagen.html" style="color:var(--blue-dark); font-weight:600;">Kombinatorik &amp; Wahrscheinlichkeit</a>
+    · <a href="lernpfad-binomialverteilung.html" style="color:var(--blue-dark); font-weight:600;">Binomialverteilung</a>
+    · <a href="lernpfad-normalverteilung.html" style="color:var(--blue-dark); font-weight:600;">Normalverteilung</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Diskret / stetig</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>PMF &amp; PDF</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>F(x)</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>E &amp; Streuung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Beispiele</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Übungen &amp; Quiz</button>
+</div>
+
+<!-- ═══ STATION 1 ═══ -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Lernziele &amp; Einstieg</div>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Nach diesem Lernpfad kannst du …</strong>
+      <ul style="margin:10px 0 0 18px;">
+        <li>diskrete und kontinuierliche Zufallsvariablen unterscheiden und erklären,</li>
+        <li>Wahrscheinlichkeitsfunktion (PMF) und Dichte (PDF) korrekt einordnen,</li>
+        <li>die Verteilungsfunktion \(F(x)=P(X\le x)\) interpretieren,</li>
+        <li>\(E(X)\), \(\mathrm{Var}(X)\) und \(\sigma\) berechnen und deuten.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>Eine <strong>Zufallsvariable</strong> \(X\) ordnet <strong>jedem Ergebnis eines Zufallsvorgangs eine Zahl</strong> zu — etwa beim Würfeln die Augenzahl, bei einer Messung einen Messwert (Zeit, Länge, Temperatur, …).</p>
+
+  <div class="exercise" id="quiz_wv0">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Begriff Zufallsvariable</span>
+    </div>
+    <p><strong>Frage 1:</strong> Was beschreibt eine Zufallsvariable \(X\) am treffendsten?</p>
+    <div class="quiz-options" data-quiz="wv0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Eine feste Zahl, die bei jedem Versuch gleich bleibt</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Jedem Ergebnis eines Zufallsvorgangs wird eine Zahl zugeordnet</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Nur die Wahrscheinlichkeit eines Ereignisses ohne Zahlenwert</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Ausschließlich den Erwartungswert einer Normalverteilung</div>
+    </div>
+    <div class="feedback" id="fb_wv0_1"></div>
+
+    <p style="margin-top:20px;"><strong>Frage 2:</strong> Welche Größe ist typischerweise <em>kontinuierlich</em> modelliert?</p>
+    <div class="quiz-options" data-quiz="wv0_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Anzahl Treffer bei \(n\) Würfen</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Augenzahl eines fairen Würfels</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Wartezeit auf den Bus (in Minuten oder Sekunden)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Anzahl defekter Teile in einer Stichprobe</div>
+    </div>
+    <div class="feedback" id="fb_wv0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['wv0_1','wv0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Diskret / stetig →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 2 ═══ -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Diskret vs. kontinuierlich</div>
+
+  <p><strong>Diskrete Zufallsvariable</strong> — nimmt <strong>abzählbar</strong> viele Werte an (endlich oder abzählbar unendlich). Beispiele: Augenzahl \(\{1,\ldots,6\}\), Anzahl E-Mails \(\{0,1,2,\ldots\}\). Hier sind <strong>Punktwahrscheinlichkeiten</strong> möglich: \(P(X=x)\) kann <strong>größer als 0</strong> sein.</p>
+
+  <p><strong>Kontinuierliche Zufallsvariable</strong> — Werte in einem Intervall (überabzählbar), z.&nbsp;B. Körpergröße, Wartezeit, Temperatur. Dann gilt für jeden einzelnen Punkt \(x\):</p>
+  <div class="formula-box">
+    <div class="formula-label">Punktwahrscheinlichkeit</div>
+    \[ P(X=x)=0 \quad\text{für jedes einzelne } x \]
+  </div>
+  <p>Wahrscheinlichkeiten entstehen über <strong>Intervalle</strong> \(P(a\le X\le b)\), nicht über isolierte Punkte.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Typen erkennen</span>
+    </div>
+    <p><strong>Frage 1:</strong> Bei welcher Art von Zufallsvariable ist \(P(X=x)\) für einzelne \(x\) oft <strong>positiv</strong>?</p>
+    <div class="quiz-options" data-quiz="wv1_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Diskret</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Kontinuierlich</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Beides gleich häufig</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Nur bei unendlich vielen Versuchen</div>
+    </div>
+    <div class="feedback" id="fb_wv1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die Körpergröße einer zufällig gewählten Person modelliert man sinnvollerweise als …</p>
+    <div class="quiz-options" data-quiz="wv1_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">diskret (nur ganze Zentimeter erlaubt)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">kontinuierlich (Messgröße im Intervall)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">weder noch</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer Bernoulli-verteilt</div>
+    </div>
+    <div class="feedback" id="fb_wv1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['wv1_1','wv1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: PMF &amp; PDF →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 3 ═══ -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Wahrscheinlichkeitsfunktion vs. Dichte</div>
+
+  <p><strong>Diskret — Wahrscheinlichkeitsfunktion (PMF):</strong> \(p(x)=P(X=x)\). Es gilt \(0\le p(x)\le 1\) und \(\sum_x p(x)=1\).</p>
+
+  <p><strong>Kontinuierlich — Wahrscheinlichkeitsdichte (PDF):</strong> \(f(x)\ge 0\) und \(\displaystyle\int_{-\infty}^{\infty} f(x)\,dx=1\).</p>
+
+  <div class="info-box success">
+    <div class="icon">💡</div>
+    <div>
+      <strong>Wichtig:</strong> \(f(x)\) ist <strong>keine</strong> Wahrscheinlichkeit! Wahrscheinlichkeit eines Intervalls:
+      \[ P(a\le X\le b)=\int_a^b f(x)\,dx \]
+      <strong>Merksatz:</strong> Diskret — „Punkte zählen“ (\(P(X=x)\)); kontinuierlich — „Flächen zählen“ (Integral).
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">PMF &amp; PDF</span>
+    </div>
+    <p><strong>Frage 1:</strong> Die Dichte \(f(x)\) an der Stelle \(x\) ist …</p>
+    <div class="quiz-options" data-quiz="wv2_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">gleichbedeutend mit \(P(X=x)\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">eine „Höhe“ — Wahrscheinlichkeiten sind Flächen unter der Kurve</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">immer maximal \(1\), sonst keine Dichte</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur für diskrete Variablen definiert</div>
+    </div>
+    <div class="feedback" id="fb_wv2_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Für eine diskrete PMF \(p(x)\) gilt …</p>
+    <div class="quiz-options" data-quiz="wv2_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\displaystyle\int p(x)\,dx = 1\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\sum_x p(x)=1\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(p(x)=1\) für alle \(x\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\sum_x p(x)=0\)</div>
+    </div>
+    <div class="feedback" id="fb_wv2_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['wv2_1','wv2_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Verteilungsfunktion →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 4 ═══ -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Verteilungsfunktion \(F(x)\)</div>
+
+  <p>Die <strong>Verteilungsfunktion (CDF)</strong> ist für diskrete und kontinuierliche Zufallsvariablen gleich definiert:</p>
+  <div class="formula-box">
+    <div class="formula-label">Definition</div>
+    \[ F(x) = P(X \le x) \]
+  </div>
+  <ul style="margin:12px 0 12px 22px;">
+    <li><strong>Diskret:</strong> \(F\) ist eine <strong>Stufenfunktion</strong> (Sprünge an den möglichen Werten).</li>
+    <li><strong>Kontinuierlich:</strong> \(F\) ist (unter üblichen Voraussetzungen) <strong>stetig</strong>.</li>
+  </ul>
+  <div class="formula-box">
+    <div class="formula-label">Zusammenhang</div>
+    <p style="text-align:left; font-size:0.95rem;">Diskret: \(\displaystyle F(x)=\sum_{t\le x} p(t)\). &nbsp; Kontinuierlich: \(\displaystyle F(x)=\int_{-\infty}^{x} f(t)\,dt\).</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">CDF</span>
+    </div>
+    <p><strong>Frage 1:</strong> Es gilt stets …</p>
+    <div class="quiz-options" data-quiz="wv3_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(F(x)=P(X\ge x)\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(F(x)=P(X\le x)\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(F(x)=f(x)\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(F(x)=E(X)\)</div>
+    </div>
+    <div class="feedback" id="fb_wv3_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die Verteilungsfunktion einer <strong>diskreten</strong> Zufallsvariable ist typischerweise …</p>
+    <div class="quiz-options" data-quiz="wv3_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">eine Stufenfunktion</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">überall gleich \(0\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">immer eine Gerade</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">identisch mit der Dichte</div>
+    </div>
+    <div class="feedback" id="fb_wv3_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['wv3_1','wv3_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Erwartung &amp; Streuung →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 5 ═══ -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Erwartungswert, Varianz, Standardabweichung</div>
+
+  <p><strong>Erwartungswert \(E(X)\)</strong> — „langfristiger Mittelwert“ / Lage (Schwerpunkt).</p>
+  <div class="formula-box">
+    <div class="formula-label">Erwartungswert</div>
+    <p style="text-align:left; font-size:0.95rem;">Diskret: \(\displaystyle E(X)=\sum_x x\cdot p(x)\). &nbsp; Kontinuierlich: \(\displaystyle E(X)=\int_{-\infty}^{\infty} x\,f(x)\,dx\).</p>
+  </div>
+
+  <p><strong>Varianz \(\mathrm{Var}(X)\)</strong> — mittlere quadratische Abweichung vom Erwartungswert. Praktische Formel:</p>
+  <div class="formula-box">
+    <div class="formula-label">Verschiebungssatz</div>
+    \[ \mathrm{Var}(X)=E\bigl((X-E(X))^2\bigr)=E(X^2)-\bigl(E(X)\bigr)^2 \]
+  </div>
+
+  <p><strong>Standardabweichung</strong> \(\sigma=\sqrt{\mathrm{Var}(X)}\) — gleiche Einheit wie \(X\); große \(\sigma\): starke Streuung, kleine \(\sigma\): Werte eng um \(E(X)\).</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Kennzahlen</span>
+    </div>
+    <p><strong>Frage 1:</strong> Die praktische Rechenformel \(\mathrm{Var}(X)=E(X^2)-(E(X))^2\) ist …</p>
+    <div class="quiz-options" data-quiz="wv4_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">falsch — Varianz ist immer \(E(X)^2\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">ein gängiger Weg neben der Definition mit quadrierten Abweichungen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nur für kontinuierliche \(X\) erlaubt</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">gleichbedeutend mit \(\sigma\) ohne Quadratwurzel</div>
+    </div>
+    <div class="feedback" id="fb_wv4_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die Standardabweichung \(\sigma\) …</p>
+    <div class="quiz-options" data-quiz="wv4_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">ist immer dimensionslos</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">hat dieselbe physikalische Einheit wie \(X\) (z.&nbsp;B. Sekunden, Euro, …)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">ist stets gleich \(\mathrm{Var}(X)\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">ist nur bei diskreten \(X\) definiert</div>
+    </div>
+    <div class="feedback" id="fb_wv4_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['wv4_1','wv4_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Beispiele →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 6 ═══ -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Erklärungsbeispiele</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-bottom:10px;">Fairer Würfel (diskret)</h3>
+  <p>Sei \(X\) die Augenzahl. Dann ist \(p(x)=\frac{1}{6}\) für \(x\in\{1,\ldots,6\}\).</p>
+  <div class="formula-box">
+    <div class="formula-label">Erwartungswert &amp; Streuung</div>
+    \[ E(X)=3{,}5,\quad E(X^2)=\frac{91}{6},\quad \mathrm{Var}(X)=\frac{91}{6}-3{,}5^2\approx 2{,}92,\quad \sigma\approx 1{,}71 \]
+  </div>
+  <p style="font-size:0.95rem; color:var(--text-light);">Interpretation: Im Mittel „3,5 Augen“; typische Abweichung in der Größenordnung von etwa \(1{,}7\) Augen.</p>
+
+  <div style="height:260px; position:relative; margin:16px 0;">
+    <canvas id="diceChart" aria-label="Balkendiagramm PMF fairer Würfel"></canvas>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin:24px 0 10px;">Gleichverteilung auf \([0;\,10]\) (kontinuierlich)</h3>
+  <p>Sei \(Y\) gleichverteilt auf \([0;10]\). Dichte \(f(y)=\frac{1}{10}\) für \(0\le y\le 10\). Verteilungsfunktion:</p>
+  <div class="formula-box">
+    <div class="formula-label">Stückweise \(F(y)\)</div>
+    \[ F(y)=\begin{cases} 0 & y&lt;0 \\ \dfrac{y}{10} & 0\le y\le 10 \\ 1 & y&gt;10 \end{cases} \]
+  </div>
+  <p>Wichtig: \(P(Y=3)=0\) — nicht weil „3 unmöglich“ wäre, sondern weil ein Punkt keine Fläche unter der Dichte hat.</p>
+
+  <div class="chart-controls" style="flex-direction:column; align-items:stretch; gap:14px; margin:16px 0;">
+    <div class="input-row" style="flex-wrap:wrap; gap:16px;">
+      <div class="slider-group">
+        <label for="uniA">Untergrenze \(a\) = <span id="uniAVal">2</span></label>
+        <input type="range" id="uniA" min="0" max="10" step="0.1" value="2">
+      </div>
+      <div class="slider-group">
+        <label for="uniB">Obergrenze \(b\) = <span id="uniBVal">5</span></label>
+        <input type="range" id="uniB" min="0" max="10" step="0.1" value="5">
+      </div>
+    </div>
+    <p style="font-size:0.95rem;"><strong>\(P(a\le Y\le b)\)</strong> = <span id="uniProbOut">0,3000</span> &nbsp;(Länge \((b-a)\) geteilt durch \(10\))</p>
+  </div>
+
+  <div style="height:280px; position:relative; margin:8px 0 20px;">
+    <canvas id="uniformChart" aria-label="Dichte Gleichverteilung und markiertes Intervall"></canvas>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Beispiele</span>
+    </div>
+    <p><strong>Frage 1:</strong> Für \(Y\) gleichverteilt auf \([0;10]\) ist \(P(Y=3)\) gleich …</p>
+    <div class="quiz-options" data-quiz="wv5_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\dfrac{1}{10}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\dfrac{3}{10}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(0\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(1\)</div>
+    </div>
+    <div class="feedback" id="fb_wv5_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Der Erwartungswert \(E(X)\) beim fairen Würfel beträgt …</p>
+    <div class="quiz-options" data-quiz="wv5_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(3\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(3{,}5\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(4\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(6\)</div>
+    </div>
+    <div class="feedback" id="fb_wv5_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['wv5_1','wv5_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Übungen &amp; Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 7 ═══ -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Merksätze, Mini-Check &amp; Abschluss</div>
+
+  <div class="info-box concept">
+    <div class="icon">🧠</div>
+    <div>
+      <strong>Mini-Merksätze (prüfungsfit)</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Diskret: Werte abzählbar → \(p(x)=P(X=x)\), Summe der \(p(x)\) ist \(1\).</li>
+        <li>Kontinuierlich: Dichte \(f(x)\), Integral über \(\mathbb{R}\) ist \(1\); Wahrscheinlichkeiten über Intervalle.</li>
+        <li>CDF: \(F(x)=P(X\le x)\) gilt immer.</li>
+        <li>\(E(X)\): Lage; \(\mathrm{Var}(X)\) und \(\sigma\): Streuung (\(\sigma\) wie \(X\) einheitlich).</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:8px;">Mini-Check (Selbsttest — Lösungen)</h3>
+  <details style="margin:10px 0; padding:12px 14px; background:var(--blue-light); border-radius:12px; border:1px solid rgba(59,130,196,0.25);">
+    <summary>1) Ist „Zeit bis der Bus kommt“ eher diskret oder kontinuierlich?</summary>
+    <p style="margin-top:8px;"><strong>Lösung:</strong> Kontinuierlich — Zeit kann beliebig fein gemessen werden; sinnvoll als kontinuierliches Modell (auch wenn man digital rundet).</p>
+  </details>
+  <details style="margin:10px 0; padding:12px 14px; background:var(--blue-light); border-radius:12px; border:1px solid rgba(59,130,196,0.25);">
+    <summary>2) Warum gilt bei kontinuierlichen Variablen \(P(X=x)=0\)?</summary>
+    <p style="margin-top:8px;"><strong>Lösung:</strong> Ein einzelner Punkt hat keine „Fläche“ unter der Dichte — Wahrscheinlichkeiten entstehen über Intervalle.</p>
+  </details>
+  <details style="margin:10px 0; padding:12px 14px; background:var(--blue-light); border-radius:12px; border:1px solid rgba(59,130,196,0.25);">
+    <summary>3) Würfel: Wie groß ist \(P(X\le 4)\)?</summary>
+    <p style="margin-top:8px;"><strong>Lösung:</strong> \(P(X\le 4)=\frac{4}{6}=\frac{2}{3}\) (CDF bei \(4\) oder Summe \(p(1)+\cdots+p(4)\)).</p>
+  </details>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung A</span>
+      <span class="exercise-title">Würfel — CDF</span>
+    </div>
+    <p>Fairer Würfel, \(X\) = Augenzahl. Wie groß ist \(P(X\le 4)\)? (Dezimalbruch, z.&nbsp;B. <code>0,667</code> oder <code>2/3</code>)</p>
+    <div class="input-group">
+      <label for="wv_u1">Antwort</label>
+      <input type="text" id="wv_u1" placeholder="z. B. 0,667" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWvU1()">Überprüfen</button>
+    <div class="feedback" id="fb_wv_u1"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung B</span>
+      <span class="exercise-title">Würfel — Varianz</span>
+    </div>
+    <p>Wie groß ist \(\mathrm{Var}(X)\) beim fairen Würfel? (Tipp: \(E(X^2)=\frac{91}{6}\))</p>
+    <div class="input-group">
+      <label for="wv_u2">\(\mathrm{Var}(X)\approx\)</label>
+      <input type="text" id="wv_u2" placeholder="2,917" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWvU2()">Überprüfen</button>
+    <div class="feedback" id="fb_wv_u2"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung C</span>
+      <span class="exercise-title">Würfel — \(\sigma\)</span>
+    </div>
+    <p>Wie groß ist \(\sigma\) (Standardabweichung) näherungsweise?</p>
+    <div class="input-group">
+      <label for="wv_u3">\(\sigma\approx\)</label>
+      <input type="text" id="wv_u3" placeholder="1,708" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWvU3()">Überprüfen</button>
+    <div class="feedback" id="fb_wv_u3"></div>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:28px;">Abschlussquiz</h3>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+
+  <div id="finalResult" style="display:none; margin-top:20px;">
+    <div class="info-box success">
+      <div class="icon">🏆</div>
+      <div>
+        <strong id="finalScore"></strong>
+        <p id="finalMessage" style="margin-top:8px;"></p>
+        <div class="badge-container" id="badgeContainer"></div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-hint" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div><!-- container -->
+
+<div class="floating-tools-wrap" id="floatingToolsWrap">
+  <button type="button" class="floating-tools-fab" onclick="openCalculatorModal()"
+    aria-label="Taschenrechner öffnen" title="Taschenrechner">🧮</button>
+</div>
+
+<div id="calcModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="calcModalTitle" aria-hidden="true">
+  <div class="gg-modal-backdrop" onclick="closeCalculatorModal()"></div>
+  <div class="gg-modal-dialog calc-modal-dialog">
+    <div class="gg-modal-header">
+      <h2 id="calcModalTitle">Taschenrechner</h2>
+      <button type="button" class="gg-modal-close" onclick="closeCalculatorModal()" aria-label="Schließen">&times;</button>
+    </div>
+    <div class="gg-modal-body">
+      <div class="calc-display-wrap">
+        <input type="text" class="calc-display" id="calcDisplay" value="0" readonly inputmode="none" aria-live="polite">
+      </div>
+      <div class="calc-keys">
+        <button type="button" onclick="calcClear()">C</button>
+        <button type="button" onclick="calcBackspace()">⌫</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('/')">÷</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('*')">×</button>
+        <button type="button" onclick="calcPressDigit('7')">7</button>
+        <button type="button" onclick="calcPressDigit('8')">8</button>
+        <button type="button" onclick="calcPressDigit('9')">9</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('-')">−</button>
+        <button type="button" onclick="calcPressDigit('4')">4</button>
+        <button type="button" onclick="calcPressDigit('5')">5</button>
+        <button type="button" onclick="calcPressDigit('6')">6</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('+')">+</button>
+        <button type="button" onclick="calcPressDigit('1')">1</button>
+        <button type="button" onclick="calcPressDigit('2')">2</button>
+        <button type="button" onclick="calcPressDigit('3')">3</button>
+        <button type="button" class="calc-eq" onclick="calcEquals()">=</button>
+        <button type="button" class="calc-wide" onclick="calcPressDigit('0')">0</button>
+        <button type="button" onclick="calcPressDigit('.')">,</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--text-light); margin-top:12px;">Dezimalzahlen intern mit Punkt — Anzeige mit Komma.</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/wahrscheinlichkeitsverteilungen-lernpfad/app.js"></script>
+</body>
+</html>

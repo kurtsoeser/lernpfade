@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Binomialverteilung</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="binom" data-page-type="lernpfad" data-chapter-folder="Wahrscheinlichkeitsrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 7 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Binomialverteilung</h1>
+  <p class="subtitle">Lernpfad: Modell \(X\sim \mathrm{Bin}(n;\,p)\) verstehen — Wahrscheinlichkeiten berechnen, Kennzahlen interpretieren, Aufgaben strukturiert lösen.</p>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:680px; margin-left:auto; margin-right:auto;">
+    Grundlagen: <a href="lernpfad-wahrscheinlichkeit-grundlagen.html" style="color:var(--blue-dark); font-weight:600;">Kombinatorik &amp; Wahrscheinlichkeit</a>
+    · <a href="lernpfad-wahrscheinlichkeitsverteilungen.html" style="color:var(--blue-dark); font-weight:600;">Wahrscheinlichkeitsverteilungen</a>
+    · Später: <a href="lernpfad-approximation-normalverteilung.html" style="color:var(--blue-dark); font-weight:600;">NV als Näherung der Binomialverteilung</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Modell</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Beispiel</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>PMF</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>CDF</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>E &amp; Streuung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Interaktiv</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Übungen &amp; Quiz</button>
+</div>
+
+<!-- ═══ STATION 1 ═══ -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Wann passt die Binomialverteilung?</div>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Lernziel:</strong> Du kannst das Modell der Binomialverteilung <strong>erklären</strong>, <strong>anwenden</strong> (rechnen) und <strong>interpretieren</strong> — im Kontext und mit Kennzahlen.
+    </div>
+  </div>
+
+  <p>Wird ein Zufallsvorgang <strong>mehrmals unter gleichen Bedingungen</strong> wiederholt und gibt es <strong>pro Versuch nur zwei Ausgänge</strong> (Erfolg / Misserfolg), beschreibt die Binomialverteilung, wie wahrscheinlich <strong>\(0,1,2,\ldots,n\)</strong> Erfolge sind.</p>
+
+  <p><strong>Eine Zufallsvariable \(X\) ist binomialverteilt</strong>, wenn gilt:</p>
+  <ol style="margin:12px 0 12px 22px;">
+    <li><strong>Festes \(n\):</strong> Die Anzahl der Versuche ist vorgegeben (z.&nbsp;B. 10 Anrufe).</li>
+    <li><strong>Zwei Ausgänge:</strong> Pro Versuch nur „Erfolg“ oder „Misserfolg“.</li>
+    <li><strong>Konstantes \(p\):</strong> Die Erfolgswahrscheinlichkeit ist in jedem Versuch gleich.</li>
+    <li><strong>Unabhängigkeit:</strong> Die Versuche beeinflussen sich nicht gegenseitig.</li>
+  </ol>
+
+  <div class="info-box success" style="margin:18px 0 14px;">
+    <div class="icon">🔮</div>
+    <div>
+      <strong>Modellidee Galtonbrett:</strong> Eine Kugel rollt durch <strong>\(n\)</strong> Reihen von Zacken — in jeder Reihe entscheidet ein Zufallsschritt (z.&nbsp;B. mit Wahrscheinlichkeit <strong>\(p\)</strong> nach <em>rechts</em>, sonst nach <em>links</em>). Die Schritte sind <strong>unabhängig</strong> und <strong>gleichartig</strong>. Wenn du „rechts“ als Treffer zählst, ist die Gesamtzahl der Rechts-Schritte nach unten genau eine Realisation von <strong>\(X \sim \mathrm{Bin}(n;\,p)\)</strong> — die Kugeln sammeln sich in den Fächern wie im Histogramm der Binomialverteilung.
+    </div>
+  </div>
+
+  <div class="geogebra-embed" id="galtonEmbedBinom">
+    <p class="geogebra-embed-title">Interaktives Galtonbrett</p>
+    <p style="font-size:0.92rem; color:var(--text); margin:-4px 0 12px; line-height:1.55;">Stelle die <strong>Länge</strong> (Anzahl der Entscheidungsreihen = <strong>\(n\)</strong>) und die Wahrscheinlichkeit für den <strong>rechten</strong> Weg (= <strong>\(p\)</strong>) ein, starte oder pausiere die Animation und beobachte die Verteilung der Kugeln — bei vielen Kugeln kannst du die Darstellung wie im Original oft <strong>normalisieren</strong>.</p>
+    <div class="geogebra-iframe-wrap">
+      <iframe
+        id="galtonIframeBinom"
+        title="Interaktives Galton-Brett — GeoGebra"
+        src="https://www.geogebra.org/material/iframe/id/tcR9U7zG/width/900/height/520/border/ffffff/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdt/false"
+        width="900"
+        height="520"
+        allowfullscreen
+        loading="lazy"
+        style="border:0;"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    <p class="geogebra-embed-note">Erweiterte Version (Animation, Normalisierung): <a href="https://www.geogebra.org/m/tcR9U7zG" target="_blank" rel="noopener noreferrer">Interaktives Galton-Brett bei GeoGebra öffnen</a> — Autor: Kurt Söser.</p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Schreibweise</div>
+    \[ X \sim \mathrm{Bin}(n;\,p) \quad\text{(\(n\) Versuche, Trefferwahrscheinlichkeit \(p\))} \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Modellwahl</span>
+    </div>
+    <p><strong>Frage 1:</strong> Welche Kombination gehört zu den üblichen Voraussetzungen für \(\mathrm{Bin}(n;\,p)\)?</p>
+    <div class="quiz-options" data-quiz="b0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(n\) darf sich während des Experiments ändern</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">festes \(n\), zwei Ausgänge, konstantes \(p\), unabhängige Versuche</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">beliebig viele Ausgänge pro Versuch</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(p\) muss immer \(0{,}5\) sein</div>
+    </div>
+    <div class="feedback" id="fb_b0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(X \sim \mathrm{Bin}(20;\,0{,}4)\) bedeutet in Worten …</p>
+    <div class="quiz-options" data-quiz="b0_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">20 unabhängige Versuche; pro Versuch Trefferwahrscheinlichkeit \(0{,}4\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">20 % Treffer bei 4 Versuchen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Erwartungswert ist \(20{,}4\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Genau 4 Treffer sind sicher</div>
+    </div>
+    <div class="feedback" id="fb_b0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['b0_1','b0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Beispiel →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 2 ═══ -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Beispiel (Sales / Marketing)</div>
+
+  <p>Ein Team ruft <strong>\(n=10\)</strong> potenzielle Kund:innen an. Aus Erfahrung sagt eine Person mit Wahrscheinlichkeit <strong>\(p=0{,}3\)</strong> zu (Erfolg = Zusage).</p>
+  <p>Die Zufallsvariable \(X\) zählt die <strong>Anzahl der Zusagen</strong> bei den 10 Anrufen. Dann gilt:</p>
+  <div class="formula-box">
+    <div class="formula-label">Modell</div>
+    \[ X \sim \mathrm{Bin}(10;\,0{,}3) \]
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">💼</div>
+    <div>
+      <strong>Interpretation:</strong> \(X\) kann die Werte \(0,1,\ldots,10\) annehmen — wie viele „Ja“ insgesamt, nicht ob ein <em>bestimmter</em> Anruf klappt (dafür bräuchte man ggf. Bernoulli pro Person).
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Beispiel</span>
+    </div>
+    <p><strong>Frage 1:</strong> Im Modell \(\mathrm{Bin}(10;\,0{,}3)\) ist \(n\) gleich …</p>
+    <div class="quiz-options" data-quiz="b1_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(0{,}3\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">30</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">10</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">3</div>
+    </div>
+    <div class="feedback" id="fb_b1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(p=0{,}3\) bedeutet …</p>
+    <div class="quiz-options" data-quiz="b1_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">pro Anruf beträgt die Erfolgswahrscheinlichkeit rund \(30\,\%\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">insgesamt genau 3 Zusagen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">30 Anrufe sind nötig</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(p\) ist die Varianz</div>
+    </div>
+    <div class="feedback" id="fb_b1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['b1_1','b1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: PMF →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 3 ═══ -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Wahrscheinlichkeitsfunktion (PMF)</div>
+
+  <p>Die Binomialverteilung ist <strong>diskret</strong> — \(X\) nimmt nur ganzzahlige Werte an. Man arbeitet mit der <strong>Wahrscheinlichkeitsfunktion</strong> \(P(X=k)\) (in Schulbüchern wird „Dichte“ manchmal als Sammelbegriff gebraucht; korrekt ist hier <strong>keine</strong> stetige Dichte).</p>
+
+  <div class="formula-box">
+    <div class="formula-label">PMF der Binomialverteilung</div>
+    \[ P(X=k)=\binom{n}{k}\,p^{\,k}\,(1-p)^{\,n-k}, \qquad k=0,1,\ldots,n \]
+  </div>
+
+  <ul style="margin:12px 0 12px 22px;">
+    <li>\(\binom{n}{k}\): Anzahl Möglichkeiten, \(k\) Treffer auf \(n\) Plätze zu verteilen</li>
+    <li>\(p^{\,k}\): Wahrscheinlichkeit für \(k\) Treffer</li>
+    <li>\((1-p)^{\,n-k}\): Wahrscheinlichkeit für \(n-k\) Nieten</li>
+  </ul>
+
+  <div class="info-box success" style="margin:18px 0 14px;">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Interaktiv:</strong> Stelle <strong>\(n\)</strong> und <strong>\(p\)</strong> ein — dasselbe Werkzeug wie im Binomialverteilungsrechner (Histogramm, Intervalle, Tabelle). Balken = \(P(X=k)\); bei <em>P(X ≤ k)</em> kannst du <strong>P</strong> eingeben, um die Grenze <strong>k</strong> umzukehren.
+    </div>
+  </div>
+
+  <div class="bv-rechner" id="bvPmfLernpfadRoot">
+    <div class="bv-rechner-layout">
+      <div class="bv-rechner-sidebar">
+        <p class="bv-intervals-caption">Intervalle</p>
+        <div class="bv-mode-group" role="group" aria-label="Wahrscheinlichkeitsbereich">
+          <button type="button" class="bv-mode-btn bv-mode-btn--active" data-bv-mode="left" aria-pressed="true" title="P(X ≤ k)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M20 4v16M20 4h3M20 20h3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(X≤·)</span></button>
+          <button type="button" class="bv-mode-btn" data-bv-mode="between" aria-pressed="false" title="P(a ≤ X ≤ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="11" y1="12" x2="29" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(a≤X≤b)</span></button>
+          <button type="button" class="bv-mode-btn" data-bv-mode="two" aria-pressed="false" title="P(X ≤ a) + P(X ≥ b)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><line x1="2" y1="12" x2="8" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v16M8 4h3M8 20h3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="32" y1="12" x2="38" y2="12" stroke="currentColor" stroke-width="1.5"/><path d="M32 4v16M32 4h-3M32 20h-3" stroke="currentColor" stroke-width="2" fill="none"/></svg></span><span class="mode-interval-label">P(außen)</span></button>
+          <button type="button" class="bv-mode-btn" data-bv-mode="right" aria-pressed="false" title="P(X ≥ k)"><span class="mode-interval-icon" aria-hidden="true"><svg viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16M12 4h4M12 20h4" stroke="currentColor" stroke-width="2" fill="none"/><line x1="16" y1="12" x2="36" y2="12" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="mode-interval-label">P(X≥·)</span></button>
+        </div>
+        <div class="bv-params">
+          <label class="bv-field"><span class="bv-field-label">n</span><input type="text" class="bv-n" value="10" inputmode="numeric" autocomplete="off" aria-label="Parameter n" /></label>
+          <label class="bv-field"><span class="bv-field-label">p</span><input type="text" class="bv-p" value="0,3" inputmode="decimal" autocomplete="off" aria-label="Parameter p" /></label>
+        </div>
+      </div>
+      <div class="bv-graph-wrap">
+        <div class="bv-graph-toolbar">
+          <div class="bv-stats" aria-live="polite"></div>
+          <div class="bv-toolbar-actions">
+            <button type="button" class="bv-table-toggle" aria-expanded="false" aria-controls="bvPmfTableLernpfadBinom" title="Wahrscheinlichkeitstabelle P(X = k) ein- oder ausblenden">
+              Tabelle P(X = k)
+            </button>
+            <button type="button" class="bv-normal-toggle" aria-pressed="false" title="Normalverteilung als Näherung (rot) ein- oder ausblenden">
+              Normalverteilung
+            </button>
+          </div>
+        </div>
+        <div class="bv-graph-main">
+          <div class="bv-canvas-wrap">
+            <canvas class="bv-canvas" width="520" height="380" aria-label="Histogramm der Binomialverteilung"></canvas>
+          </div>
+          <aside class="bv-pmf-table-panel" id="bvPmfTableLernpfadBinom" aria-hidden="true" aria-label="Verteilungstabelle">
+            <div class="bv-pmf-table-scroll">
+              <table class="bv-pmf-table">
+                <thead>
+                  <tr><th>k</th><th>P(X = k)</th></tr>
+                </thead>
+                <tbody class="bv-pmf-table-body"></tbody>
+              </table>
+            </div>
+          </aside>
+        </div>
+        <div class="bv-graph-below">
+          <div class="bv-formula-display" aria-live="polite"></div>
+          <div class="bv-bounds">
+            <label class="bv-field bv-row-a"><span class="bv-field-label">k / a</span><input type="text" class="bv-a" value="3" inputmode="numeric" autocomplete="off" /></label>
+            <label class="bv-field bv-row-b"><span class="bv-field-label">b</span><input type="text" class="bv-b" value="7" inputmode="numeric" autocomplete="off" /></label>
+          </div>
+          <div class="bv-result-line"><strong>P</strong> = <input type="text" class="bv-prob-out" value="" aria-label="Wahrscheinlichkeit P" /></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Beispielrechnung</div>
+    <p style="text-align:left; font-size:0.95rem;">„Genau 3 Zusagen bei 10 Anrufen“ mit \(p=0{,}3\):</p>
+    \[ P(X=3)=\binom{10}{3}\,(0{,}3)^3\,(0{,}7)^7 \]
+  </div>
+  <p>Das Ergebnis ist eine Zahl zwischen \(0\) und \(1\) — eine echte <strong>Wahrscheinlichkeit</strong>.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">PMF</span>
+    </div>
+    <p><strong>Frage 1:</strong> Der Faktor \(\binom{n}{k}\) steht für …</p>
+    <div class="quiz-options" data-quiz="b2_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">die Fläche unter einer Dichtekurve</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">die Anzahl Möglichkeiten, \(k\) Treffer auf \(n\) Versuche zu verteilen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">den Erwartungswert</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer den Wert \(1\)</div>
+    </div>
+    <div class="feedback" id="fb_b2_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Bei der Binomialverteilung ist \(X\) …</p>
+    <div class="quiz-options" data-quiz="b2_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">diskret (nur ganzzahlige Trefferanzahlen)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">kontinuierlich auf \([0;\,n]\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">immer normalverteilt</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur dann definiert, wenn \(p=0{,}5\)</div>
+    </div>
+    <div class="feedback" id="fb_b2_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['b2_1','b2_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: CDF →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 4 ═══ -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Verteilungsfunktion \(F(x)\)</div>
+
+  <p>Die <strong>Verteilungsfunktion</strong> (CDF) ist wie immer \(F(x)=P(X\le x)\): Wahrscheinlichkeit, <strong>höchstens</strong> \(x\) Treffer zu erhalten.</p>
+  <p>Da \(X\) nur ganzzahlig ist, rechnet man z.&nbsp;B.</p>
+  <div class="formula-box">
+    <div class="formula-label">Summe über Einzelwahrscheinlichkeiten</div>
+    \[ P(X\le 2)=P(X=0)+P(X=1)+P(X=2) \]
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Im Sales-Beispiel:</strong> \(P(X\le 2)\) ist die Wahrscheinlichkeit, <strong>maximal 2 Zusagen</strong> bei 10 Anrufen zu erhalten — nicht „genau 2“, sondern <strong>0, 1 oder 2</strong>.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">CDF</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(F(2)=P(X\le 2)\) entspricht für diskretes \(X\) …</p>
+    <div class="quiz-options" data-quiz="b3_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nur \(P(X=2)\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(P(X\ge 2)\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(P(X=0)+P(X=1)+P(X=2)\) (falls \(0,1,2\) möglich)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\displaystyle\int_0^2 f(x)\,dx\) bei Binomial</div>
+    </div>
+    <div class="feedback" id="fb_b3_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> „Höchstens 4 Treffer“ schreibt man als …</p>
+    <div class="quiz-options" data-quiz="b3_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(P(X=4)\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(P(X\le 4)\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(P(X\ge 4)\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(1-P(X\le 4)\)</div>
+    </div>
+    <div class="feedback" id="fb_b3_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['b3_1','b3_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Kennzahlen →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 5 ═══ -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Erwartungswert, Varianz, Standardabweichung</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Kennzahlen</div>
+    \[ E(X)=n\cdot p, \qquad \mathrm{Var}(X)=n\cdot p\cdot(1-p), \qquad \sigma=\sqrt{\mathrm{Var}(X)} \]
+  </div>
+
+  <p><strong>Im Beispiel</strong> \(X\sim \mathrm{Bin}(10;\,0{,}3)\):</p>
+  <ul style="margin:10px 0 12px 22px;">
+    <li>\(E(X)=10\cdot 0{,}3=3\) — langfristig erwarten wir <strong>im Mittel 3 Zusagen</strong> (keine Garantie in einem Einzeldurchlauf).</li>
+    <li>\(\mathrm{Var}(X)=10\cdot 0{,}3\cdot 0{,}7=2{,}1\) — Streuung der Trefferanzahl.</li>
+    <li>\(\sigma=\sqrt{2{,}1}\approx 1{,}45\) — typische Abweichung vom Mittelwert in der Größenordnung von etwa \(1{,}5\) Zusagen (Faustbild, keine harte Grenze).</li>
+  </ul>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Kennzahlen</span>
+    </div>
+    <p><strong>Frage 1:</strong> Für \(X\sim \mathrm{Bin}(n;\,p)\) ist \(E(X)\) gleich …</p>
+    <div class="quiz-options" data-quiz="b4_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(p\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(n\cdot p\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(n+p\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\sqrt{n}\cdot p\)</div>
+    </div>
+    <div class="feedback" id="fb_b4_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Die Standardabweichung \(\sigma\) hat …</p>
+    <div class="quiz-options" data-quiz="b4_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">keine Einheit</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">die Einheit „Quadrattreffer“</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">dieselbe Einheit wie \(X\) (z.&nbsp;B. „Anzahl Zusagen“)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer den Wert \(1\)</div>
+    </div>
+    <div class="feedback" id="fb_b4_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['b4_1','b4_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Interaktiv →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 6 ═══ -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Interaktiv: PMF &amp; Kennzahlen</div>
+
+  <p>Stelle <strong>\(n\)</strong> und <strong>\(p\)</strong> ein — das Diagramm zeigt \(P(X=k)\) als Balken. Der Balken für dein gewähltes <strong>\(k\)</strong> ist hervorgehoben. Unten siehst du \(P(X=k)\), \(P(X\le x)\) sowie \(E(X)\), \(\mathrm{Var}(X)\) und \(\sigma\).</p>
+
+  <div class="chart-controls" style="flex-direction:column; align-items:stretch; gap:14px; margin:16px 0;">
+    <div class="input-row" style="flex-wrap:wrap; gap:16px;">
+      <div class="slider-group">
+        <label for="binNRange">\(n\) = <span id="binNLabel">10</span></label>
+        <input type="range" id="binNRange" min="1" max="30" step="1" value="10">
+      </div>
+      <div class="slider-group">
+        <label for="binPRange">\(p\) = <span id="binPLabel">0,3</span></label>
+        <input type="range" id="binPRange" min="0.05" max="0.95" step="0.01" value="0.3">
+      </div>
+    </div>
+    <div class="input-row" style="flex-wrap:wrap; gap:12px;">
+      <div class="input-group">
+        <label for="binN">\(n\) (Zahl)</label>
+        <input type="number" id="binN" min="1" max="30" value="10" inputmode="numeric">
+      </div>
+      <div class="input-group">
+        <label for="binP">\(p\)</label>
+        <input type="text" id="binP" value="0,3" inputmode="decimal" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label for="binK">hervorgehobenes \(k\)</label>
+        <input type="number" id="binK" min="0" max="10" value="3" inputmode="numeric">
+      </div>
+    </div>
+  </div>
+
+  <div style="height:300px; position:relative; margin:8px 0 16px;">
+    <canvas id="binomChart" aria-label="Balkendiagramm Binomial-PMF"></canvas>
+  </div>
+
+  <div class="info-box success" style="margin-bottom:14px;">
+    <div class="icon">📐</div>
+    <div>
+      <strong>\(P(X=k)\):</strong> <span id="binPmfOut">—</span><br>
+      <strong>\(P(X\le x)\):</strong> für \(x=\) <input type="number" id="binXcdf" min="0" max="10" value="2" style="width:4rem; padding:6px; border-radius:8px; border:1px solid #ccc;"> → <span id="binCdfOut">—</span><br>
+      <strong>\(E(X)\):</strong> <span id="binExOut">—</span> &nbsp;·&nbsp; <strong>\(\mathrm{Var}(X)\):</strong> <span id="binVarOut">—</span> &nbsp;·&nbsp; <strong>\(\sigma\):</strong> <span id="binSigmaOut">—</span>
+    </div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">✍️</div>
+    <div>
+      <strong>Mini-Checkliste (Aufgaben):</strong>
+      <ol style="margin:8px 0 0 18px;">
+        <li>Erkennen: Binomial? (\(n\), \(p\), zwei Ausgänge, Unabhängigkeit?)</li>
+        <li>Modellieren: \(X\sim \mathrm{Bin}(n;\,p)\)</li>
+        <li>Rechnen: „genau \(k\)“ → \(P(X=k)\); „höchstens / mindestens“ → Summe bzw. Komplement</li>
+        <li>Interpretieren: Ergebnis im Kontext erklären</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Einordnung</span>
+    </div>
+    <p><strong>Frage 1:</strong> Die Binomialverteilung ist eine …</p>
+    <div class="quiz-options" data-quiz="b5_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">diskrete Verteilung auf \(\{0,\ldots,n\}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">stetige Normalverteilung</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Gleichverteilung auf \([0;\,n]\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Verteilung ohne Parameter</div>
+    </div>
+    <div class="feedback" id="fb_b5_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Für \(X\sim \mathrm{Bin}(10;\,0{,}3)\) ist \(P(X=10)\) gleich …</p>
+    <div class="quiz-options" data-quiz="b5_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\((0{,}7)^{10}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\((0{,}3)^{10}\) (alle 10 Versuche Treffer)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(0{,}3\cdot 10\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\binom{10}{10}\cdot 0{,}3\)</div>
+    </div>
+    <div class="feedback" id="fb_b5_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['b5_1','b5_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Übungen &amp; Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══ STATION 7 ═══ -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Verständnisfragen &amp; Abschluss</div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Drei Verständnisfragen (mit Musterlösung)</h3>
+
+  <details style="margin:10px 0; padding:12px 14px; background:var(--blue-light); border-radius:12px; border:1px solid rgba(59,130,196,0.25);">
+    <summary>1) Wann darfst du eine Binomialverteilung verwenden? Nenne zwei Bedingungen.</summary>
+    <p style="margin-top:8px;"><strong>Antwort:</strong> Z.&nbsp;B. (1) feste Anzahl \(n\) unabhängiger Versuche und (2) genau zwei Ausgänge pro Versuch. Zusätzlich typischerweise konstantes \(p\) und Unabhängigkeit der Versuche.</p>
+  </details>
+  <details style="margin:10px 0; padding:12px 14px; background:var(--blue-light); border-radius:12px; border:1px solid rgba(59,130,196,0.25);">
+    <summary>2) \(X\sim \mathrm{Bin}(10;\,0{,}3)\): Was bedeutet \(P(X=3)\) in Worten?</summary>
+    <p style="margin-top:8px;"><strong>Antwort:</strong> Die Wahrscheinlichkeit, dass es bei 10 Anrufen <strong>genau 3</strong> Zusagen gibt.</p>
+  </details>
+  <details style="margin:10px 0; padding:12px 14px; background:var(--blue-light); border-radius:12px; border:1px solid rgba(59,130,196,0.25);">
+    <summary>3) Berechne \(E(X)\), \(\mathrm{Var}(X)\) und \(\sigma\) für \(X\sim \mathrm{Bin}(10;\,0{,}3)\) und erkläre kurz.</summary>
+    <p style="margin-top:8px;"><strong>Antwort:</strong> \(E(X)=3\), \(\mathrm{Var}(X)=2{,}1\), \(\sigma=\sqrt{2{,}1}\approx 1{,}45\). Im Mittel erwarten wir 3 Zusagen; typische Schwankung rund \(\pm 1{,}5\) Zusagen (grobes Bild).</p>
+  </details>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung A</span>
+      <span class="exercise-title">Genau 3 Zusagen</span>
+    </div>
+    <p>Für \(X\sim \mathrm{Bin}(10;\,0{,}3)\): Wie groß ist \(P(X=3)\)? (Dezimalzahl, z.&nbsp;B. <code>0,2668</code>)</p>
+    <div class="input-group">
+      <label for="bio_u1">\(P(X=3)\)</label>
+      <input type="text" id="bio_u1" placeholder="0,2668" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkBioU1()">Überprüfen</button>
+    <div class="feedback" id="fb_bio_u1"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung B</span>
+      <span class="exercise-title">Erwartungswert</span>
+    </div>
+    <p>Wie groß ist \(E(X)\) für \(X\sim \mathrm{Bin}(10;\,0{,}3)\)?</p>
+    <div class="input-group">
+      <label for="bio_u2">\(E(X)=\)</label>
+      <input type="text" id="bio_u2" placeholder="3" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkBioU2()">Überprüfen</button>
+    <div class="feedback" id="fb_bio_u2"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung C</span>
+      <span class="exercise-title">Höchstens 2 Zusagen</span>
+    </div>
+    <p>Wie groß ist \(P(X\le 2)\) für \(X\sim \mathrm{Bin}(10;\,0{,}3)\)?</p>
+    <div class="input-group">
+      <label for="bio_u3">\(P(X\le 2)\)</label>
+      <input type="text" id="bio_u3" placeholder="0,…" autocomplete="off">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkBioU3()">Überprüfen</button>
+    <div class="feedback" id="fb_bio_u3"></div>
+  </div>
+
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:28px;">Abschlussquiz</h3>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+
+  <div id="finalResult" style="display:none; margin-top:20px;">
+    <div class="info-box success">
+      <div class="icon">🏆</div>
+      <div>
+        <strong id="finalScore"></strong>
+        <p id="finalMessage" style="margin-top:8px;"></p>
+        <div class="badge-container" id="badgeContainer"></div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-hint" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div><!-- container -->
+
+<div class="floating-tools-wrap">
+  <button type="button" class="floating-tools-fab" onclick="openCalculatorModal()"
+    aria-label="Taschenrechner öffnen" title="Taschenrechner">🧮</button>
+</div>
+
+<div id="calcModal" class="gg-modal" role="dialog" aria-modal="true" aria-labelledby="calcModalTitle" aria-hidden="true">
+  <div class="gg-modal-backdrop" onclick="closeCalculatorModal()"></div>
+  <div class="gg-modal-dialog calc-modal-dialog">
+    <div class="gg-modal-header">
+      <h2 id="calcModalTitle">Taschenrechner</h2>
+      <button type="button" class="gg-modal-close" onclick="closeCalculatorModal()" aria-label="Schließen">&times;</button>
+    </div>
+    <div class="gg-modal-body">
+      <div class="calc-display-wrap">
+        <input type="text" class="calc-display" id="calcDisplay" value="0" readonly inputmode="none" aria-live="polite">
+      </div>
+      <div class="calc-keys">
+        <button type="button" onclick="calcClear()">C</button>
+        <button type="button" onclick="calcBackspace()">⌫</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('/')">÷</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('*')">×</button>
+        <button type="button" onclick="calcPressDigit('7')">7</button>
+        <button type="button" onclick="calcPressDigit('8')">8</button>
+        <button type="button" onclick="calcPressDigit('9')">9</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('-')">−</button>
+        <button type="button" onclick="calcPressDigit('4')">4</button>
+        <button type="button" onclick="calcPressDigit('5')">5</button>
+        <button type="button" onclick="calcPressDigit('6')">6</button>
+        <button type="button" class="calc-op" onclick="calcPressOp('+')">+</button>
+        <button type="button" onclick="calcPressDigit('1')">1</button>
+        <button type="button" onclick="calcPressDigit('2')">2</button>
+        <button type="button" onclick="calcPressDigit('3')">3</button>
+        <button type="button" class="calc-eq" onclick="calcEquals()">=</button>
+        <button type="button" class="calc-wide" onclick="calcPressDigit('0')">0</button>
+        <button type="button" onclick="calcPressDigit('.')">,</button>
+      </div>
+      <p style="font-size:0.8rem; color:var(--text-light); margin-top:12px;">Dezimalzahlen intern mit Punkt — Anzeige mit Komma.</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/normalverteilung-lernpfad/15-binomialverteilung-rechner-widget.js"></script>
+<script src="js/binomialverteilung-lernpfad/app.js"></script>
+</body>
+</html>

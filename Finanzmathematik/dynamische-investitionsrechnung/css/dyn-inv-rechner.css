@@ -1,0 +1,335 @@
+/* Excel-ähnlicher Investitionsrechner (Lernpfad dynamische Investitionsrechnung) */
+.xls-wrap {
+  font-size: 0.88rem;
+  color: #1a1a1a;
+  margin-top: 12px;
+}
+
+.xls-grid {
+  display: grid;
+  grid-template-columns: minmax(200px, 240px) 1fr;
+  gap: 16px 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .xls-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.xls-params {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.xls-block {
+  border: 1px solid #c5d4b8;
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: #fafafa;
+}
+
+.xls-block--yellow {
+  background: #fff9c4;
+  border-color: #e6d86a;
+}
+
+.xls-block--blue {
+  background: #e3f2fd;
+  border-color: #90caf9;
+}
+
+.xls-block--orange {
+  background: #fff3e0;
+  border-color: #ffcc80;
+}
+
+.xls-block--pink {
+  background: #fce4ec;
+  border-color: #f48fb1;
+}
+
+.xls-block h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.xls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.xls-row:last-child {
+  margin-bottom: 0;
+}
+
+.xls-row label {
+  flex: 1;
+  font-size: 0.8rem;
+}
+
+.xls-in {
+  width: 88px;
+  max-width: 40%;
+  padding: 6px 8px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-family: Consolas, 'Segoe UI', monospace;
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.xls-in:focus {
+  outline: 2px solid var(--blue, #3b82c4);
+  border-color: var(--blue, #3b82c4);
+}
+
+.xls-read {
+  font-family: Consolas, 'Segoe UI', monospace;
+  font-weight: 600;
+  text-align: right;
+  min-width: 72px;
+}
+
+.xls-scroll {
+  overflow-x: auto;
+  border: 1px solid #2e7d32;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.xls-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+
+.xls-table thead th {
+  background: #2e7d32;
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 8px;
+  text-align: right;
+  border: 1px solid #1b5e20;
+  font-size: 0.78rem;
+}
+
+.xls-table thead th:first-child {
+  text-align: center;
+  width: 52px;
+}
+
+.xls-table tbody td {
+  padding: 6px 8px;
+  border: 1px solid #e0e0e0;
+  text-align: right;
+  font-family: Consolas, 'Segoe UI', monospace;
+}
+
+.xls-table tbody td:first-child {
+  text-align: center;
+  font-weight: 600;
+  background: #f1f8e9;
+}
+
+.xls-table tbody tr:nth-child(even) td:not(:first-child) {
+  background: #fafafa;
+}
+
+.xls-table tfoot td {
+  padding: 8px;
+  font-weight: 700;
+  background: #c8e6c9;
+  border: 1px solid #81c784;
+  text-align: right;
+  font-family: Consolas, 'Segoe UI', monospace;
+}
+
+.xls-table tfoot td:first-child {
+  text-align: center;
+}
+
+.xls-num {
+  color: #000;
+}
+
+.xls-neg {
+  color: #c62828;
+}
+
+.xls-cell-inv {
+  background: #b71c1c !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+
+.xls-out {
+  background: #e8f5e9 !important;
+}
+
+.xls-summary {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.xls-sum-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #eceff1;
+  font-size: 0.82rem;
+}
+
+.xls-sum-row--yellow {
+  background: #fff9c4;
+  border-color: #e6d86a;
+}
+
+.xls-sum-row--orange {
+  background: #ffe0b2;
+  border-color: #ffb74d;
+}
+
+.xls-sum-row strong {
+  font-family: Consolas, 'Segoe UI', monospace;
+  font-size: 0.9rem;
+}
+
+.xls-hint {
+  font-size: 0.8rem;
+  color: var(--text-light, #666);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* Kapitalwertkurve (Station Kapitalwert) */
+.kw-applet {
+  margin: 20px 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(59, 130, 196, 0.25);
+  border-radius: var(--radius, 12px);
+  background: linear-gradient(165deg, #f8fbff 0%, #fff 55%);
+}
+
+.kw-applet h3 {
+  margin: 0 0 10px 0;
+  font-family: 'Patrick Hand', cursive;
+  color: var(--blue-dark, #1a4d7a);
+  font-size: 1.35rem;
+}
+
+.kw-applet-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+
+.kw-applet-controls label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.kw-slider-row {
+  flex: 1;
+  min-width: 220px;
+}
+
+.kw-slider-row input[type='range'] {
+  width: 100%;
+  max-width: 420px;
+  accent-color: var(--blue, #3b82c4);
+}
+
+.kw-select-row select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 2px solid #e8e8e8;
+  font-size: 0.85rem;
+  min-width: 260px;
+}
+
+.kw-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  font-size: 0.86rem;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+}
+
+.kw-readout strong {
+  font-family: Consolas, 'Segoe UI', monospace;
+  color: var(--blue-dark, #1a4d7a);
+}
+
+.kw-readout .kw-neg {
+  color: #c62828;
+}
+
+.kw-readout .kw-pos {
+  color: #2e7d32;
+}
+
+.kw-canvas-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #cfd8dc;
+  background: #fff;
+}
+
+.kw-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+
+.kw-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--text-light, #555);
+}
+
+.kw-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kw-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.kw-leg-dash {
+  width: 18px;
+  border-top: 3px dashed #212121;
+  flex-shrink: 0;
+}
