@@ -133,6 +133,48 @@ function checkA3() {
   if (correct >= 3) checkStation6();
 }
 
+function checkA4() {
+  const n = parseNum(document.getElementById('a4_n').value);
+  const p = parseNum(document.getElementById('a4_p').value);
+  const pBinom = parseProbability(document.getElementById('a4_binom_prob').value);
+  const ex = parseNum(document.getElementById('a4_ex').value);
+  const sigmaX = parseNum(document.getElementById('a4_sigma_x').value);
+  const mu = parseNum(document.getElementById('a4_mu').value);
+  const sigmaN = parseNum(document.getElementById('a4_sigma_n').value);
+  const pNorm = parseProbability(document.getElementById('a4_norm_prob').value);
+  const pCorr = parseProbability(document.getElementById('a4_corr_prob').value);
+  const fb = document.getElementById('fb_a4');
+
+  let correct = 0;
+  let details = [];
+
+  if (approxEq(n, 600)) correct++; else details.push('n = 600');
+  if (approxEq(p, 1 / 6, 0.002)) correct++; else details.push('p = 1/6 ≈ 0,1667');
+  if (!Number.isNaN(pBinom) && approxEq(pBinom, 0.605, 0.025)) correct++;
+  else details.push('P(90 ≤ X ≤ 105) (binomial) ≈ 60,5 %');
+  if (approxEq(ex, 100, 0.2)) correct++; else details.push('E(X) = 100');
+  if (approxEq(sigmaX, 9.13, 0.18)) correct++; else details.push('σ(X) ≈ 9,13');
+  if (approxEq(mu, 100, 0.2)) correct++; else details.push('μ = 100');
+  if (approxEq(sigmaN, 9.13, 0.18)) correct++; else details.push('σ ≈ 9,13');
+  if (!Number.isNaN(pNorm) && approxEq(pNorm, 0.571, 0.03)) correct++;
+  else details.push('ohne Stetigkeitskorrektur ≈ 57,1 %');
+  if (!Number.isNaN(pCorr) && approxEq(pCorr, 0.606, 0.03)) correct++;
+  else details.push('mit Stetigkeitskorrektur ≈ 60,6 %');
+
+  if (correct >= 8) {
+    fb.className = 'feedback correct';
+    fb.innerHTML = '✅ Sehr stark! Du siehst den Effekt der Stetigkeitskorrektur klar: ohne Korrektur zu klein, mit Korrektur sehr nah an der Binomialwahrscheinlichkeit.';
+    checkStation6();
+  } else if (correct >= 6) {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '🟠 ' + correct + ' von 9 richtig — fast. Prüfe besonders die Wahrscheinlichkeiten ohne/mit Stetigkeitskorrektur.<br>' + details.join('<br>');
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.innerHTML = '❌ ' + correct + ' von 9 richtig. Nutze bei Bedarf die Lösung als Leitfaden.<br>' + details.join('<br>');
+  }
+  fb.style.display = 'block';
+}
+
 function checkStation6() {
   station6Count++;
   if (station6Count >= 2) markComplete(6);

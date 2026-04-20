@@ -1,7 +1,7 @@
 /**
  * Lernpfad: Kosten- und Preistheorie (Kapitel Differential-Integralrechnung)
  */
-var TOTAL_SECTIONS = 9;
+var TOTAL_SECTIONS = 10;
 var completedSections = new Set();
 var currentTab = 0;
 
@@ -60,13 +60,20 @@ function switchTab(idx) {
 
   if (idx === 4) {
     window.requestAnimationFrame(function () {
+      drawKpErlosApplet();
+      drawKpCournotCanvas();
+    });
+  }
+
+  if (idx === 5) {
+    window.requestAnimationFrame(function () {
       var iframe = document.getElementById('ggbKegIframe');
       var url = iframe && iframe.getAttribute('data-ggb-src');
       if (iframe && url && !iframe.getAttribute('src')) iframe.setAttribute('src', url);
     });
   }
 
-  if (idx === 6) {
+  if (idx === 7) {
     window.requestAnimationFrame(function () {
       var iframe = document.getElementById('ggbKostenIframe');
       var url = iframe && iframe.getAttribute('data-ggb-src');
@@ -343,6 +350,763 @@ function resetKp0Quiz() {
     d.classList.remove('correct-dot', 'wrong-dot');
   });
   buildKp0Quiz();
+}
+
+/** Schritt 2: Graphen-Quiz (5 Fragen), Schritt-fuer-Schritt */
+var currentKp2 = 0;
+var kp2Answers = [];
+
+var kp2QuizData = [
+  {
+    type: 'graphPick',
+    q: 'Welches Diagramm zeigt <strong>keinen</strong> ueblichen Gesamtkostenverlauf? (Annahme: mit wachsender Produktionsmenge steigen die Gesamtkosten, \(K\) faellt nicht.)',
+    shapes: ['falling', 'linear', 'degressiv', 'progressiv'],
+    labels: ['A', 'B', 'C', 'D'],
+    correct: 0,
+    explain:
+      'Ein fallender Verlauf passt nicht zum ueblichen Modell einer Kostenfunktion bei steigender Produktion.'
+  },
+  {
+    type: 'graphPick',
+    q: 'Welches Diagramm passt am ehesten zu einem <strong>ertragsgesetzlichen</strong> Verlauf (S-Form mit Kostenkehre)?',
+    shapes: ['linear', 'progressiv', 'erg', 'degressiv'],
+    labels: ['A', 'B', 'C', 'D'],
+    correct: 2,
+    explain:
+      'Ertragsgesetzlich bedeutet: zuerst degressiv, dann progressiv - erkennbar an der S-Form mit Wendepunkt.'
+  },
+  {
+    type: 'mc',
+    q: 'Auf einem Intervall ist der Kostenverlauf <strong>durchweg degressiv</strong>. Welche Aussage zur Kruemmung passt dort typischerweise?',
+    opts: [
+      "\(K''(x) > 0\) (rechtsgekruemmt)",
+      "\(K''(x) < 0\) (linksgekruemmt)",
+      "\(K''(x) = 0\) ueberall",
+      "\(K'(x) < 0\) (Kosten fallen)"
+    ],
+    correct: 1,
+    explain:
+      'Degressiver Verlauf bedeutet typischerweise negative zweite Ableitung: \(K\'\'(x)<0\).'
+  },
+  {
+    type: 'mc',
+    q: 'Warum kann folgende Funktion keine Kostenfunktion sein? \(K(x)=-0{,}02x^2+45x+200\)',
+    opts: [
+      'Weil die Funktion nicht definiert ist.',
+      'Weil die Funktion keine Fixkosten besitzt.',
+      'Weil die Funktion nicht durchgehend monoton steigend ist.',
+      'Weil die Funktion eine lineare Funktion ist.'
+    ],
+    correct: 2,
+    explain:
+      'Eine uebliche Kostenfunktion soll im betrachteten Bereich mit steigender Menge nicht wieder fallen.'
+  },
+  {
+    type: 'mc',
+    q: 'Warum kann folgende Funktion keine Kostenfunktion sein? \(K(x)=0{,}05x-300\)',
+    opts: [
+      'Weil die Funktion nicht differenzierbar ist.',
+      'Weil die Fixkosten bei dieser Funktion negativ waeren.',
+      'Weil die Steigung zu klein ist.',
+      'Weil die Funktion keinen Wendepunkt hat.'
+    ],
+    correct: 1,
+    explain:
+      'Hier gilt \(K(0)=-300\): Das waeren negative Fixkosten und ist im Standardmodell nicht sinnvoll.'
+  },
+  {
+    type: 'mc',
+    q: 'Für \(K(x)=0{,}1x^3-3x^2+40x+300\): Wo liegt die <strong>Kostenkehre</strong> (x-Koordinate)?',
+    opts: ['\(x=0\)', '\(x=6\)', '\(x=10\)', '\(x=40\)'],
+    correct: 2,
+    explain:
+      'Kostenkehre als Wendestelle: \(K\'\'(x)=0{,}6x-6=0\Rightarrow x=10\).'
+  }
+];
+
+function buildKp2Quiz() {
+  var stepper = document.getElementById('kp2QuizStepper');
+  if (!stepper) return;
+  stepper.innerHTML = '';
+  for (var i = 0; i < kp2QuizData.length; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'quiz-step-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.id = 'kp2Dot' + i;
+    stepper.appendChild(dot);
+  }
+  kp2Answers = new Array(kp2QuizData.length).fill(-1);
+  showKp2Question(0);
+}
+
+function showKp2Question(idx) {
+  currentKp2 = idx;
+  var q = kp2QuizData[idx];
+  var wrap = document.getElementById('kp2QuizContainer');
+  var resultEl = document.getElementById('kp2QuizResult');
+  if (!wrap || !q) return;
+  if (resultEl) {
+    resultEl.style.display = 'none';
+    resultEl.innerHTML = '';
+  }
+
+  var html = '<div class="kp0-question-card" style="animation:fadeIn 0.3s ease;">';
+  html +=
+    '<p class="kp0-q-lead">Frage ' +
+    (idx + 1) +
+    ' von ' +
+    kp2QuizData.length +
+    '</p>';
+  html += '<p class="kp0-q-text">' + q.q + '</p>';
+
+  if (q.type === 'graphPick') {
+    html += '<div class="quiz-options kv-graph-quiz">';
+    for (var gi = 0; gi < q.shapes.length; gi++) {
+      var sel = kp2Answers[idx] === gi ? ' selected' : '';
+      var lab = q.labels && q.labels[gi] ? q.labels[gi] : String.fromCharCode(65 + gi);
+      html +=
+        '<div class="quiz-option kv-graph-opt' +
+        sel +
+        '" onclick="selectKp2(' +
+        gi +
+        ')"><canvas width="132" height="84" data-kp2-shape="' +
+        q.shapes[gi] +
+        '" aria-hidden="true"></canvas><span class="kv-graph-cap">' +
+        lab +
+        '</span></div>';
+    }
+    html += '</div>';
+  } else {
+    html += '<div class="quiz-options kp0-quiz-options">';
+    q.opts.forEach(function (opt, i) {
+      var sel = kp2Answers[idx] === i ? ' selected' : '';
+      html += '<div class="quiz-option' + sel + '" onclick="selectKp2(' + i + ')">' + opt + '</div>';
+    });
+    html += '</div>';
+  }
+
+  html += '<div class="kp0-question-actions">';
+  if (idx > 0)
+    html +=
+      '<button type="button" class="btn btn-prev" onclick="showKp2Question(' + (idx - 1) + ')">\u2190 Zur\u00fcck</button>';
+  if (idx < kp2QuizData.length - 1) {
+    html +=
+      '<button type="button" class="btn btn-next" onclick="showKp2Question(' +
+      (idx + 1) +
+      ')">Weiter \u2192</button>';
+  } else {
+    html +=
+      '<button type="button" class="btn btn-check" onclick="evaluateKp2Quiz()">Auswerten \u2713</button>';
+  }
+  html += '</div></div>';
+  wrap.innerHTML = html;
+
+  document.querySelectorAll('#kp2QuizStepper .quiz-step-dot').forEach(function (d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (q.type === 'graphPick') {
+    window.requestAnimationFrame(function () {
+      drawKp2GraphPickCanvases();
+    });
+  }
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([wrap]).catch(function () {});
+}
+
+function selectKp2(optIdx) {
+  kp2Answers[currentKp2] = optIdx;
+  document.querySelectorAll('#kp2QuizContainer .quiz-option').forEach(function (o, i) {
+    o.classList.toggle('selected', i === optIdx);
+  });
+}
+
+function drawKp2GraphPickCanvases() {
+  document.querySelectorAll('#kp2QuizContainer canvas[data-kp2-shape]').forEach(function (cv) {
+    var sh = cv.getAttribute('data-kp2-shape');
+    if (!sh || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    var w = cv.width;
+    var h = cv.height;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#FAFAFA';
+    ctx.fillRect(0, 0, w, h);
+    drawKvCurveInBox(ctx, w, h, 10, 8, 6, 14, 10, sh, '#2563EB', 2.2);
+  });
+}
+
+function evaluateKp2Quiz() {
+  var score = 0;
+  kp2QuizData.forEach(function (q, i) {
+    var ok = kp2Answers[i] === q.correct;
+    if (ok) score++;
+    var dot = document.getElementById('kp2Dot' + i);
+    if (dot) {
+      dot.classList.remove('correct-dot', 'wrong-dot');
+      dot.classList.add(ok ? 'correct-dot' : 'wrong-dot');
+    }
+  });
+
+  if (score === kp2QuizData.length) markComplete(2);
+
+  var html = '';
+  kp2QuizData.forEach(function (q, i) {
+    var ok = kp2Answers[i] === q.correct;
+    html +=
+      '<div class="info-box ' + (ok ? 'success' : 'danger') + '" style="margin:8px 0;">';
+    html += '<div class="icon">' + (ok ? '\u2705' : '\u274c') + '</div><div>';
+    html += '<strong>Frage ' + (i + 1) + ':</strong> ' + q.explain;
+    if (!ok && kp2Answers[i] >= 0 && q.opts) {
+      html += '<br><em>Deine Antwort: ' + q.opts[kp2Answers[i]] + '</em>';
+    } else if (!ok && kp2Answers[i] >= 0 && q.labels) {
+      html +=
+        '<br><em>Deine Wahl: ' +
+        (q.labels[kp2Answers[i]] || String.fromCharCode(65 + kp2Answers[i])) +
+        '</em>';
+    } else if (!ok && kp2Answers[i] < 0) {
+      html += '<br><em>Keine Antwort gewaehlt.</em>';
+    }
+    html += '</div></div>';
+  });
+
+  var res = document.getElementById('kp2QuizResult');
+  if (res) {
+    res.style.display = 'block';
+    res.innerHTML =
+      '<p style="font-weight:700; margin-bottom:8px;">Ergebnis: ' +
+      score +
+      ' von ' +
+      kp2QuizData.length +
+      ' richtig.</p>' +
+      html;
+  }
+  var wrap = document.getElementById('kp2QuizContainer');
+  if (wrap) wrap.innerHTML = '';
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([res]).catch(function () {});
+}
+
+function resetKp2Quiz() {
+  var res = document.getElementById('kp2QuizResult');
+  if (res) {
+    res.style.display = 'none';
+    res.innerHTML = '';
+  }
+  document.querySelectorAll('#kp2QuizStepper .quiz-step-dot').forEach(function (d) {
+    d.classList.remove('correct-dot', 'wrong-dot');
+  });
+  buildKp2Quiz();
+}
+
+/** Schritt 3: Zuordnungs-Quiz als Abfolge */
+var currentKp3 = 0;
+var kp3Answers = [];
+
+var kp3QuizData = [
+  {
+    q: 'Polynomkosten 3. Grades. Welche Gleichung passt zur Aussage: <strong>„Grenzkosten- und Stückkostenkurve schneiden sich bei 10&nbsp;ME.“</strong>',
+    opts: [
+      '\\(\\overline{K}(10)=K\'(10)\\)',
+      '\\(K(10)=100\\)',
+      '\\(K\'\'(10)=0\\)',
+      '\\(\\dfrac{K\'(10)}{10}=10\\)'
+    ],
+    correct: 0,
+    explain:
+      'Schnitt von Grenzkosten- und Stückkostenkurve bei \\(x=10\\) bedeutet \\(\\overline{K}(10)=K\'(10)\\).'
+  },
+  {
+    q: 'Polynomkosten 3. Grades. Welche Gleichung passt zur Aussage: <strong>„Stückkosten bei 10&nbsp;ME betragen 10&nbsp;GE/ME.“</strong>',
+    opts: [
+      '\\(\\overline{K}(10)=K\'(10)\\)',
+      '\\(K(10)=100\\) (bzw. \\(\\overline{K}(10)=10\\))',
+      '\\(K\'\'(10)=0\\)',
+      '\\(K\'(10)=0\\)'
+    ],
+    correct: 1,
+    explain:
+      '10 GE/ME bei \\(x=10\\) heisst \\(\\overline{K}(10)=10\\), also aequivalent \\(K(10)=100\\).'
+  }
+];
+
+function buildKp3Quiz() {
+  var stepper = document.getElementById('kp3QuizStepper');
+  if (!stepper) return;
+  stepper.innerHTML = '';
+  for (var i = 0; i < kp3QuizData.length; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'quiz-step-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.id = 'kp3Dot' + i;
+    stepper.appendChild(dot);
+  }
+  kp3Answers = new Array(kp3QuizData.length).fill(-1);
+  showKp3Question(0);
+}
+
+function showKp3Question(idx) {
+  currentKp3 = idx;
+  var q = kp3QuizData[idx];
+  var wrap = document.getElementById('kp3QuizContainer');
+  var resultEl = document.getElementById('kp3QuizResult');
+  if (!wrap || !q) return;
+  if (resultEl) {
+    resultEl.style.display = 'none';
+    resultEl.innerHTML = '';
+  }
+
+  var html = '<div class="kp0-question-card" style="animation:fadeIn 0.3s ease;">';
+  html +=
+    '<p class="kp0-q-lead">Frage ' +
+    (idx + 1) +
+    ' von ' +
+    kp3QuizData.length +
+    '</p>';
+  html += '<p class="kp0-q-text">' + q.q + '</p>';
+  html += '<div class="quiz-options kp0-quiz-options">';
+  q.opts.forEach(function (opt, i) {
+    var sel = kp3Answers[idx] === i ? ' selected' : '';
+    html += '<div class="quiz-option' + sel + '" onclick="selectKp3(' + i + ')">' + opt + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="kp0-question-actions">';
+  if (idx > 0)
+    html +=
+      '<button type="button" class="btn btn-prev" onclick="showKp3Question(' + (idx - 1) + ')">\u2190 Zur\u00fcck</button>';
+  if (idx < kp3QuizData.length - 1) {
+    html +=
+      '<button type="button" class="btn btn-next" onclick="showKp3Question(' +
+      (idx + 1) +
+      ')">Weiter \u2192</button>';
+  } else {
+    html +=
+      '<button type="button" class="btn btn-check" onclick="evaluateKp3Quiz()">Auswerten \u2713</button>';
+  }
+  html += '</div></div>';
+  wrap.innerHTML = html;
+
+  document.querySelectorAll('#kp3QuizStepper .quiz-step-dot').forEach(function (d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([wrap]).catch(function () {});
+}
+
+function selectKp3(optIdx) {
+  kp3Answers[currentKp3] = optIdx;
+  document.querySelectorAll('#kp3QuizContainer .quiz-option').forEach(function (o, i) {
+    o.classList.toggle('selected', i === optIdx);
+  });
+}
+
+function evaluateKp3Quiz() {
+  var score = 0;
+  kp3QuizData.forEach(function (q, i) {
+    var ok = kp3Answers[i] === q.correct;
+    if (ok) score++;
+    var dot = document.getElementById('kp3Dot' + i);
+    if (dot) {
+      dot.classList.remove('correct-dot', 'wrong-dot');
+      dot.classList.add(ok ? 'correct-dot' : 'wrong-dot');
+    }
+  });
+
+  if (score === kp3QuizData.length) markComplete(3);
+
+  var html = '';
+  kp3QuizData.forEach(function (q, i) {
+    var ok = kp3Answers[i] === q.correct;
+    html +=
+      '<div class="info-box ' + (ok ? 'success' : 'danger') + '" style="margin:8px 0;">';
+    html += '<div class="icon">' + (ok ? '\u2705' : '\u274c') + '</div><div>';
+    html += '<strong>Frage ' + (i + 1) + ':</strong> ' + q.explain;
+    if (!ok && kp3Answers[i] >= 0 && q.opts) {
+      html += '<br><em>Deine Antwort: ' + q.opts[kp3Answers[i]] + '</em>';
+    } else if (!ok && kp3Answers[i] < 0) {
+      html += '<br><em>Keine Antwort gewaehlt.</em>';
+    }
+    html += '</div></div>';
+  });
+
+  var res = document.getElementById('kp3QuizResult');
+  if (res) {
+    res.style.display = 'block';
+    res.innerHTML =
+      '<p style="font-weight:700; margin-bottom:8px;">Ergebnis: ' +
+      score +
+      ' von ' +
+      kp3QuizData.length +
+      ' richtig.</p>' +
+      html;
+  }
+
+  var wrap = document.getElementById('kp3QuizContainer');
+  if (wrap) wrap.innerHTML = '';
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([res]).catch(function () {});
+}
+
+function resetKp3Quiz() {
+  var res = document.getElementById('kp3QuizResult');
+  if (res) {
+    res.style.display = 'none';
+    res.innerHTML = '';
+  }
+  document.querySelectorAll('#kp3QuizStepper .quiz-step-dot').forEach(function (d) {
+    d.classList.remove('correct-dot', 'wrong-dot');
+  });
+  buildKp3Quiz();
+}
+
+/** Schritt 6: Gewinn-Quiz als Abfolge (mit Grafikbezug) */
+var currentKp6 = 0;
+var kp6Answers = [];
+
+var kp6QuizData = [
+  {
+    q: 'Ein <strong>positiver Deckungsbeitrag</strong> \\(D(x)=E(x)-K_v(x)\\) bedeutet sicher …',
+    opts: [
+      'Der Gewinn \\(G(x)\\) ist positiv.',
+      'Die variablen Kosten sind gedeckt; ob <em>Gewinn</em> bleibt, hängt von den Fixkosten ab.',
+      'Die Fixkosten sind immer voll gedeckt.',
+      'Das Betriebsoptimum ist erreicht.'
+    ],
+    correct: 1,
+    explain:
+      'Positiver Deckungsbeitrag heißt: variable Kosten gedeckt. Gewinn entsteht erst, wenn danach auch die Fixkosten gedeckt sind.'
+  },
+  {
+    q: 'Bezug zur Gewinnkurve: Welche Zuordnung ist korrekt?',
+    opts: [
+      '\\(x_u\\): Gewinnmaximum, \\(x_c\\): Gewinngrenze, \\(x_o\\): Verlustzone',
+      '\\(x_u\\): Sättigungsmenge, \\(x_c\\): Kostenkehre, \\(x_o\\): Betriebsminimum',
+      '\\(x_u\\): untere Gewinngrenze, \\(x_c\\): Gewinnmaximum, \\(x_o\\): obere Gewinngrenze',
+      '\\(x_u\\): Höchstpreis, \\(x_c\\): Gleichgewicht, \\(x_o\\): Mindestpreis'
+    ],
+    correct: 2,
+    explain:
+      'In der üblichen Gewinnkurve sind \\(x_u\\) und \\(x_o\\) die Gewinngrenzen, \\(x_c\\) ist die Menge mit maximalem Gewinn.'
+  },
+  {
+    q: 'Wie ist \\(G(x)\\) zwischen \\(x_u\\) und \\(x_o\\) typischerweise?',
+    opts: ['\\(G(x)&lt;0\\)', '\\(G(x)&gt;0\\)', '\\(G(x)=0\\) überall', '\\(G(x)\\) ist dort nicht definiert'],
+    correct: 1,
+    explain:
+      'Zwischen den Gewinngrenzen liegt die Gewinnzone, daher ist \\(G(x)&gt;0\\).'
+  },
+  {
+    q: 'Was bedeutet \\(G(x_c)\\) in der Grafik?',
+    opts: [
+      'Den Preis im Marktgleichgewicht',
+      'Die Stückkosten bei \\(x_c\\)',
+      'Die untere Gewinngrenze',
+      'Den maximalen Gewinn (Funktionswert am Hochpunkt der Gewinnkurve)'
+    ],
+    correct: 3,
+    explain:
+      '\\(x_c\\) markiert das Gewinnmaximum; \\(G(x_c)\\) ist entsprechend die maximale Gewinnhöhe.'
+  }
+];
+
+function buildKp6Quiz() {
+  var stepper = document.getElementById('kp6QuizStepper');
+  if (!stepper) return;
+  stepper.innerHTML = '';
+  for (var i = 0; i < kp6QuizData.length; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'quiz-step-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.id = 'kp6Dot' + i;
+    stepper.appendChild(dot);
+  }
+  kp6Answers = new Array(kp6QuizData.length).fill(-1);
+  showKp6Question(0);
+}
+
+function showKp6Question(idx) {
+  currentKp6 = idx;
+  var q = kp6QuizData[idx];
+  var wrap = document.getElementById('kp6QuizContainer');
+  var resultEl = document.getElementById('kp6QuizResult');
+  if (!wrap || !q) return;
+  if (resultEl) {
+    resultEl.style.display = 'none';
+    resultEl.innerHTML = '';
+  }
+
+  var html = '<div class="kp0-question-card" style="animation:fadeIn 0.3s ease;">';
+  html +=
+    '<p class="kp0-q-lead">Frage ' +
+    (idx + 1) +
+    ' von ' +
+    kp6QuizData.length +
+    '</p>';
+  html += '<p class="kp0-q-text">' + q.q + '</p>';
+  html += '<div class="quiz-options kp0-quiz-options">';
+  q.opts.forEach(function (opt, i) {
+    var sel = kp6Answers[idx] === i ? ' selected' : '';
+    html += '<div class="quiz-option' + sel + '" onclick="selectKp6(' + i + ')">' + opt + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="kp0-question-actions">';
+  if (idx > 0)
+    html +=
+      '<button type="button" class="btn btn-prev" onclick="showKp6Question(' + (idx - 1) + ')">\u2190 Zur\u00fcck</button>';
+  if (idx < kp6QuizData.length - 1) {
+    html +=
+      '<button type="button" class="btn btn-next" onclick="showKp6Question(' +
+      (idx + 1) +
+      ')">Weiter \u2192</button>';
+  } else {
+    html +=
+      '<button type="button" class="btn btn-check" onclick="evaluateKp6Quiz()">Auswerten \u2713</button>';
+  }
+  html += '</div></div>';
+  wrap.innerHTML = html;
+
+  document.querySelectorAll('#kp6QuizStepper .quiz-step-dot').forEach(function (d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([wrap]).catch(function () {});
+}
+
+function selectKp6(optIdx) {
+  kp6Answers[currentKp6] = optIdx;
+  document.querySelectorAll('#kp6QuizContainer .quiz-option').forEach(function (o, i) {
+    o.classList.toggle('selected', i === optIdx);
+  });
+}
+
+function evaluateKp6Quiz() {
+  var score = 0;
+  kp6QuizData.forEach(function (q, i) {
+    var ok = kp6Answers[i] === q.correct;
+    if (ok) score++;
+    var dot = document.getElementById('kp6Dot' + i);
+    if (dot) {
+      dot.classList.remove('correct-dot', 'wrong-dot');
+      dot.classList.add(ok ? 'correct-dot' : 'wrong-dot');
+    }
+  });
+
+  if (score === kp6QuizData.length) markComplete(6);
+
+  var html = '';
+  kp6QuizData.forEach(function (q, i) {
+    var ok = kp6Answers[i] === q.correct;
+    html +=
+      '<div class="info-box ' + (ok ? 'success' : 'danger') + '" style="margin:8px 0;">';
+    html += '<div class="icon">' + (ok ? '\u2705' : '\u274c') + '</div><div>';
+    html += '<strong>Frage ' + (i + 1) + ':</strong> ' + q.explain;
+    if (!ok && kp6Answers[i] >= 0 && q.opts) {
+      html += '<br><em>Deine Antwort: ' + q.opts[kp6Answers[i]] + '</em>';
+    } else if (!ok && kp6Answers[i] < 0) {
+      html += '<br><em>Keine Antwort gewaehlt.</em>';
+    }
+    html += '</div></div>';
+  });
+
+  var res = document.getElementById('kp6QuizResult');
+  if (res) {
+    res.style.display = 'block';
+    res.innerHTML =
+      '<p style="font-weight:700; margin-bottom:8px;">Ergebnis: ' +
+      score +
+      ' von ' +
+      kp6QuizData.length +
+      ' richtig.</p>' +
+      html;
+  }
+
+  var wrap = document.getElementById('kp6QuizContainer');
+  if (wrap) wrap.innerHTML = '';
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([res]).catch(function () {});
+}
+
+function resetKp6Quiz() {
+  var res = document.getElementById('kp6QuizResult');
+  if (res) {
+    res.style.display = 'none';
+    res.innerHTML = '';
+  }
+  document.querySelectorAll('#kp6QuizStepper .quiz-step-dot').forEach(function (d) {
+    d.classList.remove('correct-dot', 'wrong-dot');
+  });
+  buildKp6Quiz();
+}
+
+/** Schritt 7: Leitbeispiel-Quiz als Abfolge */
+var currentKp7 = 0;
+var kp7Answers = [];
+
+var kp7QuizData = [
+  {
+    q: '\\(K\'(x)=6x^2-120x+700\\). Fuer welche \\(x\\) gilt \\(K\'(x)\\le 700\\) (groesstes zusammenhaengendes Intervall mit \\(x\\ge 0\\))?',
+    opts: ['\\([0;\\,15]\\)', '\\([0;\\,20]\\)', '\\([10;\\,25]\\)', '\\([15;\\,25]\\)'],
+    correct: 1,
+    explain:
+      'Aus \\(6x^2-120x+700\\le 700\\) folgt \\(6x(x-20)\\le 0\\), also \\(x\\in[0,20]\\).'
+  },
+  {
+    q: '<strong>Betriebsminimum-Gleichung (Auswahl):</strong> Fuer \\(K\\) wie oben ist \\(K_v(x)=2x^3-60x^2+700x\\), also \\(\\overline{K}_v(x)=2x^2-60x+700\\). Welche Ableitungsgleichung passt fuer das Minimum?',
+    opts: ['\\(6x^2-120x+700=0\\)', '\\(12x-120=0\\)', '\\(6x^2-120x=0\\)', '\\(4x-60=0\\)'],
+    correct: 3,
+    explain:
+      'Minimum von \\(\\overline{K}_v\\): \\(\\overline{K}_v\'(x)=4x-60=0\\).'
+  },
+  {
+    q: '<strong>Mit \\(G(x)=E(x)-K(x)\\):</strong> Welche Aussage beschreibt die Gewinnzone korrekt?',
+    opts: [
+      'Gewinnzone: \\(x&lt;2{,}97\\)',
+      'Gewinnzone: \\(x&gt;40{,}44\\)',
+      'Gewinnzone: naeherungsweise \\(2{,}97&lt;x&lt;40{,}44\\)',
+      'Gewinnzone gibt es nicht, weil \\(K\\) kubisch ist.'
+    ],
+    correct: 2,
+    explain:
+      'Zwischen den beiden Break-even-Mengen ist \\(G(x)&gt;0\\), also naeherungsweise \\(2{,}97&lt;x&lt;40{,}44\\).'
+  },
+  {
+    q: 'Welche Bedingung passt im Inneren typischerweise zum <strong>Gewinnmaximum</strong>?',
+    opts: ['\\(E\'(x)=0\\)', '\\(E\'(x)=K\'(x)\\)', '\\(K\'\'(x)=0\\)', '\\(K(x)=0\\)'],
+    correct: 1,
+    explain:
+      'Im inneren Gewinnmaximum gilt \\(G\'(x)=0\\), also aequivalent \\(E\'(x)=K\'(x)\\).'
+  }
+];
+
+function buildKp7Quiz() {
+  var stepper = document.getElementById('kp7QuizStepper');
+  if (!stepper) return;
+  stepper.innerHTML = '';
+  for (var i = 0; i < kp7QuizData.length; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'quiz-step-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.id = 'kp7Dot' + i;
+    stepper.appendChild(dot);
+  }
+  kp7Answers = new Array(kp7QuizData.length).fill(-1);
+  showKp7Question(0);
+}
+
+function showKp7Question(idx) {
+  currentKp7 = idx;
+  var q = kp7QuizData[idx];
+  var wrap = document.getElementById('kp7QuizContainer');
+  var resultEl = document.getElementById('kp7QuizResult');
+  if (!wrap || !q) return;
+  if (resultEl) {
+    resultEl.style.display = 'none';
+    resultEl.innerHTML = '';
+  }
+
+  var html = '<div class="kp0-question-card" style="animation:fadeIn 0.3s ease;">';
+  html +=
+    '<p class="kp0-q-lead">Frage ' +
+    (idx + 1) +
+    ' von ' +
+    kp7QuizData.length +
+    '</p>';
+  html += '<p class="kp0-q-text">' + q.q + '</p>';
+  html += '<div class="quiz-options kp0-quiz-options">';
+  q.opts.forEach(function (opt, i) {
+    var sel = kp7Answers[idx] === i ? ' selected' : '';
+    html += '<div class="quiz-option' + sel + '" onclick="selectKp7(' + i + ')">' + opt + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="kp0-question-actions">';
+  if (idx > 0)
+    html +=
+      '<button type="button" class="btn btn-prev" onclick="showKp7Question(' + (idx - 1) + ')">\u2190 Zur\u00fcck</button>';
+  if (idx < kp7QuizData.length - 1) {
+    html +=
+      '<button type="button" class="btn btn-next" onclick="showKp7Question(' +
+      (idx + 1) +
+      ')">Weiter \u2192</button>';
+  } else {
+    html +=
+      '<button type="button" class="btn btn-check" onclick="evaluateKp7Quiz()">Auswerten \u2713</button>';
+  }
+  html += '</div></div>';
+  wrap.innerHTML = html;
+
+  document.querySelectorAll('#kp7QuizStepper .quiz-step-dot').forEach(function (d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([wrap]).catch(function () {});
+}
+
+function selectKp7(optIdx) {
+  kp7Answers[currentKp7] = optIdx;
+  document.querySelectorAll('#kp7QuizContainer .quiz-option').forEach(function (o, i) {
+    o.classList.toggle('selected', i === optIdx);
+  });
+}
+
+function evaluateKp7Quiz() {
+  var score = 0;
+  kp7QuizData.forEach(function (q, i) {
+    var ok = kp7Answers[i] === q.correct;
+    if (ok) score++;
+    var dot = document.getElementById('kp7Dot' + i);
+    if (dot) {
+      dot.classList.remove('correct-dot', 'wrong-dot');
+      dot.classList.add(ok ? 'correct-dot' : 'wrong-dot');
+    }
+  });
+
+  if (score === kp7QuizData.length) markComplete(7);
+
+  var html = '';
+  kp7QuizData.forEach(function (q, i) {
+    var ok = kp7Answers[i] === q.correct;
+    html +=
+      '<div class="info-box ' + (ok ? 'success' : 'danger') + '" style="margin:8px 0;">';
+    html += '<div class="icon">' + (ok ? '\u2705' : '\u274c') + '</div><div>';
+    html += '<strong>Frage ' + (i + 1) + ':</strong> ' + q.explain;
+    if (!ok && kp7Answers[i] >= 0 && q.opts) {
+      html += '<br><em>Deine Antwort: ' + q.opts[kp7Answers[i]] + '</em>';
+    } else if (!ok && kp7Answers[i] < 0) {
+      html += '<br><em>Keine Antwort gewaehlt.</em>';
+    }
+    html += '</div></div>';
+  });
+
+  var res = document.getElementById('kp7QuizResult');
+  if (res) {
+    res.style.display = 'block';
+    res.innerHTML =
+      '<p style="font-weight:700; margin-bottom:8px;">Ergebnis: ' +
+      score +
+      ' von ' +
+      kp7QuizData.length +
+      ' richtig.</p>' +
+      html;
+  }
+
+  var wrap = document.getElementById('kp7QuizContainer');
+  if (wrap) wrap.innerHTML = '';
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([res]).catch(function () {});
+}
+
+function resetKp7Quiz() {
+  var res = document.getElementById('kp7QuizResult');
+  if (res) {
+    res.style.display = 'none';
+    res.innerHTML = '';
+  }
+  document.querySelectorAll('#kp7QuizStepper .quiz-step-dot').forEach(function (d) {
+    d.classList.remove('correct-dot', 'wrong-dot');
+  });
+  buildKp7Quiz();
 }
 
 /** Schritt 3: interaktive Kostenverläufe + Mini-Graphen für Quiz */
@@ -711,6 +1475,305 @@ function drawKpStueckGraphCanvas() {
       kpFmtDe2(kbar) +
       ' GE/ME); dort gilt K′(x)=K\u0305(x).';
   }
+}
+
+function kpNormalizeExpr(raw) {
+  var s = String(raw || '')
+    .trim()
+    .replace(/,/g, '.')
+    .replace(/\s+/g, '')
+    .replace(/\^/g, '**');
+  s = s.replace(/(\d)(x)/gi, '$1*$2');
+  s = s.replace(/(x)(\d)/gi, '$1*$2');
+  s = s.replace(/\)\(/g, ')*(');
+  s = s.replace(/(x)\(/gi, '$1*(');
+  s = s.replace(/\)(x)/gi, ')*$1');
+  return s;
+}
+
+function kpBuildPreisFunction(expr) {
+  var normalized = kpNormalizeExpr(expr);
+  if (!normalized) return null;
+  if (/[^0-9xX+\-*/().*]/.test(normalized)) return null;
+  try {
+    var fn = new Function('x', 'return (' + normalized + ');');
+    var test = fn(1.23);
+    if (!isFinite(test)) return null;
+    return function (x) {
+      var y = fn(x);
+      return isFinite(y) ? y : NaN;
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+function kpErlosInputChange() {
+  drawKpErlosApplet();
+  drawKpCournotCanvas();
+}
+
+/** Schritt 5: interaktiver Übergang Preisfunktion -> Erlösfunktion */
+function drawKpErlosApplet() {
+  var canvas = document.getElementById('kpErlosCanvas');
+  if (!canvas || !canvas.getContext) return;
+  var exprEl = document.getElementById('kpPreisExpr');
+  var exprRaw = exprEl ? exprEl.value : '100-2x';
+  var pFn = kpBuildPreisFunction(exprRaw);
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width;
+  var h = canvas.height;
+  var padL = 56;
+  var padR = 22;
+  var padT = 26;
+  var padB = 48;
+
+  var xMaxCandidate = 60;
+  var yMaxAbsP = 0;
+  if (pFn) {
+    for (var xp = 0; xp <= 60; xp += 0.5) {
+      var yp = pFn(xp);
+      if (isFinite(yp) && Math.abs(yp) > yMaxAbsP) yMaxAbsP = Math.abs(yp);
+    }
+    if (yMaxAbsP > 0) xMaxCandidate = Math.min(130, Math.max(18, 700 / yMaxAbsP));
+  }
+  var xmax = Math.max(16, xMaxCandidate);
+
+  var ymin = 0;
+  var ymax = 0;
+  if (pFn) {
+    for (var xs = 0; xs <= xmax; xs += Math.max(0.1, xmax / 180)) {
+      var ev = xs * pFn(xs);
+      if (isFinite(ev) && ev > ymax) ymax = ev;
+    }
+  }
+  ymax = Math.max(80, ymax * 1.18 + 10);
+
+  function xToPx(x) {
+    return padL + (x / xmax) * (w - padL - padR);
+  }
+  function yToPx(y) {
+    return padT + ((ymax - y) / (ymax - ymin)) * (h - padT - padB);
+  }
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#FBFCFE';
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.strokeStyle = '#94A3B8';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(xToPx(0), h - padB);
+  ctx.lineTo(xToPx(xmax), h - padB);
+  ctx.moveTo(xToPx(0), padT);
+  ctx.lineTo(xToPx(0), h - padB);
+  ctx.stroke();
+
+  ctx.strokeStyle = '#1D4ED8';
+  ctx.lineWidth = 2.8;
+  ctx.beginPath();
+  var started = false;
+  if (pFn) {
+    for (var xi = 0; xi <= xmax; xi += Math.max(0.05, xmax / 260)) {
+      var ey = xi * pFn(xi);
+      if (!isFinite(ey)) continue;
+      var px = xToPx(xi);
+      var py = yToPx(Math.max(ymin, ey));
+      if (!started) {
+        ctx.moveTo(px, py);
+        started = true;
+      } else {
+        ctx.lineTo(px, py);
+      }
+    }
+  }
+  ctx.stroke();
+
+  var xPeak = 0;
+  var yPeak = -Infinity;
+  if (pFn) {
+    for (var xk = 0; xk <= xmax; xk += Math.max(0.02, xmax / 500)) {
+      var ek = xk * pFn(xk);
+      if (isFinite(ek) && ek > yPeak) {
+        yPeak = ek;
+        xPeak = xk;
+      }
+    }
+  }
+  if (pFn && isFinite(yPeak) && yPeak >= 0) {
+    var pxP = xToPx(xPeak);
+    var pyP = yToPx(Math.max(ymin, yPeak));
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = '#CBD5E1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pxP, pyP);
+    ctx.lineTo(pxP, h - padB);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#0F766E';
+    ctx.beginPath();
+    ctx.arc(pxP, pyP, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = '#475569';
+  ctx.font = '600 11px Nunito, sans-serif';
+  ctx.fillText('x (ME)', w - padR - 8, h - padB + 4);
+  ctx.save();
+  ctx.translate(18, padT + 54);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('E (GE)', 0, 0);
+  ctx.restore();
+
+  var hint = document.getElementById('kpErlosHint');
+  if (hint) {
+    if (!pFn) {
+      hint.textContent =
+        'Bitte einen gueltigen Term fuer p(x) eingeben, z. B. 100-2x oder 120-1.5*x.';
+    } else {
+      hint.textContent =
+        'Preisfunktion: p(x)=' +
+        String(exprRaw).trim() +
+        '. Daraus wird E(x)=x·p(x). Numerisch im sichtbaren Bereich: E_max ≈ ' +
+        kpFmtDe2(yPeak) +
+        ' GE bei x ≈ ' +
+        kpFmtDe2(xPeak) +
+        ' ME (automatisch skaliert).';
+    }
+  }
+}
+
+/** Schritt 5: Visualisierung Cournotscher Punkt auf p(x) */
+function drawKpCournotCanvas() {
+  var canvas = document.getElementById('kpCournotCanvas');
+  if (!canvas || !canvas.getContext) return;
+  var exprEl = document.getElementById('kpPreisExpr');
+  var exprRaw = exprEl ? exprEl.value : '100-2x';
+  var pFn = kpBuildPreisFunction(exprRaw);
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width;
+  var h = canvas.height;
+  var padL = 56;
+  var padR = 20;
+  var padT = 20;
+  var padB = 46;
+  var xmax = 60;
+  var ymin = 0;
+  var ymax = 0;
+
+  if (pFn) {
+    for (var x = 0; x <= xmax; x += 0.3) {
+      var y = pFn(x);
+      if (isFinite(y) && y > ymax) ymax = y;
+    }
+  }
+  ymax = Math.max(20, ymax * 1.15 + 4);
+
+  function xToPx(x) {
+    return padL + (x / xmax) * (w - padL - padR);
+  }
+  function yToPx(y) {
+    return padT + ((ymax - y) / (ymax - ymin)) * (h - padT - padB);
+  }
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#FBFCFE';
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.strokeStyle = '#94A3B8';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(xToPx(0), h - padB);
+  ctx.lineTo(xToPx(xmax), h - padB);
+  ctx.moveTo(xToPx(0), padT);
+  ctx.lineTo(xToPx(0), h - padB);
+  ctx.stroke();
+
+  if (pFn) {
+    ctx.strokeStyle = '#1D4ED8';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    var started = false;
+    for (var xi = 0; xi <= xmax; xi += 0.2) {
+      var py = pFn(xi);
+      if (!isFinite(py)) continue;
+      var px = xToPx(xi);
+      var pyPx = yToPx(Math.max(ymin, py));
+      if (!started) {
+        ctx.moveTo(px, pyPx);
+        started = true;
+      } else ctx.lineTo(px, pyPx);
+    }
+    ctx.stroke();
+
+    var xBest = 0;
+    var eBest = -Infinity;
+    for (var xj = 0; xj <= xmax; xj += 0.05) {
+      var pVal = pFn(xj);
+      if (!isFinite(pVal) || pVal < 0) continue;
+      var eVal = xj * pVal;
+      if (eVal > eBest) {
+        eBest = eVal;
+        xBest = xj;
+      }
+    }
+    var pBest = pFn(xBest);
+    if (isFinite(pBest) && pBest >= 0) {
+      var pxC = xToPx(xBest);
+      var pyC = yToPx(pBest);
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = '#CBD5E1';
+      ctx.beginPath();
+      ctx.moveTo(pxC, pyC);
+      ctx.lineTo(pxC, h - padB);
+      ctx.moveTo(pxC, pyC);
+      ctx.lineTo(padL, pyC);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#B91C1C';
+      ctx.beginPath();
+      ctx.arc(pxC, pyC, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#991B1B';
+      ctx.font = '700 12px Nunito, sans-serif';
+      ctx.fillText('Cournotscher Punkt', pxC + 10, pyC - 8);
+      ctx.font = '600 11px Nunito, sans-serif';
+      ctx.fillStyle = '#64748B';
+      ctx.fillText('x ≈ ' + kpFmtDe2(xBest) + ', p ≈ ' + kpFmtDe2(pBest), pxC + 10, pyC + 10);
+
+      var hint = document.getElementById('kpCournotHint');
+      if (hint) {
+        hint.textContent =
+          'Auf der Nachfragekurve p(x) liegt der Cournotsche Punkt bei der Menge mit maximalem Erlös (hier numerisch: x ≈ ' +
+          kpFmtDe2(xBest) +
+          ', p ≈ ' +
+          kpFmtDe2(pBest) +
+          ').';
+      }
+    }
+  } else {
+    var hintInvalid = document.getElementById('kpCournotHint');
+    if (hintInvalid) hintInvalid.textContent = 'Bitte einen gültigen Term für p(x) eingeben, um den Cournotschen Punkt zu visualisieren.';
+  }
+
+  ctx.fillStyle = '#475569';
+  ctx.font = '600 11px Nunito, sans-serif';
+  ctx.fillText('x (ME)', w - padR - 8, h - padB + 4);
+  ctx.save();
+  ctx.translate(18, padT + 46);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('p (GE/ME)', 0, 0);
+  ctx.restore();
 }
 
 function kpMarktPN(a, b, x) {
@@ -1090,23 +2153,6 @@ function checkKvExercise() {
     fb.style.display = 'block';
     fb.textContent =
       '\u274c Tipp: \\(K_v(x)=K(x)-K(0)\\). Setze \\(x=10\\) ein und rechne \\(K(10)\\) und \\(K(0)\\).';
-  }
-  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function () {});
-}
-
-function checkBoExercise() {
-  var v = parseNum(document.getElementById('kp_bo_input').value);
-  var fb = document.getElementById('fb_kp_bo');
-  if (approxEq(v, 10, 0.05)) {
-    fb.className = 'feedback correct';
-    fb.style.display = 'block';
-    fb.textContent =
-      '\u2705 Richtig: \\(K\'\'(x)=0.6x-6=0 \\Rightarrow x=10\\).';
-  } else {
-    fb.className = 'feedback incorrect';
-    fb.style.display = 'block';
-    fb.textContent =
-      '\u274c Wendepunkt: \\(K\'\'(x)=0\\) lösen (hier \\(K(x)=0.1x^3-3x^2+40x+300\\)).';
   }
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function () {});
 }
@@ -1537,7 +2583,7 @@ function evaluateFinalQuiz() {
   document.getElementById('finalMessage').textContent = msg;
   document.getElementById('badgeContainer').innerHTML = badges;
 
-  if (score >= 7) markComplete(9);
+  if (score >= 7) markComplete(10);
 
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise().catch(function () {});
 }
@@ -1554,6 +2600,10 @@ function resetFinalQuiz() {
 document.addEventListener('DOMContentLoaded', function () {
   switchTab(0);
   buildKp0Quiz();
+  buildKp2Quiz();
+  buildKp3Quiz();
+  buildKp6Quiz();
+  buildKp7Quiz();
   buildFinalQuiz();
 
   window.requestAnimationFrame(function () {

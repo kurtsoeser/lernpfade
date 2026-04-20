@@ -754,6 +754,86 @@ MathJax = {
     <div class="feedback" id="fb_a3"></div>
   </div>
 
+  <!-- Aufgabe 4 -->
+  <div class="exercise" id="ex_a4">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe 4</span>
+      <span class="exercise-title">Würfel: Binomialverteilung und Normalapproximation</span>
+    </div>
+    <p>Du würfelst \(600\)-mal mit einem fairen \(6\)-seitigen Würfel. Sei \(X\) die Anzahl der geworfenen Sechser.</p>
+    <p><strong>Frage:</strong> Wie wahrscheinlich ist es, dass du <strong>mindestens 90</strong>, aber <strong>höchstens 105</strong> Sechser würfelst?</p>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>1) \(X \sim B(n,p)\): \(n=\)</label>
+        <input type="text" id="a4_n" placeholder="...">
+      </div>
+      <div class="input-group">
+        <label>1) \(X \sim B(n,p)\): \(p=\)</label>
+        <input type="text" id="a4_p" placeholder="z. B. 1/6 oder 0,1667">
+      </div>
+      <div class="input-group">
+        <label>\(P(90 \leq X \leq 105) \approx\) (binomial, in %)</label>
+        <input type="text" id="a4_binom_prob" placeholder="z. B. 60,5">
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>Erwartungswert: \(E(X)=n \cdot p=\)</label>
+        <input type="text" id="a4_ex" placeholder="...">
+      </div>
+      <div class="input-group">
+        <label>Standardabweichung: \(\sigma(X)=\sqrt{n p (1-p)}=\)</label>
+        <input type="text" id="a4_sigma_x" placeholder="...">
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label>2) Normalapproximation: \(\mu=E(X)=\)</label>
+        <input type="text" id="a4_mu" placeholder="...">
+      </div>
+      <div class="input-group">
+        <label>2) Normalapproximation: \(\sigma=\sigma(X)=\)</label>
+        <input type="text" id="a4_sigma_n" placeholder="...">
+      </div>
+      <div class="input-group">
+        <label>\(P(90 \leq X' \leq 105) \approx\) (ohne Korrektur, in %)</label>
+        <input type="text" id="a4_norm_prob" placeholder="z. B. 57,1">
+      </div>
+    </div>
+
+    <p style="margin-top:10px;"><strong>Stetigkeitskorrektur:</strong> \(P(89{,}5 \leq X' \leq 105{,}5)\approx\) (in %) </p>
+    <div class="input-group" style="margin-top:8px;">
+      <input type="text" id="a4_corr_prob" placeholder="z. B. 60,6">
+    </div>
+
+    <div class="a4-figure-wrap">
+      <img
+        class="a4-figure"
+        src="Treppenfunktion-Annäherung.png"
+        alt="Treppenfunktion der Binomialverteilung mit Normalapproximation und markiertem Bereich von 89,5 bis 105,5"
+        loading="lazy"
+      >
+      <p class="a4-figure-caption">
+        Treppenfunktion (Binomialverteilung, diskret) und glatte Dichtekurve \(f\) (Normalverteilung, stetig). Die grüne Markierung entspricht der Stetigkeitskorrektur \(89{,}5 \leq X' \leq 105{,}5\) und zeigt die passende Fläche unter der Kurve.
+      </p>
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn btn-check" onclick="checkA4()">Überprüfen ✓</button>
+      <button class="btn btn-hint" onclick="showHint('hint_a4')">💡 Lösung</button>
+    </div>
+    <div class="feedback hint" id="hint_a4" style="display:none;">
+      \(n=600\), \(p=\frac16\approx 0{,}1667\), \(\mu=E(X)=100\), \(\sigma=\sqrt{600\cdot \frac16\cdot \frac56}\approx 9{,}13\).<br>
+      Binomial: \(P(90 \leq X \leq 105)\approx 60{,}5\,\%\).<br>
+      Normal ohne Stetigkeitskorrektur: \(P(90 \leq X' \leq 105)\approx 57{,}1\,\%\).<br>
+      Mit Stetigkeitskorrektur: \(P(89{,}5 \leq X' \leq 105{,}5)\approx 60{,}6\,\%\).
+    </div>
+    <div class="feedback" id="fb_a4"></div>
+  </div>
+
   <div class="tab-nav">
     <button class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
     <button class="btn btn-next" onclick="switchTab(6)">Weiter: Abschlussquiz →</button>

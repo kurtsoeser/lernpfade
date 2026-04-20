@@ -783,6 +783,26 @@ body {
 .input-row { display: flex; gap: 14px; flex-wrap: wrap; }
 .input-row .input-group { flex: 1; min-width: 140px; }
 
+.a4-figure-wrap {
+  margin-top: 18px;
+  border: 1px solid rgba(59,130,196,0.22);
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+}
+.a4-figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #ffffff;
+}
+.a4-figure-caption {
+  margin-top: 10px;
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 10px 24px; border: none; border-radius: 10px;
