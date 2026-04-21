@@ -379,18 +379,18 @@ var kp2QuizData = [
     type: 'mc',
     q: 'Auf einem Intervall ist der Kostenverlauf <strong>durchweg degressiv</strong>. Welche Aussage zur Kruemmung passt dort typischerweise?',
     opts: [
-      "\(K''(x) > 0\) (rechtsgekruemmt)",
-      "\(K''(x) < 0\) (linksgekruemmt)",
-      "\(K''(x) = 0\) ueberall",
-      "\(K'(x) < 0\) (Kosten fallen)"
+      "\\(K''(x) > 0\\) (rechtsgekruemmt)",
+      "\\(K''(x) < 0\\) (linksgekruemmt)",
+      "\\(K''(x) = 0\\) ueberall",
+      "\\(K'(x) < 0\\) (Kosten fallen)"
     ],
     correct: 1,
     explain:
-      'Degressiver Verlauf bedeutet typischerweise negative zweite Ableitung: \(K\'\'(x)<0\).'
+      'Degressiver Verlauf bedeutet typischerweise negative zweite Ableitung: \\(K\'\'(x)<0\\).'
   },
   {
     type: 'mc',
-    q: 'Warum kann folgende Funktion keine Kostenfunktion sein? \(K(x)=-0{,}02x^2+45x+200\)',
+    q: 'Warum kann folgende Funktion keine Kostenfunktion sein? \\(K(x)=-0,02x^2+45x+200\\)',
     opts: [
       'Weil die Funktion nicht definiert ist.',
       'Weil die Funktion keine Fixkosten besitzt.',
@@ -403,7 +403,7 @@ var kp2QuizData = [
   },
   {
     type: 'mc',
-    q: 'Warum kann folgende Funktion keine Kostenfunktion sein? \(K(x)=0{,}05x-300\)',
+    q: 'Warum kann folgende Funktion keine Kostenfunktion sein? \\(K(x)=0,05x-300\\)',
     opts: [
       'Weil die Funktion nicht differenzierbar ist.',
       'Weil die Fixkosten bei dieser Funktion negativ waeren.',
@@ -412,15 +412,15 @@ var kp2QuizData = [
     ],
     correct: 1,
     explain:
-      'Hier gilt \(K(0)=-300\): Das waeren negative Fixkosten und ist im Standardmodell nicht sinnvoll.'
+      'Hier gilt \\(K(0)=-300\\): Das waeren negative Fixkosten und ist im Standardmodell nicht sinnvoll.'
   },
   {
     type: 'mc',
-    q: 'Für \(K(x)=0{,}1x^3-3x^2+40x+300\): Wo liegt die <strong>Kostenkehre</strong> (x-Koordinate)?',
-    opts: ['\(x=0\)', '\(x=6\)', '\(x=10\)', '\(x=40\)'],
+    q: 'Für \\(K(x)=0,1x^3-3x^2+40x+300\\): Wo liegt die <strong>Kostenkehre</strong> (x-Koordinate)?',
+    opts: ['\\(x=0\\)', '\\(x=6\\)', '\\(x=10\\)', '\\(x=40\\)'],
     correct: 2,
     explain:
-      'Kostenkehre als Wendestelle: \(K\'\'(x)=0{,}6x-6=0\Rightarrow x=10\).'
+      'Kostenkehre als Wendestelle: \\(K\'\'(x)=0,6x-6=0\\Rightarrow x=10\\).'
   }
 ];
 
