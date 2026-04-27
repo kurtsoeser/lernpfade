@@ -745,45 +745,22 @@ MathJax = {
 <!-- 7 Beispiele -->
 <div class="tab-panel" id="panel6">
   <div class="ribbon">Rechenbeispiele (Prüfungsniveau)</div>
-  <div class="info-box concept" style="margin-bottom:16px;">
-    <div class="icon">📗</div>
-    <div>
-      <strong>Leitbeispiel für diesen Schritt:</strong> Wir verwenden durchgehend \(E(x)=100x-2x^2\) und \(K(x)=0{,}02x^3-1{,}2x^2+30x+200\). Daraus folgt \(G(x)=E(x)-K(x)\) mit den genannten <strong>Break-even</strong>-Näherungen \(x\approx 2{,}97\) und \(x\approx 40{,}44\) sowie der <strong>Gewinnzone</strong> dazwischen. <strong>Deckungsbeitrag</strong> \(DB(x)=E(x)-K_v(x)\): z.&nbsp;B. \(DB(20)=920\) GE.
-    </div>
-  </div>
-
-  <div class="exercise">
-    <div class="exercise-header">
-      <span class="exercise-badge">Bauteil B</span>
-      <span class="exercise-title">Erlösfunktion aus \(E=G+K\)</span>
-    </div>
-    <p>\(K(x)=2x^3-60x^2+700x+6000\), \(G(x)=-40x^2+1200x-6000\). Bestimme \(a,b,c\) in \(E(x)=ax^3+bx^2+cx\).</p>
-    <p style="margin:10px 0;">
-      \(a\) = <input type="text" id="kp_a" style="width:70px; padding:8px 10px; border-radius:10px; border:2px solid #E8E8E8;">
-      &nbsp; \(b\) = <input type="text" id="kp_b" style="width:90px; padding:8px 10px; border-radius:10px; border:2px solid #E8E8E8;">
-      &nbsp; \(c\) = <input type="text" id="kp_c" style="width:90px; padding:8px 10px; border-radius:10px; border:2px solid #E8E8E8;">
-    </p>
-    <button type="button" class="btn btn-check" onclick="checkErlösExercise()">Prüfen</button>
-    <div class="feedback" id="fb_kp_erl" style="display:none;"></div>
-  </div>
-
   <div class="exercise" style="margin-top:18px;">
     <div class="exercise-header">
-      <span class="exercise-badge">Bauteil B</span>
-      <span class="exercise-title">Gewinn pro Stück (Einheiten!)</span>
+      <span class="exercise-badge">Leitbeispiel</span>
+      <span class="exercise-title">Schritt für Schritt mit Navigation</span>
     </div>
-    <p>Maximiere \(G(x)=-40x^2+1200x-6000\). Bei dieser Menge: \(1\) ME \(=10\,000\) Stück, \(1\) GE \(=100\) €. Wie groß ist der <strong>Gewinn pro Stück in Euro</strong>?</p>
-    <p style="margin:8px 0;"><input type="text" id="kp_gewst" placeholder="Euro/Stück" style="max-width:140px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
-    <button type="button" class="btn btn-check" onclick="checkGewinnStückExercise()">Prüfen</button>
-    <div class="feedback" id="fb_kp_gewst" style="display:none;"></div>
+    <div id="kp7GuideStepper" class="quiz-stepper"></div>
+    <div id="kp7GuideContainer" style="margin-top:16px;"></div>
+    <button type="button" class="btn btn-hint" onclick="resetKp7Guide()" style="margin-top:12px;">Leitbeispiel neu starten</button>
   </div>
 
   <div class="exercise" style="margin-top:18px;">
     <div class="exercise-header">
       <span class="exercise-badge">Quiz</span>
-      <span class="exercise-title">Leitbeispiel: Verständnisfragen</span>
+      <span class="exercise-title">Aufgaben</span>
     </div>
-    <p style="margin-bottom:10px; line-height:1.65;">Die Fragen kommen wieder nacheinander mit Navigation.</p>
+    <p style="font-weight:700; margin:0 0 8px 0;">Leitbeispiel-Quiz: Verständnisfragen</p>
     <div id="kp7QuizStepper" class="quiz-stepper"></div>
     <div id="kp7QuizContainer" style="margin-top:16px;"></div>
     <div id="kp7QuizResult" style="display:none; margin-top:18px; padding-top:4px;"></div>
@@ -791,9 +768,15 @@ MathJax = {
   </div>
 
   <div class="info-box concept" style="margin-top:16px;">
-    <div class="icon">🏗️</div>
+    <div class="icon">📄</div>
     <div>
-      <strong>Glasfassaden-Klammern</strong> (längeres Textbeispiel): \(K(x)=10^{-5}x^3-0{,}025x^2+24x+3500\) mit \(x\) in Stück, \(K\) in €, Verkauf 20&nbsp;€/Stück → \(G(x)=20x-K(x)\). Typische Teilfragen: \(\overline{K}(x)\) aufstellen, Minimum von \(\overline{K}\) mit \(\overline{K}'(x)=0\), Minimum nachweisen mit \(\overline{K}''(x)&gt;0\), Gewinnbereich \(G(x)\ge 0\) (Nullstellen / Näherung).
+      <strong>Zusätzliche Übungszettel (Download)</strong>
+      <p style="margin:8px 0 8px 0; line-height:1.65;">Für weiteres Training kannst du die folgenden Arbeitsblätter direkt herunterladen:</p>
+      <ul style="margin:0 0 0 18px; line-height:1.7;">
+        <li><a href="mathk4_online_komp_011_478985.pdf" download>Übungszettel 011</a></li>
+        <li><a href="mathk4_online_komp_015_478989.pdf" download>Übungszettel 015</a></li>
+        <li><a href="mathk4_online_komp_016_478990.pdf" download>Übungszettel 016</a></li>
+      </ul>
     </div>
   </div>
 

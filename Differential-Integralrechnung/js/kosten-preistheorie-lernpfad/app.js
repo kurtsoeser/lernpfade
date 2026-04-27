@@ -943,6 +943,335 @@ function resetKp6Quiz() {
 var currentKp7 = 0;
 var kp7Answers = [];
 
+/** Schritt 7: Leitbeispiel als gefuehrte Abfolge */
+var currentKp7Guide = 0;
+var kp7GuideData = [
+  {
+    title: '1) Von p(x) zu E(x)',
+    graph: 'E',
+    content:
+      'Gegeben ist die Preisfunktion \\(p(x)=100-2x\\). Der Erlös ist Preis mal Menge: \\(E(x)=x\\cdot p(x)=x(100-2x)=100x-2x^2\\).'
+  },
+  {
+    title: '2) Gewinnfunktion G(x)',
+    graph: 'G',
+    content:
+      'Mit \\(K(x)=0{,}02x^3-1{,}2x^2+30x+200\\) gilt \\(G(x)=E(x)-K(x)\\). Daraus folgt:\\[G(x)=-0{,}02x^3-0{,}8x^2+70x-200.\\]'
+  },
+  {
+    title: '3) Break-even und Gewinngrenzen',
+    graph: 'G_BE',
+    content:
+      'Break-even bedeutet \\(G(x)=0\\) bzw. \\(E(x)=K(x)\\). Numerisch ergeben sich zwei Gewinngrenzen:\\[x_u\\approx 2{,}97, \\quad x_o\\approx 40{,}44.\\]Die Gewinnzone liegt dazwischen: \\(2{,}97\\lt x\\lt 40{,}44\\).'
+  },
+  {
+    title: '4) Gewinnmaximum',
+    graph: 'G_MAX',
+    content:
+      'Im inneren Maximum gilt \\(G\'(x)=0\\), äquivalent zu \\(E\'(x)=K\'(x)\\). Für dieses Leitbeispiel liegt das Maximum näherungsweise bei\\[x_G\\approx 23{,}33, \\quad G(x_G)\\approx 743{,}70\\text{ GE}.\\]'
+  },
+  {
+    title: '5) Betriebsoptimum + langfristige Preisuntergrenze',
+    graph: 'KBAR',
+    content:
+      'Betriebsoptimum = Minimum der gesamten Stückkosten \\(\\overline{K}(x)=K(x)/x\\). Für dieses Leitbeispiel ergibt sich näherungsweise\\[x_{opt}\\approx 34{,}26, \\quad \\overline{K}(x_{opt})\\approx 18{,}20\\text{ GE/ME}.\\]Damit ist die langfristige Preisuntergrenze näherungsweise \\(18{,}20\\text{ GE/ME}\\).'
+  },
+  {
+    title: '6) Betriebsminimum + kurzfristige Preisuntergrenze',
+    graph: 'KVBAR',
+    content:
+      'Mit \\(K_v(x)=K(x)-K_f=0{,}02x^3-1{,}2x^2+30x\\) gilt\\[\\overline{K}_v(x)=\\frac{K_v(x)}{x}=0{,}02x^2-1{,}2x+30.\\]Minimum bei \\(x_{min}=30\\), Wert \\(\\overline{K}_v(30)=12\\text{ GE/ME}\\). Das ist die kurzfristige Preisuntergrenze.'
+  },
+  {
+    title: '7) Deckungsbeitrag',
+    graph: 'DB',
+    content:
+      'Der Deckungsbeitrag lautet \\(DB(x)=E(x)-K_v(x)\\). Hier:\\[DB(x)=-0{,}02x^3-0{,}8x^2+70x.\\]Beispiel bei \\(x=20\\): \\(DB(20)=920\\text{ GE}\\). Davon werden zuerst die Fixkosten gedeckt; erst der Rest ist Gewinn.'
+  },
+  {
+    title: '8) Übersicht: Alle Ergebnisse',
+    graph: 'SUMMARY',
+    content:
+      '<strong>Gegeben:</strong> \\(p(x)=100-2x\\), \\(K(x)=0{,}02x^3-1{,}2x^2+30x+200\\)<br><br>' +
+      '<strong>Erlösfunktion:</strong> \\(E(x)=x\\cdot p(x)=100x-2x^2\\)<br>' +
+      '<strong>Gewinnfunktion:</strong> \\(G(x)=E(x)-K(x)=-0{,}02x^3-0{,}8x^2+70x-200\\)<br>' +
+      '<strong>Break-even / Gewinngrenzen:</strong> \\(x_u\\approx 2{,}97\\), \\(x_o\\approx 40{,}44\\), Gewinnzone: \\(2{,}97\\lt x\\lt 40{,}44\\)<br>' +
+      '<strong>Gewinnmaximum:</strong> \\(x_G\\approx 23{,}33\\), \\(G(x_G)\\approx 743{,}70\\,\\text{GE}\\)<br>' +
+      '<strong>Betriebsoptimum + LPU:</strong> \\(x_{opt}\\approx 34{,}26\\), \\(\\overline{K}(x_{opt})\\approx 18{,}20\\,\\text{GE/ME}\\)<br>' +
+      '<strong>Betriebsminimum + KPU:</strong> \\(x_{min}=30\\), \\(\\overline{K}_v(x_{min})=12\\,\\text{GE/ME}\\)<br>' +
+      '<strong>Deckungsbeitrag:</strong> \\(DB(x)=E(x)-K_v(x)=-0{,}02x^3-0{,}8x^2+70x\\), z. B. \\(DB(20)=920\\,\\text{GE}\\)'
+  }
+];
+
+function kp7GuideE(x) {
+  return 100 * x - 2 * x * x;
+}
+
+function kp7GuideG(x) {
+  return kp7GuideE(x) - kpLeitK(x);
+}
+
+function kp7GuideKv(x) {
+  return kpLeitK(x) - 200;
+}
+
+function kp7GuideKbar(x) {
+  if (x <= 0) return NaN;
+  return kpLeitK(x) / x;
+}
+
+function kp7GuideKvbar(x) {
+  if (x <= 0) return NaN;
+  return kp7GuideKv(x) / x;
+}
+
+function kp7GuideDb(x) {
+  return kp7GuideE(x) - kp7GuideKv(x);
+}
+
+function drawKp7GuideCanvas(step) {
+  var canvas = document.getElementById('kp7GuideCanvas');
+  if (!canvas || !canvas.getContext || !step) return;
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width;
+  var h = canvas.height;
+  var padL = 52;
+  var padR = 22;
+  var padT = 20;
+  var padB = 42;
+  var xmax = 48;
+  var xStart = 0;
+  var fn = kp7GuideE;
+  var color = '#1D4ED8';
+  var yLabel = 'y';
+  var marker = null;
+  var hint = '';
+
+  if (step.graph === 'G' || step.graph === 'G_BE' || step.graph === 'G_MAX') {
+    fn = kp7GuideG;
+    color = '#7C3AED';
+    yLabel = 'G (GE)';
+  } else if (step.graph === 'KBAR') {
+    xStart = 5;
+    fn = kp7GuideKbar;
+    color = '#0F766E';
+    yLabel = 'K̄ (GE/ME)';
+    var xOpt = kpLeitBetriebsoptimumX();
+    var yOpt = kp7GuideKbar(xOpt);
+    marker = { x: xOpt, y: yOpt, label: 'Optimum' };
+    hint = 'Minimum bei x ≈ ' + kpFmtDe2(xOpt) + ', K̄ ≈ ' + kpFmtDe2(yOpt) + '.';
+  } else if (step.graph === 'KVBAR') {
+    xStart = 5;
+    fn = kp7GuideKvbar;
+    color = '#C2410C';
+    yLabel = 'K̄v (GE/ME)';
+    marker = { x: 30, y: 12, label: 'Minimum' };
+    hint = 'Minimum bei x = 30, K̄v = 12.';
+  } else if (step.graph === 'DB') {
+    fn = kp7GuideDb;
+    color = '#B91C1C';
+    yLabel = 'DB (GE)';
+  } else {
+    fn = kp7GuideE;
+    color = '#1D4ED8';
+    yLabel = 'E (GE)';
+  }
+
+  var ymin = Infinity;
+  var ymax = -Infinity;
+  for (var xs = xStart; xs <= xmax; xs += 0.12) {
+    var yv = fn(xs);
+    if (!isFinite(yv)) continue;
+    if (yv < ymin) ymin = yv;
+    if (yv > ymax) ymax = yv;
+  }
+  if (!isFinite(ymin) || !isFinite(ymax)) return;
+  if (step.graph === 'G' || step.graph === 'G_BE' || step.graph === 'G_MAX') {
+    ymin = Math.min(ymin, -240);
+    ymax = Math.max(ymax, 860);
+  }
+  if (step.graph === 'KBAR') {
+    ymax = Math.min(ymax, 90);
+    ymin = Math.min(ymin, 20);
+  }
+  if (step.graph === 'KVBAR') {
+    ymax = Math.min(ymax, 45);
+    ymin = Math.min(ymin, 8);
+  }
+  var yPad = (ymax - ymin) * 0.12 + 6;
+  ymin -= yPad;
+  ymax += yPad;
+
+  function xToPx(x) {
+    return padL + (x / xmax) * (w - padL - padR);
+  }
+  function yToPx(y) {
+    return padT + ((ymax - y) / (ymax - ymin)) * (h - padT - padB);
+  }
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#FBFCFE';
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.strokeStyle = '#94A3B8';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(xToPx(0), yToPx(0));
+  ctx.lineTo(xToPx(xmax), yToPx(0));
+  ctx.moveTo(xToPx(0), padT);
+  ctx.lineTo(xToPx(0), h - padB);
+  ctx.stroke();
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.8;
+  ctx.beginPath();
+  var started = false;
+  for (var xi = xStart; xi <= xmax; xi += 0.08) {
+    var yy = fn(xi);
+    if (!isFinite(yy)) continue;
+    var px = xToPx(xi);
+    var py = yToPx(yy);
+    if (!started) {
+      ctx.moveTo(px, py);
+      started = true;
+    } else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  if (step.graph === 'G_BE') {
+    [2.97, 40.44].forEach(function (xr) {
+      var pxr = xToPx(xr);
+      var pyr = yToPx(0);
+      ctx.fillStyle = '#7C3AED';
+      ctx.beginPath();
+      ctx.arc(pxr, pyr, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    });
+    hint = 'Gewinngrenzen bei x ≈ 2,97 und x ≈ 40,44.';
+  }
+
+  if (step.graph === 'G_MAX') {
+    var xg = 23.33;
+    var yg = kp7GuideG(xg);
+    var pxg = xToPx(xg);
+    var pyg = yToPx(yg);
+    ctx.fillStyle = '#7C3AED';
+    ctx.beginPath();
+    ctx.arc(pxg, pyg, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    hint = 'Gewinnmaximum bei x ≈ 23,33.';
+  }
+
+  if (marker) {
+    var pxx = xToPx(marker.x);
+    var pyy = yToPx(marker.y);
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = '#CBD5E1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pxx, pyy);
+    ctx.lineTo(pxx, h - padB);
+    ctx.moveTo(pxx, pyy);
+    ctx.lineTo(xToPx(0), pyy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(pxx, pyy, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = '#475569';
+  ctx.font = '600 11px Nunito, sans-serif';
+  ctx.fillText('x (ME)', w - padR - 8, h - padB + 4);
+  ctx.save();
+  ctx.translate(16, padT + 50);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText(yLabel, 0, 0);
+  ctx.restore();
+
+  var hintEl = document.getElementById('kp7GuideGraphHint');
+  if (hintEl) hintEl.textContent = hint || '';
+}
+
+function buildKp7Guide() {
+  var stepper = document.getElementById('kp7GuideStepper');
+  if (!stepper) return;
+  stepper.innerHTML = '';
+  for (var i = 0; i < kp7GuideData.length; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'quiz-step-dot' + (i === 0 ? ' active' : '');
+    dot.textContent = i + 1;
+    dot.id = 'kp7GuideDot' + i;
+    stepper.appendChild(dot);
+  }
+  showKp7GuideStep(0);
+}
+
+function showKp7GuideStep(idx) {
+  currentKp7Guide = idx;
+  var step = kp7GuideData[idx];
+  var wrap = document.getElementById('kp7GuideContainer');
+  if (!wrap || !step) return;
+
+  var html = '<div class="kp0-question-card" style="animation:fadeIn 0.3s ease;">';
+  html +=
+    '<p class="kp0-q-lead">Schritt ' +
+    (idx + 1) +
+    ' von ' +
+    kp7GuideData.length +
+    '</p>';
+  html += '<p class="kp0-q-text"><strong>' + step.title + '</strong></p>';
+  html += '<div style="line-height:1.7; font-size:0.97rem;">' + step.content + '</div>';
+  if (step.graph !== 'SUMMARY') {
+    html +=
+      '<div class="kp-canvas-card" style="margin-top:12px;"><canvas id="kp7GuideCanvas" width="620" height="300" aria-label="Grafik zum Leitbeispiel-Schritt"></canvas><p class="kp-canvas-note" id="kp7GuideGraphHint"></p></div>';
+  }
+  html += '<div class="kp0-question-actions">';
+  if (idx > 0)
+    html +=
+      '<button type="button" class="btn btn-prev" onclick="showKp7GuideStep(' +
+      (idx - 1) +
+      ')">\u2190 Zur\u00fcck</button>';
+  if (idx < kp7GuideData.length - 1) {
+    html +=
+      '<button type="button" class="btn btn-next" onclick="showKp7GuideStep(' +
+      (idx + 1) +
+      ')">Weiter \u2192</button>';
+  } else {
+    html +=
+      '<button type="button" class="btn btn-check" onclick="markComplete(7)">Leitbeispiel abgeschlossen \u2713</button>';
+  }
+  html += '</div></div>';
+  wrap.innerHTML = html;
+
+  document.querySelectorAll('#kp7GuideStepper .quiz-step-dot').forEach(function (d, i) {
+    d.classList.toggle('active', i === idx);
+  });
+
+  if (step.graph !== 'SUMMARY') {
+    window.requestAnimationFrame(function () {
+      drawKp7GuideCanvas(step);
+    });
+  }
+
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([wrap]).catch(function () {});
+}
+
+function resetKp7Guide() {
+  buildKp7Guide();
+}
+
 var kp7QuizData = [
   {
     q: '\\(K\'(x)=6x^2-120x+700\\). Fuer welche \\(x\\) gilt \\(K\'(x)\\le 700\\) (groesstes zusammenhaengendes Intervall mit \\(x\\ge 0\\))?',
@@ -2603,6 +2932,7 @@ document.addEventListener('DOMContentLoaded', function () {
   buildKp2Quiz();
   buildKp3Quiz();
   buildKp6Quiz();
+  buildKp7Guide();
   buildKp7Quiz();
   buildFinalQuiz();
 
