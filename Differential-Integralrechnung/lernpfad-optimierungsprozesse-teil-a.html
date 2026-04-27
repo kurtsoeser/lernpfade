@@ -169,6 +169,46 @@ MathJax = {
   font-size: 0.88rem;
   color: var(--text-light);
 }
+.quiz-stepper-local {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 6px 0 10px 0;
+}
+.quiz-step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 2px solid #CBD5E1;
+  background: #fff;
+  color: #334155;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.quiz-step-dot.active {
+  border-color: #2563EB;
+  background: #EFF6FF;
+  color: #1D4ED8;
+}
+.quiz-step-dot.answered {
+  border-color: #16A34A;
+  background: #ECFDF3;
+  color: #166534;
+}
+.quiz-figure-local {
+  margin-top: 10px;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  background: #F8FAFC;
+  padding: 8px;
+  text-align: center;
+}
+.quiz-figure-local svg {
+  max-width: 100%;
+  height: auto;
+  font-family: Nunito, Arial, sans-serif;
+}
 .cyl-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -237,11 +277,46 @@ MathJax = {
 .cyl-stepper-body h4 {
   margin: 0 0 8px 0;
 }
+.cyl-step-figure {
+  margin: 10px 0;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  background: #FFFFFF;
+  padding: 8px;
+  text-align: center;
+}
+.cyl-step-figure svg {
+  max-width: 100%;
+  height: auto;
+  font-family: Nunito, Arial, sans-serif;
+}
 .cyl-stepper-nav {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin-top: 10px;
+}
+.swim-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+@media (min-width: 900px) {
+  .swim-grid { grid-template-columns: 1fr 1fr; }
+}
+.swim-card {
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+}
+.swim-card canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #E2E8F0;
+  background: #FBFCFE;
 }
 </style>
 </head>
@@ -252,7 +327,7 @@ MathJax = {
     <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
   </div>
   <div class="progress-label">
-    <span id="progressText">Station 0 von 6 besucht</span>
+    <span id="progressText">Station 0 von 7 besucht</span>
     <span id="progressPercent">0 %</span>
   </div>
 </div>
@@ -276,8 +351,9 @@ MathJax = {
   <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Ziel</button>
   <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Vorgehen</button>
   <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Zylinder-Beispiel</button>
-  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Aufgaben</button>
-  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Abschlussquiz</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Elvis-Beispiel</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Aufgaben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Abschlussquiz</button>
 </div>
 
 <div class="tab-panel active" id="panel0">
@@ -454,11 +530,86 @@ MathJax = {
   </details>
   <div class="tab-nav">
     <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
-    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Aufgaben →</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Elvis-Beispiel →</button>
   </div>
 </div>
 
 <div class="tab-panel" id="panel4">
+  <div class="ribbon">Einleitungsbeispiel: Elvis und der Ball</div>
+  <p><strong>Ausgangssituation:</strong> Der Hund Elvis steht am Ufer und möchte auf schnellstem Weg einen Ball im Wasser erreichen. An Land läuft Elvis mit konstanter Geschwindigkeit \(v_L=3\,\mathrm{m/s}\), im Wasser schwimmt er mit \(v_W=1\,\mathrm{m/s}\).</p>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">🧭</div>
+    <div>
+      <strong>Was ist die eigentliche Optimierungsfrage?</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Elvis kann nicht nur „direkt“ schwimmen, sondern zuerst ein Stück am Strand laufen und erst dann ins Wasser gehen. Genau dieser Einstiegspunkt wird mit der Variablen \(x\) beschrieben. Gesucht ist also jene Wahl von \(x\), bei der die <strong>Gesamtzeit</strong> aus Laufzeit und Schwimmzeit minimal wird.</p>
+    </div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Modellannahmen für die Aufgabe</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Beide Geschwindigkeiten sind innerhalb ihres Bereichs konstant (\(v_L\), \(v_W\)).</li>
+        <li>Der Strand ist geradlinig, und die Wasserlinie wird als klare Trennlinie modelliert.</li>
+        <li>Gesucht wird ausschließlich das Zeitminimum (nicht der kürzeste geometrische Weg).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cyl-card" style="margin-top:12px;">
+    <strong>Geschwindigkeiten (global für beide Grafiken)</strong>
+    <div class="row" style="margin-top:10px;">
+      <label for="swimVLSlider">\(v_L\): <strong id="swimVLVal">3.0</strong> m/s</label>
+      <input type="range" id="swimVLSlider" min="1.0" max="6.0" step="0.1" value="3.0" oninput="updateSwimExample()">
+    </div>
+    <div class="row">
+      <label for="swimVWSlider">\(v_W\): <strong id="swimVWVal">1.0</strong> m/s</label>
+      <input type="range" id="swimVWSlider" min="0.5" max="3.0" step="0.1" value="1.0" oninput="updateSwimExample()">
+    </div>
+  </div>
+  <div class="swim-grid">
+    <div class="swim-card">
+      <strong>Skizze des Weges</strong>
+      <canvas id="swimPathCanvas" width="420" height="300"></canvas>
+      <div class="row" style="margin-top:10px;">
+        <label for="swimXSlider">\(x\): <strong id="swimXVal">7.1</strong> m</label>
+        <input type="range" id="swimXSlider" min="0" max="40" step="0.1" value="7.1" oninput="updateSwimExample()">
+      </div>
+      <p id="swimInfo" class="cyl-fb"></p>
+    </div>
+    <div class="swim-card">
+      <strong>Gesamtzeit \(t(x)\)</strong>
+      <canvas id="swimGraphCanvas" width="420" height="300"></canvas>
+      <p class="cyl-fb" id="swimFormulaHint">\(t(x)=\frac{40-x}{3}+\sqrt{x^2+400}\), \(0\le x\le 40\)</p>
+    </div>
+  </div>
+
+  <div class="cyl-card cyl-form" style="margin-top:12px;">
+    <strong>Interaktive Ausarbeitung (Schritt für Schritt)</strong>
+    <div class="cyl-stepper-head">
+      <span class="cyl-stepper-badge" id="swimStepBadge">Schritt 1 von 6</span>
+      <span id="swimStepLabel" style="font-weight:700; color:var(--blue-dark);"></span>
+    </div>
+    <div class="cyl-stepper-body">
+      <h4 id="swimStepTitle"></h4>
+      <p id="swimStepExplain" style="margin:0 0 10px 0; line-height:1.65;"></p>
+      <div id="swimStepFigure" class="cyl-step-figure"></div>
+      <div id="swimStepInputs"></div>
+      <div id="swimStepFeedback" class="cyl-fb"></div>
+    </div>
+    <div class="cyl-stepper-nav">
+      <button type="button" class="btn btn-prev" onclick="prevSwimStep()">← Zurück</button>
+      <button type="button" class="btn btn-next" onclick="nextSwimStep()">Weiter →</button>
+      <button type="button" class="btn btn-check" onclick="checkSwimStep()">Überprüfen ✓</button>
+      <button type="button" class="btn btn-hint" onclick="fillSwimStepSolution()">Lösung anzeigen</button>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Aufgaben →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel5">
   <div class="ribbon">Aufgaben und Sicherung</div>
   <div class="info-box success">
     <div class="icon">✍️</div>
@@ -583,12 +734,12 @@ MathJax = {
     </div>
   </details>
   <div class="tab-nav">
-    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
-    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Abschlussquiz →</button>
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Abschlussquiz →</button>
   </div>
 </div>
 
-<div class="tab-panel" id="panel5">
+<div class="tab-panel" id="panel6">
   <div class="ribbon">Abschlussquiz Teil A</div>
   <div class="info-box success">
     <div class="icon">🏁</div>
@@ -604,7 +755,7 @@ MathJax = {
   </div>
   <div id="optiAQuizResult" style="display:none; margin-top:12px;"></div>
   <div class="tab-nav">
-    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
     <a class="btn btn-next" href="lernpfad-optimierungsprozesse-teil-b.html">Weiter zu Teil B →</a>
   </div>
 </div>
@@ -793,11 +944,13 @@ function nextOptiGuideStep() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  TOTAL_SECTIONS = 6;
+  TOTAL_SECTIONS = 7;
   renderOptiGuideStep();
   renderOptiAQuiz();
   updateCylinderExample();
   clearCylinderInputs();
+  updateSwimExample();
+  clearSwimInputs();
   if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise();
 });
 
@@ -916,7 +1069,7 @@ const cylinderSteps = [
     label: 'Volumen',
     title: '1) Volumenformel des Zylinders',
     explain: 'Im ersten Schritt formulierst du die Hauptbeziehung. Ein Zylinder hat Grundfläche \\(\\pi r^2\\) und Höhe \\(h\\). Daher gilt für das Volumen direkt \\(V=\\pi r^2h\\).',
-    inputs: [{ key: 'q1', label: 'V =', placeholder: '' }],
+    inputs: [{ key: 'q1', label: '\\(V=\\)', placeholder: '' }],
     check: (a) => ['pir^2h','pi*r^2*h','pih*r^2'].includes(normalizeExpr(a.q1)),
     solution: { q1: 'pi*r^2*h' },
     feedback: 'Erwartet: V = π·r²·h'
@@ -925,7 +1078,7 @@ const cylinderSteps = [
     label: 'Skalierung',
     title: '2) Was passiert bei Verdopplung von r?',
     explain: 'Wenn \\(r\\) verdoppelt wird, vervierfacht sich \\(r^2\\). Damit das Volumen gleich bleibt, muss \\(h\\) um denselben Faktor kleiner werden – also auf ein Viertel.',
-    inputs: [{ key: 'q2', label: 'h wird auf ... von h verkleinert:', placeholder: '' }],
+    inputs: [{ key: 'q2', label: '\\(h\\) wird auf ... von \\(h\\) verkleinert:', placeholder: '' }],
     check: (a) => ['1/4','0.25','viertel'].includes(normalizeExpr(a.q2)),
     solution: { q2: '1/4' },
     feedback: 'Bei doppeltem r muss h auf 1/4 verkleinert werden.'
@@ -937,7 +1090,7 @@ const cylinderSteps = [
     inputs: [
       { key: 'q3a', label: 'Mantel-Seite 1:', placeholder: '' },
       { key: 'q3b', label: 'Mantel-Seite 2:', placeholder: '' },
-      { key: 'q3c', label: 'O =', placeholder: '' }
+      { key: 'q3c', label: '\\(O=\\)', placeholder: '' }
     ],
     check: (a) => {
       const s1 = normalizeExpr(a.q3a), s2 = normalizeExpr(a.q3b), s3 = normalizeExpr(a.q3c);
@@ -953,7 +1106,7 @@ const cylinderSteps = [
     label: 'Nebenbedingung',
     title: '4) h in Abhängigkeit von r',
     explain: 'Das Volumen ist mit \\(500\\,\\text{cm}^3\\) fest: \\(500=\\pi r^2h\\). Für die Optimierung über \\(r\\) löst du nach \\(h\\) auf und erhältst die Nebenbedingung.',
-    inputs: [{ key: 'q4', label: 'h(r) =', placeholder: '' }],
+    inputs: [{ key: 'q4', label: '\\(h(r)=\\)', placeholder: '' }],
     check: (a) => ['500/(pir^2)','500/pir^2','500/(pi*r^2)'].includes(normalizeExpr(a.q4)),
     solution: { q4: '500/(pi*r^2)' },
     feedback: 'h(r)=500/(πr²)'
@@ -962,7 +1115,7 @@ const cylinderSteps = [
     label: 'Zielfunktion',
     title: '5) Zielfunktion nur in r',
     explain: 'Nun setzt du \\(h(r)\\) in die Oberflächenformel ein: \\(O(r)=2\\pi r^2+2\\pi r\\cdot\\frac{500}{\\pi r^2}\\). Daraus folgt \\(O(r)=2\\pi r^2+\\frac{1000}{r}\\).',
-    inputs: [{ key: 'q5', label: 'O(r) =', placeholder: '' }],
+    inputs: [{ key: 'q5', label: '\\(O(r)=\\)', placeholder: '' }],
     check: (a) => {
       const s = normalizeExpr(a.q5);
       return s.includes('2pir^2') && (s.includes('1000/r') || s.includes('1000r^-1'));
@@ -975,8 +1128,8 @@ const cylinderSteps = [
     title: '6) Grafisch ablesen (Näherung)',
     explain: 'Aus dem Graphen von \\(O(r)\\) liest du den Tiefpunkt näherungsweise ab. Für dieses Beispiel liegt er bei etwa \\(r^*\\approx 4{,}3\\) und \\(O_{min}\\approx 349\\,\\text{cm}^2\\).',
     inputs: [
-      { key: 'q6a', label: 'r* ≈', placeholder: '', numeric: true },
-      { key: 'q6b', label: 'Omin ≈', placeholder: '', numeric: true }
+      { key: 'q6a', label: '\\(r^*\\approx\\)', placeholder: '', numeric: true },
+      { key: 'q6b', label: '\\(O_{\\min}\\approx\\)', placeholder: '', numeric: true }
     ],
     check: (a) => approxEq(parseFloat((a.q6a || '').replace(',', '.')), 4.3, 0.3) && approxEq(parseFloat((a.q6b || '').replace(',', '.')), 349, 25),
     solution: { q6a: '4.3', q6b: '349' },
@@ -986,7 +1139,7 @@ const cylinderSteps = [
     label: 'Interpretation',
     title: '7) Optimale Maße deuten',
     explain: 'Aus der Rechnung folgt näherungsweise \\(r\\approx 4{,}30\\) und \\(h\\approx 8{,}60\\). Damit gilt \(h\\approx 2r\\): Bei optimaler Dose ist die Höhe gleich dem Durchmesser.',
-    inputs: [{ key: 'q7', label: 'h* ≈', placeholder: '' }],
+    inputs: [{ key: 'q7', label: '\\(h^*\\approx\\)', placeholder: '' }],
     check: (a) => approxEq(parseFloat((a.q7 || '').replace(',', '.')), 8.6, 0.5),
     solution: { q7: '8.6' },
     feedback: 'Optimale Höhe: h*≈8,6 cm (≈2r)'
@@ -1018,7 +1171,7 @@ function renderCylinderStep() {
     const row = document.createElement('div');
     row.className = 'row';
     const lab = document.createElement('label');
-    lab.textContent = inp.label;
+    lab.innerHTML = inp.label;
     const input = document.createElement('input');
     input.placeholder = inp.placeholder || '';
     input.autocomplete = 'off';
@@ -1067,46 +1220,142 @@ function clearCylinderInputs() {
   renderCylinderStep();
 }
 
+const swimSteps = [
+  { label: 'Direktweg', title: '1) Direkter Weg durch das Wasser', explain: 'Direktweg ist die Hypotenuse mit Längen 40 m und 20 m. Die Zeit erhältst du mit \\(t=\\frac{s}{v_W}\\).', figure:'<svg viewBox="0 0 420 130"><line x1="30" y1="95" x2="230" y2="95" stroke="#64748B" stroke-width="2"/><line x1="230" y1="95" x2="230" y2="35" stroke="#64748B" stroke-width="2"/><line x1="30" y1="95" x2="230" y2="35" stroke="#DC2626" stroke-width="3"/><text x="100" y="112" font-size="12">40 m</text><text x="238" y="68" font-size="12">20 m</text><text x="88" y="56" font-size="12">Direkter Schwimmweg s</text></svg>', inputs:[{key:'s1',label:'\\(t_{\\mathrm{direkt}}\\approx\\)',placeholder:''}], check:a=>approxEq(parseFloat((a.s1||'').replace(',','.')),44.72,0.8), solution:{s1:'44.72'}, feedback:'Erwartet etwa 44,72 s.'},
+  { label: 'Randfall', title: '2) Erst nur Land, dann nur Wasser', explain: 'Für \\(x=0\\) läuft Elvis 40 m am Strand und schwimmt 20 m. Gesamtzeit: \\(\\frac{40}{3}+\\frac{20}{1}\\).', figure:'<svg viewBox="0 0 420 130"><line x1="30" y1="95" x2="250" y2="95" stroke="#1D4ED8" stroke-width="4"/><line x1="250" y1="95" x2="250" y2="35" stroke="#DC2626" stroke-width="4"/><text x="120" y="112" font-size="12">Land: 40 m</text><text x="262" y="68" font-size="12">Wasser: 20 m</text><text x="290" y="80" font-size="13">t = 40/3 + 20</text></svg>', inputs:[{key:'s2',label:'\\(t(0)\\approx\\)',placeholder:''}], check:a=>approxEq(parseFloat((a.s2||'').replace(',','.')),33.33,0.8), solution:{s2:'33.33'}, feedback:'Erwartet etwa 33,33 s.'},
+  { label: 'Modell', title: '3) Teilzeiten aufstellen', explain: 'Mit variablem Einstiegspunkt gilt \\(s_L=40-x\\) und \\(s_W=\\sqrt{x^2+20^2}\\). Damit \\(t_L=\\frac{40-x}{3}\\), \\(t_W=\\sqrt{x^2+400}\\).', figure:'<svg viewBox="0 0 420 130"><line x1="30" y1="95" x2="260" y2="95" stroke="#64748B" stroke-width="2"/><line x1="180" y1="95" x2="180" y2="40" stroke="#CBD5E1" stroke-dasharray="4 4" /><line x1="180" y1="95" x2="260" y2="40" stroke="#DC2626" stroke-width="3"/><text x="95" y="112" font-size="12">40 - x</text><text x="212" y="112" font-size="12">x</text><text x="265" y="72" font-size="12">20</text><text x="272" y="42" font-size="12">s<tspan baseline-shift="sub" font-size="9">W</tspan></text></svg>', inputs:[{key:'s3a',label:'\\(t_L(x)=\\)',placeholder:''},{key:'s3b',label:'\\(t_W(x)=\\)',placeholder:''}], check:a=>normalizeExpr(a.s3a).includes('(40-x)/3') && normalizeExpr(a.s3b).includes('sqrt(x^2+400)'), solution:{s3a:'(40-x)/3',s3b:'sqrt(x^2+400)'}, feedback:'Teilzeiten korrekt.'},
+  { label: 'Zielfunktion', title: '4) Gesamtzeitfunktion', explain: 'Die Gesamtzeit ist die Summe \\(t(x)=t_L+t_W\\). Damit wird die Optimierung auf eine Funktion in \\(x\\) reduziert.', figure:'<svg viewBox="0 0 420 130"><text x="24" y="52" font-size="18">t(x)=t<tspan baseline-shift="sub" font-size="12">L</tspan>+t<tspan baseline-shift="sub" font-size="12">W</tspan></text><line x1="24" y1="66" x2="390" y2="66" stroke="#CBD5E1"/><text x="24" y="90" font-size="13">Formel steht im Text und Eingabefeld darunter.</text><text x="24" y="114" font-size="12">Optimiert wird jetzt nur noch über x.</text></svg>', inputs:[{key:'s4',label:'\\(t(x)=\\)',placeholder:''}], check:a=>{const s=normalizeExpr(a.s4); return s.includes('(40-x)/3')&&s.includes('sqrt(x^2+400)');}, solution:{s4:'(40-x)/3+sqrt(x^2+400)'}, feedback:'Zielfunktion korrekt.'},
+  { label: 'Optimum', title: '5) Optimalen x-Wert bestimmen', explain: 'Das Minimum liegt im Inneren des Bereichs. Aus der Rechnung ergibt sich \\(x^*=\\sqrt{50}\\approx 7{,}07\\,\\mathrm{m}\\).', figure:'<svg viewBox="0 0 420 130"><line x1="30" y1="98" x2="390" y2="98" stroke="#64748B" stroke-width="2"/><path d="M40,70 C120,120 180,115 250,98 C300,85 350,60 390,38" fill="none" stroke="#2563EB" stroke-width="3"/><circle cx="120" cy="112" r="4" fill="#DC2626"/><text x="126" y="116" font-size="12">x*≈7,07</text></svg>', inputs:[{key:'s5',label:'\\(x^*\\approx\\)',placeholder:''}], check:a=>approxEq(parseFloat((a.s5||'').replace(',','.')),7.07,0.4), solution:{s5:'7.07'}, feedback:'Optimaler Einstiegswert ca. 7,07 m.'},
+  { label: 'Vergleich', title: '6) Zeitgewinn in Prozent', explain: 'Vergleiche direkte Zeit \\(44{,}72\\,s\\) mit optimaler Zeit \\(t_{\\min}\\approx 32{,}18\\,s\\). Ergebnis: etwa 28 % schneller.', figure:'<svg viewBox="0 0 420 130"><rect x="30" y="28" width="120" height="24" fill="#FECACA"/><rect x="30" y="74" width="86" height="24" fill="#BBF7D0"/><text x="160" y="45" font-size="12">direkt: 44,72 s</text><text x="125" y="91" font-size="12">optimal: 32,18 s</text><text x="280" y="70" font-size="14">≈ 28 % weniger</text></svg>', inputs:[{key:'s6',label:'Zeitersparnis in % \\(\\approx\\)',placeholder:''}], check:a=>approxEq(parseFloat((a.s6||'').replace(',','.')),28.0,2.0), solution:{s6:'28.0'}, feedback:'Etwa 28 % weniger Zeit.'}
+];
+
+let currentSwimStep = 0;
+let swimAnswers = {};
+
+function drawSwimPath(x) {
+  const c = document.getElementById('swimPathCanvas'); if (!c) return;
+  const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const shoreY = 210, hx = 50, footX = 290, bX = footX, bY = 90;
+  ctx.fillStyle='#F1E1B0'; ctx.fillRect(20,shoreY,380,70);
+  ctx.fillStyle='#E0F2FE'; ctx.fillRect(20,30,380,shoreY-30);
+  ctx.strokeStyle='#64748B'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(20,shoreY); ctx.lineTo(400,shoreY); ctx.stroke();
+  // Modellkonsistent: x ist Abstand vom Lotfuß (unter B) nach links entlang des Ufers.
+  // Daher gilt: x=0 => Einstieg am Lotfuß (senkrechter Schwimmweg), x=40 => Einstieg bei H.
+  const ex = footX - (x / 40) * (footX - hx);
+  ctx.strokeStyle='#1D4ED8'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(hx,shoreY); ctx.lineTo(ex,shoreY); ctx.stroke();
+  ctx.strokeStyle='#DC2626'; ctx.beginPath(); ctx.moveTo(ex,shoreY); ctx.lineTo(bX,bY); ctx.stroke();
+  ctx.fillStyle='#0F172A'; ctx.font='12px Nunito, Arial';
+  ctx.fillText('H',hx-10,shoreY+15);
+  ctx.fillText('Lotfuß',footX-18,shoreY+15);
+  ctx.fillText('Einstieg',ex-16,shoreY+30);
+  ctx.fillText('B',bX+6,bY);
+}
+
+function drawSwimGraph(x, vL, vW) {
+  const c = document.getElementById('swimGraphCanvas'); if (!c) return;
+  const ctx = c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  const pL=40,pR=15,pT=15,pB=30,w=c.width-pL-pR,h=c.height-pT-pB;
+  const fx=t=> (40-t)/vL + Math.sqrt(t*t+400)/vW;
+  let yMin = Infinity, yMax = -Infinity;
+  for (let i = 0; i <= 240; i++) {
+    const t = (i / 240) * 40;
+    const y = fx(t);
+    if (y < yMin) yMin = y;
+    if (y > yMax) yMax = y;
+  }
+  const margin = Math.max(1.2, (yMax - yMin) * 0.12);
+  yMin -= margin;
+  yMax += margin;
+  const sx=t=>pL+(t/40)*w, sy=v=>pT+h-((v-yMin)/(yMax-yMin))*h;
+  ctx.strokeStyle='#64748B'; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,pT+h); ctx.lineTo(pL+w,pT+h); ctx.stroke();
+  ctx.strokeStyle='#2563EB'; ctx.lineWidth=2.2; ctx.beginPath();
+  for(let i=0;i<=240;i++){const t=(i/240)*40; const X=sx(t),Y=sy(fx(t)); if(i===0)ctx.moveTo(X,Y); else ctx.lineTo(X,Y);}
+  ctx.stroke();
+  const y=fx(x); ctx.fillStyle='#DC2626'; ctx.beginPath(); ctx.arc(sx(x),sy(y),4,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#0F172A'; ctx.font='12px Nunito, Arial'; ctx.fillText('t(x) in s', pL + 4, pT + 12); ctx.fillText('x in m', pL + w - 34, pT + h + 24);
+}
+
+function updateSwimExample() {
+  const slider=document.getElementById('swimXSlider');
+  const val=document.getElementById('swimXVal');
+  const info=document.getElementById('swimInfo');
+  const vlSlider=document.getElementById('swimVLSlider');
+  const vwSlider=document.getElementById('swimVWSlider');
+  const vlVal=document.getElementById('swimVLVal');
+  const vwVal=document.getElementById('swimVWVal');
+  const hint=document.getElementById('swimFormulaHint');
+  if(!slider||!val||!info||!vlSlider||!vwSlider||!vlVal||!vwVal||!hint)return;
+  const x=parseFloat(slider.value); val.textContent=x.toFixed(1);
+  const vL=parseFloat(vlSlider.value);
+  const vW=parseFloat(vwSlider.value);
+  vlVal.textContent=vL.toFixed(1);
+  vwVal.textContent=vW.toFixed(1);
+  const t=(40-x)/vL + Math.sqrt(x*x+400)/vW;
+  info.textContent='Für x='+x.toFixed(1)+' m, v_L='+vL.toFixed(1)+' m/s und v_W='+vW.toFixed(1)+' m/s gilt t(x)='+t.toFixed(2)+' s.';
+  hint.innerHTML='\\(t(x)=\\frac{40-x}{'+vL.toFixed(1)+'}+\\frac{\\sqrt{x^2+400}}{'+vW.toFixed(1)+'}\\), \\(0\\le x\\le 40\\)';
+  drawSwimPath(x); drawSwimGraph(x, vL, vW);
+  if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([hint]).catch(function(){});
+}
+
+function renderSwimStep() {
+  const badge=document.getElementById('swimStepBadge'), label=document.getElementById('swimStepLabel'), title=document.getElementById('swimStepTitle'), explain=document.getElementById('swimStepExplain'), wrap=document.getElementById('swimStepInputs'), fb=document.getElementById('swimStepFeedback');
+  const figure=document.getElementById('swimStepFigure');
+  if(!badge||!label||!title||!explain||!figure||!wrap||!fb)return;
+  const s=swimSteps[currentSwimStep];
+  badge.textContent='Schritt '+(currentSwimStep+1)+' von '+swimSteps.length; label.textContent=s.label; title.textContent=s.title; explain.innerHTML=s.explain; figure.innerHTML=s.figure || ''; wrap.innerHTML=''; fb.textContent=''; fb.className='cyl-fb';
+  s.inputs.forEach(inp=>{const row=document.createElement('div'); row.className='row'; const lab=document.createElement('label'); lab.innerHTML=inp.label; const input=document.createElement('input'); input.autocomplete='off'; input.placeholder=''; input.value=swimAnswers[inp.key]||''; input.oninput=()=>{swimAnswers[inp.key]=input.value;}; row.appendChild(lab); row.appendChild(input); wrap.appendChild(row);});
+  if(window.MathJax&&window.MathJax.typesetPromise) window.MathJax.typesetPromise([explain,wrap,figure]).catch(function(){});
+}
+
+function checkSwimStep(){const s=swimSteps[currentSwimStep]; const ok=s.check(swimAnswers); const fb=document.getElementById('swimStepFeedback'); if(!fb)return; fb.className='cyl-fb '+(ok?'ok':'bad'); fb.textContent=(ok?'✓ ':'✗ ')+s.feedback;}
+function fillSwimStepSolution(){const s=swimSteps[currentSwimStep]; Object.keys(s.solution).forEach(k=>swimAnswers[k]=s.solution[k]); renderSwimStep(); checkSwimStep();}
+function prevSwimStep(){currentSwimStep=Math.max(0,currentSwimStep-1); renderSwimStep();}
+function nextSwimStep(){currentSwimStep=Math.min(swimSteps.length-1,currentSwimStep+1); renderSwimStep();}
+function clearSwimInputs(){swimAnswers={}; currentSwimStep=0; renderSwimStep();}
+
 const optiAQuizQuestions = [
   {
     type: 'single',
     prompt: '1) Was ist in der DIN-A4-Aufgabe die Hauptbedingung?',
-    options: ['Die feste Blattgröße 29,7 × 21', 'Die zu maximierende Volumenfunktion V(x)', 'Die Bedingung x < 10,5', 'Die Ableitungsfunktion V\'(x)'],
+    options: ['Die feste Blattgröße \\(29{,}7\\times 21\\)', 'Die zu maximierende Volumenfunktion \\(V(x)\\)', 'Die Bedingung \\(x<10{,}5\\)', 'Die Ableitungsfunktion \\(V\'(x)\\)'],
     correct: [1],
-    explain: 'Hauptbedingung ist immer die Zielgröße, die optimiert wird: hier das Volumen.'
+    explain: 'Hauptbedingung ist immer die Zielgröße, die optimiert wird: hier das Volumen.',
+    figure: '<svg viewBox="0 0 420 120" aria-label="Hauptbedingung Volumen"><rect x="18" y="22" width="140" height="78" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="2"/><text x="188" y="50" font-size="16">Zielgröße:</text><text x="188" y="78" font-size="20" fill="#1D4ED8">V(x) → max</text></svg>'
   },
   {
     type: 'single',
     prompt: '2) Welcher Definitionsbereich ist sachlich sinnvoll?',
-    options: ['0 < x < 10,5', 'x > 0', '0 < x < 29,7', 'x < 12,86'],
+    options: ['\\(0 < x < 10{,}5\\)', '\\(x>0\\)', '\\(0<x<29{,}7\\)', '\\(x<12{,}86\\)'],
     correct: [0],
-    explain: 'Beide Kanten (29,7-2x) und (21-2x) müssen positiv bleiben, daher x < 10,5.'
+    explain: 'Beide Kanten \\((29{,}7-2x)\\) und \\((21-2x)\\) müssen positiv bleiben, daher \\(x<10{,}5\\).',
+    figure: '<svg viewBox="0 0 420 120" aria-label="Definitionsbereich"><line x1="40" y1="72" x2="380" y2="72" stroke="#64748B" stroke-width="3"/><line x1="80" y1="64" x2="80" y2="80" stroke="#64748B" stroke-width="3"/><line x1="280" y1="64" x2="280" y2="80" stroke="#64748B" stroke-width="3"/><line x1="80" y1="72" x2="280" y2="72" stroke="#16A34A" stroke-width="7"/><text x="72" y="98" font-size="12">0</text><text x="265" y="98" font-size="12">10,5</text></svg>'
   },
   {
     type: 'multi',
     prompt: '3) Welche Aussagen gehören zum Standardvorgehen? (Mehrfachauswahl)',
     options: ['Haupt- und Nebenbedingung zuerst sauber trennen', 'Direkt raten und nur Endwert angeben', 'Nebenbedingung in HB einsetzen', 'Extremwert im Kontext deuten'],
     correct: [0, 2, 3],
-    explain: 'Optimierungsaufgaben brauchen Modellansatz, Rechenweg und Deutung.'
+    explain: 'Optimierungsaufgaben brauchen Modellansatz, Rechenweg und Deutung.',
+    figure: '<svg viewBox="0 0 420 120" aria-label="Prozesskette"><rect x="20" y="38" width="86" height="36" rx="8" fill="#DBEAFE"/><rect x="126" y="38" width="86" height="36" rx="8" fill="#BFDBFE"/><rect x="232" y="38" width="86" height="36" rx="8" fill="#93C5FD"/><rect x="338" y="38" width="62" height="36" rx="8" fill="#60A5FA"/><text x="34" y="60" font-size="12">HB/NB</text><text x="136" y="60" font-size="12">Einsetzen</text><text x="244" y="60" font-size="12">Ableiten</text><text x="348" y="60" font-size="12">Deuten</text></svg>'
   },
   {
     type: 'single',
-    prompt: '4) Für a+b=30 wird a·b maximal bei …',
-    options: ['a=10, b=20', 'a=15, b=15', 'a=1, b=29', 'a=5, b=25'],
+    prompt: '4) Für \\(a+b=30\\) wird \\(a\\cdot b\\) maximal bei …',
+    options: ['\\(a=10,\\ b=20\\)', '\\(a=15,\\ b=15\\)', '\\(a=1,\\ b=29\\)', '\\(a=5,\\ b=25\\)'],
     correct: [1],
     explain: 'Bei fixer Summe ist das Produkt maximal, wenn beide Zahlen gleich sind.'
   },
   {
     type: 'single',
-    prompt: '5) Warum ist x≈12,86 in der Schachtelaufgabe keine Lösung?',
-    options: ['Weil die Ableitung dort negativ ist', 'Weil x nicht ganzzahlig ist', 'Weil x außerhalb des zulässigen Bereichs liegt', 'Weil das Volumen dort Null ist'],
+    prompt: '5) Warum ist \\(x\\approx 12{,}86\\) in der Schachtelaufgabe keine Lösung?',
+    options: ['Weil die Ableitung dort negativ ist', 'Weil \\(x\\) nicht ganzzahlig ist', 'Weil \\(x\\) außerhalb des zulässigen Bereichs liegt', 'Weil das Volumen dort Null ist'],
     correct: [2],
     explain: 'Rechnerische Kandidaten müssen immer mit dem Sachbereich abgeglichen werden.'
   },
   {
     type: 'single',
     prompt: '6) Welche Zielfunktion passt zur DIN-A4-Schachtel?',
-    options: ['V(x)=x(29,7-x)(21-x)', 'V(x)=x(29,7-2x)(21-2x)', 'V(x)=29,7·21·x', 'V(x)=(29,7+2x)(21+2x)x'],
+    options: ['\\(V(x)=x(29{,}7-x)(21-x)\\)', '\\(V(x)=x(29{,}7-2x)(21-2x)\\)', '\\(V(x)=29{,}7\\cdot 21\\cdot x\\)', '\\(V(x)=(29{,}7+2x)(21+2x)x\\)'],
     correct: [1],
     explain: 'Links und rechts bzw. oben und unten wird jeweils x abgeschnitten, also insgesamt 2x.'
   },
@@ -1119,8 +1368,8 @@ const optiAQuizQuestions = [
   },
   {
     type: 'single',
-    prompt: '8) In Worten ist die korrekte Enddeutung:',
-    options: ['x=4,04 ist eine Nullstelle', 'Bei x≈4,04 cm wird das Schachtelvolumen maximal', 'x≈4,04 ist die Ableitung', 'Die beste Lösung ist immer ganzzahlig'],
+    prompt: '8) Kontextfrage zur DIN-A4-Schachtel: Für \\(V(x)=x(29{,}7-2x)(21-2x)\\) und den sachlich zulässigen Bereich \\(0&lt;x&lt;10{,}5\\) ist welche Enddeutung korrekt?',
+    options: ['\\(x=4{,}04\\) ist eine Nullstelle der Zielfunktion', 'Bei \\(x\\approx 4{,}04\\,\\text{cm}\\) ist das Schachtelvolumen im zulässigen Bereich maximal', '\\(x\\approx 4{,}04\\) ist die Ableitungsfunktion', 'Die optimale Ecklänge muss ganzzahlig sein'],
     correct: [1],
     explain: 'Am Ende braucht es immer eine verständliche Aussage im Sachkontext.'
   }
@@ -1136,6 +1385,23 @@ function renderOptiAQuiz() {
   const q = optiAQuizQuestions[currentOptiAQuizIndex];
   const qi = currentOptiAQuizIndex;
 
+  const stepper = document.createElement('div');
+  stepper.className = 'quiz-stepper-local';
+  optiAQuizQuestions.forEach((_, idx) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'quiz-step-dot';
+    dot.textContent = String(idx + 1);
+    if (idx === qi) dot.classList.add('active');
+    if ((optiAQuizAnswers[idx] || []).length > 0) dot.classList.add('answered');
+    dot.onclick = function () {
+      currentOptiAQuizIndex = idx;
+      renderOptiAQuiz();
+    };
+    stepper.appendChild(dot);
+  });
+  wrap.appendChild(stepper);
+
   const top = document.createElement('p');
   top.style.margin = '0 0 8px 0';
   top.style.fontSize = '0.88rem';
@@ -1149,15 +1415,21 @@ function renderOptiAQuiz() {
   const head = document.createElement('p');
   head.style.margin = '0';
   head.style.fontWeight = '700';
-  head.textContent = q.prompt;
+  head.innerHTML = q.prompt;
   card.appendChild(head);
+  if (q.figure) {
+    const fig = document.createElement('div');
+    fig.className = 'quiz-figure-local';
+    fig.innerHTML = q.figure;
+    card.appendChild(fig);
+  }
   const opts = document.createElement('div');
   opts.className = 'quiz-options-local';
   q.options.forEach((opt, oi) => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'quiz-option-local';
-    btn.textContent = opt;
+    btn.innerHTML = opt;
     btn.onclick = function () { selectOptiAOption(qi, oi, q.type === 'multi', btn); };
     if ((optiAQuizAnswers[qi] || []).includes(oi)) btn.classList.add('selected');
     opts.appendChild(btn);
@@ -1193,6 +1465,9 @@ function renderOptiAQuiz() {
   nav.appendChild(nextBtn);
 
   wrap.appendChild(nav);
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise([wrap]).catch(function () {});
+  }
 }
 
 function selectOptiAOption(qi, oi, isMulti, btnEl) {
