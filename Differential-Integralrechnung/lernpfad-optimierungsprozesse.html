@@ -23,7 +23,7 @@ MathJax = {
     <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
   </div>
   <div class="progress-label">
-    <span id="progressText">Station 0 von 3 besucht</span>
+    <span id="progressText">Station 0 von 7 besucht</span>
     <span id="progressPercent">0 %</span>
   </div>
 </div>
@@ -32,7 +32,7 @@ MathJax = {
 
 <div class="hero">
   <h1>Optimierungsprozesse</h1>
-  <p class="subtitle">Optimierung unter Nebenbedingungen und Methode der kleinsten Quadrate — Inhalte werden ausgebaut.</p>
+  <p class="subtitle">Ein gemeinsamer Einstieg, danach zwei getrennte Lernpfade: <strong>Optimierung unter Nebenbedingungen</strong> und <strong>Methode der kleinsten Quadrate</strong>.</p>
   <span class="badge">6. Semester</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
@@ -44,51 +44,217 @@ MathJax = {
 
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Ziele</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Lernpfad A</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>A: Aufgaben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Lernpfad B</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>B: Aufgaben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Abschluss</button>
 </div>
 
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Du löst typische <strong>Optimierungsaufgaben</strong> mit Nebenbedingungen und begegnest der <strong>linearen Ausgleichsrechnung</strong> als Werkzeug zur Modellanpassung.</p>
+  <div class="ribbon">Gemeinsamer Einstieg</div>
+  <p>In diesem Kapitel lernst du zwei unterschiedliche Denkweisen kennen, die beide mit dem Wort <strong>Optimierung</strong> zu tun haben:</p>
+  <ul style="margin:10px 0 12px 22px; line-height:1.65;">
+    <li><strong>Optimierung unter Nebenbedingungen:</strong> Eine Größe soll maximal oder minimal werden, aber es gibt eine feste Einschränkung.</li>
+    <li><strong>Methode der kleinsten Quadrate:</strong> Ein Modell soll so gewählt werden, dass es zu Datenpunkten insgesamt am besten passt.</li>
+  </ul>
   <div class="info-box concept">
+    <div class="icon">🧭</div>
+    <div>
+      <strong>So ist der Lernpfad aufgebaut</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Station 1-2: gemeinsames Begriffsfundament und beide Lernziele im Überblick</li>
+        <li>Station 3-4: Lernpfad A (Nebenbedingungen, Zielfunktion, Extremwert)</li>
+        <li>Station 5-6: Lernpfad B (Residuen, Ausgleichsrechnung, Modellgüte)</li>
+        <li>Station 7: Vergleich, Transfer und Abschlusscheck</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
     <div class="icon">🎯</div>
     <div>
-      <strong>Geplanter Schwerpunkt</strong>
-      <ul style="margin:8px 0 0 18px;">
-        <li>Standardmodelle (Produkt/Summe unter linearen Bindungen) sicher aufstellen</li>
-        <li>Prinzip der kleinsten Quadrate verständlich erklären und Gütekriterien bewerten</li>
-        <li>Optional: Technologie (GTR/Software) zur Modellfunktion einsetzen</li>
-      </ul>
+      <strong>Leitfrage des Kapitels</strong>
+      <p style="margin:8px 0 0 0;">Wie findet man in unterschiedlichen Kontexten mathematisch die „beste“ Lösung – einmal über <strong>Extremwerte unter Bedingungen</strong>, einmal über <strong>minimale Fehlerquadrate</strong>?</p>
     </div>
   </div>
   <div class="tab-nav">
     <div></div>
-    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Kompetenzen →</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Ziele →</button>
   </div>
 </div>
 
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen &amp; Ziele (Lehrplan)</div>
+  <div class="ribbon">Kompetenzen &amp; Lernziele</div>
   <div class="info-box success">
     <div class="icon">📌</div>
     <div><p style="margin:0;">Die Idee der Optimierung unter <strong>einschränkenden Bedingungen</strong> erklären und anhand der Modelle <strong>Hauptbedingung \(a\cdot b\)</strong> unter Nebenbedingung \(a+b=\mathrm{konst.}\) bzw. Hauptbedingung \(a+b\) unter Nebenbedingung \(a\cdot b=\mathrm{konst.}\) modellieren und berechnen.</p></div>
   </div>
   <div class="info-box success" style="margin-top:12px;">
     <div class="icon">📌</div>
-    <div><p style="margin:0;">Das Prinzip der <strong>Methode der kleinsten Quadrate</strong> und die zugrundeliegenden Ideen erläutern und die <strong>Güte der Ergebnisse</strong> bewerten; mit Technologieeinsatz für vorgegebene Modellfunktionen mit Hilfe der Methode der kleinsten Quadrate <strong>Funktionsgleichungen bestimmen</strong>.</p></div>
+    <div><p style="margin:0;">Das Prinzip der <strong>Methode der kleinsten Quadrate</strong> und die zugrundeliegenden Ideen erläutern, die <strong>Güte der Ergebnisse</strong> bewerten und mit Technologieeinsatz für vorgegebene Modellfunktionen <strong>Funktionsgleichungen bestimmen</strong>.</p></div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">🔑</div>
+    <div>
+      <strong>Gemeinsame Schlüsselbegriffe</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Hauptbedingung, Nebenbedingung, Zielfunktion, Maximum/Minimum, Modellfunktion, Residuum, Quadratsumme, \(R^2\), Plausibilität im Sachkontext.</p>
+    </div>
   </div>
   <div class="tab-nav">
     <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
-    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Lernpfad A →</button>
   </div>
 </div>
 
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Hier folgen Aufgabenklassen, Beispiele und ggf. Rechnerhinweise.</p>
+  <div class="ribbon">Lernpfad A: Optimierung unter Nebenbedingungen</div>
+  <p><strong>Einleitungsbeispiel:</strong> Schachtel aus DIN-A4-Blatt (quadratische Ecken ausschneiden, hochfalten, Volumen maximieren).</p>
+  <div class="info-box concept">
+    <div class="icon">📦</div>
+    <div>
+      <strong>Einstieg A (Problemverständnis)</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Was wird verändert? \(\rightarrow\) Eckquadrat mit Seitenlänge \(x\)</li>
+        <li>Was bleibt vorgegeben? \(\rightarrow\) Blattmaße \(29{,}7\) cm und \(21\) cm</li>
+        <li>Was soll optimal werden? \(\rightarrow\) Volumen \(V(x)\)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">🧮</div>
+    <div>
+      <strong>Schrittfolge A (Modellieren und berechnen)</strong>
+      <ol style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Hauptbedingung aufstellen (z. B. Volumen oder Produkt/Summe).</li>
+        <li>Nebenbedingung aufstellen (z. B. feste Summe oder festes Produkt).</li>
+        <li>Nebenbedingung umformen und in die Hauptbedingung einsetzen.</li>
+        <li>Zielfunktion auf sinnvollem Definitionsbereich untersuchen.</li>
+        <li>Extremstelle berechnen und im Kontext deuten.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="source-note" style="font-size:0.84rem; color:var(--text-light); margin-top:12px; padding:10px 12px; background:#F8FAFC; border-radius:10px; border-left:4px solid var(--blue);">
+    Material für den Einstieg: <a href="https://www.geogebra.org/m/Crf5nCdp" target="_blank" rel="noopener noreferrer">GeoGebra – Schachtel aus einem DIN-A4-Blatt</a>.
+  </div>
   <div class="tab-nav">
     <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: A-Aufgaben →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Lernpfad A: Aufgaben und Sicherung</div>
+  <div class="info-box success">
+    <div class="icon">✍️</div>
+    <div>
+      <strong>Kernaufgaben A</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li><strong>Fall 1:</strong> \(A=a\cdot b\) bei \(a+b=k\) \(\rightarrow\) zeige: Maximum bei \(a=b\).</li>
+        <li><strong>Fall 2:</strong> \(S=a+b\) bei \(a\cdot b=k\) \(\rightarrow\) zeige: Minimum bei \(a=b\).</li>
+        <li>Transferaufgabe: Rechteck/Box mit Nebenbedingung modellieren und Ergebnis begründen.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">✅</div>
+    <div>
+      <strong>Ergebnissicherung A</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Die Lernenden dokumentieren immer: Hauptbedingung, Nebenbedingung, Zielfunktion, Rechenweg, Extremwert und sachliche Deutung. Zusatzfrage: Warum kann ich sicher sein, dass es wirklich ein Maximum/Minimum ist?</p>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Lernpfad B →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Lernpfad B: Kleinste-Quadrate-Methode</div>
+  <p><strong>Einleitungsbeispiel:</strong> Regression-Lerneinheit mit Datenpunkten, Trendlinien und Modellvergleich.</p>
+  <div class="info-box concept">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Einstieg B (Daten verstehen)</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Datenpunkte im Koordinatensystem darstellen und Streuung beobachten.</li>
+        <li>Geeignete Modellfunktion wählen (linear, quadratisch, exponentiell).</li>
+        <li>Residuen als Abweichungen zwischen Messwert und Modellwert deuten.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">🧠</div>
+    <div>
+      <strong>Schrittfolge B (Modellanpassung)</strong>
+      <ol style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Modelltyp begründet auswählen.</li>
+        <li>Mit Technologie Parameter bestimmen (\(\sum (y_i-\hat y_i)^2\) minimieren).</li>
+        <li>Residuen prüfen (Größe und Muster).</li>
+        <li>\(R^2\) und Diagramm gemeinsam interpretieren.</li>
+        <li>Modell sachlich bewerten (passt es inhaltlich zur Situation?).</li>
+      </ol>
+    </div>
+  </div>
+  <div class="source-note" style="font-size:0.84rem; color:var(--text-light); margin-top:12px; padding:10px 12px; background:#F8FAFC; border-radius:10px; border-left:4px solid var(--blue);">
+    Grundlage für Lernpfad B: <a href="https://www.geogebra.org/m/KVBqUYT8" target="_blank" rel="noopener noreferrer">GeoGebra – Regression Lerneinheit</a>.
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: B-Aufgaben →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Lernpfad B: Aufgaben und Sicherung</div>
+  <div class="info-box success">
+    <div class="icon">🧪</div>
+    <div>
+      <strong>Kernaufgaben B</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Zu vorgegebenen Daten lineare und quadratische Regression berechnen.</li>
+        <li>Residuen einzelner Punkte bestimmen und vergleichen.</li>
+        <li>Zwei Modellfunktionen über \(R^2\), Residuenbild und Plausibilität bewerten.</li>
+        <li>Aussage treffen: Welches Modell ist für Prognosen im gegebenen Bereich sinnvoll?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">✅</div>
+    <div>
+      <strong>Ergebnissicherung B</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Die Lernenden argumentieren nicht nur mit „höherem \(R^2\)“, sondern immer mit mindestens zwei Kriterien: numerische Güte, Residuenverteilung und sachliche Passung des Modells.</p>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Abschluss →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Abschluss: Vergleich und Transfer</div>
+  <div class="info-box concept">
+    <div class="icon">🔄</div>
+    <div>
+      <strong>Was ist gleich, was ist unterschiedlich?</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li><strong>Gemeinsam:</strong> In beiden Lernpfaden wird eine Zielgröße optimiert.</li>
+        <li><strong>Unterschied:</strong> Lernpfad A optimiert eine Funktion unter Bedingung; Lernpfad B optimiert die Anpassung eines Modells an Daten.</li>
+        <li><strong>A:</strong> Ergebnis meist exakter Extremwert.</li>
+        <li><strong>B:</strong> Ergebnis bestmögliche Näherung mit Unsicherheit/Restfehlern.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box success" style="margin-top:12px;">
+    <div class="icon">🏁</div>
+    <div>
+      <strong>Abschlussauftrag (kurz)</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Erstelle zu jedem Lernziel eine 5-Zeilen-Zusammenfassung mit: Ausgangsfrage, mathematischem Modell, Rechenschritt, Ergebnis und Deutung im Sachkontext.</p>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
     <div></div>
   </div>
 </div>

@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Optimierungsprozesse - Teil A</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.ggb-wrap {
+  width: 100%;
+  max-width: 980px;
+  margin: 14px auto 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #E2E8F0;
+  box-shadow: var(--shadow);
+  background: #fff;
+}
+.ggb-wrap iframe {
+  display: block;
+  width: 100%;
+  height: min(70vh, 620px);
+  border: 0;
+}
+.box-visual-wrap {
+  margin-top: 16px;
+  text-align: center;
+}
+.box-visual-wrap canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  background: #FBFCFE;
+}
+.box-slider-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0 8px;
+}
+.box-slider-row input[type="range"] { width: 220px; }
+.entry-highlight {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border-left: 5px solid var(--blue);
+  background: #EFF6FF;
+}
+.entry-highlight p { margin: 0; line-height: 1.65; }
+.entry-photo-wrap {
+  margin-top: 14px;
+  text-align: center;
+}
+.entry-photo-wrap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  box-shadow: var(--shadow);
+}
+.entry-photo-wrap .photo-cap {
+  margin-top: 8px;
+  font-size: 0.84rem;
+  color: var(--text-light);
+}
+.step-guide-wrap {
+  margin-top: 12px;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 14px 16px;
+}
+.step-guide-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.step-guide-badge {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: #fff;
+  background: var(--blue);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.step-guide-title {
+  margin: 0 0 8px 0;
+  font-size: 1.02rem;
+}
+.step-guide-text {
+  margin: 0;
+  line-height: 1.7;
+}
+.step-guide-nav {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.step-guide-mini {
+  margin-top: 10px;
+  font-size: 0.86rem;
+  color: var(--text-light);
+}
+.step-guide-figure {
+  margin: 12px 0 2px;
+  padding: 10px;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  background: #F8FAFC;
+  text-align: center;
+  min-height: 200px;
+}
+.step-guide-figure svg {
+  max-width: 100%;
+  height: auto;
+  font-family: Nunito, Arial, sans-serif;
+}
+.quiz-card {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  background: #fff;
+}
+.quiz-options-local {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.quiz-option-local {
+  border: 2px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 9px 11px;
+  cursor: pointer;
+  background: #fff;
+}
+.quiz-option-local.selected {
+  border-color: #2563EB;
+  background: #EFF6FF;
+}
+.quiz-option-local.correct {
+  border-color: #16A34A;
+  background: #ECFDF3;
+}
+.quiz-option-local.wrong {
+  border-color: #DC2626;
+  background: #FEF2F2;
+}
+.quiz-explain {
+  margin-top: 8px;
+  font-size: 0.88rem;
+  color: var(--text-light);
+}
+.cyl-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+@media (min-width: 900px) {
+  .cyl-grid { grid-template-columns: 1fr 1fr; }
+}
+.cyl-card {
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+}
+.cyl-card canvas {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #E2E8F0;
+  background: #FBFCFE;
+}
+.cyl-form .row {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.cyl-form input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 2px solid #E2E8F0;
+  min-width: 130px;
+  background: #FFFFFF;
+  color: #0F172A;
+}
+.cyl-fb {
+  margin-top: 4px;
+  font-size: 0.84rem;
+}
+.ok { color: #166534; }
+.bad { color: #b91c1c; }
+.cyl-stepper-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.cyl-stepper-badge {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: #fff;
+  background: var(--blue);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.cyl-stepper-body {
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  background: #F8FAFC;
+  padding: 12px;
+}
+.cyl-stepper-body h4 {
+  margin: 0 0 8px 0;
+}
+.cyl-stepper-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body data-current-page="s6-optimierung-a" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 6 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Optimierungsprozesse - Teil A</h1>
+  <p class="subtitle">Optimierung unter einschränkenden Bedingungen: Modellieren, Zielfunktion bilden und Extremwerte im Sachkontext deuten.</p>
+  <span class="badge">6. Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    <a href="lernpfad-kosten-preistheorie.html" style="color:var(--blue-dark); font-weight:600;">← Kosten- und Preistheorie</a>
+    · <a href="lernpfad-optimierungsprozesse-teil-b.html" style="color:var(--blue-dark); font-weight:600;">Teil B →</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Ziel</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Vorgehen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Zylinder-Beispiel</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Aufgaben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Abschlussquiz</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg: Schachtel aus DIN A4</div>
+  <div class="entry-highlight">
+    <p><strong>Einstiegsbeispiel:</strong> Aus einem DIN-A4-Blatt werden an den vier Ecken Quadrate mit Seitenlänge \(x\) ausgeschnitten und die Seiten hochgefaltet. Gesucht ist jene Wahl von \(x\), bei der das Volumen der offenen Schachtel maximal wird.</p>
+  </div>
+  <div class="entry-photo-wrap">
+    <img src="Schachteln.png" alt="Mehrere gefaltete, offene Schachteln aus Papier als reales Einstiegsbeispiel">
+    <p class="photo-cap">Reales Anschauungsbeispiel: Schachteln aus Papier mit unterschiedlichen Ecklängen.</p>
+  </div>
+  <div class="box-visual-wrap">
+    <div class="box-slider-row">
+      <label for="boxXSlider">Ecklänge \(x\): <strong id="boxXValue">2.0</strong> cm</label>
+      <input type="range" id="boxXSlider" min="0.0" max="15.0" step="0.1" value="2.0" oninput="drawDinA4BoxSketch()">
+    </div>
+    <canvas id="boxSketchCanvas" width="760" height="300" aria-label="Skizze zur DIN-A4-Schachtel"></canvas>
+    <p class="source-note" id="boxSketchHint" style="margin-top:8px; font-size:0.84rem;"></p>
+  </div>
+  <div class="ggb-wrap">
+    <iframe
+      title="GeoGebra Applet: Schachtel aus einem DIN-A4-Blatt"
+      width="980"
+      height="620"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"
+      src="https://www.geogebra.org/material/iframe/id/Crf5nCdp/width/980/height/620/border/888888"
+    ></iframe>
+  </div>
+  <div class="ggb-wrap">
+    <iframe
+      title="GeoGebra Applet: Kubische Funktionen - Offene Schachtel maximieren"
+      width="980"
+      height="620"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"
+      src="https://www.geogebra.org/material/iframe/id/fwsvp4h3/width/980/height/620/border/888888"
+    ></iframe>
+  </div>
+  <p class="source-note" style="font-size:0.84rem; color:var(--text-light); margin-top:10px; padding:10px 12px; background:#F8FAFC; border-radius:10px; border-left:4px solid var(--blue);">
+    Applet-Links:
+    <a href="https://www.geogebra.org/m/Crf5nCdp" target="_blank" rel="noopener noreferrer">Schachtel aus einem DIN-A4-Blatt</a>
+    ·
+    <a href="https://www.geogebra.org/m/fwsvp4h3" target="_blank" rel="noopener noreferrer">Kubische Funktionen: Offene Schachtel maximieren</a>
+  </p>
+  <div class="info-box concept">
+    <div class="icon">📦</div>
+    <div>
+      <strong>Was wird optimiert?</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li><strong>Hauptbedingung:</strong> Volumen \(V(x)\) der Schachtel</li>
+        <li><strong>Nebenbedingungen:</strong> feste Blattmaße \(29{,}7\) cm und \(21\) cm</li>
+        <li><strong>Entscheidungsvariable:</strong> Ecklänge \(x\)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="source-note" style="font-size:0.84rem; color:var(--text-light); margin-top:12px; padding:10px 12px; background:#F8FAFC; border-radius:10px; border-left:4px solid var(--blue);">
+    Einstiegsmaterial: <a href="https://www.geogebra.org/m/Crf5nCdp" target="_blank" rel="noopener noreferrer">GeoGebra – Schachtel aus einem DIN-A4-Blatt</a>.
+  </p>
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Ziel →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Lernziel Teil A</div>
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <p style="margin:0;">Die Idee der Optimierung unter <strong>einschränkenden Bedingungen</strong> erklären und anhand der Modelle <strong>Hauptbedingung \(a\cdot b\)</strong> unter Nebenbedingung \(a+b=\mathrm{konst.}\) bzw. Hauptbedingung \(a+b\) unter Nebenbedingung \(a\cdot b=\mathrm{konst.}\) modellieren und berechnen.</p>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">🔑</div>
+    <div>
+      <strong>Begriffe</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Hauptbedingung, Nebenbedingung, Zielfunktion, Definitionsbereich, Maximum, Minimum.</p>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Vorgehen →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Standard-Vorgehen in 5 Schritten</div>
+  <p style="line-height:1.65;">Klicke dich durch die Schritte. Jeder Schritt erklärt dir den vollständigen Denkweg am konkreten DIN‑A4‑Beispiel.</p>
+  <div class="step-guide-wrap">
+    <div class="step-guide-top">
+      <span class="step-guide-badge" id="guideStepBadge">Schritt 1 von 5</span>
+      <span id="guideStepLabel" style="font-weight:700; color:var(--blue-dark);"></span>
+    </div>
+    <h3 class="step-guide-title" id="guideStepTitle"></h3>
+    <p class="step-guide-text" id="guideStepText"></p>
+    <div class="step-guide-figure" id="guideStepFigure"></div>
+    <p class="step-guide-mini" id="guideStepMini"></p>
+    <div class="step-guide-nav">
+      <button type="button" class="btn btn-prev" onclick="prevOptiGuideStep()">← Zurück</button>
+      <button type="button" class="btn btn-next" onclick="nextOptiGuideStep()">Weiter →</button>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">🧮</div>
+    <div>
+      <strong>Zwei Kernmuster (Übertrag auf andere Aufgaben)</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>\(a\cdot b\) bei \(a+b=k\): Produkt wird maximal bei \(a=b\).</li>
+        <li>\(a+b\) bei \(a\cdot b=k\): Summe wird minimal bei \(a=b\).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Zylinder-Beispiel →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Einleitungsbeispiel: Optimale Konservendose</div>
+  <p>Wir betrachten einen geschlossenen Drehzylinder (Radius \(r\), Höhe \(h\)) mit festem Volumen \(V=500\,\text{cm}^3\). Gesucht sind Maße mit minimaler Oberfläche \(O\) (Materialkosten).</p>
+  <div class="cyl-grid">
+    <div class="cyl-card">
+      <strong>Grafik 1: Zylinder (r, h)</strong>
+      <canvas id="cylCanvas" width="420" height="300" aria-label="Zylinderdarstellung"></canvas>
+      <div class="row" style="margin-top:10px;">
+        <label for="cylRSlider">Radius \(r\): <strong id="cylRVal">4.3</strong> cm</label>
+        <input type="range" id="cylRSlider" min="1.0" max="8.5" step="0.1" value="4.3" oninput="updateCylinderExample()">
+      </div>
+      <p id="cylInfo" class="cyl-fb"></p>
+    </div>
+    <div class="cyl-card">
+      <strong>Grafik 2: Oberfläche \(O(r)\)</strong>
+      <canvas id="cylGraphCanvas" width="420" height="300" aria-label="Funktionsgraph O(r)"></canvas>
+      <p class="cyl-fb">Funktion: \(O(r)=2\pi r^2+\frac{1000}{r}\) für \(r>0\)</p>
+    </div>
+  </div>
+  <div class="cyl-card cyl-form" style="margin-top:12px;">
+    <strong>Interaktive Ausarbeitung (mit Kontrolle)</strong>
+    <div class="cyl-stepper-head">
+      <span class="cyl-stepper-badge" id="cylStepBadge">Schritt 1 von 7</span>
+      <span id="cylStepLabel" style="font-weight:700; color:var(--blue-dark);"></span>
+    </div>
+    <div class="cyl-stepper-body">
+      <h4 id="cylStepTitle"></h4>
+      <p id="cylStepExplain" style="margin:0 0 10px 0; line-height:1.65;"></p>
+      <div id="cylStepInputs"></div>
+      <div id="cylStepFeedback" class="cyl-fb"></div>
+    </div>
+    <div class="cyl-stepper-nav">
+      <button type="button" class="btn btn-prev" onclick="prevCylinderStep()">← Zurück</button>
+      <button type="button" class="btn btn-next" onclick="nextCylinderStep()">Weiter →</button>
+      <button type="button" class="btn btn-check" onclick="checkCylinderStep()">Überprüfen ✓</button>
+      <button type="button" class="btn btn-hint" onclick="fillCylinderStepSolution()">Lösung anzeigen</button>
+    </div>
+  </div>
+  <details class="kp-details-box" style="margin-top:12px; padding:12px 14px; border-radius:12px; border:1px solid #E8E8E8; background:#FAFAFA;">
+    <summary style="cursor:pointer; font-weight:700;">GeoGebra-Applet zur Konservendosen-Optimierung (aufklappen)</summary>
+    <div class="ggb-wrap" style="margin-top:12px;">
+      <iframe
+        title="GeoGebra Applet: Optimierung Konservendose"
+        width="980"
+        height="620"
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin"
+        src="https://www.geogebra.org/material/iframe/id/b37dczsf/width/980/height/620/border/888888"
+      ></iframe>
+    </div>
+    <p class="source-note" style="font-size:0.84rem; color:var(--text-light); margin-top:10px; padding:10px 12px; background:#F8FAFC; border-radius:10px; border-left:4px solid var(--blue);">
+      Applet-Link:
+      <a href="https://www.geogebra.org/m/b37dczsf" target="_blank" rel="noopener noreferrer">Optimierung Konservendose</a>
+    </p>
+  </details>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Aufgaben →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Aufgaben und Sicherung</div>
+  <div class="info-box success">
+    <div class="icon">✍️</div>
+    <div>
+      <strong>Pflichtaufgaben</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Leite die Volumenfunktion \(V(x)\) für die DIN-A4-Schachtel her und bestimme das Maximum im zulässigen Bereich.</li>
+        <li>Zeige rechnerisch: Maximum von \(a\cdot b\) bei \(a+b=k\) liegt bei \(a=b\).</li>
+        <li>Zeige rechnerisch: Minimum von \(a+b\) bei \(a\cdot b=k\) liegt bei \(a=b\).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">📚</div>
+    <div>
+      <strong>Zusätzliche Übungsaufgaben (10 Stück)</strong>
+      <ol style="margin:8px 0 0 18px; line-height:1.72;">
+        <li>Auf einer Wiese soll eine rechteckige Fläche mit \(200\,\text{m}\) Zaun so abgesteckt werden, dass der Flächeninhalt maximal wird (Seitenlängen \(a,b>0\)).</li>
+        <li>Bestimme jenes Prisma mit quadratischer Grundfläche (\(a\times a\)) und Höhe \(c\), bei dem die <strong>Summe aller 12 Kanten</strong> \(S=72\,\text{cm}\) beträgt und das Volumen maximal wird.</li>
+        <li>Ein oben offener Blechbehälter mit quadratischer Grundfläche soll ein Volumen von \(4\,\text{dm}^3\) haben. Welche Maße \(a\) (Grundkante) und \(h\) (Höhe) minimieren die benötigte Blechfläche?</li>
+        <li>Die Zahl \(64\) ist in zwei positive Summanden \(x\) und \(y\) zu zerlegen, sodass \(x^2+y^2\) minimal wird.</li>
+        <li>Die Zahl \(64\) ist in zwei positive Faktoren \(x\) und \(y\) zu zerlegen, sodass \(x^2+y^2\) minimal wird.</li>
+        <li>Ein Rechteck hat den Umfang \(U=48\,\text{cm}\). Bestimme die Seitenlängen so, dass die Fläche maximal wird.</li>
+        <li>Zwei positive Zahlen haben das Produkt \(100\). Bestimme die Zahlen so, dass ihre Summe minimal wird.</li>
+        <li>Ein rechteckiger Garten soll den Flächeninhalt \(A=400\,\text{m}^2\) besitzen. Welche Seitenlängen minimieren den Umfang?</li>
+        <li>Für zwei positive Zahlen gilt \(a+b=30\). Für welche Werte von \(a\) und \(b\) wird das Produkt \(a\cdot b\) maximal?</li>
+        <li>Ein <strong>geschlossener</strong> Quader mit quadratischer Grundfläche hat das Volumen \(V=108\,\text{cm}^3\). Welche Maße minimieren die gesamte Oberfläche?</li>
+      </ol>
+      <p style="margin:10px 0 0 0; font-size:0.88rem; color:var(--text-light);">Arbeitsauftrag: Löse mindestens 6 Aufgaben vollständig mit HB, NB, Zielfunktion, Ableitung, Definitionsbereich und Deutung.</p>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">✅</div>
+    <div>
+      <strong>Sicherung</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Jede Lösung enthält: Modellansatz, Umformung, Zielfunktion, Extremwertrechnung und Deutung in ganzen Sätzen.</p>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">📄</div>
+    <div>
+      <strong>Arbeitsblatt (Download)</strong>
+      <p style="margin:8px 0 8px 0; line-height:1.65;">Zusätzliches Übungsmaterial zum Vertiefen:</p>
+      <ul style="margin:0 0 0 18px; line-height:1.7;">
+        <li><a href="AB-Optimierungsaufgaben-Zentriert.pdf" download>AB-Optimierungsaufgaben-Zentriert.pdf</a></li>
+      </ul>
+    </div>
+  </div>
+  <details class="kp-details-box" style="margin-top:14px; padding:12px 14px; border-radius:12px; border:1px solid #E8E8E8; background:#FAFAFA;">
+    <summary style="cursor:pointer; font-weight:700;">Lösungen und Ausarbeitung (aufklappen)</summary>
+    <div style="margin-top:12px; line-height:1.7;">
+      <ol style="margin:0 0 0 18px;">
+        <li>
+          <strong>Zaun 200 m, Fläche max.</strong><br>
+          NB: \(2a+2b=200 \Rightarrow a+b=100 \Rightarrow b=100-a\).<br>
+          HB: \(A=a\cdot b=a(100-a)=100a-a^2\).<br>
+          \(A'(a)=100-2a=0 \Rightarrow a=50,\; b=50\).<br>
+          <strong>Ergebnis:</strong> Quadrat \(50\text{ m}\times 50\text{ m}\), \(A_{\max}=2500\text{ m}^2\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>Quadratisches Prisma, Kantenlängensumme 72 cm, Volumen max.</strong><br>
+          Für Prisma mit Grundkante \(a\), Höhe \(c\): \(8a+4c=72 \Rightarrow c=18-2a\).<br>
+          \(V=a^2c=a^2(18-2a)=18a^2-2a^3\).<br>
+          \(V'(a)=36a-6a^2=6a(6-a)=0 \Rightarrow a=6\) (positiv, sinnvoll), dann \(c=6\).<br>
+          <strong>Ergebnis:</strong> \(a=c=6\text{ cm}\), \(V_{\max}=216\text{ cm}^3\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>Offener Behälter, \(V=4\,\text{dm}^3\), Blechfläche min.</strong><br>
+          Volumen: \(a^2h=4 \Rightarrow h=\frac{4}{a^2}\).<br>
+          Oberfläche offen: \(O(a)=a^2+4ah=a^2+\frac{16}{a}\).<br>
+          \(O'(a)=2a-\frac{16}{a^2}=0 \Rightarrow 2a^3=16 \Rightarrow a=2\), \(h=1\).<br>
+          <strong>Ergebnis:</strong> \(a=2\text{ dm},\; h=1\text{ dm},\; O_{\min}=12\text{ dm}^2\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>\(64\) in Summanden, \(x^2+y^2\) min.</strong><br>
+          NB: \(x+y=64 \Rightarrow y=64-x\).<br>
+          \(S(x)=x^2+(64-x)^2=2x^2-128x+4096\).<br>
+          \(S'(x)=4x-128=0 \Rightarrow x=32,\; y=32\).<br>
+          <strong>Ergebnis:</strong> \(32\) und \(32\), Minimum \(S_{\min}=2048\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>\(64\) in Faktoren, \(x^2+y^2\) min.</strong><br>
+          NB: \(xy=64 \Rightarrow y=\frac{64}{x}\), \(x>0\).<br>
+          \(S(x)=x^2+\left(\frac{64}{x}\right)^2=x^2+\frac{4096}{x^2}\).<br>
+          \(S'(x)=2x-\frac{8192}{x^3}=0 \Rightarrow 2x^4=8192 \Rightarrow x=8,\; y=8\).<br>
+          <strong>Ergebnis:</strong> \(8\) und \(8\), Minimum \(S_{\min}=128\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>Rechteck \(U=48\), Fläche max.</strong><br>
+          \(a+b=24 \Rightarrow b=24-a\).<br>
+          \(A(a)=a(24-a)=24a-a^2\), \(A'(a)=24-2a=0 \Rightarrow a=12,\; b=12\).<br>
+          <strong>Ergebnis:</strong> Quadrat \(12\text{ cm}\times 12\text{ cm}\), \(A_{\max}=144\text{ cm}^2\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>Produkt 100, Summe min.</strong><br>
+          \(xy=100 \Rightarrow y=\frac{100}{x}\), \(x>0\).<br>
+          \(S(x)=x+\frac{100}{x}\), \(S'(x)=1-\frac{100}{x^2}=0 \Rightarrow x=10,\; y=10\).<br>
+          <strong>Ergebnis:</strong> \(10\) und \(10\), \(S_{\min}=20\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>Garten \(A=400\), Umfang min.</strong><br>
+          \(ab=400 \Rightarrow b=\frac{400}{a}\).<br>
+          \(U(a)=2a+2\frac{400}{a}=2a+\frac{800}{a}\).<br>
+          \(U'(a)=2-\frac{800}{a^2}=0 \Rightarrow a^2=400 \Rightarrow a=20,\; b=20\).<br>
+          <strong>Ergebnis:</strong> Quadrat \(20\text{ m}\times 20\text{ m}\), \(U_{\min}=80\text{ m}\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>\(a+b=30\), Produkt max.</strong><br>
+          \(b=30-a\), \(P(a)=a(30-a)=30a-a^2\).<br>
+          \(P'(a)=30-2a=0 \Rightarrow a=15,\; b=15\).<br>
+          <strong>Ergebnis:</strong> Maximum bei \(a=b=15\), \(P_{\max}=225\).
+        </li>
+        <li style="margin-top:10px;">
+          <strong>Geschlossener Quader mit quadratischer Grundfläche, \(V=108\), Oberfläche min.</strong><br>
+          Maße: Grundkante \(a\), Höhe \(h\). NB: \(a^2h=108 \Rightarrow h=\frac{108}{a^2}\).<br>
+          Oberfläche: \(O(a)=2a^2+4ah=2a^2+\frac{432}{a}\).<br>
+          \(O'(a)=4a-\frac{432}{a^2}=0 \Rightarrow 4a^3=432 \Rightarrow a^3=108\).<br>
+          \(\Rightarrow a=\sqrt[3]{108}\approx 4{,}76,\; h=\frac{108}{a^2}=a\).<br>
+          <strong>Ergebnis:</strong> Würfel ist optimal, \(a=h=\sqrt[3]{108}\approx 4{,}76\text{ cm}\), \(O_{\min}\approx 136{,}0\text{ cm}^2\).
+        </li>
+      </ol>
+    </div>
+  </details>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Abschlussquiz →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Abschlussquiz Teil A</div>
+  <div class="info-box success">
+    <div class="icon">🏁</div>
+    <div>
+      <strong>Interaktive Abschlusskontrolle</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Gemischte Aufgaben: Verständnis, Modellierung, Deutung und einzelne Rechenschritte.</p>
+    </div>
+  </div>
+  <div id="optiAQuizWrap" class="quiz-card"></div>
+  <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+    <button type="button" class="btn btn-check" onclick="checkOptiAQuiz()">Quiz auswerten ✓</button>
+    <button type="button" class="btn btn-hint" onclick="resetOptiAQuiz()">Quiz neu starten</button>
+  </div>
+  <div id="optiAQuizResult" style="display:none; margin-top:12px;"></div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <a class="btn btn-next" href="lernpfad-optimierungsprozesse-teil-b.html">Weiter zu Teil B →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Optimierungsprozesse - Teil A<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/lernpfad-platzhalter-app.js"></script>
+<script>
+function drawDinA4BoxSketch() {
+  const slider = document.getElementById('boxXSlider');
+  const valueEl = document.getElementById('boxXValue');
+  const hintEl = document.getElementById('boxSketchHint');
+  const canvas = document.getElementById('boxSketchCanvas');
+  if (!slider || !valueEl || !hintEl || !canvas) return;
+
+  const x = parseFloat(slider.value);
+  valueEl.textContent = x.toFixed(1);
+
+  const w = 29.7;
+  const h = 21.0;
+  const innerW = w - 2 * x;
+  const innerH = h - 2 * x;
+  const V = x * innerW * innerH;
+
+  const ctx = canvas.getContext('2d');
+  const cw = canvas.width;
+  const ch = canvas.height;
+  ctx.clearRect(0, 0, cw, ch);
+
+  const margin = 40;
+  const leftW = (cw - margin * 3) * 0.56;
+  const rightW = (cw - margin * 3) * 0.44;
+
+  const scale = Math.min((leftW - 20) / w, (ch - 80) / h);
+  const rx = margin + 10;
+  const ry = (ch - h * scale) / 2;
+  const rw = w * scale;
+  const rh = h * scale;
+  const cut = x * scale;
+
+  ctx.fillStyle = '#F8FAFC';
+  ctx.strokeStyle = '#1D4ED8';
+  ctx.lineWidth = 2;
+  ctx.fillRect(rx, ry, rw, rh);
+  ctx.strokeRect(rx, ry, rw, rh);
+
+  ctx.fillStyle = '#DBEAFE';
+  ctx.fillRect(rx, ry, cut, cut);
+  ctx.fillRect(rx + rw - cut, ry, cut, cut);
+  ctx.fillRect(rx, ry + rh - cut, cut, cut);
+  ctx.fillRect(rx + rw - cut, ry + rh - cut, cut, cut);
+
+  ctx.strokeStyle = '#0F172A';
+  ctx.setLineDash([5, 4]);
+  ctx.strokeRect(rx + cut, ry + cut, rw - 2 * cut, rh - 2 * cut);
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = '#0F172A';
+  ctx.font = '13px Nunito, Arial, sans-serif';
+  ctx.fillText('Ausgangsblatt 29,7 cm × 21 cm', rx, ry - 10);
+  ctx.fillText('ausgeschnittene Ecken: x × x', rx, ry + rh + 18);
+
+  const bx = margin * 2 + leftW;
+  const by = 58;
+  const bScale = Math.min((rightW - 60) / Math.max(1, innerW), (ch - 120) / Math.max(1, innerH));
+  const bw = innerW * bScale;
+  const bh = innerH * bScale;
+  const dx = Math.max(16, x * bScale * 0.9);
+  const dy = Math.max(12, x * bScale * 0.6);
+
+  ctx.fillStyle = '#E2E8F0';
+  ctx.beginPath();
+  ctx.moveTo(bx, by + dy);
+  ctx.lineTo(bx + bw, by + dy);
+  ctx.lineTo(bx + bw + dx, by);
+  ctx.lineTo(bx + dx, by);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#334155';
+  ctx.stroke();
+
+  ctx.fillStyle = '#BFDBFE';
+  ctx.beginPath();
+  ctx.moveTo(bx + bw, by + dy);
+  ctx.lineTo(bx + bw, by + dy + bh);
+  ctx.lineTo(bx + bw + dx, by + bh);
+  ctx.lineTo(bx + bw + dx, by);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#93C5FD';
+  ctx.beginPath();
+  ctx.moveTo(bx, by + dy);
+  ctx.lineTo(bx, by + dy + bh);
+  ctx.lineTo(bx + bw, by + dy + bh);
+  ctx.lineTo(bx + bw, by + dy);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#1E293B';
+  ctx.fillText('vereinfachte 3D-Skizze', bx, by - 12);
+  ctx.fillText('Grundfläche: (29,7 - 2x)(21 - 2x)', bx, by + dy + bh + 26);
+  ctx.fillText('Höhe: x', bx, by + dy + bh + 44);
+
+  const valid = x > 0 && x < 10.5;
+  hintEl.textContent = 'Volumenfunktion: V(x) = x · (29,7 - 2x) · (21 - 2x)  |  aktuelles V(x) = ' + V.toFixed(2) + ' cm³' + (valid ? '' : '  |  Achtung: außerhalb des realistischen Bereichs (0 < x < 10,5)');
+}
+
+document.addEventListener('DOMContentLoaded', drawDinA4BoxSketch);
+
+const optiGuideSteps = [
+  {
+    label: 'HB',
+    title: '1) Hauptbedingung festlegen',
+    text: 'Zuerst klärst du ganz bewusst, was optimiert werden soll. Bei der Schachtel ist das nicht die Seitenlänge und auch nicht die Fläche, sondern das Volumen. Daher setzt du als Hauptbedingung V \\(=a\\cdot b\\cdot h\\) und notierst das Ziel \\(V\\to\\max\\). Dieser Schritt ist wichtig, weil hier die mathematische Zielfunktion inhaltlich richtig verankert wird.',
+    mini: 'Frage zur Selbstkontrolle: „Welche Größe beschreibt den Erfolg der Aufgabe?“',
+    figure: '<svg viewBox="0 0 520 220" aria-label="Skizze Hauptbedingung"><rect x="20" y="18" width="480" height="184" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/><text x="42" y="48" font-size="15" fill="#334155">Schachtelmodell (Volumen als Zielgröße)</text><rect x="52" y="82" width="150" height="90" fill="#BFDBFE" stroke="#1D4ED8" stroke-width="2"/><polygon points="202,82 246,62 246,152 202,172" fill="#93C5FD" stroke="#1D4ED8" stroke-width="2"/><polygon points="52,82 202,82 246,62 96,62" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="2"/><line x1="52" y1="178" x2="202" y2="178" stroke="#0F172A" stroke-width="1.5"/><line x1="208" y1="174" x2="246" y2="156" stroke="#0F172A" stroke-width="1.5"/><line x1="250" y1="150" x2="250" y2="64" stroke="#0F172A" stroke-width="1.5"/><text x="120" y="193" font-size="13">a</text><text x="225" y="172" font-size="13">b</text><text x="257" y="110" font-size="13">h</text><text x="300" y="108" font-size="24" fill="#0F172A">V = a · b · h</text><text x="300" y="142" font-size="18" fill="#1D4ED8">Optimierungsziel: V → max</text></svg>'
+  },
+  {
+    label: 'NB',
+    title: '2) Nebenbedingungen aufstellen',
+    text: 'Jetzt beschreibst du die festen Rahmenbedingungen des DIN‑A4‑Blatts. Die Höhe der Schachtel ist \\(h=x\\), weil genau diese Eckquadrate hochgefaltet werden. Die neue Länge und Breite der Grundfläche entstehen durch den Zuschnitt links/rechts bzw. oben/unten: \\(a=29{,}7-2x\\), \\(b=21-2x\\). Damit hast du alle veränderlichen Größen vollständig über \\(x\\) beschrieben.',
+    mini: 'Merke: Nebenbedingungen liefern die Brücke vom Text zur Rechnung.',
+    figure: '<svg viewBox="0 0 520 220" aria-label="Skizze Nebenbedingungen"><rect x="20" y="18" width="480" height="184" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/><text x="42" y="48" font-size="15" fill="#334155">DIN-A4-Netz mit Eckquadraten x</text><rect x="52" y="62" width="230" height="130" fill="#FFFFFF" stroke="#475569" stroke-width="2"/><rect x="52" y="62" width="30" height="30" fill="#DBEAFE" stroke="#1D4ED8"/><rect x="252" y="62" width="30" height="30" fill="#DBEAFE" stroke="#1D4ED8"/><rect x="52" y="162" width="30" height="30" fill="#DBEAFE" stroke="#1D4ED8"/><rect x="252" y="162" width="30" height="30" fill="#DBEAFE" stroke="#1D4ED8"/><line x1="82" y1="92" x2="252" y2="92" stroke="#16A34A" stroke-width="2"/><line x1="82" y1="162" x2="252" y2="162" stroke="#16A34A" stroke-width="2"/><line x1="82" y1="92" x2="82" y2="162" stroke="#EA580C" stroke-width="2"/><text x="60" y="58" font-size="12" fill="#1D4ED8">x</text><text x="255" y="58" font-size="12" fill="#1D4ED8">x</text><text x="292" y="92" font-size="16" fill="#0F172A">h = x</text><text x="292" y="126" font-size="16" fill="#0F172A">a = 29,7 - 2x</text><text x="292" y="160" font-size="16" fill="#0F172A">b = 21 - 2x</text><text x="292" y="186" font-size="13" fill="#64748B">alle Maße als Funktion von x</text></svg>'
+  },
+  {
+    label: 'ZF',
+    title: '3) Zielfunktion bilden',
+    text: 'Nun setzt du die Nebenbedingungen in die Hauptbedingung ein. Aus \\(V=a\\cdot b\\cdot h\\) wird \\(V(x)=(29{,}7-2x)(21-2x)\\cdot x\\). Ab jetzt hast du nur noch eine Variable und kannst mit Analysis arbeiten. Ohne diesen Schritt ist eine Extremwertrechnung kaum möglich, weil mehrere Variablen gleichzeitig vorkommen würden.',
+    mini: 'Die Zielfunktion ist das zentrale Rechenobjekt der Optimierungsaufgabe.',
+    figure: '<svg viewBox="0 0 520 220" aria-label="Skizze Zielfunktion"><rect x="20" y="18" width="480" height="184" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/><text x="42" y="48" font-size="15" fill="#334155">Einsetzen der Nebenbedingungen in die Hauptbedingung</text><text x="42" y="90" font-size="22" fill="#0F172A">V = a · b · h</text><text x="175" y="90" font-size="22" fill="#1D4ED8">⇒</text><text x="210" y="90" font-size="22" fill="#0F172A">V(x) = (29,7 - 2x)(21 - 2x)·x</text><line x1="42" y1="112" x2="478" y2="112" stroke="#CBD5E1"/><text x="42" y="145" font-size="16" fill="#334155">Jetzt hängt alles nur noch von x ab.</text><text x="42" y="172" font-size="16" fill="#334155">Genau diese Funktion wird im nächsten Schritt abgeleitet.</text></svg>'
+  },
+  {
+    label: 'Ableitung',
+    title: '4) Extremstelle berechnen',
+    text: 'Im nächsten Schritt leitest du \\(V(x)\\) ab und setzt \\(V\'(x)=0\\). Für dieses Beispiel ergibt sich \\(V\'(x)=12x^2-202{,}8x+623{,}7\\). Die rechnerischen Kandidaten sind ungefähr \\(x_1\\approx4{,}04\\) und \\(x_2\\approx12{,}86\\). Diese Kandidaten sind noch nicht automatisch Lösungen im Sachkontext – sie sind zunächst nur mathematische Extremstellenkandidaten.',
+    mini: 'Wichtig: Nullstellen der Ableitung liefern Kandidaten, nicht sofort die Endantwort.',
+    figure: '<svg viewBox="0 0 520 220" aria-label="Skizze Ableitung"><rect x="20" y="18" width="480" height="184" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/><text x="42" y="48" font-size="15" fill="#334155">Kandidaten über V\'(x)=0 bestimmen</text><line x1="52" y1="172" x2="476" y2="172" stroke="#475569" stroke-width="2"/><line x1="62" y1="182" x2="62" y2="62" stroke="#475569" stroke-width="2"/><path d="M76,166 C132,88 206,58 258,70 C320,85 382,130 456,166" fill="none" stroke="#16A34A" stroke-width="3"/><circle cx="214" cy="68" r="5" fill="#DC2626"/><text x="228" y="72" font-size="14" fill="#0F172A">lokales Maximum</text><text x="318" y="116" font-size="14" fill="#0F172A">zweite kritische Stelle</text><text x="74" y="197" font-size="13" fill="#475569">x₁ ≈ 4,04</text><text x="352" y="197" font-size="13" fill="#475569">x₂ ≈ 12,86</text><text x="42" y="92" font-size="16" fill="#0F172A">V\'(x) = 12x² - 202,8x + 623,7</text></svg>'
+  },
+  {
+    label: 'Deutung',
+    title: '5) Sachlich deuten und entscheiden',
+    text: 'Jetzt kommt der entscheidende Praxisschritt: der realistische Definitionsbereich. Wegen \\(21-2x>0\\) gilt \\(x<10{,}5\\), außerdem \\(x>0\\). Daher ist \\(x\\approx12{,}86\\) unzulässig und fällt weg. Übrig bleibt \\(x\\approx4{,}04\\) cm als sinnvolle Lösung. Eingesetzt ergibt das ein maximales Volumen von rund \\(1128{,}5\\,\\text{cm}^3\\).',
+    mini: 'Endsatz in Worten: „Bei einer Ecklänge von etwa 4,04 cm ist das Schachtelvolumen maximal.“',
+    figure: '<svg viewBox="0 0 520 220" aria-label="Skizze Deutung"><rect x="20" y="18" width="480" height="184" rx="10" fill="#FFFFFF" stroke="#E2E8F0"/><text x="42" y="48" font-size="15" fill="#334155">Definitionsbereich prüfen und sinnvolle Lösung auswählen</text><line x1="60" y1="138" x2="468" y2="138" stroke="#64748B" stroke-width="3"/><line x1="86" y1="130" x2="86" y2="146" stroke="#64748B" stroke-width="3"/><line x1="344" y1="130" x2="344" y2="146" stroke="#64748B" stroke-width="3"/><line x1="86" y1="138" x2="344" y2="138" stroke="#16A34A" stroke-width="7"/><circle cx="186" cy="138" r="6" fill="#DC2626"/><text x="78" y="162" font-size="13" fill="#475569">0</text><text x="330" y="162" font-size="13" fill="#475569">10,5</text><text x="171" y="125" font-size="13" fill="#DC2626">x = 4,04</text><text x="42" y="82" font-size="16" fill="#0F172A">zulässig: 0 &lt; x &lt; 10,5</text><text x="42" y="104" font-size="16" fill="#0F172A">x = 12,86  → unzulässig</text><text x="42" y="186" font-size="16" fill="#1D4ED8">Ergebnis: Vmax bei x ≈ 4,04 cm</text></svg>'
+  }
+];
+
+let currentOptiGuideStep = 0;
+
+function renderOptiGuideStep() {
+  const badge = document.getElementById('guideStepBadge');
+  const label = document.getElementById('guideStepLabel');
+  const title = document.getElementById('guideStepTitle');
+  const text = document.getElementById('guideStepText');
+  const figure = document.getElementById('guideStepFigure');
+  const mini = document.getElementById('guideStepMini');
+  if (!badge || !label || !title || !text || !figure || !mini) return;
+
+  const step = optiGuideSteps[currentOptiGuideStep];
+  badge.textContent = 'Schritt ' + (currentOptiGuideStep + 1) + ' von ' + optiGuideSteps.length;
+  label.textContent = step.label;
+  title.textContent = step.title;
+  text.innerHTML = step.text;
+  figure.innerHTML = step.figure || '';
+  mini.textContent = step.mini;
+}
+
+function prevOptiGuideStep() {
+  currentOptiGuideStep = Math.max(0, currentOptiGuideStep - 1);
+  renderOptiGuideStep();
+  if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise();
+}
+
+function nextOptiGuideStep() {
+  currentOptiGuideStep = Math.min(optiGuideSteps.length - 1, currentOptiGuideStep + 1);
+  renderOptiGuideStep();
+  if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  TOTAL_SECTIONS = 6;
+  renderOptiGuideStep();
+  renderOptiAQuiz();
+  updateCylinderExample();
+  clearCylinderInputs();
+  if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise();
+});
+
+function normalizeExpr(s) {
+  return (s || '').toLowerCase().replace(/\s+/g, '').replace(/,/g, '.').replace(/\*/g, '').replace(/π/g, 'pi');
+}
+
+function approxEq(v, target, tol) {
+  return Number.isFinite(v) && Math.abs(v - target) <= tol;
+}
+
+function setFb(id, ok, txt) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'cyl-fb ' + (ok ? 'ok' : 'bad');
+  el.textContent = (ok ? '✓ ' : '✗ ') + txt;
+}
+
+function drawCylinderCanvas(r, h) {
+  const c = document.getElementById('cylCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const cx = 210;
+  const baseY = 245;
+  const scale = 14;
+  const rx = r * scale;
+  const hh = Math.min(180, h * 13);
+  const topY = baseY - hh;
+
+  ctx.fillStyle = '#E2E8F0';
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.ellipse(cx, topY, rx, rx * 0.28, 0, 0, Math.PI * 2);
+  ctx.fill(); ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(cx - rx, topY);
+  ctx.lineTo(cx - rx, baseY);
+  ctx.moveTo(cx + rx, topY);
+  ctx.lineTo(cx + rx, baseY);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.ellipse(cx, baseY, rx, rx * 0.28, 0, 0, Math.PI);
+  ctx.stroke();
+  ctx.setLineDash([5, 5]);
+  ctx.beginPath();
+  ctx.ellipse(cx, baseY, rx, rx * 0.28, 0, Math.PI, Math.PI * 2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle = '#1D4ED8';
+  ctx.beginPath();
+  ctx.moveTo(cx, topY);
+  ctx.lineTo(cx, baseY);
+  ctx.stroke();
+  ctx.fillStyle = '#0F172A';
+  ctx.font = '13px Nunito, Arial, sans-serif';
+  ctx.fillText('h', cx + 8, (topY + baseY) / 2);
+  ctx.fillText('r', cx + rx * 0.55, baseY + 16);
+}
+
+function drawCylinderGraph(currentR) {
+  const c = document.getElementById('cylGraphCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  const padL = 42, padR = 14, padT = 18, padB = 34;
+  const w = c.width - padL - padR;
+  const h = c.height - padT - padB;
+  const rMin = 1, rMax = 8.5;
+  const oMin = 250, oMax = 900;
+  const fx = r => 2 * Math.PI * r * r + 1000 / r;
+  const sx = r => padL + ((r - rMin) / (rMax - rMin)) * w;
+  const sy = o => padT + h - ((o - oMin) / (oMax - oMin)) * h;
+
+  ctx.strokeStyle = '#64748B'; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, padT + h); ctx.lineTo(padL + w, padT + h); ctx.stroke();
+
+  ctx.strokeStyle = '#2563EB'; ctx.lineWidth = 2.2;
+  ctx.beginPath();
+  for (let i = 0; i <= 220; i++) {
+    const r = rMin + (i / 220) * (rMax - rMin);
+    const x = sx(r), y = sy(fx(r));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  const yCur = fx(currentR);
+  ctx.fillStyle = '#DC2626';
+  ctx.beginPath(); ctx.arc(sx(currentR), sy(yCur), 4.2, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#0F172A';
+  ctx.font = '12px Nunito, Arial, sans-serif';
+  ctx.fillText('O(r) in cm²', padL + 4, padT + 12);
+  ctx.fillText('r in cm', padL + w - 34, padT + h + 24);
+}
+
+function updateCylinderExample() {
+  const rInput = document.getElementById('cylRSlider');
+  const rVal = document.getElementById('cylRVal');
+  const info = document.getElementById('cylInfo');
+  if (!rInput || !rVal || !info) return;
+  const r = parseFloat(rInput.value);
+  const h = 500 / (Math.PI * r * r);
+  const O = 2 * Math.PI * r * r + 2 * Math.PI * r * h;
+  rVal.textContent = r.toFixed(1);
+  info.textContent = 'Bei r=' + r.toFixed(1) + ' cm gilt h=' + h.toFixed(2) + ' cm und O=' + O.toFixed(1) + ' cm².';
+  drawCylinderCanvas(r, h);
+  drawCylinderGraph(r);
+}
+
+const cylinderSteps = [
+  {
+    label: 'Volumen',
+    title: '1) Volumenformel des Zylinders',
+    explain: 'Im ersten Schritt formulierst du die Hauptbeziehung. Ein Zylinder hat Grundfläche \\(\\pi r^2\\) und Höhe \\(h\\). Daher gilt für das Volumen direkt \\(V=\\pi r^2h\\).',
+    inputs: [{ key: 'q1', label: 'V =', placeholder: '' }],
+    check: (a) => ['pir^2h','pi*r^2*h','pih*r^2'].includes(normalizeExpr(a.q1)),
+    solution: { q1: 'pi*r^2*h' },
+    feedback: 'Erwartet: V = π·r²·h'
+  },
+  {
+    label: 'Skalierung',
+    title: '2) Was passiert bei Verdopplung von r?',
+    explain: 'Wenn \\(r\\) verdoppelt wird, vervierfacht sich \\(r^2\\). Damit das Volumen gleich bleibt, muss \\(h\\) um denselben Faktor kleiner werden – also auf ein Viertel.',
+    inputs: [{ key: 'q2', label: 'h wird auf ... von h verkleinert:', placeholder: '' }],
+    check: (a) => ['1/4','0.25','viertel'].includes(normalizeExpr(a.q2)),
+    solution: { q2: '1/4' },
+    feedback: 'Bei doppeltem r muss h auf 1/4 verkleinert werden.'
+  },
+  {
+    label: 'Oberfläche',
+    title: '3) Oberfläche des geschlossenen Zylinders',
+    explain: 'Die Oberfläche besteht aus zwei Kreisflächen \\((2\\pi r^2)\\) und dem Mantel \\((2\\pi rh)\\). Damit erhältst du die Hauptbedingung für den Materialverbrauch.',
+    inputs: [
+      { key: 'q3a', label: 'Mantel-Seite 1:', placeholder: '' },
+      { key: 'q3b', label: 'Mantel-Seite 2:', placeholder: '' },
+      { key: 'q3c', label: 'O =', placeholder: '' }
+    ],
+    check: (a) => {
+      const s1 = normalizeExpr(a.q3a), s2 = normalizeExpr(a.q3b), s3 = normalizeExpr(a.q3c);
+      const ok1 = s1 === '2pir' || s1 === '2pi*r' || s1 === '2*r*pi';
+      const ok2 = s2 === 'h';
+      const ok3 = s3.includes('2pir^2') && (s3.includes('2pirh') || s3.includes('2pihr'));
+      return ok1 && ok2 && ok3;
+    },
+    solution: { q3a: '2*pi*r', q3b: 'h', q3c: '2*pi*r^2+2*pi*r*h' },
+    feedback: 'Mantel: 2πr und h, daher O = 2πr² + 2πrh'
+  },
+  {
+    label: 'Nebenbedingung',
+    title: '4) h in Abhängigkeit von r',
+    explain: 'Das Volumen ist mit \\(500\\,\\text{cm}^3\\) fest: \\(500=\\pi r^2h\\). Für die Optimierung über \\(r\\) löst du nach \\(h\\) auf und erhältst die Nebenbedingung.',
+    inputs: [{ key: 'q4', label: 'h(r) =', placeholder: '' }],
+    check: (a) => ['500/(pir^2)','500/pir^2','500/(pi*r^2)'].includes(normalizeExpr(a.q4)),
+    solution: { q4: '500/(pi*r^2)' },
+    feedback: 'h(r)=500/(πr²)'
+  },
+  {
+    label: 'Zielfunktion',
+    title: '5) Zielfunktion nur in r',
+    explain: 'Nun setzt du \\(h(r)\\) in die Oberflächenformel ein: \\(O(r)=2\\pi r^2+2\\pi r\\cdot\\frac{500}{\\pi r^2}\\). Daraus folgt \\(O(r)=2\\pi r^2+\\frac{1000}{r}\\).',
+    inputs: [{ key: 'q5', label: 'O(r) =', placeholder: '' }],
+    check: (a) => {
+      const s = normalizeExpr(a.q5);
+      return s.includes('2pir^2') && (s.includes('1000/r') || s.includes('1000r^-1'));
+    },
+    solution: { q5: '2*pi*r^2+1000/r' },
+    feedback: 'Richtig: O(r)=2πr²+1000/r'
+  },
+  {
+    label: 'Tiefpunkt',
+    title: '6) Grafisch ablesen (Näherung)',
+    explain: 'Aus dem Graphen von \\(O(r)\\) liest du den Tiefpunkt näherungsweise ab. Für dieses Beispiel liegt er bei etwa \\(r^*\\approx 4{,}3\\) und \\(O_{min}\\approx 349\\,\\text{cm}^2\\).',
+    inputs: [
+      { key: 'q6a', label: 'r* ≈', placeholder: '', numeric: true },
+      { key: 'q6b', label: 'Omin ≈', placeholder: '', numeric: true }
+    ],
+    check: (a) => approxEq(parseFloat((a.q6a || '').replace(',', '.')), 4.3, 0.3) && approxEq(parseFloat((a.q6b || '').replace(',', '.')), 349, 25),
+    solution: { q6a: '4.3', q6b: '349' },
+    feedback: 'Näherung: r*≈4,3 cm und Omin≈349 cm²'
+  },
+  {
+    label: 'Interpretation',
+    title: '7) Optimale Maße deuten',
+    explain: 'Aus der Rechnung folgt näherungsweise \\(r\\approx 4{,}30\\) und \\(h\\approx 8{,}60\\). Damit gilt \(h\\approx 2r\\): Bei optimaler Dose ist die Höhe gleich dem Durchmesser.',
+    inputs: [{ key: 'q7', label: 'h* ≈', placeholder: '' }],
+    check: (a) => approxEq(parseFloat((a.q7 || '').replace(',', '.')), 8.6, 0.5),
+    solution: { q7: '8.6' },
+    feedback: 'Optimale Höhe: h*≈8,6 cm (≈2r)'
+  }
+];
+
+let currentCylinderStep = 0;
+let cylinderAnswers = {};
+
+function renderCylinderStep() {
+  const badge = document.getElementById('cylStepBadge');
+  const label = document.getElementById('cylStepLabel');
+  const title = document.getElementById('cylStepTitle');
+  const explain = document.getElementById('cylStepExplain');
+  const inputsWrap = document.getElementById('cylStepInputs');
+  const fb = document.getElementById('cylStepFeedback');
+  if (!badge || !label || !title || !explain || !inputsWrap || !fb) return;
+
+  const step = cylinderSteps[currentCylinderStep];
+  badge.textContent = 'Schritt ' + (currentCylinderStep + 1) + ' von ' + cylinderSteps.length;
+  label.textContent = step.label;
+  title.textContent = step.title;
+  explain.innerHTML = step.explain;
+  inputsWrap.innerHTML = '';
+  fb.textContent = '';
+  fb.className = 'cyl-fb';
+
+  step.inputs.forEach(inp => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const lab = document.createElement('label');
+    lab.textContent = inp.label;
+    const input = document.createElement('input');
+    input.placeholder = inp.placeholder || '';
+    input.autocomplete = 'off';
+    input.value = (cylinderAnswers[inp.key] || '');
+    input.addEventListener('input', function () {
+      cylinderAnswers[inp.key] = input.value;
+    });
+    row.appendChild(lab);
+    row.appendChild(input);
+    inputsWrap.appendChild(row);
+  });
+  if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([explain, inputsWrap]).catch(function () {});
+}
+
+function checkCylinderStep() {
+  const step = cylinderSteps[currentCylinderStep];
+  const ok = step.check(cylinderAnswers);
+  const fb = document.getElementById('cylStepFeedback');
+  if (!fb) return;
+  fb.className = 'cyl-fb ' + (ok ? 'ok' : 'bad');
+  fb.textContent = (ok ? '✓ ' : '✗ ') + step.feedback;
+}
+
+function fillCylinderStepSolution() {
+  const step = cylinderSteps[currentCylinderStep];
+  Object.keys(step.solution).forEach(k => {
+    cylinderAnswers[k] = step.solution[k];
+  });
+  renderCylinderStep();
+  checkCylinderStep();
+}
+
+function prevCylinderStep() {
+  currentCylinderStep = Math.max(0, currentCylinderStep - 1);
+  renderCylinderStep();
+}
+
+function nextCylinderStep() {
+  currentCylinderStep = Math.min(cylinderSteps.length - 1, currentCylinderStep + 1);
+  renderCylinderStep();
+}
+
+function clearCylinderInputs() {
+  cylinderAnswers = {};
+  currentCylinderStep = 0;
+  renderCylinderStep();
+}
+
+const optiAQuizQuestions = [
+  {
+    type: 'single',
+    prompt: '1) Was ist in der DIN-A4-Aufgabe die Hauptbedingung?',
+    options: ['Die feste Blattgröße 29,7 × 21', 'Die zu maximierende Volumenfunktion V(x)', 'Die Bedingung x < 10,5', 'Die Ableitungsfunktion V\'(x)'],
+    correct: [1],
+    explain: 'Hauptbedingung ist immer die Zielgröße, die optimiert wird: hier das Volumen.'
+  },
+  {
+    type: 'single',
+    prompt: '2) Welcher Definitionsbereich ist sachlich sinnvoll?',
+    options: ['0 < x < 10,5', 'x > 0', '0 < x < 29,7', 'x < 12,86'],
+    correct: [0],
+    explain: 'Beide Kanten (29,7-2x) und (21-2x) müssen positiv bleiben, daher x < 10,5.'
+  },
+  {
+    type: 'multi',
+    prompt: '3) Welche Aussagen gehören zum Standardvorgehen? (Mehrfachauswahl)',
+    options: ['Haupt- und Nebenbedingung zuerst sauber trennen', 'Direkt raten und nur Endwert angeben', 'Nebenbedingung in HB einsetzen', 'Extremwert im Kontext deuten'],
+    correct: [0, 2, 3],
+    explain: 'Optimierungsaufgaben brauchen Modellansatz, Rechenweg und Deutung.'
+  },
+  {
+    type: 'single',
+    prompt: '4) Für a+b=30 wird a·b maximal bei …',
+    options: ['a=10, b=20', 'a=15, b=15', 'a=1, b=29', 'a=5, b=25'],
+    correct: [1],
+    explain: 'Bei fixer Summe ist das Produkt maximal, wenn beide Zahlen gleich sind.'
+  },
+  {
+    type: 'single',
+    prompt: '5) Warum ist x≈12,86 in der Schachtelaufgabe keine Lösung?',
+    options: ['Weil die Ableitung dort negativ ist', 'Weil x nicht ganzzahlig ist', 'Weil x außerhalb des zulässigen Bereichs liegt', 'Weil das Volumen dort Null ist'],
+    correct: [2],
+    explain: 'Rechnerische Kandidaten müssen immer mit dem Sachbereich abgeglichen werden.'
+  },
+  {
+    type: 'single',
+    prompt: '6) Welche Zielfunktion passt zur DIN-A4-Schachtel?',
+    options: ['V(x)=x(29,7-x)(21-x)', 'V(x)=x(29,7-2x)(21-2x)', 'V(x)=29,7·21·x', 'V(x)=(29,7+2x)(21+2x)x'],
+    correct: [1],
+    explain: 'Links und rechts bzw. oben und unten wird jeweils x abgeschnitten, also insgesamt 2x.'
+  },
+  {
+    type: 'single',
+    prompt: '7) Welche Aussage trifft auf die Nebenbedingung zu?',
+    options: ['Sie ist optional', 'Sie beschreibt die Einschränkung des Problems', 'Sie ist immer eine Ableitung', 'Sie ist das Endergebnis'],
+    correct: [1],
+    explain: 'Die Nebenbedingung begrenzt die zulässigen Werte.'
+  },
+  {
+    type: 'single',
+    prompt: '8) In Worten ist die korrekte Enddeutung:',
+    options: ['x=4,04 ist eine Nullstelle', 'Bei x≈4,04 cm wird das Schachtelvolumen maximal', 'x≈4,04 ist die Ableitung', 'Die beste Lösung ist immer ganzzahlig'],
+    correct: [1],
+    explain: 'Am Ende braucht es immer eine verständliche Aussage im Sachkontext.'
+  }
+];
+
+let optiAQuizAnswers = [];
+let currentOptiAQuizIndex = 0;
+
+function renderOptiAQuiz() {
+  const wrap = document.getElementById('optiAQuizWrap');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const q = optiAQuizQuestions[currentOptiAQuizIndex];
+  const qi = currentOptiAQuizIndex;
+
+  const top = document.createElement('p');
+  top.style.margin = '0 0 8px 0';
+  top.style.fontSize = '0.88rem';
+  top.style.color = 'var(--text-light)';
+  top.textContent = 'Frage ' + (qi + 1) + ' von ' + optiAQuizQuestions.length;
+  wrap.appendChild(top);
+
+  const card = document.createElement('div');
+  card.className = 'quiz-card';
+  card.style.marginTop = '0';
+  const head = document.createElement('p');
+  head.style.margin = '0';
+  head.style.fontWeight = '700';
+  head.textContent = q.prompt;
+  card.appendChild(head);
+  const opts = document.createElement('div');
+  opts.className = 'quiz-options-local';
+  q.options.forEach((opt, oi) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'quiz-option-local';
+    btn.textContent = opt;
+    btn.onclick = function () { selectOptiAOption(qi, oi, q.type === 'multi', btn); };
+    if ((optiAQuizAnswers[qi] || []).includes(oi)) btn.classList.add('selected');
+    opts.appendChild(btn);
+  });
+  const exp = document.createElement('div');
+  exp.className = 'quiz-explain';
+  exp.id = 'optiAExplain_' + qi;
+  exp.style.display = 'none';
+  card.appendChild(opts);
+  card.appendChild(exp);
+  wrap.appendChild(card);
+
+  const nav = document.createElement('div');
+  nav.style.marginTop = '10px';
+  nav.style.display = 'flex';
+  nav.style.gap = '10px';
+  nav.style.flexWrap = 'wrap';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.type = 'button';
+  prevBtn.className = 'btn btn-prev';
+  prevBtn.textContent = '← Vorherige Frage';
+  prevBtn.disabled = qi === 0;
+  prevBtn.onclick = prevOptiAQuizQuestion;
+  nav.appendChild(prevBtn);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.type = 'button';
+  nextBtn.className = 'btn btn-next';
+  nextBtn.textContent = 'Nächste Frage →';
+  nextBtn.disabled = qi === optiAQuizQuestions.length - 1;
+  nextBtn.onclick = nextOptiAQuizQuestion;
+  nav.appendChild(nextBtn);
+
+  wrap.appendChild(nav);
+}
+
+function selectOptiAOption(qi, oi, isMulti, btnEl) {
+  const questionCard = btnEl.parentElement;
+  const buttons = Array.from(questionCard.querySelectorAll('.quiz-option-local'));
+  if (!optiAQuizAnswers[qi]) optiAQuizAnswers[qi] = [];
+  if (isMulti) {
+    const idx = optiAQuizAnswers[qi].indexOf(oi);
+    if (idx >= 0) optiAQuizAnswers[qi].splice(idx, 1);
+    else optiAQuizAnswers[qi].push(oi);
+  } else {
+    optiAQuizAnswers[qi] = [oi];
+  }
+  buttons.forEach((b, bi) => {
+    const selected = optiAQuizAnswers[qi].includes(bi);
+    b.classList.toggle('selected', selected);
+  });
+}
+
+function arraysEqualAsSet(a, b) {
+  if (!a || a.length !== b.length) return false;
+  const sa = a.slice().sort((x, y) => x - y);
+  const sb = b.slice().sort((x, y) => x - y);
+  return sa.every((v, i) => v === sb[i]);
+}
+
+function checkOptiAQuiz() {
+  let score = 0;
+  optiAQuizQuestions.forEach((q, qi) => {
+    const ans = optiAQuizAnswers[qi] || [];
+    const ok = arraysEqualAsSet(ans, q.correct);
+    if (ok) score++;
+  });
+  // Zeige Feedback für die aktuell geöffnete Frage
+  const cq = optiAQuizQuestions[currentOptiAQuizIndex];
+  const cAns = optiAQuizAnswers[currentOptiAQuizIndex] || [];
+  const cOk = arraysEqualAsSet(cAns, cq.correct);
+  const card = document.getElementById('optiAExplain_' + currentOptiAQuizIndex).parentElement;
+  const buttons = Array.from(card.querySelectorAll('.quiz-option-local'));
+  buttons.forEach((b, bi) => {
+    b.classList.remove('wrong', 'correct');
+    if (cq.correct.includes(bi)) b.classList.add('correct');
+    if (cAns.includes(bi) && !cq.correct.includes(bi)) b.classList.add('wrong');
+  });
+  const exp = document.getElementById('optiAExplain_' + currentOptiAQuizIndex);
+  exp.style.display = 'block';
+  exp.textContent = (cOk ? '✓ Richtig. ' : '✗ Nicht ganz. ') + cq.explain;
+
+  const res = document.getElementById('optiAQuizResult');
+  if (res) {
+    res.style.display = 'block';
+    const pct = Math.round((score / optiAQuizQuestions.length) * 100);
+    const msg = pct >= 85 ? 'Sehr stark – du beherrschst Teil A sicher.' : pct >= 65 ? 'Gut geschafft – mit wenig Feinschliff bist du prüfungsfit.' : 'Gute Basis – gehe die Erklärungen noch einmal Schritt für Schritt durch.';
+    res.innerHTML = '<div class="info-box success"><div class="icon">📊</div><div><strong>Ergebnis: ' + score + ' / ' + optiAQuizQuestions.length + ' (' + pct + '%)</strong><p style="margin:8px 0 0 0;">' + msg + '</p></div></div>';
+  }
+}
+
+function resetOptiAQuiz() {
+  optiAQuizAnswers = [];
+  currentOptiAQuizIndex = 0;
+  renderOptiAQuiz();
+  const res = document.getElementById('optiAQuizResult');
+  if (res) {
+    res.style.display = 'none';
+    res.innerHTML = '';
+  }
+}
+
+function prevOptiAQuizQuestion() {
+  currentOptiAQuizIndex = Math.max(0, currentOptiAQuizIndex - 1);
+  renderOptiAQuiz();
+}
+
+function nextOptiAQuizQuestion() {
+  currentOptiAQuizIndex = Math.min(optiAQuizQuestions.length - 1, currentOptiAQuizIndex + 1);
+  renderOptiAQuiz();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Optimierungsprozesse - Teil B</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../js/lernpfade-registry.js"></script>
+<script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+</head>
+<body data-current-page="s6-optimierung-b" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 4 besucht</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Optimierungsprozesse - Teil B</h1>
+  <p class="subtitle">Methode der kleinsten Quadrate: Daten modellieren, Funktionsgleichungen bestimmen und die Güte der Ergebnisse bewerten.</p>
+  <span class="badge">6. Semester</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamtübersicht</a><br>
+    <a href="lernpfad-optimierungsprozesse-teil-a.html" style="color:var(--blue-dark); font-weight:600;">← Teil A</a>
+    · <a href="lernpfad-integralrechnung.html" style="color:var(--blue-dark); font-weight:600;">Integralrechnung →</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Ziel</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Vorgehen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Aufgaben</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg: Regression</div>
+  <p>Bei realen Daten liegen Messpunkte meist nicht exakt auf einer Geraden oder Kurve. Gesucht wird daher ein Modell, das die Daten <strong>insgesamt bestmöglich</strong> beschreibt.</p>
+  <div class="info-box concept">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Grundidee</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Residuen: \(r_i=y_i-\hat y_i\)</li>
+        <li>Gütekriterium: \(\sum (y_i-\hat y_i)^2\) möglichst klein</li>
+        <li>Ergebnis: bestangepasste Modellfunktion innerhalb der gewählten Funktionsklasse</li>
+      </ul>
+    </div>
+  </div>
+  <p class="source-note" style="font-size:0.84rem; color:var(--text-light); margin-top:12px; padding:10px 12px; background:#F8FAFC; border-radius:10px; border-left:4px solid var(--blue);">
+    Einstiegsmaterial: <a href="https://www.geogebra.org/m/KVBqUYT8" target="_blank" rel="noopener noreferrer">GeoGebra – Regression Lerneinheit</a>.
+  </p>
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Ziel →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Lernziel Teil B</div>
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <p style="margin:0;">Das Prinzip der <strong>Methode der kleinsten Quadrate</strong> und die zugrundeliegenden Ideen erläutern und die <strong>Güte der Ergebnisse</strong> bewerten; mit Technologieeinsatz für vorgegebene Modellfunktionen mit Hilfe der Methode der kleinsten Quadrate <strong>Funktionsgleichungen bestimmen</strong>.</p>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">🔑</div>
+    <div>
+      <strong>Begriffe</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Datenpunkte, Modellfunktion, Residuum, Fehlerquadratsumme, Regressionsfunktion, Bestimmtheitsmaß \(R^2\), Plausibilität.</p>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Vorgehen →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Standard-Vorgehen in 5 Schritten</div>
+  <ol style="margin:6px 0 12px 20px; line-height:1.7;">
+    <li><strong>Daten darstellen:</strong> Streudiagramm erstellen und Trend erkennen.</li>
+    <li><strong>Modelltyp wählen:</strong> z. B. linear, quadratisch, exponentiell.</li>
+    <li><strong>Regression ausführen:</strong> Parameter per Technologie bestimmen.</li>
+    <li><strong>Güte prüfen:</strong> Residuenbild, Größe der Residuen, \(R^2\).</li>
+    <li><strong>Kontext deuten:</strong> Modell auf Plausibilität und Prognoseeignung bewerten.</li>
+  </ol>
+  <div class="info-box concept">
+    <div class="icon">🧠</div>
+    <div>
+      <strong>Merke</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Ein hohes \(R^2\) allein genügt nicht. Eine sinnvolle Modellentscheidung braucht immer auch die inhaltliche Deutung im Kontext.</p>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Aufgaben →</button>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Aufgaben und Sicherung</div>
+  <div class="info-box success">
+    <div class="icon">✍️</div>
+    <div>
+      <strong>Pflichtaufgaben</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Bestimme zu einem Datensatz eine lineare und eine quadratische Regressionsfunktion.</li>
+        <li>Berechne für ausgewählte Punkte Residuen und vergleiche die Modelle.</li>
+        <li>Bewerte die Modellgüte mit \(R^2\), Residuenverteilung und sachlicher Plausibilität.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="info-box concept" style="margin-top:12px;">
+    <div class="icon">✅</div>
+    <div>
+      <strong>Sicherung</strong>
+      <p style="margin:8px 0 0 0; line-height:1.65;">Jede Auswertung enthält: gewähltes Modell, Regressionsgleichung, Gütekriterien und klare Begründung, warum dieses Modell im gegebenen Kontext passend ist.</p>
+    </div>
+  </div>
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <a class="btn btn-next" href="lernpfad-integralrechnung.html">Weiter: Integralrechnung →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Optimierungsprozesse - Teil B<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+
+</div>
+
+<script src="js/lernpfad-platzhalter-app.js"></script>
+</body>
+</html>

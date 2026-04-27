@@ -765,15 +765,26 @@
           order: 30
         },
         {
-          id: 's6-optimierung',
-          href: 'lernpfad-optimierungsprozesse.html',
-          navLabel: '04 Optimierungsprozesse',
-          cardTitle: 'Optimierungsprozesse',
-          semesterTopicCode: '04',
+          id: 's6-optimierung-a',
+          href: 'lernpfad-optimierungsprozesse-teil-a.html',
+          navLabel: '04A Optimierungsprozesse - Teil A',
+          cardTitle: 'Optimierungsprozesse - Teil A',
+          semesterTopicCode: '04A',
           description:
-            'Optimierung unter Nebenbedingungen (Standardmodelle), Methode der kleinsten Quadrate — Idee, Güte, Technologie für Modellgleichungen.',
+            'Optimierung unter Nebenbedingungen: Haupt-/Nebenbedingung, Zielfunktion, Extremwerte und Modellierung mit DIN-A4-Schachtel sowie Standardmustern.',
           semesterId: 's6',
           order: 40
+        },
+        {
+          id: 's6-optimierung-b',
+          href: 'lernpfad-optimierungsprozesse-teil-b.html',
+          navLabel: '04B Optimierungsprozesse - Teil B',
+          cardTitle: 'Optimierungsprozesse - Teil B',
+          semesterTopicCode: '04B',
+          description:
+            'Methode der kleinsten Quadrate: Regression, Residuen, Bestimmtheitsmaß und bewusste Bewertung der Modellgüte mit Technologieeinsatz.',
+          semesterId: 's6',
+          order: 45
         },
         {
           id: 's6-integral',
