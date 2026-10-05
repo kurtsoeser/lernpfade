@@ -55,7 +55,7 @@
               cardTitle: 'Grundlagen der Mathematik',
               semesterTopicCode: '01',
               description:
-                'Zahlenmengen auf der Zahlengeraden, mathematische Symbole, Beziehungen zwischen den Mengen — Inhalt wird ergänzt.',
+                'Zahlenmengen ℕ, ℤ, ℚ, ℝ auf der Zahlengeraden; Symbole ∈, ⊂; interaktive Veranschaulichung und Abschlussquiz.',
               semesterId: 's3',
               order: 10
             }
@@ -80,7 +80,7 @@
               cardTitle: 'Die 4 Grundrechnungsarten',
               semesterTopicCode: '02',
               description:
-                'Natürliche, ganze, rationale und reelle Zahlen; Genauigkeit, Runden und Abschätzen — Inhalt wird ergänzt.',
+                'Grundrechenarten in ℕ–ℝ, Reihenfolge und Vorzeichen; kaufmännisches Runden, Abschätzen, Übungen und Quiz.',
               semesterId: 's3',
               order: 20
             }
@@ -103,7 +103,7 @@
               cardTitle: 'Rechnen mit Prozenten',
               semesterTopicCode: '03',
               description:
-                'Prozent und Promille verstehen, berechnen und im Kontext anwenden — Inhalt wird ergänzt.',
+                'Prozent und Promille; G, W, p; Erhöhen/Vermindern; Kontextaufgaben, Promille, interaktiver Rechner und Quiz.',
               semesterId: 's3',
               order: 30
             }

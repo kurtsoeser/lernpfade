@@ -5,57 +5,469 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Die 4 Grundrechnungsarten</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
-<script src="../../../js/lernpfade-registry.js"></script>
-<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.op-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:780px){ .op-grid { grid-template-columns:1fr 1fr; } }
+.op-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px 16px; background:#fff; }
+.op-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.tool-box { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#F8FAFC; margin-top:14px; }
+</style>
 </head>
 <body data-current-page="s3-p02" data-page-type="lernpfad" data-chapter-folder="Grundlagen/grundrechnungsarten">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 8 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
   <h1>Die 4 Grundrechnungsarten</h1>
-  <p class="subtitle">Natürliche, ganze, rationale und reelle Zahlen — Inhalte werden ergänzt.</p>
+  <p class="subtitle">Rechnen in \(\mathbb{N}\), \(\mathbb{Z}\), \(\mathbb{Q}\) und \(\mathbb{R}\); Reihenfolge; sinnvolle Genauigkeit, Runden und Abschätzen.</p>
   <span class="badge">3.&nbsp;Semester · Thema 02</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
-    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
-    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
-    <a href="../grundlagen-mathematik/index.html" style="color:var(--blue-dark); font-weight:600;">← 01 Grundlagen</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    <a href="../grundlagen-mathematik/lernpfad-grundlagen-mathematik.html" style="color:var(--blue-dark); font-weight:600;">← 01 Grundlagen</a>
     · <a href="../prozent-rechnen/index.html" style="color:var(--blue-dark); font-weight:600;">03 Prozent →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Zahlenbereiche</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>4 Operationen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Reihenfolge</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Runden</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Abschätzen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Üben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Quiz</button>
 </div>
+
+<!-- 1 -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>Zahlenbereiche</strong> und <strong>sinnvolle Genauigkeit</strong> beim Rechnen und Runden.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg &amp; Lernziele</div>
+  <p>Die vier Grundrechenarten — <strong>Addieren, Subtrahieren, Multiplizieren, Dividieren</strong> — sind das Handwerkszeug für fast alles Weitere: Prozent, Formeln, Gleichungen, Finanzmathematik.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Du lernst:</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>in den Zahlenbereichen \(\mathbb{N}\), \(\mathbb{Z}\), \(\mathbb{Q}\), \(\mathbb{R}\) sicher zu rechnen,</li>
+        <li>Rechenreihenfolge und Vorzeichenregeln anzuwenden,</li>
+        <li>Ergebnisse <strong>sinnvoll zu runden</strong> und <strong>abzuschätzen</strong>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Lehrplan-Kompetenzen</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Zahlenbereiche beschreiben und damit rechnen.</li>
+        <li>Berechnungen mit sinnvoller Genauigkeit; angemessen runden.</li>
+        <li>Ergebnisse abschätzen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Zielklarheit</span>
+    </div>
+    <p><strong>Frage 1:</strong> Warum ist Abschätzen wichtig, obwohl der Taschenrechner „exakt“ rechnet?</p>
+    <div class="quiz-options" data-quiz="gr0_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Abschätzen ersetzt immer die genaue Rechnung.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Weil Abschätzen in der Matura verboten ist.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Um Tippfehler und unsinnige Ergebnisse schnell zu erkennen.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Weil Rundungen immer falsch sind.</div>
+    </div>
+    <div class="feedback" id="fb_gr0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> „Sinnvolle Genauigkeit“ bedeutet vor allem …</p>
+    <div class="quiz-options" data-quiz="gr0_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">immer möglichst viele Nachkommastellen</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">die Genauigkeit dem Kontext anpassen (z.&nbsp;B. Cent bei Geld)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nie zu runden</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur natürliche Zahlen zu verwenden</div>
+    </div>
+    <div class="feedback" id="fb_gr0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['gr0_1','gr0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Zahlenbereiche →</button>
+  </div>
 </div>
+
+<!-- 2 -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Die Zahlenbereiche der <strong>natürlichen, ganzen, rationalen und reellen</strong> Zahlen beschreiben und damit rechnen.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Berechnungen mit <strong>sinnvoller Genauigkeit</strong> durchführen und Ergebnisse <strong>angemessen runden</strong>.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Ergebnisse von Berechnungen <strong>abschätzen</strong>.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Rechnen in Zahlenbereichen</div>
+  <p>Ob eine Rechnung „geschlossen“ bleibt, hängt vom Zahlenbereich ab — das hast du in Thema 01 vorbereitet.</p>
+
+  <div class="op-grid">
+    <div class="op-card">
+      <h3>\(\mathbb{N}\)</h3>
+      <p>\(+\) und \(\cdot\) bleiben in \(\mathbb{N}\). Differenz und Quotient oft nicht (\(3-5\), \(1:2\)).</p>
+    </div>
+    <div class="op-card">
+      <h3>\(\mathbb{Z}\)</h3>
+      <p>\(+\), \(-\), \(\cdot\) bleiben in \(\mathbb{Z}\). Division nicht immer (\(1:2\)).</p>
+    </div>
+    <div class="op-card">
+      <h3>\(\mathbb{Q}\)</h3>
+      <p>\(+\), \(-\), \(\cdot\) und Division (außer durch 0) bleiben in \(\mathbb{Q}\).</p>
+    </div>
+    <div class="op-card">
+      <h3>\(\mathbb{R}\)</h3>
+      <p>Alle vier Grundrechenarten (Division \(\neq 0\)); Wurzeln positiver Zahlen liegen in \(\mathbb{R}\).</p>
+    </div>
+  </div>
+
+  <div class="info-box warning" style="margin-top:14px;">
+    <div class="icon">🚫</div>
+    <div><strong>Division durch 0</strong> ist in keinem dieser Bereiche definiert. Immer Nenner prüfen!</div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Bereich wählen</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(7 - 10\) liefert ein Ergebnis in …</p>
+    <div class="quiz-options" data-quiz="gr1_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\mathbb{N}\), aber nicht in \(\mathbb{Z}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\mathbb{Z}\) (und \(\mathbb{Q}\), \(\mathbb{R}\)), nicht in \(\mathbb{N}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nirgends</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur in irrationalen Zahlen</div>
+    </div>
+    <div class="feedback" id="fb_gr1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(\dfrac{2}{5} + \dfrac{1}{5}\) bleibt in …</p>
+    <div class="quiz-options" data-quiz="gr1_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nur \(\mathbb{N}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">nur \(\mathbb{Z}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\mathbb{Q}\) (und \(\mathbb{R}\))</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">außerhalb von \(\mathbb{R}\)</div>
+    </div>
+    <div class="feedback" id="fb_gr1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['gr1_1','gr1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Operationen →</button>
+  </div>
 </div>
+
+<!-- 3 -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Die vier Operationen</div>
+
+  <div class="op-grid">
+    <div class="op-card">
+      <h3>Addition \(+\)</h3>
+      <p>Zusammenfassen. «Plus» verschiebt auf der Zahlengeraden nach rechts (bei positiven Summanden).</p>
+      <p>\(a+b=b+a\) (kommutativ).</p>
+    </div>
+    <div class="op-card">
+      <h3>Subtraktion \(-\)</h3>
+      <p>Differenz / Wegnehmen. \(a-b = a+(-b)\). Nicht kommutativ: \(5-2 \neq 2-5\).</p>
+    </div>
+    <div class="op-card">
+      <h3>Multiplikation \(\cdot\)</h3>
+      <p>Wiederholte Addition / Skalierung. Vorzeichen: gleich → plus, verschieden → minus.</p>
+    </div>
+    <div class="op-card">
+      <h3>Division \(:\)</h3>
+      <p>\(a:b = a\cdot\frac{1}{b}\) für \(b\neq 0\). Bruchstrich ist dieselbe Operation.</p>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Vorzeichen-Kurzregeln</div>
+    \[
+      (+)(+) = +\quad (-)(-)=+\quad (+)(-)=-\quad (-)(+)=-
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Vorzeichen</span>
+    </div>
+    <p><strong>Frage 1:</strong> \((-6)\cdot(-3) = ?\)</p>
+    <div class="quiz-options" data-quiz="gr2_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">−18</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">−9</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">18</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">9</div>
+    </div>
+    <div class="feedback" id="fb_gr2_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(\dfrac{-12}{4} = ?\)</p>
+    <div class="quiz-options" data-quiz="gr2_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">−3</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">3</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">−16</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">48</div>
+    </div>
+    <div class="feedback" id="fb_gr2_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['gr2_1','gr2_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Reihenfolge →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Die 4 Grundrechnungsarten<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- 4 -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Reihenfolge der Rechenoperationen</div>
+
+  <div class="info-box concept">
+    <div class="icon">1️⃣</div>
+    <div>
+      <strong>Priorität</strong>
+      <ol style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Klammern</li>
+        <li>Potenzen (später vertieft)</li>
+        <li>Punktrechnung (\(\cdot\), \(:\)) von links nach rechts</li>
+        <li>Strichrechnung (\(+\), \(-\)) von links nach rechts</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Beispiel</div>
+    \[
+      2 + 3 \cdot 4 = 2 + 12 = 14
+      \qquad\text{aber}\qquad
+      (2+3)\cdot 4 = 20
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Berechne</span>
+    </div>
+    <p>Berechne \(2 + 3 \cdot 4\) (ohne zusätzliche Klammern):</p>
+    <div class="input-group">
+      <label for="ord_input">Ergebnis</label>
+      <input id="ord_input" type="text" inputmode="decimal" placeholder="z. B. 14">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkOrderExercise()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_ord"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Klammern</span>
+    </div>
+    <p>Was ist \(18 : 3 \cdot 2\)?</p>
+    <div class="quiz-options" data-quiz="gr3_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">3</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">12</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">1</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">108</div>
+    </div>
+    <div class="feedback" id="fb_gr3_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['gr3_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Runden →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- 5 -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Genauigkeit &amp; Runden</div>
+  <p><strong>Kaufmännisches Runden:</strong> Schau auf die erste weggelassene Ziffer. Ist sie \(0\)–\(4\), abrunden; \(5\)–\(9\), aufrunden.</p>
+
+  <div class="tool-box">
+    <strong>Rundungs-Tool</strong>
+    <div class="input-row" style="margin-top:10px;">
+      <div class="input-group">
+        <label for="rnd_value">Zahl</label>
+        <input id="rnd_value" type="text" value="3,14159" inputmode="decimal">
+      </div>
+      <div class="input-group">
+        <label for="rnd_places">Nachkommastellen</label>
+        <input id="rnd_places" type="number" value="2" min="0" max="8">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="runRoundTool()">Runden</button>
+    <p id="rnd_out" style="margin-top:12px; font-weight:700;"></p>
+  </div>
+
+  <div class="info-box success" style="margin-top:14px;">
+    <div class="icon">💶</div>
+    <div>Im Wirtschaftsalltag: Geldbeträge meist auf <strong>2 Nachkommastellen (Cent)</strong>. Stückzahlen: ganze Zahlen. Prozentsätze: oft 1–2 NK — je nach Aufgabenstellung.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Selbst runden</span>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="rnd_ex_a">\(\pi \approx 3{,}14159\ldots\) auf 2 NK</label>
+        <input id="rnd_ex_a" type="text" inputmode="decimal" placeholder="3,14">
+      </div>
+      <div class="input-group">
+        <label for="rnd_ex_b">\(2{,}45\) auf 1 NK</label>
+        <input id="rnd_ex_b" type="text" inputmode="decimal" placeholder="2,5">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkRoundExercise()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_rnd_ex"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Abschätzen →</button>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Ergebnisse abschätzen</div>
+  <p>Abschätzen heißt: Zahlen durch <strong>glatte Nachbarn</strong> ersetzen und die Größenordnung prüfen — bevor oder nachdem der Rechner gearbeitet hat.</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Beispiel</div>
+    <p>\(19{,}8 \cdot 2{,}4 \approx 20 \cdot 2{,}5 = 50\). Liegt dein Taschenrechner bei \(4{,}752\), ist etwas schiefgelaufen.</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Größenordnung</span>
+    </div>
+    <p>Schätze \(19{,}8 \cdot 2{,}4\): Welche Größenordnung passt am besten?</p>
+    <div class="quiz-options" data-quiz="est1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">etwa 5</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">etwa 50</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">etwa 500</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">etwa 0,5</div>
+    </div>
+    <div class="input-group" style="margin-top:12px;">
+      <label for="est_num">Deine Zahlenschätzung (ca.)</label>
+      <input id="est_num" type="text" inputmode="decimal" placeholder="z. B. 50">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkEstimate()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_est"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Üben →</button>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Gemischte Übungen</div>
+  <p>Rechne und gib die Ergebnisse als Dezimalzahl (Komma oder Punkt) ein.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Training</span>
+      <span class="exercise-title">Drei Kurzaufgaben</span>
+    </div>
+    <div class="input-group">
+      <label for="pra_a">a) \(\dfrac{3}{2} - 3 =\)</label>
+      <input id="pra_a" type="text" inputmode="decimal" placeholder="-1,5">
+    </div>
+    <div class="input-group">
+      <label for="pra_b">b) \(\left(-\dfrac{1}{2}\right)\cdot\left(-\dfrac{1}{2}\right)=\)</label>
+      <input id="pra_b" type="text" inputmode="decimal" placeholder="0,25">
+    </div>
+    <div class="input-group">
+      <label for="pra_c">c) \(4{,}2 \cdot 3 =\)</label>
+      <input id="pra_c" type="text" inputmode="decimal" placeholder="12,6">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkPractice()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_pra"></div>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">📝</div>
+    <div>
+      <strong>Dokumentationstipp:</strong> Schreib Zwischenschritte (Vorzeichen, Punkt vor Strich, Rundung) —
+      in der HAK zählt nachvollziehbares Rechnen oft genauso wie das Endergebnis.
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>8 Fragen zu Operationen, Reihenfolge, Runden und Abschätzen.</p>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+  <div id="finalResult" style="display:none; text-align:center; margin-top:20px;">
+    <h3 id="finalScore" style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); font-size:1.6rem;"></h3>
+    <p id="finalMessage"></p>
+    <div class="badge-container" id="badgeContainer"></div>
+    <button type="button" class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <a class="btn btn-next" href="../prozent-rechnen/lernpfad-prozent-rechnen.html" style="text-decoration:none;">Weiter zu 03 →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Die 4 Grundrechnungsarten<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/grundrechnungsarten-lernpfad/app.js"></script>
 </body>
 </html>

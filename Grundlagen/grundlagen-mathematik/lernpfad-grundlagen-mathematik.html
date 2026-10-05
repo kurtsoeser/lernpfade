@@ -5,56 +5,564 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Grundlagen der Mathematik</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
-<script src="../../../js/lernpfade-registry.js"></script>
-<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.nl-wrap { margin-top:14px; border:1px solid #E2E8F0; border-radius:14px; background:#fff; padding:14px 16px; }
+.nl-tools { display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; margin-bottom:10px; }
+.nl-tools label { font-weight:700; font-size:.9rem; display:flex; gap:6px; align-items:center; cursor:pointer; }
+#numberLineCanvas { width:100%; max-width:100%; height:220px; border:1px solid #D8E2EF; border-radius:12px; background:#FBFCFE; display:block; }
+.nl-legend { margin-top:10px; font-size:.88rem; color:var(--text-light); line-height:1.55; }
+.set-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px 16px; background:#fff; margin:12px 0; }
+.set-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.1rem; }
+.symbol-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-top:12px; }
+@media (min-width:720px){ .symbol-grid { grid-template-columns:1fr 1fr; } }
+.symbol-item { border:1px solid #E2E8F0; border-radius:10px; padding:12px; background:#F8FAFC; }
+.symbol-item strong { color:var(--blue-dark); }
+.venn-note { font-size:.92rem; line-height:1.6; }
+</style>
 </head>
 <body data-current-page="s3-p01" data-page-type="lernpfad" data-chapter-folder="Grundlagen/grundlagen-mathematik">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 8 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
   <h1>Grundlagen der Mathematik</h1>
-  <p class="subtitle">Zahlenmengen, Zahlengerade, Symbole — Inhalte werden ergänzt.</p>
+  <p class="subtitle">Zahlenmengen auf der Zahlengeraden, mathematische Symbole und Beziehungen zwischen den Mengen — klar, interaktiv und zum Selbststudium.</p>
   <span class="badge">3.&nbsp;Semester · Thema 01</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
-    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
-    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
     <a href="../grundrechnungsarten/index.html" style="color:var(--blue-dark); font-weight:600;">02 Grundrechnungsarten →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>ℕ natürlich</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>ℤ ganz</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>ℚ rational</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>ℝ reell</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Zahlengerade</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Symbole</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Quiz</button>
 </div>
+
+<!-- 1 Einstieg -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>Zahlenmengen</strong> und ihre <strong>Veranschaulichung</strong> auf der Zahlengeraden.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg &amp; Lernziele</div>
+
+  <p>Mathematik beginnt oft mit einer scheinbar einfachen Frage: <strong>Welche Art von Zahl ist das?</strong> Ob Schulnoten, Kontostände, Anteile oder Messwerte — die richtige Einordnung entscheidet, welche Rechnungen und Deutungen sinnvoll sind.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>In diesem Lernpfad lernst du:</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>die Mengen \(\mathbb{N}\), \(\mathbb{Z}\), \(\mathbb{Q}\) und \(\mathbb{R}\) zu beschreiben,</li>
+        <li>Zahlen auf der <strong>Zahlengeraden</strong> zu verorten,</li>
+        <li>mit Symbolen wie \(\in\), \(\subset\) und Mengenklammern präzise zu sprechen,</li>
+        <li>die Beziehungen \(\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}\) zu erklären.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Lehrplan-Kompetenzen</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Zahlenmengen auf der Zahlengeraden veranschaulichen.</li>
+        <li>Zahlenmengen mit Hilfe mathematischer Symbole beschreiben.</li>
+        <li>Beziehungen zwischen den Zahlenmengen herstellen und erklären.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Merkformel (Verschachtelung)</div>
+    \[
+      \mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}
+    \]
+    <p class="venn-note" style="margin:8px 0 0;">Jede „kleinere“ Menge steckt in der nächsten. Irrationale Zahlen liegen in \(\mathbb{R}\), aber nicht in \(\mathbb{Q}\).</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Orientierung</span>
+    </div>
+    <p><strong>Frage 1:</strong> Warum unterscheiden wir überhaupt Zahlenmengen?</p>
+    <div class="quiz-options" data-quiz="gm0_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Nur damit Formeln schöner aussehen.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Weil Taschenrechner nur natürliche Zahlen kennen.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Weil Eigenschaften und erlaubte Rechnungen von der Zahlenart abhängen.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Weil negative Zahlen in der Wirtschaft verboten sind.</div>
+    </div>
+    <div class="feedback" id="fb_gm0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(\mathbb{N} \subset \mathbb{Z}\) bedeutet grob …</p>
+    <div class="quiz-options" data-quiz="gm0_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">natürliche und ganze Zahlen sind disjunkt (überschneidungsfrei).</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">jede natürliche Zahl ist auch eine ganze Zahl.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">es gibt mehr natürliche als ganze Zahlen.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">ganze Zahlen sind eine Teilmenge der natürlichen Zahlen.</div>
+    </div>
+    <div class="feedback" id="fb_gm0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['gm0_1','gm0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: ℕ →</button>
+  </div>
 </div>
+
+<!-- 2 Natürliche -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Die <strong>Zahlenmengen</strong> auf der <strong>Zahlengeraden</strong> veranschaulichen.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Die Zahlenmengen mit Hilfe <strong>mathematischer Symbole</strong> beschreiben.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Die <strong>Beziehungen zwischen den Zahlenmengen</strong> herstellen und erklären.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Natürliche Zahlen \(\mathbb{N}\)</div>
+
+  <div class="set-card">
+    <h3>Definition (in diesem Kurs)</h3>
+    <p>Die Menge der <strong>natürlichen Zahlen</strong> enthält die Zählzahlen einschließlich Null:</p>
+    \[
+      \mathbb{N} = \{0,\ 1,\ 2,\ 3,\ 4,\ \ldots\}
+    \]
+    <div class="info-box warning" style="margin-top:12px;">
+      <div class="icon">⚠️</div>
+      <div>In manchen Büchern startet \(\mathbb{N}\) bei 1. Wir kennzeichnen das klar: <strong>hier gehört 0 zu \(\mathbb{N}\)</strong>. Wenn 0 ausgeschlossen sein soll, schreibt man oft \(\mathbb{N}^+\) oder \(\mathbb{N}\setminus\{0\}\).</div>
+    </div>
+  </div>
+
+  <p><strong>Typische Kontexte:</strong> Stückzahlen, Anzahlen, Indizes, „wie oft?“-Fragen. Negative Anzahlen von Personen gibt es nicht — dafür brauchen wir später \(\mathbb{Z}\).</p>
+
+  <div class="info-box success">
+    <div class="icon">💡</div>
+    <div>
+      <strong>Geschlossenheit (Vorschau):</strong> Summe und Produkt zweier natürlicher Zahlen sind wieder natürlich.
+      Differenz und Quotient müssen es <em>nicht</em> sein (z.&nbsp;B. \(3-5=-2\), \(1:2=0{,}5\)).
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Was ist natürlich?</span>
+    </div>
+    <p><strong>Frage 1:</strong> Welche Zahl gehört zu \(\mathbb{N}\) (mit 0)?</p>
+    <div class="quiz-options" data-quiz="gm1_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">0</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">−3</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\frac{1}{2}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\sqrt{2}\)</div>
+    </div>
+    <div class="feedback" id="fb_gm1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> „Es sitzen 24 Schüler:innen im Raum.“ Die passende Menge ist vor allem …</p>
+    <div class="quiz-options" data-quiz="gm1_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\mathbb{R}\), weil man auch 24,7 Personen haben könnte</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\mathbb{Q}\), weil Anzahlen immer Brüche sind</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\mathbb{N}\), weil es um eine nichtnegative ganze Anzahl geht</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">keine Menge, weil Kontext zählt und Mathematik nicht</div>
+    </div>
+    <div class="feedback" id="fb_gm1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['gm1_1','gm1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: ℤ →</button>
+  </div>
 </div>
+
+<!-- 3 Ganze -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Ganze Zahlen \(\mathbb{Z}\)</div>
+
+  <div class="set-card">
+    <h3>Definition</h3>
+    <p>Die <strong>ganzen Zahlen</strong> erweitern die natürlichen Zahlen um die negativen Pendants:</p>
+    \[
+      \mathbb{Z} = \{\ldots,\ -3,\ -2,\ -1,\ 0,\ 1,\ 2,\ 3,\ \ldots\}
+    \]
+    <p style="margin-top:8px;">Es gilt: \(\mathbb{N} \subset \mathbb{Z}\).</p>
+  </div>
+
+  <p><strong>Typische Kontexte:</strong> Temperaturen unter Null, Kontostand/Saldo, Höhenunterschiede, Gewinn und Verlust, Zeitverschiebungen relativ zu einem Nullpunkt.</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Beispiel</div>
+    <p>Ein Konto: Einzahlung <strong>+250&nbsp;€</strong>, Abhebung <strong>−80&nbsp;€</strong>. Beide Beträge (mit Vorzeichen) sind ganze Zahlen — und die Bilanz bleibt in \(\mathbb{Z}\), solange wir in Cent/Euro ganzzahlig buchen.</p>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">🧭</div>
+    <div>
+      <strong>Auf der Zahlengeraden:</strong> negative Zahlen links von 0, positive rechts.
+      Der Abstand zwischen \(-2\) und \(-1\) ist derselbe wie zwischen \(3\) und \(4\) — nämlich 1.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Ganze Zahlen einordnen</span>
+    </div>
+    <p><strong>Frage 1:</strong> Welche Zahl liegt in \(\mathbb{Z}\), aber nicht in \(\mathbb{N}\)?</p>
+    <div class="quiz-options" data-quiz="gm2_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">7</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">−4</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\frac{2}{3}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">0</div>
+    </div>
+    <div class="feedback" id="fb_gm2_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(5 - 12 = -7\). Was zeigt das?</p>
+    <div class="quiz-options" data-quiz="gm2_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Subtraktion ist in \(\mathbb{N}\) immer geschlossen.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Negative Ergebnisse sind irrational.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Differenzen natürlicher Zahlen können aus \(\mathbb{N}\) hinausführen — \(\mathbb{Z}\) schließt diese Lücke.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(-7\) gehört nicht zu \(\mathbb{R}\).</div>
+    </div>
+    <div class="feedback" id="fb_gm2_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['gm2_1','gm2_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: ℚ →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Grundlagen der Mathematik<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- 4 Rationale -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Rationale Zahlen \(\mathbb{Q}\)</div>
+
+  <div class="set-card">
+    <h3>Definition</h3>
+    <p>Eine Zahl ist <strong>rational</strong>, wenn sie als Bruch zweier ganzer Zahlen geschrieben werden kann:</p>
+    \[
+      \mathbb{Q} = \left\{\frac{p}{q}\ \middle|\ p\in\mathbb{Z},\ q\in\mathbb{Z},\ q\neq 0\right\}
+    \]
+    <p style="margin-top:8px;">Beispiele: \(\frac{3}{4}\), \(-\frac{5}{2}\), \(7=\frac{7}{1}\), \(0{,}2=\frac{1}{5}\), \(0{,}333\ldots=\frac{1}{3}\).</p>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">🔁</div>
+    <div>
+      <strong>Dezimaldarstellung:</strong> Rationale Zahlen haben eine <em>abbrechende</em> oder <em>periodische</em> Dezimalentwicklung.
+      Irrationale Zahlen (nächste Station) haben weder das eine noch das andere in endlicher Periode.
+    </div>
+  </div>
+
+  <p><strong>Typische Kontexte:</strong> Anteile, Preise pro Einheit, Durchschnittswerte als Brüche, Prozent als Hundertstel (mehr dazu in Thema 03).</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Wichtig</div>
+    \[
+      \mathbb{Z} \subset \mathbb{Q}
+    \]
+    <p style="margin:8px 0 0;">Jede ganze Zahl ist rational (\(n=\frac{n}{1}\)). Nicht jeder Bruch ist ganzzahlig.</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Rational oder nicht?</span>
+    </div>
+    <p><strong>Frage 1:</strong> Welche Zahl ist rational?</p>
+    <div class="quiz-options" data-quiz="gm3_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\sqrt{2}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\pi\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(0{,}375\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\sqrt{10}\)</div>
+    </div>
+    <div class="feedback" id="fb_gm3_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(0{,}999\ldots = 1\) — was folgt daraus fachlich?</p>
+    <div class="quiz-options" data-quiz="gm3_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Periodische Dezimalzahlen sind immer irrational.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Auch periodische Darstellungen können rationale Zahlen beschreiben (hier sogar die ganze Zahl 1).</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">1 ist nicht in \(\mathbb{Q}\).</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Dezimalzahlen gehören nie zu \(\mathbb{Z}\).</div>
+    </div>
+    <div class="feedback" id="fb_gm3_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(3, ['gm3_1','gm3_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: ℝ →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- 5 Reelle -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Reelle Zahlen \(\mathbb{R}\)</div>
+
+  <div class="set-card">
+    <h3>Definition (Arbeitsfassung)</h3>
+    <p>Die <strong>reellen Zahlen</strong> füllen die gesamte Zahlengerade. Dazu gehören alle rationalen Zahlen <em>und</em> die <strong>irrationalen</strong> Zahlen.</p>
+    \[
+      \mathbb{Q} \subset \mathbb{R}
+    \]
+  </div>
+
+  <p><strong>Irrational</strong> heißt: reell, aber <em>nicht</em> als Bruch \(\frac{p}{q}\) darstellbar. Klassiker:</p>
+  <ul style="line-height:1.7;">
+    <li>\(\sqrt{2}\) — Diagonale im Einheitsquadrat</li>
+    <li>\(\pi\) — Kreiszahl</li>
+    <li>\(e\) — Eulersche Zahl (später in Wachstumsprozessen)</li>
+  </ul>
+
+  <div class="info-box concept">
+    <div class="icon">📏</div>
+    <div>
+      <strong>Bild:</strong> Rationale Zahlen liegen „dicht“ auf der Geraden — zwischen zwei beliebigen reellen Zahlen steckt immer ein Bruch.
+      Trotzdem gibt es Lücken im Sinne von \(\mathbb{Q}\): Punkte wie \(\sqrt{2}\) fehlen in \(\mathbb{Q}\), gehören aber zu \(\mathbb{R}\).
+    </div>
+  </div>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Nicht alles ist reell:</strong> \(\sqrt{-1}\) führt zu komplexen Zahlen — die brauchen wir hier nicht.
+      Auch Division durch 0 ist keine reelle Zahl.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">ℝ und Irrationalität</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(\sqrt{9}\) ist …</p>
+    <div class="quiz-options" data-quiz="gm4_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">rational (sogar natürlich), weil \(\sqrt{9}=3\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">irrational, weil eine Wurzel vorkommt</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">nicht reell</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">nur in \(\mathbb{Z}\), aber nicht in \(\mathbb{R}\)</div>
+    </div>
+    <div class="feedback" id="fb_gm4_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Welche Aussage ist korrekt?</p>
+    <div class="quiz-options" data-quiz="gm4_2" data-correct="3">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Jede reelle Zahl ist rational.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Keine irrationale Zahl liegt auf der Zahlengeraden.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\pi\) gehört zu \(\mathbb{Q}\).</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Jede rationale Zahl ist reell; zusätzlich gibt es irrationale reelle Zahlen.</div>
+    </div>
+    <div class="feedback" id="fb_gm4_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['gm4_1','gm4_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Zahlengerade →</button>
+  </div>
+</div>
+
+<!-- 6 Zahlengerade -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Zahlengerade — interaktiv</div>
+
+  <p>Aktiviere die Mengen und beobachte, welche Punkte sichtbar werden. So wird die Verschachtelung \(\mathbb{N}\subset\mathbb{Z}\subset\mathbb{Q}\subset\mathbb{R}\) bildlich.</p>
+
+  <div class="nl-wrap">
+    <div class="nl-tools">
+      <label><input type="checkbox" id="nl_N" checked> \(\mathbb{N}\)</label>
+      <label><input type="checkbox" id="nl_Z" checked> \(\mathbb{Z}\)</label>
+      <label><input type="checkbox" id="nl_Q"> \(\mathbb{Q}\) (Beispiele)</label>
+      <label><input type="checkbox" id="nl_R"> \(\mathbb{R}\) (Band + \(\sqrt{2}\), \(\pi\))</label>
+      <button type="button" class="btn btn-hint" onclick="drawNumberLine()">Neu zeichnen</button>
+    </div>
+    <canvas id="numberLineCanvas" width="720" height="220" aria-label="Interaktive Zahlengerade"></canvas>
+    <div class="nl-legend" id="nlLegend"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:18px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Einordnung</span>
+    </div>
+    <p>Wähle die passende Aussage:</p>
+    <div class="input-group">
+      <label for="nl_task_a">Die Zahl \(-5\) liegt …</label>
+      <select id="nl_task_a" data-correct="1">
+        <option value="">— bitte wählen —</option>
+        <option value="0">nur in \(\mathbb{N}\)</option>
+        <option value="1">in \(\mathbb{Z}\), \(\mathbb{Q}\) und \(\mathbb{R}\), aber nicht in \(\mathbb{N}\)</option>
+        <option value="2">nur in \(\mathbb{R}\), nicht in \(\mathbb{Q}\)</option>
+        <option value="3">nirgends, weil negativ</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="nl_task_b">Die Zahl \(\sqrt{2}\) liegt …</label>
+      <select id="nl_task_b" data-correct="2">
+        <option value="">— bitte wählen —</option>
+        <option value="0">in \(\mathbb{Q}\)</option>
+        <option value="1">in \(\mathbb{Z}\)</option>
+        <option value="2">in \(\mathbb{R}\), aber nicht in \(\mathbb{Q}\)</option>
+        <option value="3">nur in \(\mathbb{N}\)</option>
+      </select>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkNumberLineTask()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_nl_task"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Symbole →</button>
+  </div>
+</div>
+
+<!-- 7 Symbole -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Symbole &amp; Beziehungen</div>
+
+  <p>Präzise Sprache verhindert Missverständnisse — besonders bei Mengen.</p>
+
+  <div class="symbol-grid">
+    <div class="symbol-item">
+      <strong>\(\in\)</strong> — „ist Element von“<br>
+      Beispiel: \(3 \in \mathbb{N}\)
+    </div>
+    <div class="symbol-item">
+      <strong>\(\notin\)</strong> — „ist nicht Element von“<br>
+      Beispiel: \(-2 \notin \mathbb{N}\)
+    </div>
+    <div class="symbol-item">
+      <strong>\(\subset\)</strong> (oder \(\subseteq\)) — „ist Teilmenge“<br>
+      Beispiel: \(\mathbb{N} \subset \mathbb{Z}\)
+    </div>
+    <div class="symbol-item">
+      <strong>\(\{ \ldots \}\)</strong> — Mengenklammern<br>
+      Beispiel: \(A=\{2,4,6\}\)
+    </div>
+  </div>
+
+  <div class="formula-box" style="margin-top:16px;">
+    <div class="formula-label">Beziehungen erklären (Musterantwort)</div>
+    <p class="venn-note">
+      Jede natürliche Zahl ist ganzzahlig, jede ganze Zahl lässt sich als Bruch schreiben, jeder Bruch ist eine reelle Zahl.
+      Zusätzlich gibt es irrationale reelle Zahlen, die nicht in \(\mathbb{Q}\) liegen. Deshalb gilt die Kette
+      \(\mathbb{N}\subset\mathbb{Z}\subset\mathbb{Q}\subset\mathbb{R}\).
+    </p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Beispiele nennen</span>
+    </div>
+    <p>Trage zu jeder Menge <strong>ein gültiges Beispiel</strong> ein (Vorschläge sind in den Platzhaltern):</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="cl_n">\(\mathbb{N}\)</label>
+        <input id="cl_n" type="text" placeholder="z. B. 3 oder 0">
+      </div>
+      <div class="input-group">
+        <label for="cl_z">\(\mathbb{Z}\) (besser negativ)</label>
+        <input id="cl_z" type="text" placeholder="z. B. -5">
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="cl_q">\(\mathbb{Q}\)</label>
+        <input id="cl_q" type="text" placeholder="z. B. 1/2">
+      </div>
+      <div class="input-group">
+        <label for="cl_r">\(\mathbb{R}\) (gern irrational)</label>
+        <input id="cl_r" type="text" placeholder="z. B. √2 oder π">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkClassify()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_classify"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:16px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Symbolik</span>
+    </div>
+    <p><strong>Frage:</strong> Welche Aussage ist korrekt?</p>
+    <div class="quiz-options" data-quiz="gm6_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\mathbb{R} \subset \mathbb{N}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\pi \in \mathbb{Q}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(-3 \in \mathbb{Z}\) und \(-3 \notin \mathbb{N}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\frac{1}{2} \notin \mathbb{R}\)</div>
+    </div>
+    <div class="feedback" id="fb_gm6_1"></div>
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['gm6_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 8 Quiz -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>8 Fragen zu Mengen, Symbolen und der Zahlengerade. Am Ende siehst du Auswertung und Badge.</p>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+  <div id="finalResult" style="display:none; text-align:center; margin-top:20px;">
+    <h3 id="finalScore" style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); font-size:1.6rem;"></h3>
+    <p id="finalMessage"></p>
+    <div class="badge-container" id="badgeContainer"></div>
+    <button type="button" class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <a class="btn btn-next" href="../grundrechnungsarten/lernpfad-grundrechnungsarten.html" style="text-decoration:none;">Weiter zu 02 →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Grundlagen der Mathematik<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/grundlagen-mathematik-lernpfad/app.js"></script>
 </body>
 </html>

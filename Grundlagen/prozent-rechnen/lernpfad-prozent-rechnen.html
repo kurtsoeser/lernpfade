@@ -5,55 +5,468 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Rechnen mit Prozenten</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
-<script src="../../../js/lernpfade-registry.js"></script>
-<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.tri-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:820px){ .tri-grid { grid-template-columns:repeat(3,1fr); } }
+.tri-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px; background:#fff; }
+.tri-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.tool-box { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#F8FAFC; margin-top:14px; }
+.bar-demo { height:28px; border-radius:999px; background:#E2E8F0; overflow:hidden; margin:10px 0 6px; }
+.bar-demo span { display:block; height:100%; background:linear-gradient(90deg,#2563EB,#38BDF8); width:0; transition:width .4s ease; }
+</style>
 </head>
 <body data-current-page="s3-p03" data-page-type="lernpfad" data-chapter-folder="Grundlagen/prozent-rechnen">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 8 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
   <h1>Rechnen mit Prozenten</h1>
-  <p class="subtitle">Prozent und Promille verstehen, berechnen und anwenden — Inhalte werden ergänzt.</p>
+  <p class="subtitle">Prozent und Promille verstehen, die drei Größen berechnen und in wirtschaftlichen Kontexten sicher anwenden.</p>
   <span class="badge">3.&nbsp;Semester · Thema 03</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
-    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
-    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
-    <a href="../grundrechnungsarten/index.html" style="color:var(--blue-dark); font-weight:600;">← 02 Grundrechnen</a>
-    · <a href="../masseinheiten/index.html" style="color:var(--blue-dark); font-weight:600;">04 Maße →</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    <a href="../grundrechnungsarten/lernpfad-grundrechnungsarten.html" style="color:var(--blue-dark); font-weight:600;">← 02 Grundrechnungsarten</a>
+    · <a href="../masseinheiten/index.html" style="color:var(--blue-dark); font-weight:600;">04 Maßeinheiten →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>% &amp; ‰</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>G, W, p</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>± Prozent</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Kontext</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Promille</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Training</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Quiz</button>
 </div>
+
+<!-- 1 -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>Prozent</strong> und <strong>Promille</strong> in verschiedenen Kontexten.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg &amp; Lernziele</div>
+  <p>Rabatte, Steuern, Zinssätze, Ausschussquoten — überall begegnen dir <strong>Prozent</strong> und manchmal <strong>Promille</strong>. Wer die drei Größen sicher trennt, rechnet fehlerärmer.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Du lernst:</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Prozent und Promille als Anteile zu deuten,</li>
+        <li>Grundwert \(G\), Prozentwert \(W\) und Prozentsatz \(p\) zu berechnen,</li>
+        <li>Erhöhen und Vermindern mit Faktoren,</li>
+        <li>typische HAK-Kontexte (Preis, Anteil, Quote) zu lösen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Lehrplan-Kompetenz</strong><br>
+      Zahlenangaben in Prozent und Promille verstehen, berechnen und in unterschiedlichem Kontext anwenden.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Begriff</span>
+    </div>
+    <p><strong>Frage 1:</strong> „20&nbsp;% Rabatt“ bedeutet grob …</p>
+    <div class="quiz-options" data-quiz="pr0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Der Preis steigt um 20&nbsp;€.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Vom ursprünglichen Preis werden 20 von 100 Teilen nachgelassen.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Der neue Preis ist immer 20&nbsp;€.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Es handelt sich um Promille.</div>
+    </div>
+    <div class="feedback" id="fb_pr0_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Welches Symbol steht für Promille?</p>
+    <div class="quiz-options" data-quiz="pr0_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">%</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">€</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">‰</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">√</div>
+    </div>
+    <div class="feedback" id="fb_pr0_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['pr0_1','pr0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: % &amp; ‰ →</button>
+  </div>
 </div>
+
+<!-- 2 -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Zahlenangaben in <strong>Prozent und Promille</strong> verstehen, Prozente bzw. Promille berechnen und mit Prozent- bzw. Promilleangaben in <strong>unterschiedlichem Kontext</strong> rechnen.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Prozent und Promille</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Grundidee</div>
+    \[
+      1\,\% = \frac{1}{100} = 0{,}01
+      \qquad
+      1\,\text{‰} = \frac{1}{1000} = 0{,}001
+    \]
+  </div>
+
+  <p>Prozent teilt das Ganze in <strong>100</strong> gleiche Teile, Promille in <strong>1000</strong>. Deshalb: <strong>10&nbsp;‰ = 1&nbsp;%</strong>.</p>
+
+  <div class="info-box concept">
+    <div class="icon">📊</div>
+    <div>
+      <strong>Bild:</strong> 25&nbsp;% eines Balkens sind ein Viertel.
+      <div class="bar-demo" aria-hidden="true"><span style="width:25%"></span></div>
+      <span style="font-size:.88rem; color:var(--text-light);">25 von 100 Teilen sind markiert.</span>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Umwandeln</span>
+    </div>
+    <p><strong>Frage 1:</strong> \(0{,}07\) als Prozent?</p>
+    <div class="quiz-options" data-quiz="pr1_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">0,07&nbsp;%</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">0,7&nbsp;%</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">7&nbsp;%</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">70&nbsp;%</div>
+    </div>
+    <div class="feedback" id="fb_pr1_1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> \(5\,‰\) als Dezimalzahl?</p>
+    <div class="quiz-options" data-quiz="pr1_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">0,05</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">0,005</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">0,5</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">5</div>
+    </div>
+    <div class="feedback" id="fb_pr1_2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['pr1_1','pr1_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: G, W, p →</button>
+  </div>
 </div>
+
+<!-- 3 -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Die drei Größen \(G\), \(W\), \(p\)</div>
+
+  <div class="tri-grid">
+    <div class="tri-card">
+      <h3>Grundwert \(G\)</h3>
+      <p>Das Ganze / der Ausgangswert (100&nbsp;%).</p>
+    </div>
+    <div class="tri-card">
+      <h3>Prozentwert \(W\)</h3>
+      <p>Der Anteil in derselben Einheit wie \(G\).</p>
+    </div>
+    <div class="tri-card">
+      <h3>Prozentsatz \(p\)</h3>
+      <p>Die Angabe in Prozent (ohne Einheit €).</p>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Formeln</div>
+    \[
+      W = G\cdot \frac{p}{100}
+      \qquad
+      G = W\cdot \frac{100}{p}
+      \qquad
+      p = \frac{W}{G}\cdot 100
+    \]
+  </div>
+
+  <div class="tool-box">
+    <strong>Prozent-Rechner</strong>
+    <div class="input-row" style="margin-top:10px;">
+      <div class="input-group">
+        <label for="pc_mode">Gesucht</label>
+        <select id="pc_mode">
+          <option value="W">Prozentwert W</option>
+          <option value="G">Grundwert G</option>
+          <option value="p">Prozentsatz p</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="pc_g">G</label>
+        <input id="pc_g" type="text" value="200" inputmode="decimal">
+      </div>
+      <div class="input-group">
+        <label for="pc_w">W</label>
+        <input id="pc_w" type="text" value="30" inputmode="decimal">
+      </div>
+      <div class="input-group">
+        <label for="pc_p">p (in %)</label>
+        <input id="pc_p" type="text" value="15" inputmode="decimal">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="runPercentCalc()">Berechnen</button>
+    <p id="pc_out" style="margin-top:12px; font-weight:700;"></p>
+  </div>
+
+  <div class="exercise" style="margin-top:16px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Alle drei Formeln</span>
+    </div>
+    <div class="input-group">
+      <label for="ts_w">1) \(W\): 15&nbsp;% von 300</label>
+      <input id="ts_w" type="text" inputmode="decimal" placeholder="45">
+    </div>
+    <div class="input-group">
+      <label for="ts_g">2) \(G\): \(W=24\), \(p=12\,\%\)</label>
+      <input id="ts_g" type="text" inputmode="decimal" placeholder="200">
+    </div>
+    <div class="input-group">
+      <label for="ts_p">3) \(p\): \(W=18\), \(G=150\)</label>
+      <input id="ts_p" type="text" inputmode="decimal" placeholder="12">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkThreeSizes()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_ts"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: ± Prozent →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Rechnen mit Prozenten<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- 4 -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Erhöhen und Vermindern</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Faktoren</div>
+    \[
+      \text{neu} = \text{alt}\cdot\left(1+\frac{p}{100}\right)
+      \qquad
+      \text{neu} = \text{alt}\cdot\left(1-\frac{p}{100}\right)
+    \]
+    <p style="margin-top:8px;">Beispiel: +15&nbsp;% → Faktor \(1{,}15\); −20&nbsp;% → Faktor \(0{,}80\).</p>
+  </div>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Häufiger Fehler:</strong> +10&nbsp;% und danach −10&nbsp;% bringen dich <em>nicht</em> zum Ausgangswert
+      (\(100\cdot 1{,}1\cdot 0{,}9 = 99\)).
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Mit Faktoren</span>
+    </div>
+    <div class="input-group">
+      <label for="ch_a">80&nbsp;€ werden um 15&nbsp;% erhöht. Neuer Preis?</label>
+      <input id="ch_a" type="text" inputmode="decimal" placeholder="92">
+    </div>
+    <div class="input-group">
+      <label for="ch_b">Von 50 auf 60: um wie viel Prozent erhöht? (nur die Zahl)</label>
+      <input id="ch_b" type="text" inputmode="decimal" placeholder="20">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkChange()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_ch"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Kontext →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- 5 -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Kontextaufgaben (Wirtschaft)</div>
+  <p>Lies genau: Was ist der <strong>Grundwert</strong>? Oft ist das der ursprüngliche Preis, der Umsatz oder die Gesamtmenge.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🛒</div>
+    <div>
+      <strong>Beispiel (Muster):</strong> Jacke 120&nbsp;€, 25&nbsp;% Rabatt.<br>
+      \(W = 120\cdot 0{,}25 = 30\) (Ersparnis), neuer Preis \(120\cdot 0{,}75 = 90\).
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Preis &amp; Anteil</span>
+    </div>
+    <div class="input-group">
+      <label for="cx_a">Artikel 50&nbsp;€, 15&nbsp;% Rabatt. Neuer Preis in €</label>
+      <input id="cx_a" type="text" inputmode="decimal" placeholder="42,5">
+    </div>
+    <div class="input-group">
+      <label for="cx_b">8 von 100 Teilen Ausschuss — wie viel Prozent?</label>
+      <input id="cx_b" type="text" inputmode="decimal" placeholder="8">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkContext()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_cx"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Grundwert erkennen</span>
+    </div>
+    <p>„Der Umsatz stieg von 400&nbsp;000&nbsp;€ um 8&nbsp;%.“ Der Grundwert für die 8&nbsp;% ist …</p>
+    <div class="quiz-options" data-quiz="pr4_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">400&nbsp;000&nbsp;€ (Ausgangswert)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">8&nbsp;€</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">der neue Umsatz</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer 100&nbsp;€</div>
+    </div>
+    <div class="feedback" id="fb_pr4_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['pr4_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Promille →</button>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Promille in Anwendungen</div>
+  <p>Promille nutzt man bei kleinen Anteilen: Fehlerquoten, Alkoholgehalt (als Idee), Salzgehalt, Ausschuss in der Produktion.</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Formeln analog</div>
+    \[
+      W = G\cdot \frac{p_{\%\!o}}{1000}
+      \qquad
+      p_{\%\!o} = \frac{W}{G}\cdot 1000
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Promille rechnen</span>
+    </div>
+    <div class="input-group">
+      <label for="pm_a">3&nbsp;‰ als Dezimalzahl</label>
+      <input id="pm_a" type="text" inputmode="decimal" placeholder="0,003">
+    </div>
+    <div class="input-group">
+      <label for="pm_b">18 fehlerhafte Teile von 1500 — in ‰?</label>
+      <input id="pm_b" type="text" inputmode="decimal" placeholder="12">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkPermille()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_pm"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Training →</button>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Training — gemischt</div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Training</span>
+      <span class="exercise-title">Zwei gemischte Aufgaben</span>
+    </div>
+    <div class="input-group">
+      <label for="mx_a">Nettopreis 110&nbsp;€, Aufschlag 15&nbsp;%. Bruttopreis?</label>
+      <input id="mx_a" type="text" inputmode="decimal" placeholder="126,5">
+    </div>
+    <div class="input-group">
+      <label for="mx_b">15&nbsp;€ sind wie viel Prozent von 60&nbsp;€?</label>
+      <input id="mx_b" type="text" inputmode="decimal" placeholder="25">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkMixed()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_mx"></div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">✅</div>
+    <div>
+      <strong>Checkliste vor dem Abgeben:</strong>
+      <ul style="margin:8px 0 0 18px;">
+        <li>Grundwert klar benannt?</li>
+        <li>% oder ‰ — richtiger Nenner 100 bzw. 1000?</li>
+        <li>Erhöhen/Vermindern mit Faktor — nicht „prozentual verdoppeln“ verwechseln?</li>
+        <li>Einheit im Antwortsatz (€, %, ‰)?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>8 Fragen zu Prozent, Promille, Formeln und Faktoren.</p>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+  <div id="finalResult" style="display:none; text-align:center; margin-top:20px;">
+    <h3 id="finalScore" style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); font-size:1.6rem;"></h3>
+    <p id="finalMessage"></p>
+    <div class="badge-container" id="badgeContainer"></div>
+    <button type="button" class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <a class="btn btn-next" href="../masseinheiten/index.html" style="text-decoration:none;">Weiter zu 04 →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Rechnen mit Prozenten<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/prozent-rechnen-lernpfad/app.js"></script>
 </body>
 </html>
