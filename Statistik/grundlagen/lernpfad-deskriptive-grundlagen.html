@@ -11,8 +11,10 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
 <link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<link rel="stylesheet" href="css/deskriptive-grundlagen-app.css">
 <script src="../../js/lernpfade-registry.js"></script>
 <script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
 </head>
@@ -32,7 +34,7 @@ MathJax = {
 
 <div class="hero">
   <h1>Deskriptive Grundlagen</h1>
-  <p class="subtitle">Datentypen, Häufigkeitsverteilungen und grafische Darstellungen — mit dem <strong>5-Schritte-Modell</strong> der problembezogenen Datenanalyse, Vertiefung und Abschlussquiz (Lehrplanbaustein 03).</p>
+  <p class="subtitle">Datentypen, Häufigkeitsverteilungen und grafische Darstellungen — interaktiv mit Zuordnung, Live-Diagrammen, GeoGebra und Diagramm-Deutung (Lehrplanbaustein 03).</p>
   <span class="badge">7. Semester · Statistik</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Grundlagen der Statistik</a>
@@ -56,20 +58,21 @@ MathJax = {
   <div class="ribbon">Einstieg &amp; Arbeitsmodell</div>
 
   <p>In der <strong>deskriptiven Statistik</strong> geht es darum, Daten <strong>systematisch zu erfassen, zu ordnen, darzustellen und zu interpretieren</strong>. Es geht nicht primär um Prognosen, sondern darum, bereits erhobene Daten verständlich aufzubereiten und inhaltlich zu deuten.</p>
-  <p>Im <strong>wirtschaftlichen Kontext</strong> — etwa Kund:innenbefragungen, Verkaufszahlen, Zufriedenheits- oder Personalstatistiken — entscheidet die <strong>korrekte Erkennung der Datenart</strong>, welche Auswertungen erlaubt sind, welche Darstellung passt und wie Ergebnisse argumentativ abgesichert werden können.</p>
+  <p>Im <strong>wirtschaftlichen Kontext</strong> — Kund:innenbefragungen, Verkaufszahlen, Zufriedenheit — entscheidet die <strong>korrekte Erkennung der Datenart</strong>, welche Auswertung und welche Grafik passt.</p>
+
+  <div class="sg-step-strip" aria-label="5-Schritte-Modell">
+    <div class="sg-step-pill"><span>1</span>Fragestellung klären</div>
+    <div class="sg-step-pill"><span>2</span>Datentyp bestimmen</div>
+    <div class="sg-step-pill"><span>3</span>Daten erheben &amp; ordnen</div>
+    <div class="sg-step-pill"><span>4</span>Darstellung wählen</div>
+    <div class="sg-step-pill"><span>5</span>Interpretieren &amp; begründen</div>
+  </div>
 
   <div class="info-box concept">
     <div class="icon">📋</div>
     <div>
       <strong>Problembezogene Datenanalyse in 5 Schritten</strong>
-      <ol style="margin:10px 0 0 20px; line-height:1.65;">
-        <li><strong>Fragestellung klären</strong> — Was soll mit den Daten herausgefunden werden?</li>
-        <li><strong>Datentyp bestimmen</strong> — Welches Merkmal / Skalenniveau liegt vor?</li>
-        <li><strong>Daten erheben und ordnen</strong> — Wie werden Daten gesammelt und sinnvoll strukturiert?</li>
-        <li><strong>Geeignete Darstellung wählen</strong> — Welche Grafik oder Tabelle passt zu Fragestellung und Datentyp?</li>
-        <li><strong>Ergebnisse interpretieren und begründen</strong> — Was sagt die Darstellung aus — und <em>warum</em> genau diese Form?</li>
-      </ol>
-      <p style="margin-top:10px; font-size:0.95rem;">👉 Statistik ist hier vor allem <strong>sachlogisches Entscheiden und Argumentieren</strong>, nicht nur Rechnen.</p>
+      <p style="margin-top:8px;">Statistik ist hier vor allem <strong>sachlogisches Entscheiden und Argumentieren</strong>, nicht nur Rechnen. In den nächsten Stationen übst du jedes dieser Elemente interaktiv.</p>
     </div>
   </div>
 
@@ -111,42 +114,66 @@ MathJax = {
 <div class="tab-panel" id="panel1">
   <div class="ribbon">Datentypen / Skalenniveaus</div>
 
-  <p>Grundlage jeder Auswertung: <strong>Welche Art von Daten liegt vor?</strong> Es werden drei zentrale Typen unterschieden:</p>
+  <p>Grundlage jeder Auswertung: <strong>Welche Art von Daten liegt vor?</strong></p>
 
   <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">A. Nominalskaliert</h3>
-  <p><strong>Definition:</strong> Kategorien oder Bezeichnungen <strong>ohne natürliche Reihenfolge</strong>. Es lässt sich nur gleich vs. verschieden unterscheiden — nicht „mehr“ oder „besser“ in einem sinnvollen Rangsinne.</p>
-  <p><strong>Beispiele:</strong> Wohnort, Abteilung, Nationalität, Zahlungsmethode, Lieblingsmarke.</p>
-  <div class="info-box success">
-    <div class="icon">📊</div>
-    <div><strong>Folge:</strong> Sinnvoll ist vor allem <strong>Zählen von Häufigkeiten</strong> und Anteilen. Ein <strong>Mittelwert</strong> ist nicht interpretierbar.</div>
-  </div>
-  <p><strong>Typische Fragen:</strong> Welche Marke wurde am häufigsten gewählt? Wie viele Schüler:innen kommen aus welcher Gemeinde?</p>
-  <p><strong>Grafiken (oft):</strong> Balken-, Säulendiagramm; Kreisdiagramm bei Anteilen.</p>
+  <p>Kategorien <strong>ohne natürliche Reihenfolge</strong> — nur gleich vs. verschieden. Beispiele: Wohnort, Zahlungsmethode, Lieblingsmarke. Folge: Häufigkeiten zählen; kein Mittelwert.</p>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">B. Ordinalskaliert</h3>
-  <p><strong>Definition:</strong> Es gibt eine <strong>natürliche Reihenfolge</strong>, aber <strong>Abstände</strong> zwischen Ausprägungen sind <strong>nicht verlässlich gleich</strong> oder nicht sinnvoll messbar.</p>
-  <p><strong>Beispiele:</strong> Schulnoten; Zufriedenheit (sehr gut → schlecht); Rangplätze; Prioritäten hoch / mittel / gering.</p>
-  <div class="info-box success">
-    <div class="icon">⚖️</div>
-    <div><strong>Folge:</strong> Rangvergleiche ja — aber <strong>„Differenz wie bei Metrik“</strong> ist kritisch. Der Abstand „sehr zufrieden“ zu „zufrieden“ muss nicht wie „zufrieden“ zu „neutral“ sein.</div>
-  </div>
-  <p><strong>Grafiken (oft):</strong> Balken/Säule; geordnete Häufigkeitstabellen.</p>
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">B. Ordinalskaliert</h3>
+  <p><strong>Natürliche Reihenfolge</strong>, aber Abstände nicht verlässlich gleich. Beispiele: Schulnoten, Zufriedenheit, Priorität. Folge: Rangvergleiche ja — „Differenz wie bei Metrik“ kritisch.</p>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:22px;">C. Metrisch</h3>
-  <p><strong>Definition:</strong> Zahlen mit <strong>sinnvoll interpretierbaren Abständen</strong>; Rechnen mit Summen, Differenzen, Mittelwerten ist fachlich oft angezeigt.</p>
-  <p><strong>Beispiele:</strong> Alter, Körpergröße, Umsatz, Einkommen, Fahrzeit, Stückzahlen.</p>
-  <div class="info-box success">
-    <div class="icon">📈</div>
-    <div><strong>Folge:</strong> Breiteste Auswertungsmöglichkeiten — neben Häufigkeiten auch <strong>Lage- und Streuungsmaße</strong> (im nächsten großen Kapitel vertieft).</div>
-  </div>
-  <p><strong>Grafiken (u. a.):</strong> Säulen, Histogramm, Liniendiagramm bei Zeitverläufen, Punktediagramme in Spezialfällen.</p>
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">C. Metrisch</h3>
+  <p>Zahlen mit <strong>sinnvoll interpretierbaren Abständen</strong>. Beispiele: Alter, Umsatz, Fahrzeit. Folge: Summen, Differenzen, Mittelwerte oft fachlich sinnvoll.</p>
 
   <div class="exercise">
     <div class="exercise-header">
-      <span class="exercise-badge">Übung</span>
-      <span class="exercise-title">Zuordnung</span>
+      <span class="exercise-badge">Interaktiv</span>
+      <span class="exercise-title">Zuordnung: Merkmale sortieren</span>
     </div>
-    <p><strong>Frage 1:</strong> „Priorität der Aufgabe: hoch — mittel — gering“ ist typischerweise …</p>
+    <p>Tippe ein Merkmal an und lege es in die passende Kategorie. Zum Korrigieren: Chip in der Kategorie erneut tippen.</p>
+
+    <div class="sg-scale-board">
+      <div>
+        <p style="font-size:0.85rem; font-weight:700; color:var(--text-light); margin-bottom:6px;">Merkmale</p>
+        <div class="sg-scale-pool" id="sgScalePool"></div>
+        <p class="sg-live-hint" id="sgScaleHint">Merkmal wählen, dann Kategorie.</p>
+      </div>
+
+      <div class="sg-bin-actions">
+        <button type="button" class="btn btn-check sg-bin-target" onclick="placeScaleChip('nominal')">→ Nominal</button>
+        <button type="button" class="btn btn-check sg-bin-target" onclick="placeScaleChip('ordinal')" style="background:var(--orange);">→ Ordinal</button>
+        <button type="button" class="btn btn-check sg-bin-target" onclick="placeScaleChip('metric')" style="background:var(--green);">→ Metrisch</button>
+      </div>
+
+      <div class="sg-bins">
+        <div class="sg-bin nominal">
+          <h4>Nominal</h4>
+          <div class="sg-bin-chips" id="sgBinChips_nominal"></div>
+        </div>
+        <div class="sg-bin ordinal">
+          <h4>Ordinal</h4>
+          <div class="sg-bin-chips" id="sgBinChips_ordinal"></div>
+        </div>
+        <div class="sg-bin metric">
+          <h4>Metrisch</h4>
+          <div class="sg-bin-chips" id="sgBinChips_metric"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-check" onclick="checkScaleSorter()">Zuordnung prüfen ✓</button>
+      <button type="button" class="btn btn-hint" onclick="initScaleSorter()">Zurücksetzen</button>
+    </div>
+    <div class="feedback" id="fb_sg_scale" style="display:none;"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:18px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Mini-Check</span>
+      <span class="exercise-title">Schnellfragen</span>
+    </div>
+    <p><strong>Frage 1:</strong> „Priorität: hoch — mittel — gering“ ist typischerweise …</p>
     <div class="quiz-options" data-quiz="sg1_1" data-correct="1">
       <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nominalskaliert</div>
       <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">ordinalskaliert</div>
@@ -179,25 +206,39 @@ MathJax = {
 <div class="tab-panel" id="panel2">
   <div class="ribbon">Daten erheben &amp; zuordnen</div>
 
-  <p>Bevor dargestellt wird, müssen Daten <strong>erhoben</strong> werden — passend zur Fragestellung.</p>
-  <p><strong>Formen:</strong> Befragung (Fragebogen), Beobachtung, Messung, Auswertung vorhandener Daten (Umsätze, Anmeldungen, Bestellungen, …).</p>
+  <p>Bevor dargestellt wird, müssen Daten <strong>erhoben</strong> werden — passend zur Fragestellung: Befragung, Beobachtung, Messung oder vorhandene Daten.</p>
 
   <div class="info-box concept">
     <div class="icon">🚌</div>
     <div>
-      <strong>Beispiel 1:</strong> „Mit welchem Verkehrsmittel kommst du überwiegend zur Schule?“ — Antworten: Auto, Bus, Bahn, Fahrrad, zu Fuß.<br>
-      👉 <strong>Nominalskaliert:</strong> Kategorien ohne sinnvolle Rangfolge.
-    </div>
-  </div>
-  <div class="info-box concept">
-    <div class="icon">🍽️</div>
-    <div>
-      <strong>Beispiel 2:</strong> „Wie zufrieden bist du mit dem Schulbuffet?“ — sehr zufrieden … sehr unzufrieden.<br>
-      👉 <strong>Ordinalskaliert:</strong> klare Ordnung, aber Abstände zwischen Stufen nicht automatisch gleich.
+      <strong>Klassenfrage:</strong> „Mit welchem Verkehrsmittel kommst du überwiegend zur Schule?“<br>
+      Antworten: Auto, Bus, Bahn, Fahrrad, zu Fuß → <strong>nominalskaliert</strong>.
     </div>
   </div>
 
   <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Simulator</span>
+      <span class="exercise-title">Mini-Umfrage: Anreise</span>
+    </div>
+    <p>Simuliere die Erhebung: Jeder Klick = eine Antwort. Später siehst du in Station&nbsp;4 live Tabelle und Diagramme.</p>
+
+    <div class="sg-survey-meta" id="sgSurveyMeta"></div>
+    <div class="sg-survey-grid">
+      <button type="button" class="sg-survey-btn" onclick="addSurveyVote('bus')">Bus<span class="sg-count" id="sgCount_bus">0</span></button>
+      <button type="button" class="sg-survey-btn" onclick="addSurveyVote('auto')">Auto<span class="sg-count" id="sgCount_auto">0</span></button>
+      <button type="button" class="sg-survey-btn" onclick="addSurveyVote('bahn')">Bahn<span class="sg-count" id="sgCount_bahn">0</span></button>
+      <button type="button" class="sg-survey-btn" onclick="addSurveyVote('rad')">Fahrrad<span class="sg-count" id="sgCount_rad">0</span></button>
+      <button type="button" class="sg-survey-btn" onclick="addSurveyVote('fuss')">zu Fuß<span class="sg-count" id="sgCount_fuss">0</span></button>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-hint" onclick="demoSurvey()">Demo-Daten (n = 25)</button>
+      <button type="button" class="btn btn-reset" onclick="resetSurvey()">Zurücksetzen</button>
+      <button type="button" class="btn btn-next" onclick="markComplete(3); switchTab(3);">Weiter zu Häufigkeiten →</button>
+    </div>
+  </div>
+
+  <div class="exercise" style="margin-top:18px;">
     <div class="exercise-header">
       <span class="exercise-badge">Mini-Quiz</span>
       <span class="exercise-title">Erhebung</span>
@@ -227,27 +268,109 @@ MathJax = {
 
   <p>Eine Häufigkeitsverteilung zeigt, <strong>wie oft</strong> Ausprägungen vorkommen.</p>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Absolute Häufigkeit</h3>
-  <p>Gibt an, <strong>wie oft</strong> ein Wert vorkommt.</p>
-  <p><strong>Beispiel</strong> (n = 20): Bus 8, Auto 5, Bahn 3, Fahrrad 2, zu Fuß 2 — die <strong>8</strong> ist die absolute Häufigkeit für „Bus“.</p>
-
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Relative Häufigkeit</h3>
-  <p>Anteil am Ganzen — besonders wichtig zum Vergleich von Gruppen unterschiedlicher Größe.</p>
+  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Absolute &amp; relative Häufigkeit</h3>
+  <p><strong>Absolut</strong> = Anzahl · <strong>Relativ</strong> = Anteil am Ganzen (zum Vergleich unterschiedlich großer Gruppen).</p>
   <div class="formula-box">
     <div class="formula-label">Formel</div>
     \[ h = \frac{\text{absolute Häufigkeit}}{n} \]
   </div>
-  <p><strong>Beispiel Bus:</strong> \(h = \dfrac{8}{20} = 0{,}4 = 40\,\%\).</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Live</span>
+      <span class="exercise-title">Deine Umfrage als Tabelle &amp; Diagramm</span>
+    </div>
+    <p>Die Daten aus Station&nbsp;3 erscheinen hier sofort. Wechsle zwischen absolut und relativ beim Balkendiagramm.</p>
+
+    <div class="sg-toggle-row">
+      <button type="button" class="sg-toggle-btn active" data-freq-mode="absolute" onclick="setFreqMode('absolute')">Absolute Häufigkeit</button>
+      <button type="button" class="sg-toggle-btn" data-freq-mode="relative" onclick="setFreqMode('relative')">Relative Häufigkeit</button>
+      <button type="button" class="btn btn-hint" onclick="demoSurvey()">Demo laden</button>
+    </div>
+
+    <table class="sg-freq-table">
+      <thead>
+        <tr><th>Kategorie</th><th>absolut</th><th>relativ</th><th>Prozent</th></tr>
+      </thead>
+      <tbody id="sgFreqBody"></tbody>
+    </table>
+
+    <div class="sg-chart-panel">
+      <div class="sg-chart-card">
+        <h4>Balken-/Säulendiagramm</h4>
+        <div class="sg-chart-wrap"><canvas id="sgBarChart" aria-label="Balkendiagramm Häufigkeiten"></canvas></div>
+      </div>
+      <div class="sg-chart-card">
+        <h4>Kreisdiagramm (Anteile)</h4>
+        <div class="sg-chart-wrap"><canvas id="sgPieChart" aria-label="Kreisdiagramm Anteile"></canvas></div>
+      </div>
+    </div>
+    <p class="sg-live-hint">Vergleiche: Balken machen Unterschiede klarer · Kreis zeigt die Verteilung am Ganzen.</p>
+  </div>
 
   <div class="exercise">
     <div class="exercise-header">
       <span class="exercise-badge">Rechnen</span>
       <span class="exercise-title">Relative Häufigkeit</span>
     </div>
-    <p>In einer Klasse mit <strong>20</strong> Personen fahren <strong>8</strong> mit dem Bus. Wie groß ist die relative Häufigkeit? (Gib <strong>0,4</strong> oder <strong>40</strong> für 40&nbsp;% ein.)</p>
+    <p>In einer Klasse mit <strong>20</strong> Personen fahren <strong>8</strong> mit dem Bus. Relative Häufigkeit? (Gib <strong>0,4</strong> oder <strong>40</strong> ein.)</p>
     <p><input type="text" id="sg_freq_input" placeholder="z. B. 0,4 oder 40" style="max-width:220px; padding:8px 12px; border-radius:10px; border:2px solid #E8E8E8;"></p>
     <button type="button" class="btn btn-check" onclick="checkStatFreqExercise()">Überprüfen ✓</button>
     <div class="feedback" id="fb_sg_freq" style="display:none;"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">GeoGebra</span>
+      <span class="exercise-title">Häufigkeiten üben &amp; deuten</span>
+    </div>
+    <p>Zwei fertige GeoGebra-Aktivitäten zu absoluter/relativer Häufigkeit und Projektwoche — ideal zum gemeinsamen Durcharbeiten.</p>
+
+    <div class="sg-ggb-grid">
+      <div class="sg-ggb-card">
+        <h3>Absolute &amp; relative Häufigkeit</h3>
+        <p>Wiederholung mit Tabelle und Zuordnung absolut / relativ / Prozent.</p>
+        <div class="geogebra-iframe-wrap">
+          <iframe
+            title="Absolute und Relative Häufigkeit — GeoGebra"
+            src="https://www.geogebra.org/material/iframe/id/uhqhqxz2/width/900/height/560/border/ffffff/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true"
+            width="900" height="560" allowfullscreen loading="lazy"
+            style="border:0;" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="geogebra-embed-note"><a href="https://www.geogebra.org/m/uhqhqxz2" target="_blank" rel="noopener noreferrer">Applet bei GeoGebra öffnen</a></p>
+      </div>
+
+      <div class="sg-ggb-card">
+        <h3>Projektwoche — Häufigkeiten interpretieren</h3>
+        <p>Sportarten-Wahl: Anteile berechnen, Tabelle deuten, Begründung üben.</p>
+        <div class="geogebra-iframe-wrap">
+          <iframe
+            title="Projektwoche Häufigkeiten — GeoGebra"
+            src="https://www.geogebra.org/material/iframe/id/avsarxqx/width/900/height/560/border/ffffff/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true"
+            width="900" height="560" allowfullscreen loading="lazy"
+            style="border:0;" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="geogebra-embed-note"><a href="https://www.geogebra.org/m/avsarxqx" target="_blank" rel="noopener noreferrer">Applet bei GeoGebra öffnen</a> · FLINK-Team</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Transfer</span>
+      <span class="exercise-title">Projektwoche n = 30</span>
+    </div>
+    <p>Tennis&nbsp;3 · Fußball&nbsp;4 · Schwimmen&nbsp;5 (von 30). Ergänze:</p>
+    <table class="sg-freq-table">
+      <thead><tr><th>Sport</th><th>absolut</th><th>relativ (oder %)</th></tr></thead>
+      <tbody>
+        <tr><td>Tennis</td><td>3</td><td><input id="sgRelTennis" type="text" placeholder="0,1 oder 10"></td></tr>
+        <tr><td>Fußball</td><td>4</td><td><input id="sgRelFussball" type="text" placeholder="≈ 0,133"></td></tr>
+        <tr><td>Schwimmen</td><td>5</td><td><input id="sgPctSchwimmen" type="text" placeholder="≈ 16,7 %"></td></tr>
+      </tbody>
+    </table>
+    <button type="button" class="btn btn-check" onclick="checkFreqTableExercise()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_sg_freq_table" style="display:none;"></div>
   </div>
 
   <div class="tab-nav">
@@ -258,31 +381,106 @@ MathJax = {
 
 <!-- STATION 5 -->
 <div class="tab-panel" id="panel4">
-  <div class="ribbon">Grafische Darstellung</div>
+  <div class="ribbon">Grafische Darstellung &amp; Interpretation</div>
 
-  <p>Eine Grafik ist gut, wenn sie zur <strong>Fragestellung</strong> passt, Daten <strong>korrekt</strong> abbildet und <strong>leicht interpretierbar</strong> ist. Die Wahl ist <strong>zu begründen</strong>.</p>
+  <p>Eine Grafik ist gut, wenn sie zur <strong>Fragestellung</strong> passt, Daten <strong>korrekt</strong> abbildet und <strong>leicht interpretierbar</strong> ist.</p>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Balken- / Säulendiagramm</h3>
-  <p><strong>Geeignet für:</strong> nominal, ordinal, oft auch gruppierte metrische Daten.</p>
-  <p><strong>Vorteil:</strong> direkter Kategorienvergleich, Unterschiede gut sichtbar.</p>
-  <p><strong>Beispiel:</strong> bevorzugte Verkehrsmittel — Vergleich der Häufigkeiten.</p>
+  <div class="info-box success">
+    <div class="icon">🧭</div>
+    <div>
+      <strong>Merksatz:</strong> <strong>Balken/Säule → Vergleich</strong> · <strong>Kreis → Anteile</strong> · <strong>Linie → Verlauf</strong>
+    </div>
+  </div>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Kreisdiagramm</h3>
-  <p><strong>Geeignet für:</strong> <strong>Anteile eines Ganzen</strong> (relative Häufigkeiten).</p>
-  <p><strong>Vorteil:</strong> Zusammensetzung des Ganzen.</p>
-  <p><strong>Nachteil:</strong> bei vielen Kategorien unübersichtlich; kleine Unterschiede schwer erkennbar.</p>
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Visuell</span>
+      <span class="exercise-title">Welche Grafik passt? „Marktanteile der Marken“</span>
+    </div>
+    <p>Ziel: Anteile am Gesamtmarkt zeigen. Wähle die passendste Darstellung.</p>
+    <div class="sg-diagram-grid" id="sgDiagMarkt">
+      <div class="sg-diagram-card" data-idx="0" onclick="selectDiagramCard(this)">
+        <h4>A · Säulen (Vergleich)</h4>
+        <svg viewBox="0 0 200 120" aria-hidden="true">
+          <rect x="20" y="40" width="28" height="60" fill="#3B82C4" rx="4"/>
+          <rect x="60" y="55" width="28" height="45" fill="#F39C12" rx="4"/>
+          <rect x="100" y="30" width="28" height="70" fill="#27AE60" rx="4"/>
+          <rect x="140" y="70" width="28" height="30" fill="#E74C3C" rx="4"/>
+          <line x1="10" y1="100" x2="190" y2="100" stroke="#94a3b8" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="sg-diagram-card" data-idx="1" onclick="selectDiagramCard(this)">
+        <h4>B · Kreis (Anteile)</h4>
+        <svg viewBox="0 0 200 120" aria-hidden="true">
+          <circle cx="100" cy="60" r="42" fill="#3B82C4"/>
+          <path d="M100 60 L100 18 A42 42 0 0 1 136 84 Z" fill="#F39C12"/>
+          <path d="M100 60 L136 84 A42 42 0 0 1 70 96 Z" fill="#27AE60"/>
+          <path d="M100 60 L70 96 A42 42 0 0 1 100 18 Z" fill="#E74C3C"/>
+        </svg>
+      </div>
+      <div class="sg-diagram-card" data-idx="2" onclick="selectDiagramCard(this)">
+        <h4>C · Linie (Verlauf)</h4>
+        <svg viewBox="0 0 200 120" aria-hidden="true">
+          <polyline points="20,80 55,50 90,65 125,35 160,45 185,25" fill="none" stroke="#3B82C4" stroke-width="3" stroke-linecap="round"/>
+          <line x1="10" y1="100" x2="190" y2="100" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="15" y1="15" x2="15" y2="100" stroke="#94a3b8" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkDiagramPick('sgDiagMarkt', 1, 4)">Überprüfen ✓</button>
+    <div class="feedback" id="fb_sgDiagMarkt" style="display:none;"></div>
+  </div>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:18px;">Liniendiagramm</h3>
-  <p><strong>Geeignet für:</strong> <strong>zeitliche Entwicklungen</strong> und metrische Verläufe.</p>
-  <p><strong>Vorteil:</strong> Trends und Schwankungen werden deutlich.</p>
-  <p><strong>Beispiel:</strong> Umsatz von Jänner bis Dezember.</p>
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Deutung</span>
+      <span class="exercise-title">Diagramm lesen</span>
+    </div>
+
+    <figure class="sg-interp-figure">
+      <svg viewBox="0 0 420 180" role="img" aria-label="Balkendiagramm Anreise">
+        <text x="12" y="22" font-size="13" fill="#2563A0" font-family="Nunito,sans-serif" font-weight="700">Anreise zur Schule (n = 25)</text>
+        <rect x="50" y="50" width="140" height="22" fill="#3B82C4" rx="3"/>
+        <text x="200" y="66" font-size="12" fill="#2C3E50" font-family="Nunito,sans-serif">Bus 10 (40 %)</text>
+        <rect x="50" y="82" width="84" height="22" fill="#F39C12" rx="3"/>
+        <text x="144" y="98" font-size="12" fill="#2C3E50" font-family="Nunito,sans-serif">Auto 6 (24 %)</text>
+        <rect x="50" y="114" width="56" height="22" fill="#27AE60" rx="3"/>
+        <text x="116" y="130" font-size="12" fill="#2C3E50" font-family="Nunito,sans-serif">Bahn 4 (16 %)</text>
+        <rect x="50" y="146" width="42" height="22" fill="#8E44AD" rx="3"/>
+        <text x="102" y="162" font-size="12" fill="#2C3E50" font-family="Nunito,sans-serif">Rad 3 · Fuß 2</text>
+      </svg>
+      <figcaption>Horizontalbalken: absolute Häufigkeiten und Anteile.</figcaption>
+    </figure>
+
+    <p><strong>Frage 1:</strong> Welche Aussage trifft am besten zu?</p>
+    <div class="quiz-options" data-quiz="sg4_interp1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Mehr als die Hälfte kommt mit dem Auto.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Bahn ist die häufigste Kategorie.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Der Modus ist Bus — 40 % der Befragten.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Zu Fuß und Rad zusammen machen über 50 % aus.</div>
+    </div>
+    <div class="feedback" id="fb_sg4_interp1"></div>
+
+    <p style="margin-top:18px;"><strong>Frage 2:</strong> Warum ist hier ein Balkendiagramm besonders sinnvoll?</p>
+    <div class="quiz-options" data-quiz="sg4_interp2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Weil Kategorienhäufungen direkt verglichen werden sollen</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Weil ein zeitlicher Trend über Monate gezeigt wird</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Weil metrische Mittelwerte berechnet werden müssen</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Weil Kreisdiagramme bei Nominaldaten verboten sind</div>
+    </div>
+    <div class="feedback" id="fb_sg4_interp2"></div>
+
+    <div style="margin-top:16px;">
+      <button type="button" class="btn btn-check" onclick="checkInterpQuiz()">Überprüfen ✓</button>
+    </div>
+  </div>
 
   <div class="exercise">
     <div class="exercise-header">
       <span class="exercise-badge">Zuordnung</span>
       <span class="exercise-title">Grafikwahl</span>
     </div>
-    <p><strong>Frage 1:</strong> Schwerpunkt „<strong>Wie verteilt sich ein Budget auf Ausgabenkategorien?</strong>“ — typisch oft …</p>
+    <p><strong>Frage 1:</strong> Schwerpunkt „Wie verteilt sich ein Budget?“ — typisch oft …</p>
     <div class="quiz-options" data-quiz="sg4_1" data-correct="1">
       <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Liniendiagramm ohne Zeitbezug</div>
       <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Kreisdiagramm (Anteile) oder Balken mit Anteilen</div>
@@ -322,22 +520,59 @@ MathJax = {
     <div>
       <strong>Leitfragen</strong>
       <ul style="margin:8px 0 0 18px;">
-        <li>Welcher <strong>Datentyp</strong> liegt vor? (nominal / ordinal / metrisch)</li>
-        <li>Was soll sichtbar werden? <strong>Vergleich</strong> von Kategorien? <strong>Anteil</strong> am Ganzen? <strong>Verlauf</strong> über die Zeit?</li>
+        <li>Welcher <strong>Datentyp</strong> liegt vor?</li>
+        <li>Was soll sichtbar werden? Vergleich · Anteil · Verlauf?</li>
         <li>Welche Darstellung macht die Aussage <strong>am klarsten</strong>?</li>
       </ul>
-      <p style="margin-top:10px;">Merksatz: <strong>Balken/Säule → Vergleich</strong> · <strong>Kreis → Anteile</strong> · <strong>Linie → Verlauf</strong></p>
     </div>
   </div>
 
-  <div class="info-box success">
-    <div class="icon">💬</div>
-    <div>
-      <strong>Beispiel (Auszug):</strong> „Wie zufrieden sind Teilnehmer:innen mit dem Unterricht?“ — <strong>ordinal</strong>.<br>
-      <strong>Geeignet:</strong> Balken/Säule mit geordneten Stufen — Häufigkeiten gut vergleichbar.<br>
-      <strong>Kreis:</strong> möglich für Anteile, Stufenvergleich oft weniger klar.<br>
-      <strong>Linie ohne Zeit:</strong> meist ungeeignet — suggeriert einen Verlauf, der nicht da ist.
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Fragestellung → Darstellungsform</span>
     </div>
+    <p>Ordne jeder Fragestellung die beste Darstellung zu.</p>
+    <div class="sg-match-list" id="sgGraphMatch">
+      <div class="sg-match-row">
+        <label>Wie verteilt sich das Monatsbudget auf Ausgabenkategorien?</label>
+        <select id="sgMatch_0">
+          <option value="">— wählen —</option>
+          <option value="balken">Balken / Säule (Vergleich)</option>
+          <option value="kreis">Kreisdiagramm (Anteile)</option>
+          <option value="linie">Liniendiagramm (Verlauf)</option>
+        </select>
+      </div>
+      <div class="sg-match-row">
+        <label>Umsatzentwicklung von Jänner bis Dezember</label>
+        <select id="sgMatch_1">
+          <option value="">— wählen —</option>
+          <option value="balken">Balken / Säule (Vergleich)</option>
+          <option value="kreis">Kreisdiagramm (Anteile)</option>
+          <option value="linie">Liniendiagramm (Verlauf)</option>
+        </select>
+      </div>
+      <div class="sg-match-row">
+        <label>Welche Anreise ist am häufigsten? (Kategorien vergleichen)</label>
+        <select id="sgMatch_2">
+          <option value="">— wählen —</option>
+          <option value="balken">Balken / Säule (Vergleich)</option>
+          <option value="kreis">Kreisdiagramm (Anteile)</option>
+          <option value="linie">Liniendiagramm (Verlauf)</option>
+        </select>
+      </div>
+      <div class="sg-match-row">
+        <label>Zufriedenheitsstufen von „sehr gut“ bis „sehr schlecht“ vergleichen</label>
+        <select id="sgMatch_3">
+          <option value="">— wählen —</option>
+          <option value="balken">Balken / Säule (Vergleich)</option>
+          <option value="kreis">Kreisdiagramm (Anteile)</option>
+          <option value="linie">Liniendiagramm (Verlauf)</option>
+        </select>
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkGraphMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_sg_graph_match" style="display:none;"></div>
   </div>
 
   <div class="exercise">
@@ -345,7 +580,7 @@ MathJax = {
       <span class="exercise-badge">Entscheid</span>
       <span class="exercise-title">Begründung</span>
     </div>
-    <p>Du hast <strong>nominalskalierte</strong> Lieblingsmarken und willst zeigen, welche Marke am häufigsten genannt wurde. Was ist die <strong>primäre</strong> sinnvolle Aussage / Grafikidee?</p>
+    <p>Du hast <strong>nominalskalierte</strong> Lieblingsmarken und willst zeigen, welche Marke am häufigsten genannt wurde. Primär sinnvoll?</p>
     <div class="quiz-options" data-quiz="sg5_1" data-correct="0">
       <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Balkendiagramm der Häufigkeiten — direkter Kategorienvergleich</div>
       <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Liniendiagramm über Marken ohne Zeit — zeigt „Trend“</div>
@@ -366,21 +601,15 @@ MathJax = {
 
 <!-- STATION 7 -->
 <div class="tab-panel" id="panel6">
-  <div class="ribbon">Vertiefung, Fehler, Merksätze &amp; Durchgängiges Beispiel</div>
+  <div class="ribbon">Vertiefung, Fehler &amp; kritische Diagramme</div>
 
   <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark);">Was wirklich zählt</h3>
-  <p>Nicht nur Merksätze wie „nominal = Namen“ — die <strong>Kompetenz</strong> ist: Der Datentyp entscheidet, welche Aussagen <strong>zulässig</strong> sind.</p>
+  <p>Der Datentyp entscheidet, welche Aussagen <strong>zulässig</strong> sind — nicht nur Merksätze wie „nominal = Namen“.</p>
 
   <div class="info-box concept">
     <div class="icon">📝</div>
     <div>
-      <strong>Schulnoten (ordinal):</strong> 1 besser als 2 — ja. Ob der Abstand 1→2 derselbe ist wie 3→4 — <strong>nicht garantiert</strong> → Vorsicht bei Rechenoperationen und Mittelwerten.
-    </div>
-  </div>
-  <div class="info-box concept">
-    <div class="icon">💶</div>
-    <div>
-      <strong>Monatsumsätze (metrisch):</strong> Differenzen und Vielfache sind sinnvoll interpretierbar; Mittelwerte oft fachlich sinnvoll (Kontext beachten).
+      <strong>Schulnoten (ordinal):</strong> 1 besser als 2 — ja. Ob der Abstand 1→2 derselbe ist wie 3→4 — <strong>nicht garantiert</strong>.
     </div>
   </div>
 
@@ -388,30 +617,50 @@ MathJax = {
   <ul style="margin-left:20px; line-height:1.65;">
     <li>Datentyp falsch zuordnen</li>
     <li>Kreisdiagramm bei zu vielen Kategorien</li>
-    <li>Liniendiagramm ohne sinnvollen zeitlichen / geordneten Verlauf</li>
+    <li>Liniendiagramm ohne sinnvollen Verlauf</li>
     <li>absolute und relative Häufigkeit verwechseln</li>
-    <li>Grafik ohne Interpretation / ohne Begründung der Wahl</li>
+    <li>Achsen manipulieren / Grafik ohne Interpretation</li>
   </ul>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Merksätze</h3>
-  <ul style="margin-left:20px; line-height:1.65;">
-    <li><strong>nominal</strong> — nur unterscheiden · <strong>ordinal</strong> — ordnen, Abstände kritisch · <strong>metrisch</strong> — messen &amp; rechnen (Abstände sinnvoll)</li>
-    <li><strong>absolute H.</strong> = Anzahl · <strong>relative H.</strong> = Anteil / Prozent</li>
-    <li><strong>Balken/Säule</strong> = Vergleich · <strong>Kreis</strong> = Anteile · <strong>Linie</strong> = Verlauf</li>
-  </ul>
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Kritik</span>
+      <span class="exercise-title">Irreführendes Diagramm erkennen</span>
+    </div>
+    <p>Eine Firma zeigt „stabile Einnahmen“. Die y-Achse läuft nur von 48&nbsp;000 bis 52&nbsp;000&nbsp;€.</p>
 
-  <h3 style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); margin-top:20px;">Durchgängiges Beispiel: Anreise (n = 25)</h3>
-  <p><strong>Fragestellung:</strong> Wie verteilt sich die Anreise? — <strong>Datentyp:</strong> Verkehrsmittel nominal. — <strong>Häufigkeiten:</strong> Bus 10, Auto 6, Bahn 4, Fahrrad 3, zu Fuß 2.</p>
-  <p><strong>Relativ (Auszug):</strong> Bus \(10/25 = 40\,\%\), Auto \(24\,\%\), Bahn \(16\,\%\), Fahrrad \(12\,\%\), zu Fuß \(8\,\%\).</p>
-  <p><strong>Darstellung:</strong> Balken/Säule zum Vergleich; Kreis für Anteile möglich.</p>
-  <p><strong>Interpretation:</strong> häufigster Modus Bus (40&nbsp;%); kleine Gruppe zu Fuß/Fahrrad — ggf. hohe Nutzung ÖV; <strong>Kontext</strong> mitdenken.</p>
+    <figure class="sg-interp-figure">
+      <svg viewBox="0 0 420 170" role="img" aria-label="Irreführendes Liniendiagramm">
+        <text x="12" y="20" font-size="13" fill="#2563A0" font-family="Nunito,sans-serif" font-weight="700">Einnahmen (€) — Wochen 1–6</text>
+        <line x1="50" y1="40" x2="50" y2="140" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="50" y1="140" x2="390" y2="140" stroke="#94a3b8" stroke-width="2"/>
+        <text x="8" y="48" font-size="10" fill="#5D6D7E" font-family="Nunito,sans-serif">52k</text>
+        <text x="8" y="95" font-size="10" fill="#5D6D7E" font-family="Nunito,sans-serif">50k</text>
+        <text x="8" y="140" font-size="10" fill="#5D6D7E" font-family="Nunito,sans-serif">48k</text>
+        <polyline points="70,120 120,55 170,100 220,48 270,90 330,70" fill="none" stroke="#E74C3C" stroke-width="3" stroke-linecap="round"/>
+        <text x="60" y="158" font-size="10" fill="#5D6D7E" font-family="Nunito,sans-serif">W1 &nbsp;&nbsp; W2 &nbsp;&nbsp; W3 &nbsp;&nbsp; W4 &nbsp;&nbsp; W5 &nbsp;&nbsp; W6</text>
+      </svg>
+      <figcaption>Kleine Schwankungen wirken wie große Ausschläge — Achse startet nicht bei 0.</figcaption>
+    </figure>
+
+    <div class="quiz-options" id="sgMisleadingOpts" data-quiz="sg_mis" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Alles in Ordnung — so sieht man Details besser, ohne Hinweis nötig.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Problematisch: y-Achse beginnt nicht bei 0 — Unterschiede werden optisch übertrieben.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Falsch, weil Einnahmen immer als Kreisdiagramm gezeigt werden müssen.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Falsch, weil die Linie rot ist.</div>
+    </div>
+    <div class="feedback" id="fb_sg_misleading" style="display:none;"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkMisleading()">Überprüfen ✓</button>
+    </div>
+  </div>
 
   <div class="exercise">
     <div class="exercise-header">
       <span class="exercise-badge">Check</span>
-      <span class="exercise-title">Vertiefung</span>
+      <span class="exercise-title">Ordinal vs. metrisch</span>
     </div>
-    <p>Warum ist „Differenz der Noten 1 und 4 halbiert ergibt mittlere Note“ <strong>fachlich heikel</strong>?</p>
+    <p>Warum ist „Differenz der Noten 1 und 4 halbiert ergibt mittlere Note“ fachlich heikel?</p>
     <div class="quiz-options" data-quiz="sg6_1" data-correct="1">
       <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Weil Noten immer metrisch sind</div>
       <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Weil Noten ordinal sind — Abstände nicht als gleich interpretierbar</div>
@@ -427,7 +676,7 @@ MathJax = {
   <div class="info-box success" style="margin-top:20px;">
     <div class="icon">🎓</div>
     <div>
-      <strong>Kompetenzen (Kern):</strong> Datentypen beschreiben und zuordnen · Daten erheben · absolute/relative Häufigkeiten · passende Grafiken wählen · Darstellung problembezogen begründen · Ergebnisse im Sachzusammenhang deuten.
+      <strong>Kompetenzen:</strong> Datentypen zuordnen · Daten erheben · absolute/relative Häufigkeiten · passende Grafiken wählen · Darstellung begründen · Diagramme kritisch deuten.
     </div>
   </div>
 
@@ -441,7 +690,7 @@ MathJax = {
 <div class="tab-panel" id="panel7">
   <div class="ribbon">Abschlussquiz</div>
 
-  <p>Teste dein Verständnis in mehreren Fragen — danach erhältst du eine kurze Auswertung.</p>
+  <p>Multiple Choice, Zuordnung und Diagramm-Kritik — danach kurze Auswertung.</p>
 
   <div class="quiz-stepper" id="finalQuizStepper"></div>
   <div id="finalQuizContainer"></div>
