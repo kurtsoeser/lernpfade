@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernpfad: Lineare Gleichungen — Anwendungen</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.viz-panel { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#fff; margin-top:14px; box-shadow:0 1px 2px rgba(15,23,42,.05); }
+.viz-panel h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.mini-note { font-size:.86rem; color:var(--text-light); margin-top:6px; }
+.mix-table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.92rem; }
+.mix-table th, .mix-table td { border:1px solid #CBD5E1; padding:8px 10px; text-align:center; }
+.mix-table th { background:#EFF6FF; color:var(--blue-dark); font-weight:800; }
+.mix-table td { background:#fff; }
+.mix-table input {
+  width:100%; max-width:7rem; border:1px solid #93C5FD; border-radius:8px; padding:6px 8px;
+  text-align:center; font-family:Nunito,system-ui,sans-serif; font-weight:700;
+}
+.mix-table tr.total td { background:#F0FDF4; font-weight:800; }
+.hint-ladder { margin-top:10px; }
+.hint-ladder .hint-step {
+  display:none; margin-top:8px; padding:10px 12px; border-radius:10px;
+  background:#FFFBEB; border:1px solid #F59E0B; font-size:.92rem; line-height:1.55;
+}
+.hint-ladder .hint-step.visible { display:block; }
+.hint-ladder .hint-step strong { color:#92400E; }
+.btn-hint { background:#F59E0B; color:#fff; border:none; border-radius:10px; padding:8px 14px; font-weight:700; cursor:pointer; font-family:Nunito,system-ui,sans-serif; }
+.btn-hint:hover { background:#D97706; }
+.motion-svg { width:100%; max-width:560px; height:auto; display:block; margin:10px auto; }
+.srdp-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:820px){ .srdp-grid { grid-template-columns:1fr 1fr; } }
+.srdp-card {
+  border:1px solid #BBF7D0; border-radius:14px; overflow:hidden; background:#fff;
+}
+.srdp-card .head {
+  background:#166534; color:#fff; padding:10px 14px; font-weight:800; font-size:.95rem;
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+}
+.srdp-card .body { padding:14px 16px; }
+.srdp-card .head input[type=checkbox] { width:1.1rem; height:1.1rem; }
+.match-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.match-row {
+  display:grid; grid-template-columns:1fr; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+@media (min-width:700px){ .match-row { grid-template-columns:1.3fr 1fr; } }
+.match-row label { font-weight:700; }
+.match-row select {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.stack-bar {
+  height:28px; border-radius:999px; background:#E2E8F0; overflow:hidden; display:flex; margin:10px 0;
+  border:1px solid #D8E2EF;
+}
+.stack-bar .part { height:100%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.72rem; font-weight:800; transition:width .35s ease; }
+.stack-bar .a-part { background:linear-gradient(90deg,#2563EB,#38BDF8); }
+.stack-bar .b-part { background:linear-gradient(90deg,#D97706,#FDBA74); }
+.help-toggle { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.help-toggle button {
+  border:2px solid #E2E8F0; background:#fff; border-radius:999px; padding:7px 12px;
+  font-weight:700; cursor:pointer; font-family:Nunito,system-ui,sans-serif; font-size:.85rem;
+}
+.help-toggle button.active { border-color:#2563EB; background:#EFF6FF; color:#1D4ED8; }
+.help-pane { display:none; margin-top:8px; padding:12px; border-radius:12px; background:#F8FAFC; border:1px solid #E2E8F0; }
+.help-pane.show { display:block; }
+.timeline {
+  position:relative; height:90px; margin:16px 0 8px; border-bottom:3px solid #64748B;
+}
+.timeline .mark {
+  position:absolute; bottom:0; width:2px; height:18px; background:#334155;
+}
+.timeline .label {
+  position:absolute; bottom:-22px; font-size:.75rem; font-weight:700; color:#475569; transform:translateX(-50%);
+}
+.timeline .arrow {
+  position:absolute; height:8px; border-radius:4px; bottom:40px;
+}
+.timeline .arrow.a { background:#2563EB; }
+.timeline .arrow.b { background:#D97706; }
+.timeline .person {
+  position:absolute; bottom:52px; font-size:.78rem; font-weight:800; transform:translateX(-50%);
+}
+</style>
+</head>
+<body data-current-page="gl-lineare-1v-app" data-page-type="lernpfad" data-chapter-folder="Gleichungen/lineare-gleichungen">
+
+<div class="progress-bar-container">
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 7 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+  <h1>Lineare Gleichungen — Anwendungen</h1>
+  <p class="subtitle">Prozentgleichungen, Mischungen mit Tabelle und Bewegungsaufgaben mit Distanz-Diagrammen und gestaffelten Hinweisen.</p>
+  <span class="badge">3.&nbsp;Semester · Thema 09b</span>
+  <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
+    <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gleichungen</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    <a href="lernpfad-lineare-gleichungen.html" style="color:var(--blue-dark); font-weight:600;">← 09a Theorie</a>
+    · <a href="../../Funktionen/funktionen-grundlagen/index.html" style="color:var(--blue-dark); font-weight:600;">4.&nbsp;Sem. · Funktionen →</a>
+  </p>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Prozent</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Mischung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Mix-Training</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Bewegung</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Hinweise</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>SRDP &amp; Quiz</button>
+</div>
+
+<!-- 1 -->
+<div class="tab-panel active" id="panel0">
+  <div class="ribbon">Einstieg Anwendungen</div>
+  <p>Hier stellst du <strong>lineare Gleichungen</strong> aus Sachsituationen auf: Prozent, Mischung und Bewegung. Protokoll: <em>Variable → Modell/Gleichung → Lösung → Antwortsatz</em>.</p>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Lernziel (Lehrplan):</strong>
+      Lineare Gleichungen aus den Bereichen <strong>Prozentrechnung</strong> und <strong>Bewegung</strong> aufstellen;
+      Ergebnisse in Bezug auf die Aufgabenstellung argumentieren.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Warm-up</span>
+      <span class="exercise-title">Welches Modell?</span>
+    </div>
+    <div class="match-list" id="modelMatch"></div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkModelMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_model_match"></div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Prozent →</button>
+  </div>
+</div>
+
+<!-- 2 Prozent -->
+<div class="tab-panel" id="panel1">
+  <div class="ribbon">Prozentgleichungen</div>
+  <p>Oft: „nach Abzug von p&nbsp;% bleiben …“ oder „Brutto = Netto · 1,20“. Die Unbekannte steckt im Grundwert.</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Typische Formen</div>
+    \[
+      G\cdot\left(1-\frac{p}{100}\right)=R
+      \qquad
+      N\cdot 1{,}20 = B
+      \qquad
+      K\cdot 1{,}05 = E
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Lohn &amp; MwSt</span>
+    </div>
+    <p>Frau Maier spart 15&nbsp;% ihres Monatsgehalts. Danach bleiben ihr 3&nbsp;060&nbsp;€. Wie hoch ist das Gehalt \(G\)?</p>
+    <div class="input-group">
+      <label for="pct_eq">Gleichung</label>
+      <input id="pct_eq" type="text" placeholder="z. B. G*0,85=3060">
+    </div>
+    <div class="input-group">
+      <label for="pct_g">Gehalt \(G\) in €</label>
+      <input id="pct_g" type="text" inputmode="decimal" placeholder="3600">
+    </div>
+    <p style="margin-top:12px;">Bruttopreis 3&nbsp;222&nbsp;€ bei 20&nbsp;% MwSt. Netto \(N\)?</p>
+    <div class="input-group">
+      <label for="pct_n">Netto in €</label>
+      <input id="pct_n" type="text" inputmode="decimal">
+    </div>
+    <div class="hint-ladder" data-hints="pct">
+      <button type="button" class="btn-hint" onclick="revealNextHint('pct')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Nach 15&nbsp;% Sparen bleiben 85&nbsp;% → Faktor 0,85.</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> \(G\cdot 0{,}85=3060\) → \(G=3600\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> Brutto = Netto · 1,20 → \(N=3222/1{,}2=2685\).</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkPercent()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_pct"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Kapital</span>
+      <span class="exercise-title">Zinsen 5&nbsp;%</span>
+    </div>
+    <p>Kapital wird zu 5&nbsp;% angelegt. Nach einem Jahr (inkl. Zinsen) sind 3&nbsp;990&nbsp;€ vorhanden. Ursprüngliches Kapital?</p>
+    <div class="input-group">
+      <label for="pct_k">Kapital in €</label>
+      <input id="pct_k" type="text" inputmode="decimal">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkKapital()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_kap"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Mischung →</button>
+  </div>
+</div>
+
+<!-- 3 Mischung -->
+<div class="tab-panel" id="panel2">
+  <div class="ribbon">Mischungsaufgaben</div>
+  <p>Zentrale Idee: <strong>reiner Stoff</strong> bleibt erhalten (Summe der reinen Anteile = reiner Anteil der Mischung).</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Mischungsgleichung</div>
+    \[
+      m_1\cdot \frac{p_1}{100} + m_2\cdot \frac{p_2}{100}
+      = (m_1+m_2)\cdot \frac{p}{100}
+    \]
+  </div>
+
+  <div class="viz-panel">
+    <h3>Beispiel Fruchtsaft — ausfüllbare Tabelle</h3>
+    <p>\(x\) Liter 15&nbsp;%-Saft werden mit 4&nbsp;000&nbsp;l 40&nbsp;%-Saft zu 30&nbsp;% gemischt.</p>
+    <table class="mix-table" id="mixDemo">
+      <thead>
+        <tr><th></th><th>Menge in l</th><th>Konzentration %</th><th>reiner Fruchtsaft in l</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Saft 15&nbsp;%</td>
+          <td><input id="md_m1" type="text" value="x" aria-label="Menge 1"></td>
+          <td>15</td>
+          <td><input id="md_r1" type="text" placeholder="0,15·x" aria-label="rein 1"></td>
+        </tr>
+        <tr>
+          <td>Saft 40&nbsp;%</td>
+          <td>4000</td>
+          <td>40</td>
+          <td><input id="md_r2" type="text" placeholder="1600" aria-label="rein 2"></td>
+        </tr>
+        <tr class="total">
+          <td>Gemisch 30&nbsp;%</td>
+          <td><input id="md_mt" type="text" placeholder="4000+x" aria-label="Menge total"></td>
+          <td>30</td>
+          <td><input id="md_rt" type="text" placeholder="0,30·(4000+x)" aria-label="rein total"></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="mini-note">Gleichung: \(0{,}15x + 0{,}40\cdot 4000 = 0{,}30\cdot(4000+x)\)</p>
+    <div class="stack-bar" aria-hidden="true">
+      <div class="part a-part" id="mixBarA" style="width:40%">15&nbsp;%</div>
+      <div class="part b-part" id="mixBarB" style="width:60%">40&nbsp;%</div>
+    </div>
+    <div class="input-group">
+      <label for="md_x">Berechnetes \(x\) (Liter, gerundet ganzzahlig ok)</label>
+      <input id="md_x" type="text" inputmode="decimal" placeholder="2667">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkMixDemo()">Tabelle &amp; \(x\) prüfen ✓</button>
+    <div class="feedback" id="fb_mix_demo"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Mix-Training →</button>
+  </div>
+</div>
+
+<!-- 4 Mix-Training -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Mischungs-Training</div>
+
+  <div class="help-toggle" role="group" aria-label="Hilfeart">
+    <button type="button" class="active" data-help="none" onclick="setHelpMode(this)">Ohne Hilfe</button>
+    <button type="button" data-help="table" onclick="setHelpMode(this)">Hilfe tabellarisch</button>
+    <button type="button" data-help="eq" onclick="setHelpMode(this)">Gleichung zeigen</button>
+  </div>
+  <div class="help-pane" id="helpTable">
+    <table class="mix-table">
+      <thead><tr><th></th><th>Menge</th><th>%</th><th>reiner Stoff</th></tr></thead>
+      <tbody>
+        <tr><td>Sorte A</td><td>\(m_A\)</td><td>\(p_A\)</td><td>\(m_A\cdot p_A/100\)</td></tr>
+        <tr><td>Sorte B</td><td>\(m_B\)</td><td>\(p_B\)</td><td>\(m_B\cdot p_B/100\)</td></tr>
+        <tr class="total"><td>Mischung</td><td>\(m_A+m_B\)</td><td>\(p\)</td><td>\((m_A+m_B)\cdot p/100\)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="help-pane" id="helpEq">
+    <p>Allgemein: Summe der reinen Stoffe = reiner Stoff der Mischung. Bei einer Unbekannten oft \(m_B = \text{Gesamt}-m_A\).</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">M12</span>
+      <span class="exercise-title">Essig 5&nbsp;%</span>
+    </div>
+    <p>Wie viel Liter 10&nbsp;%-Essig und 2&nbsp;%-Essig für 2&nbsp;l einer 5&nbsp;%-Mischung?</p>
+    <div class="input-row" style="display:flex; flex-wrap:wrap; gap:10px;">
+      <div class="input-group"><label for="mix_e10">Liter 10&nbsp;%</label><input id="mix_e10" type="text" inputmode="decimal"></div>
+      <div class="input-group"><label for="mix_e2">Liter 2&nbsp;%</label><input id="mix_e2" type="text" inputmode="decimal"></div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkEssig()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_essig"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Alkohol</span>
+      <span class="exercise-title">70&nbsp;% aus 80&nbsp;% und 56&nbsp;%</span>
+    </div>
+    <p>1400&nbsp;l einer 70&nbsp;%-Mischung aus 80&nbsp;%- und 56&nbsp;%-Alkohol. Liter je Sorte?</p>
+    <div class="input-row" style="display:flex; flex-wrap:wrap; gap:10px;">
+      <div class="input-group"><label for="mix_a80">Liter 80&nbsp;%</label><input id="mix_a80" type="text" inputmode="decimal"></div>
+      <div class="input-group"><label for="mix_a56">Liter 56&nbsp;%</label><input id="mix_a56" type="text" inputmode="decimal"></div>
+    </div>
+    <div class="hint-ladder" data-hints="alk">
+      <button type="button" class="btn-hint" onclick="revealNextHint('alk')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> \(x\) = Menge 80&nbsp;%, dann \(1400-x\) = Menge 56&nbsp;%.</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> \(0{,}8x+0{,}56(1400-x)=0{,}7\cdot 1400\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> \(0{,}24x=196\) → \(x\approx 816{,}67\) l (80&nbsp;%), Rest ≈ 583,33 l.</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkAlkohol()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_alk"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Verdünnen</span>
+      <span class="exercise-title">Salzlösung</span>
+    </div>
+    <p>Mit wie vielen Litern Wasser muss man 8&nbsp;l einer 80&nbsp;%-Salzlösung verdünnen, um 30&nbsp;% zu erhalten?</p>
+    <div class="input-group">
+      <label for="mix_w">Liter Wasser</label>
+      <input id="mix_w" type="text" inputmode="decimal">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkWasser()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_wasser"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Bewegung →</button>
+  </div>
+</div>
+
+<!-- 5 Bewegung -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Bewegungsaufgaben</div>
+  <p>Grundformel \(s=v\cdot t\). Gegenverkehr: Strecken addieren sich zur Gesamtstrecke. Überholen: der Schnellere holt den Vorsprung auf.</p>
+
+  <div class="viz-panel">
+    <h3>Distanz-Diagramm (Gegenverkehr)</h3>
+    <svg class="motion-svg" viewBox="0 0 520 120" role="img" aria-label="Zwei Personen fahren aufeinander zu">
+      <line x1="40" y1="70" x2="480" y2="70" stroke="#64748B" stroke-width="3"/>
+      <circle cx="40" cy="70" r="6" fill="#2563EB"/>
+      <circle cx="480" cy="70" r="6" fill="#D97706"/>
+      <text x="40" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Start A</text>
+      <text x="480" y="95" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">Start B</text>
+      <text x="260" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#166534">Treffpunkt nach \(x\) Stunden</text>
+      <path d="M40 55 H200" stroke="#2563EB" stroke-width="6" stroke-linecap="round"/>
+      <path d="M480 55 H320" stroke="#D97706" stroke-width="6" stroke-linecap="round"/>
+      <polygon points="200,55 188,50 188,60" fill="#2563EB"/>
+      <polygon points="320,55 332,50 332,60" fill="#D97706"/>
+      <text x="120" y="48" text-anchor="middle" font-size="11" fill="#1D4ED8" font-weight="700">\(v_1\cdot x\)</text>
+      <text x="400" y="48" text-anchor="middle" font-size="11" fill="#C2410C" font-weight="700">\(v_2\cdot x\)</text>
+      <text x="260" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#475569">\(v_1 x + v_2 x = s\)</text>
+    </svg>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Bike Rhade–Warendorf</span>
+    </div>
+    <p>Britta startet in Rhade (10&nbsp;km/h), Judith gleichzeitig in Warendorf (15&nbsp;km/h), Abstand 20&nbsp;km. Wann treffen sie sich? (Antwort in Minuten)</p>
+    <div class="input-group">
+      <label for="mov_t">Minuten bis zum Treffen</label>
+      <input id="mov_t" type="text" inputmode="decimal">
+    </div>
+    <div class="input-group">
+      <label for="mov_sb">Strecke Britta in km</label>
+      <input id="mov_sb" type="text" inputmode="decimal">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkBike()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_bike"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Preisverteilung</span>
+      <span class="exercise-title">60&nbsp;000&nbsp;€ / 3 Preise</span>
+    </div>
+    <p>2.&nbsp;Preis = \(\frac{2}{3}\) des 1.&nbsp;Preises, 3.&nbsp;Preis = Hälfte des 2.&nbsp;Preises. Beträge?</p>
+    <div class="input-row" style="display:flex; flex-wrap:wrap; gap:10px;">
+      <div class="input-group"><label for="pr1">1. Preis</label><input id="pr1" type="text" inputmode="decimal"></div>
+      <div class="input-group"><label for="pr2">2. Preis</label><input id="pr2" type="text" inputmode="decimal"></div>
+      <div class="input-group"><label for="pr3">3. Preis</label><input id="pr3" type="text" inputmode="decimal"></div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkPreise()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_preise"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Hinweise →</button>
+  </div>
+</div>
+
+<!-- 6 Gestaffelte Hinweise -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Gestaffelte Lösungshinweise</div>
+  <p>Probiere zuerst selbst. Öffne Tipps nur Schritt für Schritt — nicht alles auf einmal.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufholen</span>
+      <span class="exercise-title">Nachzügler</span>
+    </div>
+    <p>Die Klasse geht ab Start mit 4&nbsp;km/h. Der Nachzügler startet 10&nbsp;min später mit 6&nbsp;km/h. Wann holt er die Klasse ein (Minuten nach Klassenstart)? Welche Strecke?</p>
+    <div class="viz-panel">
+      <h3>Skizze (Zeitversatz)</h3>
+      <div class="timeline" aria-hidden="true">
+        <div class="mark" style="left:8%"></div>
+        <div class="label" style="left:8%">Start</div>
+        <div class="mark" style="left:28%"></div>
+        <div class="label" style="left:28%">+10&nbsp;min</div>
+        <div class="mark" style="left:78%"></div>
+        <div class="label" style="left:78%">Treffen</div>
+        <div class="arrow a" style="left:8%; width:70%;"></div>
+        <div class="person" style="left:40%; color:#2563EB;">Klasse 4&nbsp;km/h</div>
+        <div class="arrow b" style="left:28%; width:50%;"></div>
+        <div class="person" style="left:55%; color:#C2410C; bottom:68px;">Nachzügler 6&nbsp;km/h</div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="nz_min">Minuten nach Klassenstart</label>
+      <input id="nz_min" type="text" inputmode="decimal">
+    </div>
+    <div class="input-group">
+      <label for="nz_km">Strecke in km</label>
+      <input id="nz_km" type="text" inputmode="decimal">
+    </div>
+    <div class="hint-ladder" data-hints="nz">
+      <button type="button" class="btn-hint" onclick="revealNextHint('nz')">💡 Nächster Hinweis</button>
+      <div class="hint-step" data-step="0"><strong>Hinweis 1 (Grafik):</strong> Klasse startet früher; beide sind zum Treffen am selben Ort.</div>
+      <div class="hint-step" data-step="1"><strong>Hinweis 2 (Variable):</strong> \(x\) = Stunden seit Klassenstart. Klasse: \(4x\). Nachzügler hat nur \(x-\frac{1}{6}\) Stunden.</div>
+      <div class="hint-step" data-step="2"><strong>Hinweis 3 (Gleichung):</strong> \(4x = 6\bigl(x-\frac{1}{6}\bigr)\).</div>
+      <div class="hint-step" data-step="3"><strong>Hinweis 4 (Lösung):</strong> \(4x=6x-1\) → \(x=\frac{1}{2}\) → 30&nbsp;min, Strecke 2&nbsp;km.</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkNachzuegler()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_nz"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Schwimmen</span>
+      <span class="exercise-title">Vorsprung aufholen</span>
+    </div>
+    <p>Marco 70&nbsp;m/min, Jens 90&nbsp;m/min, Marco hat 50&nbsp;m Vorsprung. Nach wie vielen Minuten holt Jens Marco ein?</p>
+    <div class="input-group">
+      <label for="sw_min">Minuten</label>
+      <input id="sw_min" type="text" inputmode="decimal">
+    </div>
+    <div class="hint-ladder" data-hints="swim">
+      <button type="button" class="btn-hint" onclick="revealNextHint('swim')">💡 Nächster Hinweis</button>
+      <div class="hint-step" data-step="0"><strong>Hinweis 1:</strong> Beide starten gleichzeitig; Marco liegt 50&nbsp;m vorn.</div>
+      <div class="hint-step" data-step="1"><strong>Hinweis 2:</strong> In \(x\) Minuten: Marco \(70x\), Jens \(90x\). Treffen: \(90x = 70x + 50\).</div>
+      <div class="hint-step" data-step="2"><strong>Hinweis 3:</strong> \(20x=50\) → \(x=2{,}5\) Minuten.</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkSwim()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_swim"></div>
+  </div>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      Hinweis zu Varianten in Materialien: Geschwindigkeiten/Abstände können leicht abweichen (z.&nbsp;B. 15&nbsp;km/h und 24&nbsp;km).
+      Wichtig ist das <strong>Modell</strong> \(v_1 x + v_2 x = s\) bzw. \(v_{\text{schnell}}x = v_{\text{langsam}}x + \text{Vorsprung}\).
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: SRDP &amp; Quiz →</button>
+  </div>
+</div>
+
+<!-- 7 SRDP -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">SRDP-Karten &amp; Abschluss</div>
+  <p>Erstelle jeweils eine Gleichung, wenn gefragt. Protokolliere Modell · Gleichung · Lösung. Auf SRDP-Niveau achten.</p>
+
+  <div class="srdp-grid">
+    <div class="srdp-card">
+      <div class="head"><span>Aufgabe 1 — Verhältnis</span><label><input type="checkbox" aria-label="erledigt"> erledigt</label></div>
+      <div class="body">
+        <p>Adam und Simon laufen zusammen 70&nbsp;km. Adam läuft das 1,5-Fache von Simon. Strecke von Simon?</p>
+        <div class="input-group">
+          <label for="srdp_sim">Simon (km)</label>
+          <input id="srdp_sim" type="text" inputmode="decimal">
+        </div>
+      </div>
+    </div>
+    <div class="srdp-card">
+      <div class="head"><span>Aufgabe 2 — Fehleranalyse Zug</span><label><input type="checkbox" aria-label="erledigt"> erledigt</label></div>
+      <div class="body">
+        <p>Güterzug startet um 6:00 mit 80&nbsp;km/h; ICE um 7:00 entgegen mit 160&nbsp;km/h; Distanz 240&nbsp;km. Ein Schüler schreibt \(80x=160(x-1)\). Was ist falsch?</p>
+        <div class="quiz-options" data-quiz="zug_err" data-correct="1">
+          <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Nichts — die Gleichung ist korrekt</div>
+          <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Beide Strecken müssen sich zur Gesamtdistanz addieren: \(80x+160(x-1)=240\)</div>
+          <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Man darf \(x\) nicht verwenden</div>
+          <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Der ICE ist langsamer, also 80 und 160 tauschen</div>
+        </div>
+        <div class="feedback" id="fb_zug_err"></div>
+      </div>
+    </div>
+    <div class="srdp-card">
+      <div class="head"><span>Aufgabe 3 — Rabatt</span><label><input type="checkbox" aria-label="erledigt"> erledigt</label></div>
+      <div class="body">
+        <p>Nach 9&nbsp;% Rabatt kostet ein Artikel 2&nbsp;500&nbsp;€. Ursprungspreis \(G\)?</p>
+        <div class="input-group">
+          <label for="srdp_g">\(G\) in €</label>
+          <input id="srdp_g" type="text" inputmode="decimal">
+        </div>
+      </div>
+    </div>
+    <div class="srdp-card">
+      <div class="head"><span>Aufgabe 4 — Campari Orange</span><label><input type="checkbox" aria-label="erledigt"> erledigt</label></div>
+      <div class="body">
+        <p>Mischung 1:3 (Campari:Orange), 8 Gläser à 0,2&nbsp;l. Liter Campari?</p>
+        <div class="input-group">
+          <label for="srdp_cam">Liter Campari</label>
+          <input id="srdp_cam" type="text" inputmode="decimal">
+        </div>
+        <p class="mini-note" style="margin-top:8px;">Argumentation: Bei neu 20&nbsp;% Campari (statt 25&nbsp;% bei 1:3) sinkt der Campari-Anteil.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px;">
+    <button type="button" class="btn btn-check" onclick="checkSrdp()">SRDP-Eingaben prüfen ✓</button>
+    <div class="feedback" id="fb_srdp"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:16px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quiz</span>
+      <span class="exercise-title">Anwendungs-Check</span>
+    </div>
+    <p><strong>1.</strong> In der Mischungstabelle steht in der dritten Spalte …</p>
+    <div class="quiz-options" data-quiz="aq1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">nur die Konzentration</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">die Fahrzeit</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Menge · Konzentration = reiner Stoff</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">immer die Zahl 100</div>
+    </div>
+    <div class="feedback" id="fb_aq1"></div>
+
+    <p style="margin-top:14px;"><strong>2.</strong> Gegenverkehr, Abstand \(s\), Geschwindigkeiten \(v_1,v_2\), gleiche Startzeit:</p>
+    <div class="quiz-options" data-quiz="aq2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\((v_1+v_2)x=s\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(v_1 x = v_2 x\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(v_1 / x + v_2 / x = s\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(x=v_1+v_2+s\)</div>
+    </div>
+    <div class="feedback" id="fb_aq2"></div>
+
+    <p style="margin-top:14px;"><strong>3.</strong> Aktie −3&nbsp;% dann +3&nbsp;% gegenüber +5&nbsp;% dann −5&nbsp;%:</p>
+    <div class="quiz-options" data-quiz="aq3" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">beide Wege enden beim Startkurs</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">beide enden unter dem Startkurs; ±5&nbsp;% verliert mehr</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">±3&nbsp;% endet höher als Start</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Prozentänderungen sind immer kommutativ ohne Verlust</div>
+    </div>
+    <div class="feedback" id="fb_aq3"></div>
+
+    <div style="margin-top:14px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['aq1','aq2','aq3']); checkZugErr();">Quiz prüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="info-box success" style="margin-top:16px;">
+    <div class="icon">✅</div>
+    <div>
+      Theorie-Grundlagen bei Bedarf noch einmal im
+      <a href="lernpfad-lineare-gleichungen.html" style="font-weight:700; color:var(--blue-dark);">Pfad 09a</a> wiederholen.
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Lineare Gleichungen — Anwendungen<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/lineare-gleichungen-anwendungen-lernpfad/app.js"></script>
+</body>
+</html>

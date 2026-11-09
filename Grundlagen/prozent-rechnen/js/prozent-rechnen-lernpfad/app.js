@@ -60,6 +60,268 @@ function selectQuiz(el) {
   el.classList.add('selected');
 }
 
+function selectBarPick(el) {
+  var parent = el.closest('[data-quiz]');
+  parent.querySelectorAll('.bar-pick').forEach(function (o) {
+    o.classList.remove('selected', 'correct-answer', 'wrong-answer');
+  });
+  el.classList.add('selected');
+}
+
+function buildPctGrid(containerId, onCount) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  for (var i = 0; i < 100; i++) {
+    var cell = document.createElement('div');
+    cell.className = 'pct-cell' + (i < onCount ? ' on' : '');
+    el.appendChild(cell);
+  }
+}
+
+function updateIntroViz(val) {
+  var n = parseInt(val, 10) || 0;
+  buildPctGrid('introGrid', n);
+  var label = document.getElementById('introPctLabel');
+  var pie = document.getElementById('introPie');
+  var hole = document.getElementById('introPieHole');
+  if (label) label.innerHTML = n + '&nbsp;%';
+  if (pie) pie.style.background = 'conic-gradient(#2563EB 0 ' + n * 3.6 + 'deg, #E2E8F0 ' + n * 3.6 + 'deg)';
+  if (hole) hole.textContent = n + '%';
+}
+
+function updatePctLive(val) {
+  var n = parseInt(val, 10) || 0;
+  var bar = document.getElementById('pctLiveBar');
+  var label = document.getElementById('pctLiveLabel');
+  var hint = document.getElementById('pctLiveHint');
+  if (bar) bar.style.width = n + '%';
+  if (label) label.innerHTML = n + '&nbsp;%';
+  if (hint)
+    hint.textContent =
+      n +
+      ' von 100 Teilen · Dezimal: ' +
+      (n / 100).toLocaleString('de-AT', { maximumFractionDigits: 2 });
+}
+
+function updateGwpViz(val) {
+  var p = parseInt(val, 10) || 0;
+  var wPart = document.getElementById('gwpWPart');
+  var rest = document.getElementById('gwpRestPart');
+  var label = document.getElementById('gwpSliderLabel');
+  var hint = document.getElementById('gwpHint');
+  if (wPart) {
+    wPart.style.width = p + '%';
+    wPart.textContent = p > 8 ? 'W' : '';
+  }
+  if (rest) rest.style.width = 100 - p + '%';
+  if (label) label.innerHTML = p + '&nbsp;%';
+  if (hint) hint.textContent = 'Bei G = 200 und p = ' + p + ' % ist W = ' + ((200 * p) / 100).toLocaleString('de-AT');
+}
+
+function syncCalcViz() {
+  var g = parseNum(document.getElementById('pc_g').value);
+  var w = parseNum(document.getElementById('pc_w').value);
+  var p = parseNum(document.getElementById('pc_p').value);
+  var pct = Number.isFinite(p) ? p : Number.isFinite(g) && g !== 0 && Number.isFinite(w) ? (w / g) * 100 : 15;
+  pct = Math.max(0, Math.min(100, pct));
+  var wPart = document.getElementById('calcWPart');
+  var rest = document.getElementById('calcRestPart');
+  if (wPart) {
+    wPart.style.width = pct + '%';
+    wPart.textContent = pct > 8 ? 'W' : '';
+  }
+  if (rest) rest.style.width = 100 - pct + '%';
+}
+
+function updateChangeViz(val) {
+  var p = parseInt(val, 10) || 0;
+  var neu = 100 * (1 + p / 100);
+  var fill = document.getElementById('changeBarFill');
+  var label = document.getElementById('changeSliderLabel');
+  var hint = document.getElementById('changeHint');
+  var width = Math.max(5, Math.min(140, neu));
+  if (fill) {
+    fill.style.width = width + '%';
+    fill.textContent = neu.toLocaleString('de-AT', { maximumFractionDigits: 1 });
+    fill.className = 'part ' + (p >= 0 ? 'up-part' : 'down-part');
+  }
+  if (label) label.innerHTML = (p >= 0 ? '+' : '') + p + '&nbsp;%';
+  if (hint)
+    hint.textContent =
+      'Faktor ' +
+      (1 + p / 100).toLocaleString('de-AT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+      ' · neuer Wert = ' +
+      neu.toLocaleString('de-AT', { maximumFractionDigits: 1 });
+}
+
+function demoPlusMinusTrap() {
+  var hint = document.getElementById('trapHint');
+  var fill = document.getElementById('changeBarFill');
+  if (hint) {
+    hint.style.display = 'block';
+    hint.innerHTML =
+      '<strong>Schritt 1:</strong> 100 · 1,10 = 110 &nbsp;→&nbsp; <strong>Schritt 2:</strong> 110 · 0,90 = <strong>99</strong> — nicht zurück auf 100!';
+  }
+  if (fill) {
+    fill.className = 'part down-part';
+    fill.style.width = '99%';
+    fill.textContent = '99';
+  }
+  var slider = document.getElementById('changeSlider');
+  if (slider) slider.value = '-1';
+  var label = document.getElementById('changeSliderLabel');
+  if (label) label.innerHTML = 'Ergebnis: 99';
+}
+
+function updatePriceTag(val) {
+  var p = parseInt(val, 10) || 0;
+  var oldP = 120;
+  var save = (oldP * p) / 100;
+  var neu = oldP - save;
+  var badge = document.getElementById('priceBadge');
+  var oldEl = document.getElementById('priceOld');
+  var newEl = document.getElementById('priceNew');
+  var saveEl = document.getElementById('priceSave');
+  var label = document.getElementById('pricePctLabel');
+  var pay = document.getElementById('pricePayPart');
+  var savePart = document.getElementById('priceSavePart');
+  if (badge) badge.textContent = '\u2212' + p + ' %';
+  if (oldEl) oldEl.textContent = oldP.toFixed(2).replace('.', ',') + ' \u20ac';
+  if (newEl) newEl.textContent = neu.toFixed(2).replace('.', ',') + ' \u20ac';
+  if (saveEl) saveEl.textContent = 'Ersparnis W = ' + save.toFixed(2).replace('.', ',') + ' \u20ac';
+  if (label) label.innerHTML = p + '&nbsp;%';
+  if (pay) {
+    pay.style.width = 100 - p + '%';
+    pay.textContent = p < 85 ? 'zahlst' : '';
+  }
+  if (savePart) {
+    savePart.style.width = p + '%';
+    savePart.textContent = p > 12 ? 'Rabatt' : '';
+  }
+}
+
+function updatePermilleViz(val) {
+  var pm = parseInt(val, 10) || 0;
+  var asPct = pm / 10;
+  var cells = Math.max(1, Math.round(asPct));
+  buildPctGrid('permilleGridPct', cells);
+  var cellsEl = document.getElementById('permilleGridPct');
+  if (cellsEl) {
+    var list = cellsEl.querySelectorAll('.pct-cell');
+    list.forEach(function (c, i) {
+      c.classList.toggle('on', i < cells);
+      c.classList.toggle('tiny', false);
+    });
+  }
+  var label = document.getElementById('pmSliderLabel');
+  var hint = document.getElementById('pmHint');
+  var gridLabel = document.getElementById('pmGridPctLabel');
+  if (label) label.innerHTML = pm + '&nbsp;\u2030';
+  if (hint)
+    hint.textContent =
+      pm +
+      ' \u2030 = ' +
+      asPct.toLocaleString('de-AT', { maximumFractionDigits: 1 }) +
+      ' % = ' +
+      (pm / 1000).toLocaleString('de-AT', { maximumFractionDigits: 3 });
+  if (gridLabel)
+    gridLabel.textContent =
+      '≈ ' + asPct.toLocaleString('de-AT', { maximumFractionDigits: 1 }) + ' % markiert (gerundet auf Kacheln)';
+}
+
+var trainMatchData = [
+  {
+    left: '25 % Rabatt auf einen Preis',
+    correct: 'neu = alt · 0,75',
+    options: ['neu = alt · 0,75', 'neu = alt · 1,25', 'p = W/G · 1000', 'W = G · 25']
+  },
+  {
+    left: 'Aufschlag 15 % (Netto → Brutto)',
+    correct: 'neu = alt · 1,15',
+    options: ['neu = alt · 0,15', 'neu = alt · 1,15', 'W = G / 15', 'p = 115']
+  },
+  {
+    left: 'Anteil: 18 von 150',
+    correct: 'p = W/G · 100',
+    options: ['p = W/G · 100', 'neu = alt · 1,18', 'W = G + 18', 'p = W · G']
+  },
+  {
+    left: 'Ausschuss in Promille',
+    correct: 'p‰ = W/G · 1000',
+    options: ['p = W/G · 100', 'p‰ = W/G · 1000', 'neu = alt · 0,001', 'G = W · 100']
+  }
+];
+
+function buildTrainMatch() {
+  var el = document.getElementById('trainMatch');
+  if (!el) return;
+  el.innerHTML = '';
+  trainMatchData.forEach(function (item, i) {
+    var row = document.createElement('div');
+    row.className = 'match-row';
+    row.dataset.correct = item.correct;
+    var opts = item.options
+      .map(function (o) {
+        return '<option value="' + o.replace(/"/g, '&quot;') + '">' + o + '</option>';
+      })
+      .join('');
+    row.innerHTML =
+      '<label>' +
+      (i + 1) +
+      '. ' +
+      item.left +
+      '</label>' +
+      '<select aria-label="Zuordnung ' +
+      (i + 1) +
+      '"><option value="">— wählen —</option>' +
+      opts +
+      '</select>';
+    el.appendChild(row);
+  });
+}
+
+function checkTrainMatch() {
+  var el = document.getElementById('trainMatch');
+  var fb = document.getElementById('fb_train_match');
+  var rows = el.querySelectorAll('.match-row');
+  var allOk = true;
+  var answered = true;
+  rows.forEach(function (row) {
+    var sel = row.querySelector('select');
+    if (!sel.value) {
+      answered = false;
+      allOk = false;
+      sel.style.borderColor = '#E11D48';
+      return;
+    }
+    if (sel.value === row.dataset.correct) {
+      sel.style.borderColor = '#16A34A';
+      sel.style.background = '#ECFDF3';
+    } else {
+      sel.style.borderColor = '#E11D48';
+      sel.style.background = '#FEF2F2';
+      allOk = false;
+    }
+  });
+  if (!answered) {
+    fb.className = 'feedback incorrect';
+    fb.style.display = 'block';
+    fb.textContent = 'Bitte alle Zeilen zuordnen.';
+    return;
+  }
+  if (allOk) {
+    fb.className = 'feedback correct';
+    fb.style.display = 'block';
+    fb.textContent = '\u2705 Alle Zuordnungen stimmen!';
+    markComplete(7);
+  } else {
+    fb.className = 'feedback incorrect';
+    fb.style.display = 'block';
+    fb.textContent = '\u274c Noch nicht alles richtig — prüfe die markierten Zeilen.';
+  }
+}
+
 function checkQuizGroup(tabIdx, quizIds) {
   var allCorrect = true;
   quizIds.forEach(function (qid) {
@@ -119,6 +381,7 @@ function runPercentCalc() {
       return;
     }
     var W = (g * p) / 100;
+    document.getElementById('pc_w').value = String(W).replace('.', ',');
     out.style.color = 'var(--green)';
     out.textContent =
       'W = G \u00b7 p / 100 = ' +
@@ -134,6 +397,7 @@ function runPercentCalc() {
       return;
     }
     var G = (w * 100) / p;
+    document.getElementById('pc_g').value = String(G).replace('.', ',');
     out.style.color = 'var(--green)';
     out.textContent =
       'G = W \u00b7 100 / p = ' +
@@ -149,6 +413,7 @@ function runPercentCalc() {
       return;
     }
     var P = (w / g) * 100;
+    document.getElementById('pc_p').value = String(P).replace('.', ',');
     out.style.color = 'var(--green)';
     out.textContent =
       'p = W / G \u00b7 100 = ' +
@@ -159,6 +424,7 @@ function runPercentCalc() {
       P.toLocaleString('de-AT', { maximumFractionDigits: 4 }) +
       ' %';
   }
+  syncCalcViz();
 }
 
 function checkThreeSizes() {
@@ -244,17 +510,19 @@ function checkPermille() {
 function checkMixed() {
   var a = parseNum(document.getElementById('mx_a').value);
   var b = parseNum(document.getElementById('mx_b').value);
+  var c = parseNum(document.getElementById('mx_c').value);
   var fb = document.getElementById('fb_mx');
-  if (approxEq(a, 126.5, 0.1) && approxEq(b, 25, 0.1)) {
+  if (approxEq(a, 126.5, 0.1) && approxEq(b, 25, 0.1) && approxEq(c, 60, 0.1)) {
     fb.className = 'feedback correct';
     fb.style.display = 'block';
     fb.textContent =
-      '\u2705 110 \u00b7 1,15 = 126,5; 15 ist 25\u00a0% von 60.';
+      '\u2705 110 \u00b7 1,15 = 126,5; 15 ist 25\u00a0% von 60; 80 \u00b7 0,75 = 60.';
     markComplete(7);
   } else {
     fb.className = 'feedback incorrect';
     fb.style.display = 'block';
-    fb.textContent = '\u274c a) +15\u00a0% \u21d2 \u00b7 1,15. b) 15/60\u00b7100 = 25.';
+    fb.textContent =
+      '\u274c a) +15\u00a0% \u21d2 \u00b7 1,15. b) 15/60\u00b7100 = 25. c) \u221225\u00a0% \u21d2 \u00b7 0,75.';
   }
 }
 
@@ -311,6 +579,18 @@ var finalQuizData = [
     opts: ['12\u00a0%', '3\u00a0%', '0,3\u00a0%', '30\u00a0%'],
     correct: 1,
     explain: '12/400 \u00b7 100 = 3\u00a0%.'
+  },
+  {
+    q: 'Ein Balken ist zu 3/4 gefüllt. Das sind \u2026',
+    opts: ['25\u00a0%', '50\u00a0%', '75\u00a0%', '90\u00a0%'],
+    correct: 2,
+    explain: '3/4 = 0,75 = 75\u00a0%.'
+  },
+  {
+    q: '+10\u00a0% und danach \u221210\u00a0% auf 100 ergeben \u2026',
+    opts: ['wieder 100', '99', '110', '90'],
+    correct: 1,
+    explain: '100 · 1,1 · 0,9 = 99 — die Falle!'
   }
 ];
 
@@ -415,7 +695,7 @@ function evaluateFinalQuiz() {
   if (pct === 100) {
     msg = 'Ausgezeichnet — Prozent und Promille beherrschst du sicher!';
     badges = '<span class="earned-badge gold">Gold \u2014 Prozentrechnen</span>';
-  } else if (pct >= 75) {
+  } else if (pct >= 70) {
     msg = 'Sehr gut! Schau dir die markierten Fragen noch einmal an.';
     badges = '<span class="earned-badge silver">Silber \u2014 solider Stand</span>';
   } else {
@@ -424,7 +704,7 @@ function evaluateFinalQuiz() {
   }
   document.getElementById('finalMessage').textContent = msg;
   document.getElementById('badgeContainer').innerHTML = badges;
-  if (score >= 6) markComplete(8);
+  if (score >= 7) markComplete(8);
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise().catch(function () {});
 }
 
@@ -438,6 +718,15 @@ function resetFinalQuiz() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  buildPctGrid('introGrid', 20);
+  updateIntroViz(20);
+  updatePctLive(25);
+  updateGwpViz(15);
+  syncCalcViz();
+  updateChangeViz(0);
+  updatePriceTag(25);
+  updatePermilleViz(3);
+  buildTrainMatch();
   updateProgress();
   buildFinalQuiz();
 });

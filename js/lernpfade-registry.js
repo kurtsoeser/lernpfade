@@ -12,7 +12,7 @@
  * 6. Semester: Überkapitel „Differential- und Integralrechnung“ (Ordner Differential-Integralrechnung) mit Differenzial-/Integralrechnung sowie Wirtschaftsmathematik (Kosten-/Preistheorie, Optimierung).
  * 5. Semester (Hub 01–08): Zins/Zinseszins, Rente, Tilgung; Exp./Log.; lineare, exponentielle, beschränkte Wachstums-/Abnahmeprozesse; logistisches Wachstum.
  * 4. Semester (Hub-Reihenfolge 01–08): Funktionen Grundlagen, lineare Funktionen; LGS, Anwendungen LGS; quadratische Funktionen; quadratische Gleichungen*; Matrizen; Trigonometrie.
- * 3. Semester / Grundlagen (A): Bausteine 01–09 — inkl. lineare Gleichung in einer Variablen (Ordner Gleichungen/lineare-gleichungen); quadratische Gleichungen siehe 4. Sem. (06).
+ * 3. Semester / Grundlagen (A): Bausteine 01–09 — inkl. lineare Gleichung in einer Variablen (Ordner Gleichungen/lineare-gleichungen: 09a Theorie, 09b Anwendungen); quadratische Gleichungen siehe 4. Sem. (06).
  *
  * Überkapitel-Buchstaben (Reihenfolge in `chapters`, Lehrplan/GK-nah): A Grundlagen, B Gleichungen,
  * C Matrizen, D Trigonometrie, E Funktionen, F Finanzmathematik, G Wachstums- und Abnahmeprozesse,
@@ -103,7 +103,7 @@
               cardTitle: 'Rechnen mit Prozenten',
               semesterTopicCode: '03',
               description:
-                'Prozent und Promille; G, W, p; Erhöhen/Vermindern; Kontextaufgaben, Promille, interaktiver Rechner und Quiz.',
+                'Prozent und Promille mit Live-Balken, 100er-Raster und Preisschild; G/W/p, Faktoren, Zuordnungen, Kontext und Abschlussquiz.',
               semesterId: 's3',
               order: 30
             }
@@ -127,7 +127,7 @@
               cardTitle: 'Maßeinheiten',
               semesterTopicCode: '04',
               description:
-                'Längen, Flächen, Volumen, Zeit, Masse — Beziehungen und Umrechnungen — Inhalt wird ergänzt.',
+                'Längen, Flächen, Raum-/Hohlmaße, Zeit, Masse: interaktive Leitern, Zuordnungen, Selbstkontroll-Trainer, Notebook-Kontext, Tempo km/h↔m/s und Abschlussquiz.',
               semesterId: 's3',
               order: 40
             }
@@ -151,7 +151,7 @@
               cardTitle: 'Potenzen',
               semesterTopicCode: '05',
               description:
-                'Rechengesetze für ganzzahlige und rationale Exponenten; Potenz- und Wurzelform — Inhalt wird ergänzt.',
+                'Potenzregeln, Quadrat/Kubus-Visuals, rationale Exponenten mit Würfel-Einstieg, Umwandlung Potenz↔Wurzel, Holzbretter-SRDP und Abschlussquiz.',
               semesterId: 's3',
               order: 50
             }
@@ -174,7 +174,7 @@
               cardTitle: 'Gleitkommadarstellung',
               semesterTopicCode: '06',
               description:
-                'Fest- und Gleitkomma, Wechsel der Darstellung und Rechnen — Inhalt wird ergänzt.',
+                'Googol & Zehnerpotenzen, Fest↔Gleitkomma, Vorsilben, Rechnen, SRDP und Größenordnungen.',
               semesterId: 's3',
               order: 60
             }
@@ -198,7 +198,7 @@
               cardTitle: 'Terme',
               semesterTopicCode: '07',
               description:
-                'Termumformungen mit Begründung, Struktur erkennen, Technologie gezielt nutzen — Inhalt wird ergänzt.',
+                'Pakete/Volumen, Zahlenspielereien, Pyramidenzahlen, Distributivgesetz, Klammern, binomische Formeln mit Visuals, Sortier- und Zuordnungsübungen sowie Abschlussquiz.',
               semesterId: 's3',
               order: 70
             }
@@ -243,13 +243,24 @@
             {
               id: 'gl-lineare-1v',
               href: 'lernpfad-lineare-gleichungen.html',
-              navLabel: '09 Lineare Gleichungen',
-              cardTitle: 'Lineare Gleichungen',
-              semesterTopicCode: '09',
+              navLabel: '09a Lineare Gleichungen — Theorie',
+              cardTitle: 'Theorie / Grundlagen',
+              semesterTopicCode: '09a',
               description:
-                'Eine Variable: lösen, Lösungsmenge deuten und dokumentieren; Sachaufgaben Prozent und Bewegung — Inhalt wird ergänzt.',
+                'Grundform ax=b, Äquivalenzumformungen, Lösungsmenge, Algebra-Training, Z 4.3 und Text→Gleichung — interaktiv mit Tipps, Matching und Quiz.',
               semesterId: 's3',
               order: 90
+            },
+            {
+              id: 'gl-lineare-1v-app',
+              href: 'lernpfad-lineare-gleichungen-anwendungen.html',
+              navLabel: '09b Lineare Gleichungen — Anwendungen',
+              cardTitle: 'Anwendungen (Prozent, Mischung, Bewegung)',
+              semesterTopicCode: '09b',
+              description:
+                'Prozentgleichungen, Mischungstabelle, Bewegungsdiagramme, gestaffelte Lösungshinweise und SRDP-Karten — mit Eingabeprüfung und Abschlussquiz.',
+              semesterId: 's3',
+              order: 91
             }
           ],
           order: 90

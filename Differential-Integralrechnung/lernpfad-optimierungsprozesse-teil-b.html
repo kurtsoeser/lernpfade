@@ -15,6 +15,65 @@ MathJax = {
 <link rel="stylesheet" href="../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
 <script src="../js/lernpfade-registry.js"></script>
 <script src="../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.reg-grid { display:grid; grid-template-columns:1fr; gap:14px; margin-top:14px; }
+@media (min-width: 920px) { .reg-grid { grid-template-columns:1.05fr 0.95fr; align-items:start; } }
+.reg-card { border:1px solid #E2E8F0; border-radius:14px; background:#fff; padding:14px 16px; box-shadow:0 1px 2px rgba(15,23,42,.06); }
+.reg-card h3 { margin:0 0 8px 0; font-size:1.05rem; color:var(--blue-dark); }
+.reg-canvas-wrap { margin-top:10px; text-align:center; }
+.reg-canvas-wrap canvas { width:100%; max-width:760px; height:auto; border:1px solid #D8E2EF; border-radius:12px; background:#FBFCFE; }
+.reg-toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0; }
+.reg-toolbar button, .model-chip {
+  border:2px solid var(--blue); background:#fff; color:var(--blue-dark); border-radius:999px;
+  padding:7px 12px; font-family:Nunito,system-ui,sans-serif; font-weight:800; cursor:pointer; font-size:.84rem;
+}
+.reg-toolbar button:hover, .model-chip:hover { background:#EFF6FF; }
+.model-chip.active { background:var(--blue); color:#fff; }
+.reg-metrics { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px; }
+.metric-box { border:1px solid #E2E8F0; border-radius:12px; background:#F8FAFC; padding:10px 12px; }
+.metric-box strong { display:block; color:var(--blue-dark); font-size:.82rem; margin-bottom:4px; }
+.metric-box span { font-weight:800; color:var(--text); }
+.data-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:.9rem; }
+.data-table th, .data-table td { border-bottom:1px solid #E2E8F0; padding:7px 6px; text-align:right; }
+.data-table th:first-child, .data-table td:first-child { text-align:left; }
+.mini-input-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+.mini-input-row label { font-size:.86rem; font-weight:700; color:var(--text); }
+.mini-input-row input, .model-select {
+  width:100%; box-sizing:border-box; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.residual-bars { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+.res-row { display:grid; grid-template-columns:72px 1fr 58px; gap:8px; align-items:center; font-size:.86rem; }
+.res-track { height:14px; border-radius:999px; background:#EEF2F7; overflow:hidden; position:relative; }
+.res-track::before { content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; background:#CBD5E1; }
+.res-fill { height:100%; width:0; transform-origin:left center; background:#2563EB; border-radius:999px; position:absolute; left:50%; }
+.res-fill.neg { background:#E11D48; transform-origin:right center; left:auto; right:50%; }
+.model-verdict { margin-top:10px; padding:10px 12px; border-radius:12px; border-left:5px solid var(--blue); background:#EFF6FF; line-height:1.6; }
+.task-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width: 780px) { .task-grid { grid-template-columns:repeat(3,1fr); } }
+.task-card { border:1px solid #E2E8F0; background:#fff; border-radius:12px; padding:14px; }
+.task-card h3 { margin:0 0 8px 0; font-size:1rem; color:var(--blue-dark); }
+.quiz-stepper-local { display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 10px; }
+.quiz-step-dot { width:32px; height:32px; border-radius:999px; border:2px solid #CBD5E1; background:#fff; color:#334155; font-weight:800; cursor:pointer; }
+.quiz-step-dot.active { border-color:#2563EB; background:#EFF6FF; color:#1D4ED8; }
+.quiz-step-dot.answered { border-color:#16A34A; background:#ECFDF3; color:#166534; }
+.reg-note { font-size:.86rem; color:var(--text-light); line-height:1.55; }
+.ggb-source-box { margin-top:14px; border:1px solid #D8E2EF; border-radius:14px; background:#F8FAFC; overflow:hidden; }
+.ggb-source-box summary { cursor:pointer; padding:13px 16px; font-weight:800; color:var(--blue-dark); }
+.ggb-source-box summary:hover { background:#EFF6FF; }
+.ggb-source-inner { padding:0 16px 16px; }
+.ggb-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width: 860px) { .ggb-grid { grid-template-columns:1fr 1fr; } }
+.ggb-frame-card { border:1px solid #E2E8F0; border-radius:12px; background:#fff; padding:12px; }
+.ggb-frame-card h3 { margin:0 0 6px; font-size:1rem; color:var(--blue-dark); }
+.ggb-frame-card p { margin:0 0 10px; line-height:1.55; font-size:.9rem; }
+.ggb-frame {
+  width:100%; height:min(64vh,520px); min-height:360px; border:0; border-radius:10px;
+  background:#fff; box-shadow:inset 0 0 0 1px #E2E8F0;
+}
+.ggb-link-row { margin-top:8px; font-size:.86rem; }
+.ggb-link-row a { color:var(--blue-dark); font-weight:700; }
+</style>
 </head>
 <body data-current-page="s6-optimierung-b" data-page-type="lernpfad" data-chapter-folder="Differential-Integralrechnung">
 
@@ -23,7 +82,7 @@ MathJax = {
     <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
   </div>
   <div class="progress-label">
-    <span id="progressText">Station 0 von 4 besucht</span>
+    <span id="progressText">Station 0 von 8 besucht</span>
     <span id="progressPercent">0 %</span>
   </div>
 </div>
@@ -32,7 +91,7 @@ MathJax = {
 
 <div class="hero">
   <h1>Optimierungsprozesse - Teil B</h1>
-  <p class="subtitle">Methode der kleinsten Quadrate: Daten modellieren, Funktionsgleichungen bestimmen und die Güte der Ergebnisse bewerten.</p>
+  <p class="subtitle">Regression und Methode der kleinsten Quadrate: Daten modellieren, Residuen verstehen, Modellgleichungen bestimmen und Ergebnisse kritisch bewerten.</p>
   <span class="badge">6. Semester</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Zur Übersicht Semester&nbsp;6</a>
@@ -44,101 +103,278 @@ MathJax = {
 
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Ziel</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Vorgehen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Aufgaben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Residuen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Kleinste Quadrate</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Regressionslabor</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Güte \(R^2\)</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Modellwahl</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Aufgaben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Quiz</button>
 </div>
 
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg: Regression</div>
-  <p>Bei realen Daten liegen Messpunkte meist nicht exakt auf einer Geraden oder Kurve. Gesucht wird daher ein Modell, das die Daten <strong>insgesamt bestmöglich</strong> beschreibt.</p>
+  <div class="ribbon">Einstieg: Aus Daten ein Modell machen</div>
+  <p>Bei realen Messwerten liegen die Punkte fast nie exakt auf einer Geraden oder Kurve. Regression bedeutet: Wir wählen einen Modelltyp und suchen jene Funktion, die den Datensatz insgesamt möglichst gut beschreibt.</p>
   <div class="info-box concept">
-    <div class="icon">📊</div>
+    <div class="icon">1</div>
     <div>
-      <strong>Grundidee</strong>
-      <ul style="margin:8px 0 0 18px; line-height:1.65;">
-        <li>Residuen: \(r_i=y_i-\hat y_i\)</li>
-        <li>Gütekriterium: \(\sum (y_i-\hat y_i)^2\) möglichst klein</li>
-        <li>Ergebnis: bestangepasste Modellfunktion innerhalb der gewählten Funktionsklasse</li>
-      </ul>
+      <strong>Beispiel: Lernzeit und Punkte</strong>
+      <p style="margin:8px 0 0; line-height:1.65;">Eine Klasse sammelt Daten: Wie viele Stunden wurde für einen Test geübt, und wie viele Punkte wurden erreicht? Einzelne Personen weichen ab, aber ein Trend ist sichtbar. Ein lineares Modell kann helfen, den Zusammenhang grob zu beschreiben.</p>
     </div>
   </div>
-  <p class="source-note" style="font-size:0.84rem; color:var(--text-light); margin-top:12px; padding:10px 12px; background:#F8FAFC; border-radius:10px; border-left:4px solid var(--blue);">
-    Einstiegsmaterial: <a href="https://www.geogebra.org/m/KVBqUYT8" target="_blank" rel="noopener noreferrer">GeoGebra – Regression Lerneinheit</a>.
-  </p>
-  <div class="tab-nav">
-    <div></div>
-    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Ziel →</button>
+  <div class="reg-grid">
+    <div class="reg-card">
+      <h3>Datensatz A</h3>
+      <table class="data-table">
+        <thead><tr><th>Person</th><th>\(x\): Stunden</th><th>\(y\): Punkte</th></tr></thead>
+        <tbody>
+          <tr><td>A</td><td>1</td><td>42</td></tr>
+          <tr><td>B</td><td>2</td><td>50</td></tr>
+          <tr><td>C</td><td>3</td><td>57</td></tr>
+          <tr><td>D</td><td>4</td><td>63</td></tr>
+          <tr><td>E</td><td>5</td><td>69</td></tr>
+          <tr><td>F</td><td>6</td><td>76</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="reg-card">
+      <h3>Was gesucht ist</h3>
+      <p style="line-height:1.65;">Nicht eine Linie, die durch alle Punkte muss, sondern eine Linie, die <strong>im Durchschnitt möglichst wenig danebenliegt</strong>.</p>
+      <p class="reg-note">Genau deshalb quadriert man die Abweichungen: Positive und negative Fehler heben sich nicht gegenseitig auf, und große Fehler werden stärker bestraft.</p>
+    </div>
   </div>
+  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Residuen →</button></div>
 </div>
 
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Lernziel Teil B</div>
-  <div class="info-box success">
-    <div class="icon">📌</div>
-    <div>
-      <p style="margin:0;">Das Prinzip der <strong>Methode der kleinsten Quadrate</strong> und die zugrundeliegenden Ideen erläutern und die <strong>Güte der Ergebnisse</strong> bewerten; mit Technologieeinsatz für vorgegebene Modellfunktionen mit Hilfe der Methode der kleinsten Quadrate <strong>Funktionsgleichungen bestimmen</strong>.</p>
+  <div class="ribbon">Residuen: Wie weit liegt das Modell daneben?</div>
+  <p>Für jeden Datenpunkt berechnet das Modell einen geschätzten Wert \(\hat y_i\). Die Abweichung heißt Residuum:</p>
+  \[r_i=y_i-\hat y_i\]
+  <div class="reg-grid">
+    <div class="reg-card">
+      <h3>Residuen ausprobieren</h3>
+      <p class="reg-note">Ändere die Gerade \(\hat y=a\cdot x+b\). Beobachte, wie sich die Fehlerquadratsumme verändert.</p>
+      <div class="mini-input-row">
+        <label>Steigung \(a\)<input id="resSlope" type="number" value="6.6" step="0.1"></label>
+        <label>Achsenabschnitt \(b\)<input id="resIntercept" type="number" value="36.5" step="0.5"></label>
+      </div>
+      <div class="reg-metrics">
+        <div class="metric-box"><strong>Fehlerquadratsumme</strong><span id="resSse">-</span></div>
+        <div class="metric-box"><strong>Mittleres Residuum</strong><span id="resMean">-</span></div>
+      </div>
+      <div class="residual-bars" id="residualBars"></div>
+    </div>
+    <div class="reg-card">
+      <h3>Deutung</h3>
+      <ul style="line-height:1.7; margin:8px 0 0 18px;">
+        <li>\(r_i&gt;0\): Der echte Wert liegt über dem Modell.</li>
+        <li>\(r_i&lt;0\): Der echte Wert liegt unter dem Modell.</li>
+        <li>\(r_i=0\): Der Punkt liegt genau auf der Modellfunktion.</li>
+      </ul>
+      <div class="model-verdict">Eine gute Anpassung erkennt man nicht nur an kleinen Zahlen. Die Residuen sollten auch kein klares Muster zeigen.</div>
     </div>
   </div>
-  <div class="info-box concept" style="margin-top:12px;">
-    <div class="icon">🔑</div>
-    <div>
-      <strong>Begriffe</strong>
-      <p style="margin:8px 0 0 0; line-height:1.65;">Datenpunkte, Modellfunktion, Residuum, Fehlerquadratsumme, Regressionsfunktion, Bestimmtheitsmaß \(R^2\), Plausibilität.</p>
+  <details class="ggb-source-box">
+    <summary>GeoGebra dazu: Minimaleigenschaft des Mittelwerts öffnen</summary>
+    <div class="ggb-source-inner">
+      <p class="reg-note">Diese GeoGebra-Aktivität passt als Vorstufe: Sie zeigt, warum bei quadratischen Abweichungen der Mittelwert eine besondere Rolle spielt. Das ist die gleiche Denkfigur wie bei kleinsten Quadraten.</p>
+      <iframe class="ggb-frame" loading="lazy" allowfullscreen src="https://www.geogebra.org/material/iframe/id/bryqvM7q/width/900/height/560/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"></iframe>
+      <div class="ggb-link-row"><a href="https://www.geogebra.org/m/bryqvM7q" target="_blank" rel="noopener noreferrer">Applet in GeoGebra öffnen</a></div>
     </div>
-  </div>
-  <div class="tab-nav">
-    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
-    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Vorgehen →</button>
-  </div>
+  </details>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Kleinste Quadrate →</button></div>
 </div>
 
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Standard-Vorgehen in 5 Schritten</div>
-  <ol style="margin:6px 0 12px 20px; line-height:1.7;">
-    <li><strong>Daten darstellen:</strong> Streudiagramm erstellen und Trend erkennen.</li>
-    <li><strong>Modelltyp wählen:</strong> z. B. linear, quadratisch, exponentiell.</li>
-    <li><strong>Regression ausführen:</strong> Parameter per Technologie bestimmen.</li>
-    <li><strong>Güte prüfen:</strong> Residuenbild, Größe der Residuen, \(R^2\).</li>
-    <li><strong>Kontext deuten:</strong> Modell auf Plausibilität und Prognoseeignung bewerten.</li>
-  </ol>
-  <div class="info-box concept">
-    <div class="icon">🧠</div>
+  <div class="ribbon">Methode der kleinsten Quadrate</div>
+  <p>Die Regressionsfunktion wird so gewählt, dass die Summe der quadrierten Residuen möglichst klein ist:</p>
+  \[\sum_{i=1}^{n}(y_i-\hat y_i)^2 \rightarrow \min\]
+  <div class="info-box success">
+    <div class="icon">2</div>
     <div>
-      <strong>Merke</strong>
-      <p style="margin:8px 0 0 0; line-height:1.65;">Ein hohes \(R^2\) allein genügt nicht. Eine sinnvolle Modellentscheidung braucht immer auch die inhaltliche Deutung im Kontext.</p>
+      <strong>Warum Quadrate?</strong>
+      <p style="margin:8px 0 0; line-height:1.65;">Ohne Quadrieren könnten positive und negative Abweichungen einander aufheben. Durch Quadrate zählt jede Abweichung positiv, und große Fehler fallen stärker ins Gewicht.</p>
     </div>
   </div>
-  <div class="tab-nav">
-    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
-    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Aufgaben →</button>
+  <div class="task-grid">
+    <div class="task-card"><h3>1. Daten</h3><p>Messwerte erfassen und als Streudiagramm darstellen.</p></div>
+    <div class="task-card"><h3>2. Modelltyp</h3><p>Linear, quadratisch, exponentiell? Die Punktwolke und der Kontext geben Hinweise.</p></div>
+    <div class="task-card"><h3>3. Güte</h3><p>Residuen, Fehlerquadratsumme und \(R^2\) auswerten, danach fachlich deuten.</p></div>
   </div>
+  <details class="ggb-source-box" open>
+    <summary>GeoGebra-Werkbank: Regressionsgerade Schritt für Schritt</summary>
+    <div class="ggb-source-inner">
+      <p class="reg-note">Die folgenden Applets stammen aus deiner Regression-Lerneinheit. Sie passen gut zur Unterrichtsführung: erst Gerade finden, dann rechnerisch/CAS begründen.</p>
+      <div class="ggb-grid">
+        <div class="ggb-frame-card">
+          <h3>Regressionsgerade ermitteln</h3>
+          <p>Punktewolke betrachten, Trendlinie finden und die Idee der besten Geraden sichtbar machen.</p>
+          <iframe class="ggb-frame" loading="lazy" allowfullscreen src="https://www.geogebra.org/material/iframe/id/Q3VprCHa/width/900/height/560/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"></iframe>
+          <div class="ggb-link-row"><a href="https://www.geogebra.org/m/Q3VprCHa" target="_blank" rel="noopener noreferrer">Applet in GeoGebra öffnen</a></div>
+        </div>
+        <div class="ggb-frame-card">
+          <h3>CAS-Herleitung</h3>
+          <p>Für stärkere Gruppen: Wie entstehen die Parameter rechnerisch aus der Minimierungsbedingung?</p>
+          <iframe class="ggb-frame" loading="lazy" allowfullscreen src="https://www.geogebra.org/material/iframe/id/ztbWHWch/width/900/height/560/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"></iframe>
+          <div class="ggb-link-row"><a href="https://www.geogebra.org/m/ztbWHWch" target="_blank" rel="noopener noreferrer">Applet in GeoGebra öffnen</a></div>
+        </div>
+      </div>
+    </div>
+  </details>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Regressionslabor →</button></div>
 </div>
 
 <div class="tab-panel" id="panel3">
-  <div class="ribbon">Aufgaben und Sicherung</div>
-  <div class="info-box success">
-    <div class="icon">✍️</div>
-    <div>
-      <strong>Pflichtaufgaben</strong>
-      <ul style="margin:8px 0 0 18px; line-height:1.65;">
-        <li>Bestimme zu einem Datensatz eine lineare und eine quadratische Regressionsfunktion.</li>
-        <li>Berechne für ausgewählte Punkte Residuen und vergleiche die Modelle.</li>
-        <li>Bewerte die Modellgüte mit \(R^2\), Residuenverteilung und sachlicher Plausibilität.</li>
+  <div class="ribbon">Interaktiv: Regressionslabor</div>
+  <p>Wähle einen Datensatz und ein Modell. Das Diagramm zeigt Datenpunkte, Modellfunktion und Residuen. Beim eigenen Modell kannst du die Parameter selbst verändern.</p>
+  <div class="reg-grid">
+    <div class="reg-card">
+      <h3>Diagramm</h3>
+      <div class="reg-toolbar">
+        <button type="button" onclick="setRegDataset('study')">Lernzeit</button>
+        <button type="button" onclick="setRegDataset('ad')">Werbung</button>
+        <button type="button" onclick="setRegDataset('cooling')">Abkühlung</button>
+      </div>
+      <div class="reg-toolbar" id="modelChips">
+        <button type="button" class="model-chip active" data-model="linear" onclick="setRegModel('linear')">linear</button>
+        <button type="button" class="model-chip" data-model="quadratic" onclick="setRegModel('quadratic')">quadratisch</button>
+        <button type="button" class="model-chip" data-model="manual" onclick="setRegModel('manual')">eigene Gerade</button>
+      </div>
+      <div class="reg-canvas-wrap"><canvas id="regCanvas" width="760" height="460"></canvas></div>
+    </div>
+    <div class="reg-card">
+      <h3>Auswertung</h3>
+      <p id="regDatasetText" class="reg-note"></p>
+      <div id="manualControls" class="mini-input-row" style="display:none;">
+        <label>Steigung \(a\)<input id="manualSlope" type="range" min="-5" max="20" value="7" step="0.1"></label>
+        <label>Abschnitt \(b\)<input id="manualIntercept" type="range" min="-20" max="80" value="34" step="0.5"></label>
+      </div>
+      <div class="reg-metrics">
+        <div class="metric-box"><strong>Modell</strong><span id="regEq">-</span></div>
+        <div class="metric-box"><strong>\(R^2\)</strong><span id="regR2">-</span></div>
+        <div class="metric-box"><strong>SSE</strong><span id="regSse">-</span></div>
+        <div class="metric-box"><strong>Prognose bei \(x=7\)</strong><span id="regPred">-</span></div>
+      </div>
+      <div class="model-verdict" id="regVerdict"></div>
+    </div>
+  </div>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Güte →</button></div>
+</div>
+
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Bestimmtheitsmaß \(R^2\)</div>
+  <p>Das Bestimmtheitsmaß vergleicht die Fehler des Modells mit der Streuung um den Mittelwert:</p>
+  \[R^2=1-\frac{\sum(y_i-\hat y_i)^2}{\sum(y_i-\bar y)^2}\]
+  <div class="reg-grid">
+    <div class="reg-card">
+      <h3>\(R^2\)-Rechner</h3>
+      <p class="reg-note">Nutze den Datensatz aus dem Einstieg. Gib eine eigene Gerade ein und prüfe, wie gut sie ist.</p>
+      <div class="mini-input-row">
+        <label>Steigung \(a\)<input id="r2Slope" type="number" value="6.6" step="0.1"></label>
+        <label>Achsenabschnitt \(b\)<input id="r2Intercept" type="number" value="36.5" step="0.5"></label>
+      </div>
+      <div class="reg-metrics">
+        <div class="metric-box"><strong>SSE</strong><span id="r2Sse">-</span></div>
+        <div class="metric-box"><strong>SST</strong><span id="r2Sst">-</span></div>
+        <div class="metric-box"><strong>\(R^2\)</strong><span id="r2Value">-</span></div>
+        <div class="metric-box"><strong>Bewertung</strong><span id="r2Label">-</span></div>
+      </div>
+    </div>
+    <div class="reg-card">
+      <h3>Wichtig für die Prüfung</h3>
+      <ul style="line-height:1.7; margin:8px 0 0 18px;">
+        <li>\(R^2\) nahe 1 bedeutet: Das Modell erklärt viel Streuung der Daten.</li>
+        <li>\(R^2\) allein beweist nicht, dass das Modell fachlich sinnvoll ist.</li>
+        <li>Prognosen außerhalb des beobachteten Bereichs sind besonders kritisch.</li>
       </ul>
     </div>
   </div>
-  <div class="info-box concept" style="margin-top:12px;">
-    <div class="icon">✅</div>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Modellwahl →</button></div>
+</div>
+
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Modellwahl: Nicht nur die beste Zahl zählt</div>
+  <div class="info-box concept">
+    <div class="icon">3</div>
     <div>
-      <strong>Sicherung</strong>
-      <p style="margin:8px 0 0 0; line-height:1.65;">Jede Auswertung enthält: gewähltes Modell, Regressionsgleichung, Gütekriterien und klare Begründung, warum dieses Modell im gegebenen Kontext passend ist.</p>
+      <strong>Leitfrage</strong>
+      <p style="margin:8px 0 0; line-height:1.65;">Welches Modell passt zur Situation? Ein quadratisches Modell kann rechnerisch besser aussehen, aber außerhalb des Datenbereichs völlig unplausibel werden.</p>
     </div>
   </div>
-  <div class="tab-nav">
-    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
-    <a class="btn btn-next" href="lernpfad-integralrechnung.html">Weiter: Integralrechnung →</a>
+  <div class="task-grid">
+    <div class="task-card"><h3>Linear</h3><p>Konstante Änderungsrate. Gut, wenn die Punkte ungefähr entlang einer Geraden liegen.</p></div>
+    <div class="task-card"><h3>Quadratisch</h3><p>Beschleunigte Änderung oder gekrümmter Verlauf. Vorsicht bei langfristigen Prognosen.</p></div>
+    <div class="task-card"><h3>Exponentiell</h3><p>Prozentuale Veränderung. Typisch bei Wachstum, Zerfall oder Abkühlung in Richtung Umgebung.</p></div>
   </div>
+  <div class="model-verdict">Eine vollständige Antwort enthält immer: Modellgleichung, Gütekennzahl, Residuenbeobachtung und sachliche Begründung.</div>
+  <details class="ggb-source-box">
+    <summary>GeoGebra dazu: Mittelwertspunkt, Kovarianzen und Trendlinien</summary>
+    <div class="ggb-source-inner">
+      <p class="reg-note">Diese Applets eignen sich für die Vertiefung: Warum liegt die Regressionsgerade durch den Mittelwertspunkt? Wie hängen Kovarianzen mit dem Trend zusammen? Was passiert bei unterschiedlichen Trendlinien?</p>
+      <div class="ggb-grid">
+        <div class="ggb-frame-card">
+          <h3>Mittelwertspunkt und Trendlinie</h3>
+          <p>Verbindet den Mittelwertpunkt mit der Lage der Regressionsgeraden.</p>
+          <iframe class="ggb-frame" loading="lazy" allowfullscreen src="https://www.geogebra.org/material/iframe/id/GxzhYH3z/width/900/height/560/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"></iframe>
+          <div class="ggb-link-row"><a href="https://www.geogebra.org/m/GxzhYH3z" target="_blank" rel="noopener noreferrer">Applet in GeoGebra öffnen</a></div>
+        </div>
+        <div class="ggb-frame-card">
+          <h3>Kovarianzen</h3>
+          <p>Visualisiert, wie gleichgerichtete oder gegengerichtete Abweichungen den Zusammenhang prägen.</p>
+          <iframe class="ggb-frame" loading="lazy" allowfullscreen src="https://www.geogebra.org/material/iframe/id/nJE9kdSK/width/900/height/560/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"></iframe>
+          <div class="ggb-link-row"><a href="https://www.geogebra.org/m/nJE9kdSK" target="_blank" rel="noopener noreferrer">Applet in GeoGebra öffnen</a></div>
+        </div>
+        <div class="ggb-frame-card">
+          <h3>Verschiedene Trendlinien</h3>
+          <p>Vergleicht lineare und nichtlineare Anpassungen und stützt die Diskussion zur Modellwahl.</p>
+          <iframe class="ggb-frame" loading="lazy" allowfullscreen src="https://www.geogebra.org/material/iframe/id/MNsyRa4N/width/900/height/560/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"></iframe>
+          <div class="ggb-link-row"><a href="https://www.geogebra.org/m/MNsyRa4N" target="_blank" rel="noopener noreferrer">Applet in GeoGebra öffnen</a></div>
+        </div>
+        <div class="ggb-frame-card">
+          <h3>Daten für Trendlinien</h3>
+          <p>Übungsdaten, um Modelltypen bewusst auszuwählen und Prognosen kritisch zu prüfen.</p>
+          <iframe class="ggb-frame" loading="lazy" allowfullscreen src="https://www.geogebra.org/material/iframe/id/gsXXyjXC/width/900/height/560/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/true/ctl/false"></iframe>
+          <div class="ggb-link-row"><a href="https://www.geogebra.org/m/gsXXyjXC" target="_blank" rel="noopener noreferrer">Applet in GeoGebra öffnen</a></div>
+        </div>
+      </div>
+    </div>
+  </details>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Aufgaben →</button></div>
+</div>
+
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Aufgaben und Sicherung</div>
+  <div class="task-grid">
+    <div class="task-card">
+      <h3>Basis</h3>
+      <p>Berechne zu \( \hat y=6{,}6x+36{,}5 \) die Residuen für die sechs Lernzeit-Datenpunkte.</p>
+    </div>
+    <div class="task-card">
+      <h3>Technologie</h3>
+      <p>Bestimme für einen Datensatz mit Taschenrechner, GeoGebra oder Tabellenkalkulation lineare und quadratische Regression.</p>
+    </div>
+    <div class="task-card">
+      <h3>Bewertung</h3>
+      <p>Entscheide begründet, welches Modell im Kontext besser geeignet ist. Begründe auch, wo Prognosen kritisch werden.</p>
+    </div>
+  </div>
+  <div class="info-box success" style="margin-top:14px;">
+    <div class="icon">4</div>
+    <div>
+      <strong>Sicherungssatz</strong>
+      <p style="margin:8px 0 0; line-height:1.65;">Die Methode der kleinsten Quadrate liefert innerhalb einer gewählten Funktionsklasse das Modell mit minimaler Fehlerquadratsumme. Ob dieses Modell auch inhaltlich gut ist, entscheidet man mit Gütemaßen, Residuen und Kontextwissen.</p>
+    </div>
+  </div>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Quiz →</button></div>
+</div>
+
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>Prüfe, ob die wichtigsten Ideen sitzen: Residuen, kleinste Quadrate, \(R^2\), Modellwahl und Deutung.</p>
+  <div class="quiz-stepper-local" id="opbQuizStepper"></div>
+  <div id="opbQuizContainer"></div>
+  <div id="opbQuizResult" class="feedback" style="display:none;"></div>
+  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button><a class="btn btn-next" href="lernpfad-integralrechnung.html">Weiter: Integralrechnung →</a></div>
 </div>
 
 <div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
@@ -148,6 +384,6 @@ MathJax = {
 
 </div>
 
-<script src="js/lernpfad-platzhalter-app.js"></script>
+<script src="js/optimierung-b-lernpfad/app.js"></script>
 </body>
 </html>

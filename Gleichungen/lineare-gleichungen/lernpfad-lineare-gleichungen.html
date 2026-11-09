@@ -3,59 +3,554 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lernpfad: Lineare Gleichungen</title>
+<title>Lernpfad: Lineare Gleichungen — Theorie</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 <link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
 <link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
 <script src="../../js/lernpfade-registry.js"></script>
 <script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.step-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px 16px; background:#fff; margin-top:12px; }
+.step-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.step-ops { font-family:Nunito,system-ui,sans-serif; color:#64748B; font-size:.88rem; margin:.35rem 0; }
+.viz-panel { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#fff; margin-top:14px; box-shadow:0 1px 2px rgba(15,23,42,.05); }
+.viz-panel h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.mini-note { font-size:.86rem; color:var(--text-light); margin-top:6px; }
+.match-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.match-row {
+  display:grid; grid-template-columns:1fr; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+@media (min-width:700px){ .match-row { grid-template-columns:1.4fr 1fr; } }
+.match-row label { font-weight:700; }
+.match-row select {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.hint-ladder { margin-top:10px; }
+.hint-ladder .hint-step {
+  display:none; margin-top:8px; padding:10px 12px; border-radius:10px;
+  background:#FFFBEB; border:1px solid #F59E0B; font-size:.92rem; line-height:1.55;
+}
+.hint-ladder .hint-step.visible { display:block; }
+.hint-ladder .hint-step strong { color:#92400E; }
+.btn-hint { background:#F59E0B; color:#fff; border:none; border-radius:10px; padding:8px 14px; font-weight:700; cursor:pointer; font-family:Nunito,system-ui,sans-serif; }
+.btn-hint:hover { background:#D97706; }
+.balance-viz {
+  display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center;
+  margin:12px 0; padding:14px; border-radius:14px; background:linear-gradient(180deg,#EFF6FF,#F8FAFC);
+  border:1px solid #BFDBFE;
+}
+.balance-side {
+  min-height:72px; border-radius:12px; padding:12px; text-align:center;
+  background:#fff; border:2px solid #93C5FD; font-weight:800; color:var(--blue-dark);
+  display:flex; align-items:center; justify-content:center;
+}
+.balance-eq { font-size:1.6rem; font-weight:900; color:#2563EB; }
+.eq-bank { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.eq-chip {
+  border:2px solid #E2E8F0; border-radius:999px; padding:8px 12px; background:#fff;
+  cursor:pointer; font-weight:700; font-size:.9rem;
+}
+.eq-chip:hover { border-color:#93C5FD; }
+.eq-chip.selected { border-color:#2563EB; background:#EFF6FF; }
+.eq-chip.correct-answer { border-color:#16A34A; background:#ECFDF3; }
+.eq-chip.wrong-answer { border-color:#E11D48; background:#FEF2F2; }
+.srdp-card {
+  border:1px solid #BBF7D0; border-radius:14px; overflow:hidden; margin-top:12px; background:#F0FDF4;
+}
+.srdp-card .head {
+  background:#166534; color:#fff; padding:10px 14px; font-weight:800; font-size:.95rem;
+}
+.srdp-card .body { padding:14px 16px; background:#fff; }
+.grid-2 { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:780px){ .grid-2 { grid-template-columns:1fr 1fr; } }
+.self-check {
+  margin-top:10px; padding:10px 12px; border-radius:10px; border:1px dashed #94A3B8; background:#F8FAFC;
+}
+.self-check label { display:flex; gap:8px; align-items:flex-start; margin:6px 0; font-size:.92rem; cursor:pointer; }
+</style>
 </head>
 <body data-current-page="gl-lineare-1v" data-page-type="lernpfad" data-chapter-folder="Gleichungen/lineare-gleichungen">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 7 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
-  <h1>Lineare Gleichungen</h1>
-  <p class="subtitle">Eine Variable: lösen, Lösungsmenge, Prozent und Bewegung — Inhalte werden ergänzt.</p>
-  <span class="badge">Gleichungen · 3.&nbsp;Sem.</span>
+  <h1>Lineare Gleichungen — Theorie</h1>
+  <p class="subtitle">Grundform \(ax=b\), Äquivalenzumformungen, Lösungsmenge und Text → Gleichung — ohne Anwendungsaufgaben.</p>
+  <span class="badge">3.&nbsp;Semester · Thema 09a</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
     · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">Gleichungen</a>
     · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
-    <a href="../../Grundlagen/formeln/index.html" style="color:var(--blue-dark); font-weight:600;">← 08 Formeln (Grundlagen)</a>
-    · <a href="../../Funktionen/funktionen-grundlagen/index.html" style="color:var(--blue-dark); font-weight:600;">4.&nbsp;Sem. · Funktionen</a>
+    <a href="../../Grundlagen/formeln/lernpfad-formeln.html" style="color:var(--blue-dark); font-weight:600;">← 08 Formeln</a>
+    · <a href="lernpfad-lineare-gleichungen-anwendungen.html" style="color:var(--blue-dark); font-weight:600;">09b Anwendungen →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Grundform</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Umformen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Training</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Schwerer</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Text→Gl.</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Quiz</button>
 </div>
+
+<!-- 1 Einstieg -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>lineare Gleichungen in einer Variablen</strong> und ihre <strong>Lösungsmenge</strong>.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg &amp; Lernziele</div>
+  <p>Eine <strong>lineare Gleichung in einer Variablen</strong> sucht die Zahl(en) \(x\), für die beide Seiten denselben Wert haben. Am Ende dokumentierst du die <strong>Lösungsmenge</strong> \(L=\{\ldots\}\).</p>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>In diesem Pfad lernst du:</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>die Grundform \(ax=b\) und wann eine Gleichung linear ist,</li>
+        <li>Äquivalenzumformungen inkl. Klammern und Binomen,</li>
+        <li>die Lösungsmenge zu dokumentieren,</li>
+        <li>einfache Textaufgaben in Gleichungen zu übersetzen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Lehrplan-Kompetenzen (Theorie):</strong>
+      Lineare Gleichungen lösen · Lösungsmenge interpretieren und dokumentieren.
+      Anwendungen (Prozent, Mischung, Bewegung) folgen im <a href="lernpfad-lineare-gleichungen-anwendungen.html" style="font-weight:700; color:var(--blue-dark);">Pfad 09b</a>.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Warm-up</span>
+      <span class="exercise-title">Was gehört zur Lösungsmenge?</span>
+    </div>
+    <p>Die Gleichung \(2x=10\) ist erfüllt, wenn …</p>
+    <div class="quiz-options" data-quiz="t0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(x=2\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(x=5\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(x=10\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">jede reelle Zahl</div>
+    </div>
+    <div class="feedback" id="fb_t0_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['t0_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Grundform →</button>
+  </div>
 </div>
+
+<!-- 2 Grundform -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;"><strong>Lineare Gleichungen in einer Variablen</strong> lösen.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Die <strong>Lösungsmenge</strong> einer linearen Gleichung in einer Variablen interpretieren, dokumentieren und in Bezug auf die Aufgabenstellung argumentieren.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Lineare Gleichungen aus den Bereichen <strong>Prozentrechnung</strong> und <strong>Bewegung</strong> aufstellen.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Was ist eine lineare Gleichung?</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Grundform</div>
+    \[ ax = b \]
+    <p style="margin-top:8px;">\(a\), \(b\), \(x\) sind reelle Zahlen. Die Unbekannte \(x\) kommt nur in der ersten Potenz vor (\(x^1\)).</p>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Waage-Bild: Gleichheit</h3>
+    <p class="mini-note">Beide Seiten einer Gleichung müssen „gleich schwer“ sein. Äquivalenzumformungen halten die Waage im Gleichgewicht.</p>
+    <div class="balance-viz" aria-hidden="true">
+      <div class="balance-side" id="balLeft">\(4x\)</div>
+      <div class="balance-eq">=</div>
+      <div class="balance-side" id="balRight">\(15\)</div>
+    </div>
+    <div class="eq-bank" id="balChoices">
+      <button type="button" class="eq-chip" data-left="4x" data-right="15" onclick="setBalance(this)">\(4x=15\)</button>
+      <button type="button" class="eq-chip" data-left="3x+5" data-right="29" onclick="setBalance(this)">\(3x+5=29\)</button>
+      <button type="button" class="eq-chip" data-left="x" data-right="3{,}75" onclick="setBalance(this)">\(x=3{,}75\)</button>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <h3>Beispiel 1 — schon in Grundform</h3>
+    \[ 4x = 15 \quad\big|\colon 4 \]
+    \[ x = 3{,}75 \]
+    <p>Lösungsmenge: \(L=\{3{,}75\}\)</p>
+  </div>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Nicht jede Gleichung mit \(x^2\) ist „quadratisch unlösbar“:</strong>
+      \((x-5)^2=x^2\) sieht quadratisch aus, aber nach dem Ausmultiplizieren fällt \(x^2\) weg — sie wird linear.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Linear oder (noch) nicht?</span>
+    </div>
+    <div class="match-list" id="linMatch"></div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkLinMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_lin_match"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Umformen →</button>
+  </div>
 </div>
+
+<!-- 3 Umformen -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Äquivalenzumformungen</div>
+  <p>Ziel: die Unbekannte isolieren, bis die Gleichung in der Form \(x=\ldots\) steht. Erlaubt sind:</p>
+  <ol style="margin:8px 0 0 22px; line-height:1.7;">
+    <li>Termvereinfachungen (Klammern, Zusammenfassen),</li>
+    <li>Addition / Subtraktion derselben Zahl oder desselben Terms auf beiden Seiten,</li>
+    <li>Multiplikation / Division mit einer Zahl \(\neq 0\) auf beiden Seiten.</li>
+  </ol>
+
+  <div class="step-card">
+    <h3>Beispiel 2 — Klammern</h3>
+    \[ 7x-(4x-5)=29 \]
+    <p class="step-ops">Klammern auflösen → Terme zusammenfassen</p>
+    \[ 7x-4x+5=29 \quad\Rightarrow\quad 3x+5=29 \quad\big|-5 \]
+    \[ 3x=24 \quad\big|\colon 3 \quad\Rightarrow\quad x=8 \]
+    <p>Lösungsmenge: \(L=\{8\}\)</p>
+  </div>
+
+  <div class="step-card">
+    <h3>Beispiel 3 — Binom, das linear wird</h3>
+    \[ (x-5)^2=x^2 \]
+    \[ x^2-10x+25=x^2 \quad\big|-x^2 \]
+    \[ -10x+25=0 \quad\big|+10x \quad\Rightarrow\quad 25=10x \quad\big|\colon 10 \]
+    \[ x=2{,}5\qquad L=\{2{,}5\} \]
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">💻</div>
+    <div>
+      <strong>Optional mit GeoGebra CAS:</strong>
+      Gleichung eingeben und mit <code>Löse(…)</code> / <code>Solve(…)</code> prüfen.
+      Technologie ersetzt nicht die Dokumentation der Lösungsmenge und den Antwortsatz.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Selbst lösen</span>
+    </div>
+    <div class="input-group">
+      <label for="um_a">\(9x-6=2x+50\) — Wert von \(x\)</label>
+      <input id="um_a" type="text" inputmode="decimal" placeholder="z. B. 8">
+    </div>
+    <div class="input-group">
+      <label for="um_b">\(7x-(4x-5)=29\) — Wert von \(x\)</label>
+      <input id="um_b" type="text" inputmode="decimal" placeholder="8">
+    </div>
+    <div class="hint-ladder" data-hints="um1">
+      <button type="button" class="btn-hint" onclick="revealNextHint('um1')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Bei der ersten Gleichung \(x\)-Terme auf eine Seite, Zahlen auf die andere.</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> \(9x-2x=50+6\) → \(7x=56\) → \(x=8\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> Die zweite Gleichung kennst du aus Beispiel 2 — \(L=\{8\}\).</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkUmform()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_um"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Training →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Lineare Gleichungen<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- 4 Training -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Algebra-Training</div>
+  <p>Löse nach \(x\) auf. Gib ganze Zahlen, exakte Dezimalzahlen oder gekürzte Brüche an (Komma oder Punkt).</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Stufe A</span>
+      <span class="exercise-title">Grundform &amp; Zusammenfassen</span>
+    </div>
+    <div class="input-group">
+      <label for="tr_a1">1) \(9x-9=x+23\)</label>
+      <input id="tr_a1" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <div class="input-group">
+      <label for="tr_a2">2) \(7-5x=7+2x\)</label>
+      <input id="tr_a2" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <div class="input-group">
+      <label for="tr_a3">3) \(15x-18-9x=23+24x-16-15x\)</label>
+      <input id="tr_a3" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkTrainA()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_tr_a"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Stufe B</span>
+      <span class="exercise-title">Mit Klammern</span>
+    </div>
+    <div class="input-group">
+      <label for="tr_b1">4) \(8+4(x+5)=3(x+4)\)</label>
+      <input id="tr_b1" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <div class="input-group">
+      <label for="tr_b2">5) \(10(2x-5)=8(5x-4)+12\)</label>
+      <input id="tr_b2" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <div class="input-group">
+      <label for="tr_b3">6) \(7x-(2x+10)=28-3(2x-4)\)</label>
+      <input id="tr_b3" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <div class="hint-ladder" data-hints="trb">
+      <button type="button" class="btn-hint" onclick="revealNextHint('trb')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Klammern zuerst mit dem Distributivgesetz auflösen.</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> Bei (4): \(8+4x+20=3x+12\) → \(4x+28=3x+12\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> Minus vor einer Klammer kehrt alle Vorzeichen in der Klammer um.</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkTrainB()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_tr_b"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Schwerer →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- 5 Schwerer -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Etwas schwieriger</div>
+  <p>Binome, Produkte und Brüche — nach dem Vereinfachen bleibt eine lineare Gleichung.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Binome</span>
+      <span class="exercise-title">\(x^2\) fällt weg</span>
+    </div>
+    <div class="input-group">
+      <label for="sw_a">\(x^2+17=x(x-1)+48\)</label>
+      <input id="sw_a" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <div class="input-group">
+      <label for="sw_b">\((x-5)^2=(x-8)^2+39\)</label>
+      <input id="sw_b" type="text" inputmode="decimal" placeholder="x = …">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkSchwerA()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_sw_a"></div>
+  </div>
+
+  <div class="srdp-card">
+    <div class="head">Z 4.3 — Gleichungen in \(\mathbb{R}\)</div>
+    <div class="body">
+      <p>Löse die gegebenen Gleichungen. Variablen: \(x\) bzw. \(a\).</p>
+      <div class="input-group">
+        <label for="z43_a">a) \((-3)\cdot[2x-(5x+2)]=2+2\cdot(2x+7)\)</label>
+        <input id="z43_a" type="text" inputmode="decimal" placeholder="x = …">
+      </div>
+      <div class="input-group">
+        <label for="z43_b">b) \(\dfrac{1}{2}-\dfrac{4a+1}{3}=\dfrac{a-4}{9}-\dfrac{2a-3}{6}\)</label>
+        <input id="z43_b" type="text" inputmode="decimal" placeholder="a = …">
+      </div>
+      <div class="input-group">
+        <label for="z43_c">c) \(7(x-2)-8=5(3x-1)-5\)</label>
+        <input id="z43_c" type="text" inputmode="decimal" placeholder="x = …">
+      </div>
+      <div class="hint-ladder" data-hints="z43">
+        <button type="button" class="btn-hint" onclick="revealNextHint('z43')">💡 Nächster Tipp</button>
+        <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Bei Brüchen zuerst mit dem kgV der Nenner multiplizieren (bei b: kgV von 2, 3, 9, 6 ist 18).</div>
+        <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> Eckige Klammern von innen nach außen auflösen; Vorzeichen vor der Klammer beachten.</div>
+        <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> a) Innen \(-3x-2\), mal \((-3)\) → \(9x+6=4x+16\) → \(x=2\).</div>
+      </div>
+      <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkZ43()">Überprüfen ✓</button>
+      <div class="feedback" id="fb_z43"></div>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Text→Gleichung →</button>
+  </div>
+</div>
+
+<!-- 6 Text → Gleichung -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Text → Gleichung</div>
+  <p>Übersetze Sprache in Terme. <strong>Immer:</strong> Variable deklarieren → Gleichung aufstellen → lösen → Antwortsatz.</p>
+
+  <div class="step-card">
+    <h3>Musterbeispiel</h3>
+    <p>„Addiert man zum Neunfachen einer Zahl die Differenz aus 28 und dem Dreifachen der Zahl, so erhält man gleich viel, wie wenn man 60 um das Doppelte der Zahl vermindert.“</p>
+    <p>\(x\) … gesuchte Zahl</p>
+    \[ 9x+(28-3x)=60-2x \]
+    \[ 6x+28=60-2x \quad\Rightarrow\quad 8x=32 \quad\Rightarrow\quad x=4 \]
+    <p><strong>Antwortsatz:</strong> Die gesuchte Zahl ist 4.</p>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Mini-Wörterbuch</h3>
+    <div class="match-list" id="textMatch"></div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkTextMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_text_match"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zahlenrätsel</span>
+      <span class="exercise-title">Gleichung aufstellen &amp; lösen</span>
+    </div>
+    <p><strong>A:</strong> Addiert man zu einer Zahl 32, so erhält man das Fünffache davon, was übrig bleibt, wenn man von dieser Zahl 8 abzieht. Welche Zahl?</p>
+    <div class="input-group">
+      <label for="tx_eq">Deine Gleichung (z.&nbsp;B. x+32=5(x-8))</label>
+      <input id="tx_eq" type="text" placeholder="x+32=5(x-8)">
+    </div>
+    <div class="input-group">
+      <label for="tx_x">Lösung \(x=\)</label>
+      <input id="tx_x" type="text" inputmode="decimal" placeholder="…">
+    </div>
+    <p style="margin-top:12px;"><strong>B:</strong> Eine Mutter ist doppelt so alt wie ihre Tochter. In 10 Jahren sind sie zusammen 70 Jahre alt. Alter der Tochter jetzt?</p>
+    <div class="input-group">
+      <label for="tx_age">Alter der Tochter</label>
+      <input id="tx_age" type="text" inputmode="decimal" placeholder="…">
+    </div>
+    <div class="hint-ladder" data-hints="text">
+      <button type="button" class="btn-hint" onclick="revealNextHint('text')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1 (A):</strong> „Zahl + 32“ und „5 · (Zahl − 8)“ sind gleich.</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2 (B):</strong> Tochter \(t\), Mutter \(2t\). In 10 Jahren: \((t+10)+(2t+10)=70\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> A → \(x=18\); B → Tochter \(\frac{50}{3}\) Jahre (Mutter \(\frac{100}{3}\)).</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:10px;" onclick="checkTextTasks()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_tx"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Geometrie</span>
+      <span class="exercise-title">Dreieck-Umfang</span>
+    </div>
+    <p>Umfang 22&nbsp;cm. Eine Seite ist halb so lang wie die zweite, die dritte ist 2&nbsp;cm länger als die zweite. Seitenlängen?</p>
+    <div class="input-row" style="display:flex; flex-wrap:wrap; gap:10px;">
+      <div class="input-group"><label for="geo_a">Seite 1 (kürzeste)</label><input id="geo_a" type="text" inputmode="decimal"></div>
+      <div class="input-group"><label for="geo_b">Seite 2</label><input id="geo_b" type="text" inputmode="decimal"></div>
+      <div class="input-group"><label for="geo_c">Seite 3</label><input id="geo_c" type="text" inputmode="decimal"></div>
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkGeo()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_geo"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 7 Quiz -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>Prüfe dein Verständnis. Bei mehreren Fragen alle beantworten, dann prüfen.</p>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quiz</span>
+      <span class="exercise-title">Theorie-Check</span>
+    </div>
+
+    <p><strong>1.</strong> Welche Aussage zur Grundform \(ax=b\) ist richtig?</p>
+    <div class="quiz-options" data-quiz="q1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(x\) darf auch als \(x^2\) vorkommen</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Man darf nie durch \(a\) dividieren</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Für \(a\neq 0\) ist \(x=\frac{b}{a}\) die eindeutige Lösung</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Die Lösungsmenge ist immer leer</div>
+    </div>
+    <div class="feedback" id="fb_q1"></div>
+
+    <p style="margin-top:14px;"><strong>2.</strong> Nach dem Auflösen von \((x-5)^2=x^2\) erhält man …</p>
+    <div class="quiz-options" data-quiz="q2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">zwei Lösungen (quadratisch)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">eine lineare Gleichung, \(L=\{2{,}5\}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">keine reelle Lösung</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(L=\mathbb{R}\)</div>
+    </div>
+    <div class="feedback" id="fb_q2"></div>
+
+    <p style="margin-top:14px;"><strong>3.</strong> „Das Doppelte einer Zahl vermindert um 7“ als Term:</p>
+    <div class="quiz-options" data-quiz="q3" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(2x-7\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(2(x-7)\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(7-2x\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\frac{2}{x}-7\)</div>
+    </div>
+    <div class="feedback" id="fb_q3"></div>
+
+    <p style="margin-top:14px;"><strong>4.</strong> Die Lösungsmenge \(L=\{8\}\) bedeutet:</p>
+    <div class="quiz-options" data-quiz="q4" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">acht Lösungen</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">keine Lösung</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">genau die Zahl 8 löst die Gleichung</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">alle Zahlen bis 8</div>
+    </div>
+    <div class="feedback" id="fb_q4"></div>
+
+    <div style="margin-top:14px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['q1','q2','q3','q4'])">Quiz prüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="info-box success" style="margin-top:16px;">
+    <div class="icon">➡️</div>
+    <div>
+      <strong>Weiter:</strong>
+      Im <a href="lernpfad-lineare-gleichungen-anwendungen.html" style="font-weight:700; color:var(--blue-dark);">Anwendungspfad</a>
+      stellst du lineare Gleichungen zu Prozent, Mischung und Bewegung auf — inkl. Mischungstabelle und gestaffelten Lösungshinweisen.
+    </div>
+  </div>
+
+  <div class="self-check">
+    <strong>Selbstcheck (optional abhaken):</strong>
+    <label><input type="checkbox"> Ich kann \(ax=b\) und Klammern-Gleichungen lösen und \(L=\{\ldots\}\) schreiben.</label>
+    <label><input type="checkbox"> Ich erkenne, wann \(x^2\)-Terme wegfallen und die Gleichung linear bleibt.</label>
+    <label><input type="checkbox"> Ich übersetze einfache Texte in Terme und Gleichungen mit Antwortsatz.</label>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Lineare Gleichungen — Theorie<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/lineare-gleichungen-lernpfad/app.js"></script>
 </body>
 </html>

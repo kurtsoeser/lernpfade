@@ -5,55 +5,832 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Gleitkommadarstellung</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
-<script src="../../../js/lernpfade-registry.js"></script>
-<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.gk-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:780px){ .gk-grid { grid-template-columns:1fr 1fr; } }
+.gk-grid-3 { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:860px){ .gk-grid-3 { grid-template-columns:repeat(3,1fr); } }
+.gk-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px 16px; background:#fff; }
+.gk-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.tool-box { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#F8FAFC; margin-top:14px; }
+.match-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.match-row {
+  display:grid; grid-template-columns:1fr; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+@media (min-width:720px){ .match-row { grid-template-columns:1.2fr 1fr; } }
+.match-row label { font-weight:700; }
+.match-row select {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.convert-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-top:10px; }
+@media (min-width:700px){ .convert-grid { grid-template-columns:1fr 1fr; } }
+.convert-item {
+  border:1px solid #E2E8F0; border-radius:12px; padding:12px; background:#fff;
+}
+.convert-item label { display:block; font-weight:700; margin-bottom:6px; color:var(--blue-dark); }
+.convert-item input, .input-row input {
+  width:100%; box-sizing:border-box; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif;
+}
+.convert-item input.ok, .input-row input.ok { border-color:#16A34A; background:#ECFDF3; }
+.convert-item input.bad, .input-row input.bad { border-color:#E11D48; background:#FEF2F2; }
+.input-row { margin:10px 0; }
+.input-row label { display:block; font-weight:700; margin-bottom:6px; color:var(--blue-dark); }
+.hint-ladder { margin-top:10px; }
+.hint-ladder .hint-step {
+  display:none; margin-top:8px; padding:10px 12px; border-radius:10px;
+  background:#FFFBEB; border:1px solid #F59E0B; font-size:.92rem; line-height:1.55;
+}
+.hint-ladder .hint-step.visible { display:block; }
+.hint-ladder .hint-step strong { color:#92400E; }
+.story-figure {
+  margin:14px 0; border-radius:14px; overflow:hidden; border:1px solid #E2E8F0;
+  background:#0f172a; text-align:center;
+}
+.story-figure img { max-width:100%; height:auto; display:block; margin:0 auto; }
+.story-figure figcaption {
+  padding:10px 14px; font-size:.86rem; color:#CBD5E1; text-align:left; line-height:1.5;
+  background:#1e293b;
+}
+.video-wrap {
+  position:relative; width:100%; padding-bottom:56.25%; height:0; overflow:hidden;
+  border-radius:14px; border:1px solid #E2E8F0; margin-top:12px; background:#000;
+}
+.video-wrap iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+.meta-scale {
+  display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:14px 0;
+}
+.meta-pill {
+  flex:1; min-width:140px; max-width:220px; border-radius:14px; padding:14px;
+  text-align:center; border:2px solid #E2E8F0; background:#fff;
+}
+.meta-pill.neg { border-color:#FCA5A5; background:#FEF2F2; }
+.meta-pill.pos { border-color:#93C5FD; background:#EFF6FF; }
+.meta-pill .emoji { font-size:1.8rem; display:block; margin-bottom:6px; }
+.meta-pill strong { display:block; color:var(--blue-dark); margin-bottom:4px; }
+.cs-controls { display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end; margin:10px 0; }
+.cs-controls label { font-weight:700; font-size:.9rem; display:flex; flex-direction:column; gap:4px; }
+.cs-controls input[type=text], .cs-controls input[type=number] {
+  width:7rem; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-weight:700;
+}
+.cs-visual {
+  font-family:'Courier New',ui-monospace,monospace; font-size:1.55rem; font-weight:800;
+  letter-spacing:.08em; text-align:center; padding:18px 12px 8px; margin:12px 0 4px;
+  border-radius:14px; background:#fff; border:1px solid #E2E8F0; min-height:4.2rem;
+  position:relative;
+}
+.cs-visual.pos { background:#EFF6FF; border-color:#93C5FD; }
+.cs-visual.neg { background:#FEF2F2; border-color:#FCA5A5; }
+.cs-digit { display:inline-block; min-width:.9em; }
+.cs-digit.cs-arc-pos { color:#1D4ED8; border-bottom:3px solid #2563EB; }
+.cs-digit.cs-arc-neg { color:#BE123C; border-bottom:3px solid #E11D48; }
+.cs-comma { color:#0F172A; font-weight:900; margin:0 1px; }
+.cs-comma.pos { color:#1D4ED8; }
+.cs-comma.neg { color:#BE123C; }
+.cs-bracket {
+  margin-top:10px; font-size:.85rem; letter-spacing:0; font-family:Nunito,system-ui,sans-serif;
+}
+.cs-bracket.pos { color:#1D4ED8; }
+.cs-bracket.neg { color:#BE123C; }
+.cs-dir { font-weight:800; margin:6px 0 2px; }
+.cs-dir.pos { color:#1D4ED8; }
+.cs-dir.neg { color:#BE123C; }
+.cs-dir.zero { color:var(--text-light); }
+.prefix-table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.9rem; }
+.prefix-table th, .prefix-table td { border:1px solid #E2E8F0; padding:7px 8px; text-align:center; }
+.prefix-table th { background:#1E3A8A; color:#fff; }
+.prefix-table tr:nth-child(even) td { background:#EFF6FF; }
+.srdp-block {
+  border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#fff; margin-top:14px;
+}
+.srdp-block h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.mini-note { font-size:.86rem; color:var(--text-light); margin-top:6px; line-height:1.5; }
+.slider-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:10px; }
+.slider-row input[type=range] { flex:1; min-width:140px; }
+.formula-box .formula-label { font-weight:800; color:var(--blue-dark); margin-bottom:6px; }
+</style>
 </head>
 <body data-current-page="s3-p06" data-page-type="lernpfad" data-chapter-folder="Grundlagen/gleitkomma">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 9 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
   <h1>Gleitkommadarstellung</h1>
-  <p class="subtitle">Fest- und Gleitkomma, Darstellungswechsel und Rechnen — Inhalte werden ergänzt.</p>
+  <p class="subtitle">Zahlen in Fest- und Gleitkomma schreiben, die Form wechseln und damit sicher rechnen.</p>
   <span class="badge">3.&nbsp;Semester · Thema 06</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
-    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
-    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
-    <a href="../potenzen/index.html" style="color:var(--blue-dark); font-weight:600;">← 05 Potenzen</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    <a href="../potenzen/lernpfad-potenzen.html" style="color:var(--blue-dark); font-weight:600;">← 05 Potenzen</a>
     · <a href="../terme/index.html" style="color:var(--blue-dark); font-weight:600;">07 Terme →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Komma</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Vorsilben</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Umwandeln</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Rechnen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Größen</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>SRDP</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Aufträge</button>
+  <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Quiz</button>
 </div>
+
+<!-- ═══════════════ 1 Einstieg ═══════════════ -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>Fest- und Gleitkommaschreibweise</strong> von Zahlen.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg · Was ist ein Googol?</div>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Du lernst:</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Zahlen in <strong>Festkomma-</strong> und <strong>Gleitkommadarstellung</strong> schreiben,</li>
+        <li>die Darstellungsform wechseln (Komma verschieben),</li>
+        <li>mit Zehnerpotenzen und Vorsilben rechnen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Denkanstoß</span>
+      <span class="exercise-title">Was ist ein Googol?</span>
+    </div>
+    <p>Ein <strong>Googol</strong> ist die Zahl \(10^{100}\) — eine 1 mit 100 Nullen. Der Name inspirierte die Gründer von <em>Google</em>: Suchen sollte „unendlich viel“ Information finden können.</p>
+    <p class="mini-note">1996 bastelten Larry Page und Sergey Brin an der Stanford University aus günstigen Festplattengehäusen Server — die Fronten aus LEGO. So testeten sie den PageRank-Algorithmus, bevor Google Inc. 1999 Ersatz lieferte.</p>
+
+    <figure class="story-figure">
+      <img src="img/google-storage-lego.jpg" alt="Original Google Storage Server mit LEGO-Front im Museum">
+      <figcaption>Original Google Storage Server (LEGO-Gehäuse) — frühe Hardware für riesige Datenmengen, lange bevor „Googol“-Größenordnungen alltäglich wirkten.</figcaption>
+    </figure>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Video</span>
+      <span class="exercise-title">Zehnerpotenzen erklärt</span>
+    </div>
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/-ASQ3rWFOAE"
+        title="YouTube: Zehnerpotenzen / Gleitkomma"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Zwei Schreibweisen</div>
+    \[
+      \underbrace{299\,780\,000}_{\text{Festkomma}}
+      =
+      \underbrace{2{,}9978\cdot 10^{8}}_{\text{Gleitkomma (wissenschaftlich)}}
+    \]
+    <p style="margin-top:8px;">In der Gleitkommaform gilt üblicherweise \(1\le a&lt;10\) und \(k\in\mathbb{Z}\).</p>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Grundverständnis</span>
+    </div>
+    <p><strong>1)</strong> Ein Googol ist …</p>
+    <div class="quiz-options" data-quiz="gk0_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(10^{10}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(100^{10}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(10^{100}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(10^{1000}\)</div>
+    </div>
+    <div class="feedback" id="fb_gk0_1"></div>
+
+    <p style="margin-top:14px;"><strong>2)</strong> Warum ist Gleitkomma praktisch?</p>
+    <div class="quiz-options" data-quiz="gk0_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Weil man dann keine Einheiten mehr braucht.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Weil sehr große/kleine Zahlen kompakt und vergleichbar werden.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Weil Festkomma verboten ist.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Weil der Exponent immer positiv sein muss.</div>
+    </div>
+    <div class="feedback" id="fb_gk0_2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkGoogol()">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Komma →</button>
+  </div>
 </div>
+
+<!-- ═══════════════ 2 Komma verschieben ═══════════════ -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Zahlen in <strong>Fest- und Gleitkommaschreibweise</strong> darstellen, die Darstellungsform wechseln und damit rechnen.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Fest ↔ Gleit · Komma verschieben</div>
+
+  <div class="meta-scale">
+    <div class="meta-pill neg">
+      <span class="emoji">🔎</span>
+      <strong>Negativer Exponent</strong>
+      Komma nach <span style="color:#BE123C;font-weight:800;">links</span> — Lupe / Atom-Welt
+    </div>
+    <div class="meta-pill pos">
+      <span class="emoji">🔭</span>
+      <strong>Positiver Exponent</strong>
+      Komma nach <span style="color:#1D4ED8;font-weight:800;">rechts</span> — Teleskop / Kosmos
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Merksatz</div>
+    <p style="margin:0; line-height:1.7;">
+      \(a\cdot 10^{k}\): Das Komma in \(a\) wird um \(|k|\) Stellen<br>
+      <strong style="color:#1D4ED8;">rechts</strong> (\(k&gt;0\)) bzw. <strong style="color:#BE123C;">links</strong> (\(k&lt;0\)) verschoben.
+    </p>
+  </div>
+
+  <div class="tool-box">
+    <h3 style="margin:0 0 8px; color:var(--blue-dark);">Interaktiv: Komma-Schieber</h3>
+    <p class="mini-note" id="csLabel">Lichtgeschwindigkeit ≈</p>
+    <div class="cs-controls">
+      <label>Mantisse \(a\)
+        <input type="text" id="csMant" value="2,9978" oninput="updateCommaShifter()">
+      </label>
+      <label>Exponent \(k =\) <span id="csExpLabel">8</span>
+        <input type="range" id="csExp" min="-12" max="12" value="8" oninput="updateCommaShifter()">
+      </label>
+      <button type="button" class="btn btn-prev" onclick="setCommaExample(commaIdx-1)">← Beispiel</button>
+      <button type="button" class="btn btn-next" onclick="setCommaExample(commaIdx+1)">Beispiel →</button>
+    </div>
+    <div class="cs-dir pos" id="csDir">Komma 8 Stellen nach rechts (blau)</div>
+    <div class="cs-visual pos" id="csVisual" aria-live="polite"></div>
+    <div id="csResult" style="text-align:center; font-weight:700; margin-top:8px;"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Schreibe in Festkomma</span>
+    </div>
+    <div class="convert-grid">
+      <div class="convert-item">
+        <label>a) \(2{,}9978\cdot 10^{8}\)</label>
+        <input type="text" id="csP1" placeholder="z. B. 299780000" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>b) \(2{,}8978\cdot 10^{-3}\)</label>
+        <input type="text" id="csP2" placeholder="z. B. 0,0028978" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>c) \(3{,}2\cdot 10^{7}\)</label>
+        <input type="text" id="csP3" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>d) \(8{,}2\cdot 10^{-4}\)</label>
+        <input type="text" id="csP4" autocomplete="off">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkCommaPractice()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_cs_practice"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Vorsilben →</button>
+  </div>
 </div>
+
+<!-- ═══════════════ 3 Vorsilben ═══════════════ -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Zehnerpotenzen &amp; Vorsilben</div>
+  <p>Vorsilben sind Kurzformen für Zehnerpotenzen — in Technik, Physik und Informatik unverzichtbar.</p>
+
+  <div style="overflow-x:auto;">
+    <table class="prefix-table" aria-label="Zehnerpotenzen und Vorsilben">
+      <thead>
+        <tr><th>Potenz</th><th>Wert</th><th>Vorsilbe</th><th>Abk.</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>\(10^{12}\)</td><td>Billion</td><td>Tera</td><td>T</td></tr>
+        <tr><td>\(10^{9}\)</td><td>Milliarde</td><td>Giga</td><td>G</td></tr>
+        <tr><td>\(10^{6}\)</td><td>Million</td><td>Mega</td><td>M</td></tr>
+        <tr><td>\(10^{3}\)</td><td>Tausend</td><td>Kilo</td><td>k</td></tr>
+        <tr><td>\(10^{0}\)</td><td>Eins</td><td>—</td><td>—</td></tr>
+        <tr><td>\(10^{-3}\)</td><td>Tausendstel</td><td>Milli</td><td>m</td></tr>
+        <tr><td>\(10^{-6}\)</td><td>Millionstel</td><td>Mikro</td><td>μ</td></tr>
+        <tr><td>\(10^{-9}\)</td><td>Milliardstel</td><td>Nano</td><td>n</td></tr>
+        <tr><td>\(10^{-12}\)</td><td>Billionstel</td><td>Piko</td><td>p</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Vorsilbe ↔ Zehnerpotenz</span>
+    </div>
+    <div class="match-list" id="matchPrefix"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkPrefixMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_match_prefix"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Check</span>
+      <span class="exercise-title">500 MByte in Byte</span>
+    </div>
+    <div class="quiz-options" data-quiz="gk3_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(5\cdot 10^{6}\) Byte</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(5\cdot 10^{7}\) Byte</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(5\cdot 10^{8}\) Byte</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(5\cdot 10^{9}\) Byte</div>
+    </div>
+    <div class="feedback" id="fb_gk3_1"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkPrefixQuiz()">Überprüfen ✓</button>
+    <p class="mini-note">Hinweis: Station zählt als erledigt, wenn die Vorsilben-Zuordnung stimmt.</p>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Umwandeln →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Gleitkommadarstellung<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- ═══════════════ 4 Umwandeln ═══════════════ -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Festkomma ↔ Gleitkomma</div>
+
+  <div class="gk-grid">
+    <div class="gk-card">
+      <h3>→ Festkomma</h3>
+      <p>Komma verschieben, Nullen ergänzen. Negativer Exponent → Zahl &lt; 1.</p>
+    </div>
+    <div class="gk-card">
+      <h3>→ Gleitkomma</h3>
+      <p>Komma so setzen, dass \(1\le a&lt;10\). Stellen zählen = Exponent \(k\).</p>
+    </div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung A</span>
+      <span class="exercise-title">Ohne Zehnerpotenz (Festkomma)</span>
+    </div>
+    <div class="convert-grid">
+      <div class="convert-item"><label>a) \(1{,}25\cdot 10^{3}\)</label><input id="festA" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>b) \(4{,}55\cdot 10^{5}\)</label><input id="festB" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>c) \(1{,}25\cdot 10^{-2}\)</label><input id="festC" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>d) \(3{,}2\cdot 10^{7}\)</label><input id="festD" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>e) \(8{,}2\cdot 10^{-4}\)</label><input id="festE" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>f) \(902\cdot 10^{2}\)</label><input id="festF" type="text" autocomplete="off"></div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkFestConvert()">Überprüfen A ✓</button>
+    <div class="feedback" id="fb_fest"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung B</span>
+      <span class="exercise-title">In Gleitkomma \(a\cdot 10^{k}\) mit \(1\le a&lt;10\)</span>
+    </div>
+    <div class="convert-grid">
+      <div class="convert-item"><label>a) \(700\,000\)</label><input id="gleitA" type="text" placeholder="7·10^5" autocomplete="off"></div>
+      <div class="convert-item"><label>b) \(0{,}0003\)</label><input id="gleitB" type="text" placeholder="3·10^-4" autocomplete="off"></div>
+      <div class="convert-item"><label>c) \(12\,443\,628\)</label><input id="gleitC" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>d) \(0{,}001245\)</label><input id="gleitD" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>e) \(12\,000\)</label><input id="gleitE" type="text" autocomplete="off"></div>
+      <div class="convert-item"><label>f) \(0{,}0000003\)</label><input id="gleitF" type="text" autocomplete="off"></div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkGleitConvert()">Überprüfen B ✓</button>
+    <div class="feedback" id="fb_gleit"></div>
+    <p class="mini-note">Beide Übungen A und B müssen stimmen, damit die Station als erledigt gilt.</p>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Rechnen →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- ═══════════════ 5 Rechnen ═══════════════ -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Rechnen mit Zehnerpotenzen</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Multiplikation</div>
+    \[
+      (a\cdot 10^{m})\cdot(b\cdot 10^{n})=(a\cdot b)\cdot 10^{m+n}
+    \]
+    <p style="margin-top:6px;">Danach ggf. normalisieren, sodass wieder \(1\le a&lt;10\).</p>
+  </div>
+
+  <div class="tool-box">
+    <h3 style="margin:0 0 8px; color:var(--blue-dark);">Live-Rechner</h3>
+    <div class="cs-controls">
+      <label>\(a\)<input type="text" id="mulA" value="6" oninput="updateMulDemo()"></label>
+      <label>\(10^{m}\)<input type="number" id="mulKa" value="4" oninput="updateMulDemo()"></label>
+      <label>\(b\)<input type="text" id="mulB" value="2" oninput="updateMulDemo()"></label>
+      <label>\(10^{n}\)<input type="number" id="mulKb" value="-2" oninput="updateMulDemo()"></label>
+    </div>
+    <div id="mulOut" style="text-align:center; font-weight:700; margin-top:8px;"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Produkte in Gleitkomma</span>
+    </div>
+    <div class="convert-grid">
+      <div class="convert-item">
+        <label>\((6\cdot 10^{4})\cdot(2\cdot 10^{-2})\)</label>
+        <input id="mulT1" type="text" placeholder="1,2·10^3" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>\((3\cdot 10^{2})\cdot(5\cdot 10^{3})\)</label>
+        <input id="mulT2" type="text" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>\((4\cdot 10^{-2})\cdot(3\cdot 10^{-4})\)</label>
+        <input id="mulT3" type="text" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>\((1{,}2\cdot 10^{-1})\cdot(7\cdot 10^{6})\)</label>
+        <input id="mulT4" type="text" autocomplete="off">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkMulTable()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_mul_table"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Größen →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ 6 Größenordnungen ═══════════════ -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Größenordnungen &amp; Einheiten</div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Sortieren</span>
+      <span class="exercise-title">Vom Kleinsten zum Größten</span>
+    </div>
+    <p>Ordne die Größen nach ihrem Zahlenwert (aufsteigend).</p>
+    <div class="match-list" id="sortMags"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkSortMags()">Reihenfolge prüfen ✓</button>
+    <div class="feedback" id="fb_sort"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Einheiten</span>
+      <span class="exercise-title">In Gleitkomma (Basis-Einheit)</span>
+    </div>
+    <div class="convert-grid">
+      <div class="convert-item">
+        <label>a) \(40\,\mathrm{GByte}\) → Byte</label>
+        <input id="unitA" type="text" placeholder="4·10^10" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>b) \(12\,\mathrm{mg}\) → g</label>
+        <input id="unitB" type="text" placeholder="1,2·10^-2" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>c) \(450\,\mu\mathrm{m}\) → m</label>
+        <input id="unitC" type="text" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>d) \(82\,\mathrm{ns}\) → s</label>
+        <input id="unitD" type="text" autocomplete="off">
+      </div>
+      <div class="convert-item">
+        <label>e) \(3{,}5\,\mathrm{MHz}\) → Hz</label>
+        <input id="unitE" type="text" autocomplete="off">
+      </div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkUnitTable()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_units"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">MC</span>
+      <span class="exercise-title">Blutprobe — Zellenzahl in 5 L</span>
+    </div>
+    <p>Pro \(\mu\mathrm{l}\): 5 Mio. Erythrozyten, 7000 Leukozyten, 300&nbsp;000 Thrombozyten. Gesamte Zellzahl in \(5\,\mathrm{l}\) Blut?</p>
+    <p class="mini-note">\(1\,\mathrm{l}=10^{6}\,\mu\mathrm{l}\). Summe der Zellen pro µl zuerst bilden.</p>
+    <div class="quiz-options" data-quiz="gk6_blood" data-correct="3">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(5{,}3\cdot 10^{9}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(2{,}7\cdot 10^{10}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(5{,}3\cdot 10^{12}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(2{,}7\cdot 10^{13}\)</div>
+      <div class="quiz-option" data-idx="4" onclick="selectQuiz(this)">\(5{,}3\cdot 10^{13}\)</div>
+    </div>
+    <div class="feedback" id="fb_gk6_blood"></div>
+    <div class="hint-ladder" data-hints="bloodHint">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('bloodHint')">💡 Nächster Tipp</button>
+      <div class="hint-step"><strong>Tipp 1:</strong> Zellen/\(\mu\mathrm{l}\): \(5\cdot10^{6}+7\cdot10^{3}+3\cdot10^{5}=5{,}307\cdot10^{6}\).</div>
+      <div class="hint-step"><strong>Tipp 2:</strong> \(5\,\mathrm{l}=5\cdot10^{6}\,\mu\mathrm{l}\).</div>
+      <div class="hint-step"><strong>Tipp 3:</strong> Produkt \(\approx 5{,}307\cdot10^{6}\cdot 5\cdot10^{6}=2{,}6535\cdot10^{13}\approx 2{,}7\cdot10^{13}\).</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkBloodMC()">Überprüfen ✓</button>
+    <p class="mini-note">Station erledigt, wenn Sortieren, Einheiten und MC stimmen.</p>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: SRDP →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ 7 SRDP ═══════════════ -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">SRDP · Textverständnis &amp; Zehnerpotenzen</div>
+  <p>Lies genau, wandle Einheiten um, rechne in Gleitkomma. Tipps schrittweise öffnen.</p>
+
+  <div class="srdp-block">
+    <h3>A) Erythrozyten &amp; Kette</h3>
+    <p>\(1\,\mathrm{cm}^{3}\) Blut enthält ca. \(5\cdot10^{9}\) Erythrozyten. Durchmesser eines Erythrozyten: \(7{,}5\,\mu\mathrm{m}\).</p>
+    <div class="input-row">
+      <label>1) Anzahl in \(6\,\mathrm{l}\) Blut (Gleitkomma ok)</label>
+      <input id="srdpEry" type="text" placeholder="z. B. 3·10^13" autocomplete="off">
+    </div>
+    <div class="input-row">
+      <label>2) Länge der Kette aller Zellen aus 6 l, aneinandergereiht, in m</label>
+      <input id="srdpChain" type="text" placeholder="z. B. 2,25·10^8" autocomplete="off">
+    </div>
+    <div class="hint-ladder" data-hints="srdpEry">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('srdpEry')">💡 Nächster Tipp</button>
+      <div class="hint-step"><strong>Tipp 1:</strong> \(1\,\mathrm{l}=1000\,\mathrm{cm}^{3}\) ⇒ \(6\,\mathrm{l}=6000\,\mathrm{cm}^{3}\).</div>
+      <div class="hint-step"><strong>Tipp 2:</strong> Anzahl \(=5\cdot10^{9}\cdot 6\cdot10^{3}=3\cdot10^{13}\).</div>
+      <div class="hint-step"><strong>Tipp 3:</strong> \(7{,}5\,\mu\mathrm{m}=7{,}5\cdot10^{-6}\,\mathrm{m}\); Länge \(=3\cdot10^{13}\cdot 7{,}5\cdot10^{-6}=2{,}25\cdot10^{8}\,\mathrm{m}\).</div>
+    </div>
+  </div>
+
+  <div class="srdp-block">
+    <h3>B) Abfall Österreich 2009</h3>
+    <p>\(53\,543\,000\,\mathrm{t}\) Abfall; Bevölkerung ca. \(8{,}375\) Mio.</p>
+    <div class="input-row">
+      <label>1) Abfall in kg (Gleitkomma)</label>
+      <input id="srdpWaste" type="text" placeholder="5,3543·10^10" autocomplete="off">
+    </div>
+    <div class="input-row">
+      <label>2) Pro-Kopf in t (Dezimalzahl)</label>
+      <input id="srdpCap" type="text" placeholder="ca. 6,39" autocomplete="off">
+    </div>
+    <div class="hint-ladder" data-hints="srdpWaste">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('srdpWaste')">💡 Nächster Tipp</button>
+      <div class="hint-step"><strong>Tipp 1:</strong> \(1\,\mathrm{t}=10^{3}\,\mathrm{kg}\) ⇒ multipliziere mit \(10^{3}\).</div>
+      <div class="hint-step"><strong>Tipp 2:</strong> \(5{,}3543\cdot10^{7}\cdot10^{3}=5{,}3543\cdot10^{10}\,\mathrm{kg}\).</div>
+      <div class="hint-step"><strong>Tipp 3:</strong> Pro Kopf: \(53\,543\,000 / 8\,375\,000 \approx 6{,}39\,\mathrm{t}\).</div>
+    </div>
+  </div>
+
+  <div class="srdp-block">
+    <h3>C) Baikalsee</h3>
+    <p>Aktuelles Volumen \(V=18\,400\,\mathrm{km}^{3}\) (= 75 % des Volumens von 1996). 1996 entsprach der See 20 % der weltweiten Süßwasserreserven \(V_g\).</p>
+    <div class="input-row">
+      <label>1) Gesamte Süßwasserreserven \(V_g\) 1996 in \(\mathrm{km}^{3}\)</label>
+      <input id="srdpVg" type="text" placeholder="ca. 1,23·10^5" autocomplete="off">
+    </div>
+    <p style="margin-top:10px;"><strong>2)</strong> Behauptung: Mit \(V=18\,400\,\mathrm{km}^{3}\) kann man 7 Mrd. Menschen 50 Jahre lang mit 150 L/Tag versorgen.</p>
+    <div class="quiz-options" data-quiz="srdpClaim" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Die Behauptung stimmt ungefähr.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Die Behauptung ist falsch — der Bedarf ist viel größer als \(V\).</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Die Behauptung ist falsch — der See wäre sogar zu groß.</div>
+    </div>
+    <div class="feedback" id="fb_srdpClaim"></div>
+    <div class="hint-ladder" data-hints="srdpBaikal">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('srdpBaikal')">💡 Nächster Tipp</button>
+      <div class="hint-step"><strong>Tipp 1:</strong> Volumen 1996: \(V_{96}=V/0{,}75\). Dann \(V_g=V_{96}/0{,}2=V/0{,}15\).</div>
+      <div class="hint-step"><strong>Tipp 2:</strong> \(1\,\mathrm{km}^{3}=10^{12}\,\mathrm{l}\) ⇒ See \(\approx 1{,}84\cdot10^{16}\,\mathrm{l}\).</div>
+      <div class="hint-step"><strong>Tipp 3:</strong> Bedarf: \(7\cdot10^{9}\cdot150\cdot365\cdot50\approx 1{,}92\cdot10^{16}\,\mathrm{l}\) — größer als der See.</div>
+    </div>
+  </div>
+
+  <div class="srdp-block">
+    <h3>D) Skulptur · Dichte &amp; Atomradius</h3>
+    <div class="input-row">
+      <label>1) Dichte Aluminium \(2{,}70\,\mathrm{g/cm}^{3}\) in \(\mathrm{kg/m}^{3}\)</label>
+      <input id="srdpRho" type="text" placeholder="2700" autocomplete="off">
+    </div>
+    <div class="input-row">
+      <label>2) Mg-Radius \(1{,}5\cdot10^{-10}\,\mathrm{m}\); Si um \(0{,}04\,\mathrm{nm}\) kleiner — Si-Radius in nm</label>
+      <input id="srdpSi" type="text" placeholder="0,11" autocomplete="off">
+    </div>
+    <div class="hint-ladder" data-hints="srdpDens">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('srdpDens')">💡 Nächster Tipp</button>
+      <div class="hint-step"><strong>Tipp 1:</strong> \(1\,\mathrm{g/cm}^{3}=1000\,\mathrm{kg/m}^{3}\).</div>
+      <div class="hint-step"><strong>Tipp 2:</strong> \(1{,}5\cdot10^{-10}\,\mathrm{m}=0{,}15\,\mathrm{nm}\).</div>
+      <div class="hint-step"><strong>Tipp 3:</strong> Si: \(0{,}15-0{,}04=0{,}11\,\mathrm{nm}\).</div>
+    </div>
+  </div>
+
+  <div class="srdp-block">
+    <h3>E) New Horizons</h3>
+    <p>9 Jahre lang mittlere Geschwindigkeit \(16{,}2\,\mathrm{km/s}\). Vereinfachung: 1 Jahr = 365 Tage.</p>
+    <div class="input-row">
+      <label>Weglänge in km</label>
+      <input id="srdpNh" type="text" placeholder="ca. 4,6·10^9" autocomplete="off">
+    </div>
+    <div class="hint-ladder" data-hints="srdpNh">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('srdpNh')">💡 Nächster Tipp</button>
+      <div class="hint-step"><strong>Tipp 1:</strong> Sekunden in 9 Jahren: \(9\cdot365\cdot24\cdot60\cdot60\).</div>
+      <div class="hint-step"><strong>Tipp 2:</strong> Weg = Zeit · Geschwindigkeit.</div>
+      <div class="hint-step"><strong>Tipp 3:</strong> Ergebnis \(\approx 4{,}60\cdot10^{9}\,\mathrm{km}\).</div>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-check" style="margin-top:14px;" onclick="checkSrdp()">Alle SRDP-Antworten prüfen ✓</button>
+  <div class="feedback" id="fb_srdp"></div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Aufträge →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ 8 Arbeitsaufträge ═══════════════ -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Arbeitsaufträge · Größen &amp; Modelle</div>
+  <p>Typische Kontexte aus dem Arbeitsblatt — repräsentative Auswahl. Antworten dürfen in Gleitkomma stehen.</p>
+
+  <div class="convert-grid">
+    <div class="convert-item">
+      <label>1) Lichtlaufzeit Sonne–Erde<br><span class="mini-note">Abstand \(1{,}496\cdot10^{8}\,\mathrm{km}\), \(c=3\cdot10^{5}\,\mathrm{km/s}\) — Ergebnis in Sekunden</span></label>
+      <input id="wa1" type="text" placeholder="ca. 499" autocomplete="off">
+    </div>
+    <div class="convert-item">
+      <label>2) Erdradius aus Volumen<br><span class="mini-note">\(V=1{,}083\cdot10^{12}\,\mathrm{km}^{3}\), Kugel — \(r\) in km</span></label>
+      <input id="wa2" type="text" placeholder="ca. 6370" autocomplete="off">
+    </div>
+    <div class="convert-item">
+      <label>3) Erd-Umfang aus diesem Radius<br><span class="mini-note">\(U=2\pi r\) in km</span></label>
+      <input id="wa3" type="text" placeholder="ca. 4,00·10^4" autocomplete="off">
+    </div>
+    <div class="convert-item">
+      <label>4) Audio-CD: Rillenabstand<br><span class="mini-note">\(1{,}6\,\mu\mathrm{m}\) in Meter (Gleitkomma)</span></label>
+      <input id="wa4" type="text" placeholder="1,6·10^-6" autocomplete="off">
+    </div>
+    <div class="convert-item">
+      <label>5) Mondmasse = \(1/81\) der Erdmasse<br><span class="mini-note">Erde \(5{,}97\cdot10^{24}\,\mathrm{kg}\)</span></label>
+      <input id="wa5" type="text" placeholder="ca. 7,37·10^22" autocomplete="off">
+    </div>
+    <div class="convert-item">
+      <label>6) Masse von \(8{,}9\) Mrd. Menschen<br><span class="mini-note">je \(65\,\mathrm{kg}\)</span></label>
+      <input id="wa6" type="text" placeholder="ca. 5,785·10^11" autocomplete="off">
+    </div>
+    <div class="convert-item">
+      <label>7) Signalverzögerung zum Satelliten<br><span class="mini-note">\(36\,000\,\mathrm{km}\), ein Weg, \(c=3\cdot10^{5}\,\mathrm{km/s}\) — in s</span></label>
+      <input id="wa7" type="text" placeholder="0,12" autocomplete="off">
+    </div>
+    <div class="convert-item">
+      <label>8) Masse eines Wassermoleküls<br><span class="mini-note">\(18\,\mathrm{g}\) Wasser ≈ \(6{,}02\cdot10^{23}\) Moleküle — Masse in kg</span></label>
+      <input id="wa8" type="text" placeholder="ca. 3·10^-26" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="hint-ladder" data-hints="waHints" style="margin-top:12px;">
+    <button type="button" class="btn btn-hint" onclick="revealNextHint('waHints')">💡 Nächster Tipp</button>
+    <div class="hint-step"><strong>Tipp 1:</strong> Laufzeiten: Weg ÷ Geschwindigkeit. Lichtjahr-Laufzeit zu Sirius wäre 8,6 Jahre — hier reicht Sonne–Erde.</div>
+    <div class="hint-step"><strong>Tipp 2:</strong> Kugel: \(V=\frac{4}{3}\pi r^{3}\) ⇒ \(r=\sqrt[3]{\frac{3V}{4\pi}}\).</div>
+    <div class="hint-step"><strong>Tipp 3:</strong> \(\mu\mathrm{m}\to\mathrm{m}\): \(\cdot10^{-6}\). Molekülmasse = Gesamtmassenwert / Teilchenzahl (18 g = 0,018 kg).</div>
+  </div>
+
+  <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkWork()">Überprüfen ✓</button>
+  <div class="feedback" id="fb_work"></div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(8)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ 9 Quiz ═══════════════ -->
+<div class="tab-panel" id="panel8">
+  <div class="ribbon">Abschluss-Quiz</div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">1</span>
+      <span class="exercise-title">\(4{,}55\cdot 10^{5}\) in Festkomma</span>
+    </div>
+    <div class="quiz-options" data-quiz="gk9_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">45&nbsp;500</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">455&nbsp;000</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">4&nbsp;550&nbsp;000</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">0,0000455</div>
+    </div>
+    <div class="feedback" id="fb_gk9_1"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:12px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">2</span>
+      <span class="exercise-title">\(0{,}000456\) in Gleitkomma</span>
+    </div>
+    <div class="quiz-options" data-quiz="gk9_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(4{,}56\cdot 10^{-2}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(45{,}6\cdot 10^{-5}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(4{,}56\cdot 10^{-4}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(4{,}56\cdot 10^{4}\)</div>
+    </div>
+    <div class="feedback" id="fb_gk9_2"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:12px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">3</span>
+      <span class="exercise-title">\((2\cdot 10^{3})\cdot(3\cdot 10^{-5})\)</span>
+    </div>
+    <div class="quiz-options" data-quiz="gk9_3" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(6\cdot 10^{-2}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(6\cdot 10^{-15}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(5\cdot 10^{-2}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(6\cdot 10^{8}\)</div>
+    </div>
+    <div class="feedback" id="fb_gk9_3"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:12px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">4</span>
+      <span class="exercise-title">Vorsilbe Nano</span>
+    </div>
+    <div class="quiz-options" data-quiz="gk9_4" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(10^{-6}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(10^{-3}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(10^{-9}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(10^{9}\)</div>
+    </div>
+    <div class="feedback" id="fb_gk9_4"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:12px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">5</span>
+      <span class="exercise-title">Erdmasse \(5{,}974\cdot 10^{24}\,\mathrm{kg}\) — welche Aussage stimmt?</span>
+    </div>
+    <div class="quiz-options" data-quiz="gk9_5" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Das sind weniger als eine Billiarde Kilogramm.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">In Festkomma wären das 24 Stellen nach der führenden 5 — unhandlich, daher Gleitkomma.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Der Exponent 24 bedeutet 24 Nullen vor dem Komma.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Gleitkomma ist hier nicht erlaubt, weil kg eine Einheit ist.</div>
+    </div>
+    <div class="feedback" id="fb_gk9_5"></div>
+  </div>
+
+  <button type="button" class="btn btn-check" style="margin-top:14px;" onclick="checkFinalQuiz()">Quiz auswerten ✓</button>
+
+  <div class="info-box success" style="margin-top:18px;">
+    <div class="icon">🏁</div>
+    <div>
+      <strong>Geschafft?</strong> Du kannst Fest- und Gleitkomma wechseln, Vorsilben nutzen und SRDP-Texte mit Zehnerpotenzen lösen.
+      Weiter zu <a href="../terme/index.html" style="font-weight:700; color:var(--blue-dark);">07 Terme</a>.
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(7)">← Zurück</button>
+    <div></div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Gleitkommadarstellung<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/gleitkomma-lernpfad/app.js"></script>
 </body>
 </html>

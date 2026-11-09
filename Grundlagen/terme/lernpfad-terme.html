@@ -5,56 +5,989 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Terme</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
-<script src="../../../js/lernpfade-registry.js"></script>
-<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.te-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:780px){ .te-grid { grid-template-columns:1fr 1fr; } }
+.te-grid-3 { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:900px){ .te-grid-3 { grid-template-columns:repeat(3,1fr); } }
+.te-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px 16px; background:#fff; }
+.te-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.viz-panel { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#fff; margin-top:14px; box-shadow:0 1px 2px rgba(15,23,42,.05); }
+.viz-panel h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.mini-note { font-size:.86rem; color:var(--text-light); margin-top:6px; line-height:1.5; }
+.solid-wrap { width:100%; max-width:260px; margin:8px auto 4px; }
+.solid-wrap svg { width:100%; height:auto; display:block; }
+.pyr-layout { display:flex; gap:16px; align-items:center; justify-content:center; margin:12px 0; flex-wrap:wrap; }
+.pyr-slider-col { display:flex; flex-direction:column; align-items:center; gap:8px; min-width:48px; }
+.pyr-vslider {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  -webkit-appearance: slider-vertical;
+  appearance: slider-vertical;
+  width: 32px;
+  height: 200px;
+  accent-color: #2563EB;
+  cursor: pointer;
+}
+.pyr-main { flex:1; min-width:180px; display:flex; flex-direction:column; align-items:center; }
+.pyramid-stack { display:flex; flex-direction:column; align-items:center; gap:4px; margin:8px auto; min-height:160px; justify-content:flex-start; }
+.pyramid-row { display:flex; gap:3px; }
+.pyramid-cell {
+  width:18px; height:18px; border-radius:3px; background:linear-gradient(135deg,#F87171,#EF4444);
+  border:1px solid #B91C1C;
+}
+.pyramid-cell.y { background:linear-gradient(135deg,#FDE68A,#F59E0B); border-color:#B45309; }
+.pyramid-cell.o { background:linear-gradient(135deg,#FED7AA,#FB923C); border-color:#C2410C; }
+.area-model {
+  display:grid; gap:2px; margin:12px auto; max-width:320px;
+  border:2px solid #1E3A8A; border-radius:8px; overflow:hidden; background:#1E3A8A;
+}
+.area-model .cell {
+  display:flex; align-items:center; justify-content:center; font-weight:800; min-height:52px;
+  font-size:.92rem;
+}
+.area-labels { display:flex; justify-content:space-around; max-width:320px; margin:6px auto 0; font-weight:800; color:var(--blue-dark); font-size:.85rem; }
+.area-side { writing-mode:vertical-rl; transform:rotate(180deg); font-weight:800; color:var(--blue-dark); display:flex; align-items:center; justify-content:center; padding:0 6px; }
+.area-wrap { display:grid; grid-template-columns:28px 1fr; gap:6px; align-items:stretch; max-width:360px; margin:10px auto; }
+.bracket-viz {
+  font-size:1.15rem; font-weight:700; text-align:center; margin:14px 0; line-height:1.9;
+  font-family:Nunito,system-ui,sans-serif; overflow-x:auto;
+}
+.bk-a { color:#DC2626; font-weight:900; }
+.bk-b { color:#2563EB; font-weight:900; }
+.bk-c { color:#16A34A; font-weight:900; }
+.binom-tabs { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.binom-tab {
+  border:2px solid var(--blue); background:#fff; color:var(--blue-dark); border-radius:999px;
+  padding:7px 12px; font-weight:800; cursor:pointer; font-family:Nunito,system-ui,sans-serif; font-size:.84rem;
+}
+.binom-tab.active { background:var(--blue); color:#fff; }
+.binom-stage { max-width:300px; margin:10px auto; }
+.binom-stage.diff-mode { max-width:420px; }
+.binom-board {
+  width:min(260px,100%); aspect-ratio:1; margin:0 auto; display:grid; gap:3px;
+  grid-template-columns:1.45fr 0.85fr; grid-template-rows:1.45fr 0.85fr;
+}
+.binom-board.diff {
+  position:relative; display:block; width:min(280px,100%); aspect-ratio:1;
+  margin:0 auto; gap:0; border:2px solid #1E3A8A; border-radius:10px;
+  background:#F1F5F9; overflow:hidden;
+}
+.binom-board.diff .binom-slot[data-slot="0"] {
+  position:absolute; inset:0; border-radius:0; border-style:dashed; z-index:1;
+  min-height:0; font-size:.95rem;
+}
+.binom-board.diff .binom-slot[data-slot="1"] {
+  position:absolute; right:0; bottom:0; width:36%; height:36%; z-index:2;
+  border-radius:8px 0 0 0; min-height:0; font-size:.82rem;
+  box-shadow:-1px -1px 0 rgba(30,58,138,.25);
+}
+.binom-board.diff .binom-slot.bq-a2 { background:#FDBA74; }
+.binom-board.diff .binom-slot.bq-neg {
+  background:repeating-linear-gradient(-45deg,#FCA5A5,#FCA5A5 6px,#FEE2E2 6px,#FEE2E2 12px);
+  color:#7F1D1D;
+}
+.binom-board.diff .binom-slot.ok { box-shadow:inset 0 0 0 3px #16A34A; }
+.binom-board.diff .binom-slot.bad { box-shadow:inset 0 0 0 3px #E11D48; }
+.binom-diff-labels {
+  display:grid; grid-template-columns:22px 1fr; grid-template-rows:1fr 22px;
+  gap:4px; width:min(304px,100%); margin:0 auto; align-items:stretch;
+}
+.binom-diff-labels .binom-board.diff { grid-column:2; grid-row:1; width:100%; }
+.binom-diff-ylab {
+  grid-column:1; grid-row:1; writing-mode:vertical-rl; transform:rotate(180deg);
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-weight:800; color:var(--blue-dark); font-size:.8rem;
+}
+.binom-diff-xlab {
+  grid-column:2; grid-row:2; display:flex; justify-content:space-between;
+  font-weight:800; color:var(--blue-dark); font-size:.8rem; padding:0 2px;
+}
+.binom-diff-guide {
+  margin:14px auto 0; max-width:420px; text-align:center;
+}
+.binom-diff-guide svg { width:100%; max-width:400px; height:auto; display:block; margin:0 auto; }
+.binom-diff-guide .guide-caption {
+  font-size:.86rem; color:var(--text-light); line-height:1.5; margin:8px 0 0;
+}
+.binom-diff-guide.solved .guide-rect { opacity:1; }
+.binom-diff-guide .guide-rect { opacity:.55; transition:opacity .35s; }
+.binom-ggb { margin-top:16px; }
+.binom-ggb .geogebra-iframe-wrap iframe { height:480px; min-height:360px; }
+.binom-diff-ylab { justify-content:space-between; padding:12% 0 2%; }
+.binom-diff-xlab span:first-child { flex:1.7; text-align:center; }
+.binom-diff-xlab span:last-child { flex:1; text-align:center; }
+.binom-dim {
+  display:flex; justify-content:space-around; font-weight:800; color:var(--blue-dark);
+  font-size:.85rem; margin-top:6px;
+}
+.binom-slot {
+  border:2px dashed #94A3B8; border-radius:8px; background:#F8FAFC;
+  display:flex; align-items:center; justify-content:center; font-weight:800; color:#64748B;
+  cursor:pointer; min-height:48px; transition:background .2s, border-color .2s;
+}
+.binom-slot.filled { border-style:solid; color:#1E3A8A; }
+.binom-slot.ok { border-color:#16A34A; background:#ECFDF3; }
+.binom-slot.bad { border-color:#E11D48; background:#FEF2F2; }
+.binom-slot.bq-a2 { background:#FDBA74; }
+.binom-slot.bq-ab { background:#94A3B8; color:#fff; }
+.binom-slot.bq-b2 { background:#60A5FA; color:#fff; }
+.binom-slot.bq-neg { background:#FCA5A5; color:#7F1D1D; }
+.tile-palette { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:10px 0; }
+.tile-btn {
+  padding:8px 12px; border-radius:10px; border:2px solid #CBD5E1; background:#fff;
+  font-weight:800; cursor:pointer; font-family:Nunito,system-ui,sans-serif;
+}
+.tile-btn.selected { border-color:#2563EB; background:#EFF6FF; box-shadow:0 0 0 2px rgba(37,99,235,.2); }
+.tile-btn.used { opacity:.4; pointer-events:none; }
+.term-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:10px 0; }
+.term-chip {
+  padding:8px 12px; border-radius:999px; border:2px solid #93C5FD; background:#EFF6FF;
+  font-weight:800; color:var(--blue-dark);
+}
+.term-chip.like { border-color:#86EFAC; background:#ECFDF3; color:#166534; }
+.term-chip.unlike { border-color:#FDBA74; background:#FFF7ED; color:#9A3412; }
+.arrow-dist {
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;
+  margin:12px 0; font-weight:800; color:var(--blue-dark);
+}
+.arrow-dist .box {
+  padding:10px 14px; border-radius:12px; border:2px solid #2563EB; background:#EFF6FF;
+}
+.match-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.match-row {
+  display:grid; grid-template-columns:1fr; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+@media (min-width:720px){ .match-row { grid-template-columns:1.15fr 1fr; } }
+.match-row label { font-weight:700; }
+.match-row select {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.trick-steps { margin:10px 0 0; padding-left:18px; line-height:1.7; }
+.order-pool { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.order-chip {
+  padding:8px 12px; border-radius:10px; border:2px solid #CBD5E1; background:#fff;
+  font-weight:700; cursor:pointer; font-family:Nunito,system-ui,sans-serif;
+  text-align:left; font-size:.9rem; line-height:1.45;
+}
+.order-chip.selected { border-color:#2563EB; background:#EFF6FF; box-shadow:0 0 0 2px rgba(37,99,235,.2); }
+.order-chip.used { opacity:.35; pointer-events:none; }
+.order-slots { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+.order-slot {
+  display:grid; grid-template-columns:42px 1fr; gap:10px; align-items:center;
+  min-height:48px; padding:8px 12px; border:2px dashed #CBD5E1; border-radius:12px;
+  background:#F8FAFC; cursor:pointer; font-weight:700; font-family:Nunito,system-ui,sans-serif;
+  font-size:.9rem; line-height:1.45;
+}
+.order-slot .ord-num {
+  width:32px; height:32px; border-radius:999px; display:flex; align-items:center; justify-content:center;
+  background:#EFF6FF; color:var(--blue-dark); font-weight:800; border:1px solid #BFDBFE;
+}
+.order-slot .ord-body { color:#334155; }
+.order-slot.filled { border-style:solid; background:#fff; border-color:#93C5FD; }
+.order-slot.ok { border-color:#16A34A; background:#ECFDF3; }
+.order-slot.bad { border-color:#E11D48; background:#FEF2F2; }
+.order-hint { margin:0 0 8px; font-size:.9rem; color:#64748B; }
+.slider-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:10px; }
+.slider-row input[type=range] { flex:1; min-width:140px; }
+.slider-val { font-weight:800; color:var(--blue-dark); min-width:3.5rem; }
+.sort-bins { display:grid; grid-template-columns:1fr; gap:12px; margin-top:10px; }
+@media (min-width:700px){ .sort-bins { grid-template-columns:1fr 1fr; } }
+.sort-bin { border:2px dashed #CBD5E1; border-radius:14px; padding:12px; min-height:120px; background:#F8FAFC; }
+.sort-bin h4 { margin:0 0 8px; color:var(--blue-dark); }
+.sort-item {
+  display:block; width:100%; text-align:left; margin:6px 0; padding:8px 10px; border-radius:10px;
+  border:1px solid #E2E8F0; background:#fff; font-weight:700; cursor:pointer;
+  font-family:Nunito,system-ui,sans-serif;
+}
+.sort-item:hover { border-color:#93C5FD; }
+.check-grid { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.check-row {
+  display:grid; grid-template-columns:28px 1fr; gap:10px; align-items:start;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+</style>
 </head>
 <body data-current-page="s3-p07" data-page-type="lernpfad" data-chapter-folder="Grundlagen/terme">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 11 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
   <h1>Terme</h1>
-  <p class="subtitle">Rechnen, Umformen, Struktur — Inhalte werden ergänzt.</p>
+  <p class="subtitle">Terme aufstellen, umformen und strukturieren — von Paketen und Zahlenspielereien bis zu den binomischen Formeln.</p>
   <span class="badge">3.&nbsp;Semester · Thema 07</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
-    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
-    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
     <a href="../gleitkomma/index.html" style="color:var(--blue-dark); font-weight:600;">← 06 Gleitkomma</a>
     · <a href="../formeln/index.html" style="color:var(--blue-dark); font-weight:600;">08 Formeln →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
-  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Pakete</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Zahlenspiele</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Pyramide</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Struktur</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>± Terme</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Distributiv</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Klammern</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Binome</button>
+  <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Anwenden</button>
+  <button type="button" class="tab-btn" onclick="switchTab(9)"><span class="tab-num">10</span>Training</button>
+  <button type="button" class="tab-btn" onclick="switchTab(10)"><span class="tab-num">11</span>Quiz</button>
 </div>
+
+<!-- 1 Pakete -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>algebraische Terme</strong>, Umformungen und ihre <strong>Begründung</strong>.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg: Pakete — Volumen &amp; Oberfläche</div>
+  <p>Terme entstehen oft aus Geometrie: Maße mit Variablen → Formeln für \(V\) und \(O\).</p>
+
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Lehrplan</strong><br>
+      Mit Termen rechnen und umformen (begründen); Struktur eines Terms erkennen, damit Technologie gezielt eingesetzt werden kann.
+    </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Weitere interaktive Übungen</h3>
+    <p class="mini-note" style="margin-top:0;">
+      Bei GeoGebra gibt es eine Übersicht zu <strong>Termen &amp; Ausdrücken</strong> — mit Binomen, Zuordnungen und vielen Übungen zum Selbstprüfen.
+    </p>
+    <p style="margin:10px 0 0;">
+      <a class="btn btn-hint" href="https://www.geogebra.org/math/expressions" target="_blank" rel="noopener noreferrer">GeoGebra · Terme &amp; Ausdrücke ↗</a>
+    </p>
+  </div>
+
+  <div class="te-grid-3">
+    <div class="te-card">
+      <h3>1. Quader</h3>
+      <div class="solid-wrap" aria-hidden="true">
+        <!-- isometrisch: Höhe a, Breite 2a, Tiefe 3a -->
+        <svg viewBox="0 0 260 210" role="img" aria-label="Quader a mal 2a mal 3a">
+          <ellipse cx="130" cy="192" rx="88" ry="12" fill="rgba(30,58,138,0.12)"/>
+          <path d="M52 78 L130 34 L208 78" fill="none" stroke="#93C5FD" stroke-width="1.4" stroke-dasharray="5 4"/>
+          <path d="M130 34 L130 98" fill="none" stroke="#93C5FD" stroke-width="1.4" stroke-dasharray="5 4"/>
+          <!-- linke Fläche (Höhe a) -->
+          <polygon points="52,78 52,128 130,172 130,122" fill="#60A5FA" stroke="#1E3A8A" stroke-width="2.4" stroke-linejoin="round"/>
+          <!-- Deckfläche -->
+          <polygon points="52,78 130,34 208,78 130,122" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="2.4" stroke-linejoin="round"/>
+          <!-- rechte Fläche (Tiefe 3a, Breite-Projektion) -->
+          <polygon points="130,122 208,78 208,128 130,172" fill="#1D4ED8" stroke="#1E3A8A" stroke-width="2.4" stroke-linejoin="round"/>
+          <line x1="34" y1="80" x2="34" y2="126" stroke="#1D4ED8" stroke-width="2"/>
+          <line x1="28" y1="80" x2="40" y2="80" stroke="#1D4ED8" stroke-width="2"/>
+          <line x1="28" y1="126" x2="40" y2="126" stroke="#1D4ED8" stroke-width="2"/>
+          <text x="20" y="108" text-anchor="middle" font-family="Nunito,sans-serif" font-size="15" font-weight="800" fill="#1D4ED8">a</text>
+          <text x="95" y="188" text-anchor="middle" font-family="Nunito,sans-serif" font-size="15" font-weight="800" fill="#1D4ED8">2a</text>
+          <text x="196" y="58" text-anchor="middle" font-family="Nunito,sans-serif" font-size="15" font-weight="800" fill="#1D4ED8">3a</text>
+        </svg>
+      </div>
+      <p class="mini-note" style="text-align:center">\(V = a\cdot 2a\cdot 3a = 6a^{3}\)</p>
+    </div>
+    <div class="te-card">
+      <h3>2. Quader</h3>
+      <div class="solid-wrap" aria-hidden="true">
+        <!-- isometrisch: Höhe 3a, Breite 4b, Tiefe 7a -->
+        <svg viewBox="0 0 280 230" role="img" aria-label="Quader 3a mal 4b mal 7a">
+          <ellipse cx="140" cy="210" rx="100" ry="13" fill="rgba(146,64,14,0.14)"/>
+          <path d="M48 70 L140 18 L232 70" fill="none" stroke="#FCD34D" stroke-width="1.4" stroke-dasharray="5 4"/>
+          <path d="M140 18 L140 100" fill="none" stroke="#FCD34D" stroke-width="1.4" stroke-dasharray="5 4"/>
+          <polygon points="48,70 48,148 140,196 140,118" fill="#F59E0B" stroke="#78350F" stroke-width="2.4" stroke-linejoin="round"/>
+          <polygon points="48,70 140,18 232,70 140,118" fill="#FEF3C7" stroke="#78350F" stroke-width="2.4" stroke-linejoin="round"/>
+          <polygon points="140,118 232,70 232,148 140,196" fill="#B45309" stroke="#78350F" stroke-width="2.4" stroke-linejoin="round"/>
+          <line x1="30" y1="72" x2="30" y2="146" stroke="#B45309" stroke-width="2"/>
+          <line x1="24" y1="72" x2="36" y2="72" stroke="#B45309" stroke-width="2"/>
+          <line x1="24" y1="146" x2="36" y2="146" stroke="#B45309" stroke-width="2"/>
+          <text x="16" y="116" text-anchor="middle" font-family="Nunito,sans-serif" font-size="15" font-weight="800" fill="#92400E">3a</text>
+          <text x="100" y="216" text-anchor="middle" font-family="Nunito,sans-serif" font-size="15" font-weight="800" fill="#92400E">4b</text>
+          <text x="220" y="48" text-anchor="middle" font-family="Nunito,sans-serif" font-size="15" font-weight="800" fill="#92400E">7a</text>
+        </svg>
+      </div>
+      <p class="mini-note" style="text-align:center">\(V = 3a\cdot 4b\cdot 7a = 84a^{2}b\)</p>
+    </div>
+    <div class="te-card">
+      <h3>3. L-Körper</h3>
+      <div class="solid-wrap" aria-hidden="true">
+        <!-- isometrisch L (Quader-Konvention): x'=ox+x·sx+z·sx, y'=oy+x·sy−z·sy−y·hy; sx=20,sy=11,hy=20; V1 x0–2,z0–4; V2 x2–5,z0–2; y0–3.6 -->
+        <svg viewBox="0 0 280 250" role="img" aria-label="L-Körper aus zwei Quadern">
+          <ellipse cx="140" cy="236" rx="100" ry="11" fill="rgba(30,58,138,0.12)"/>
+          <!-- V1 linke Fläche -->
+          <polygon points="62,100 62,172 142,128 142,56" fill="#60A5FA" stroke="#1E3A8A" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- V1 rechte Fläche (Innenecke hinter dem Arm) -->
+          <polygon points="142,100 182,78 182,150 142,172" fill="#1E40AF" stroke="#1E3A8A" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- V1 Deckfläche -->
+          <polygon points="62,100 142,56 182,78 102,122" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- V2 Deckfläche (teilt Kante 102,122–142,100 mit V1) -->
+          <polygon points="102,122 142,100 202,133 162,155" fill="#BFDBFE" stroke="#1E3A8A" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- V2 rechte Fläche -->
+          <polygon points="162,155 202,133 202,205 162,227" fill="#1D4ED8" stroke="#1E3A8A" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- V1 Vorderfläche -->
+          <polygon points="62,100 102,122 102,194 62,172" fill="#3B82F6" stroke="#1E3A8A" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- V2 Vorderfläche -->
+          <polygon points="102,122 162,155 162,227 102,194" fill="#2563EB" stroke="#1E3A8A" stroke-width="2.2" stroke-linejoin="round"/>
+          <!-- Trennlinie V1 | V2 -->
+          <line x1="102" y1="122" x2="142" y2="100" stroke="#1E3A8A" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <line x1="102" y1="122" x2="102" y2="194" stroke="#1E3A8A" stroke-width="1.8" stroke-dasharray="5 4"/>
+          <text x="95" y="82" text-anchor="middle" font-family="Nunito,sans-serif" font-size="13" font-weight="800" fill="#1D4ED8">V₁</text>
+          <text x="155" y="128" text-anchor="middle" font-family="Nunito,sans-serif" font-size="13" font-weight="800" fill="#1D4ED8">V₂</text>
+          <line x1="44" y1="102" x2="44" y2="170" stroke="#1D4ED8" stroke-width="2"/>
+          <line x1="38" y1="102" x2="50" y2="102" stroke="#1D4ED8" stroke-width="2"/>
+          <line x1="38" y1="170" x2="50" y2="170" stroke="#1D4ED8" stroke-width="2"/>
+          <text x="30" y="140" text-anchor="middle" font-family="Nunito,sans-serif" font-size="14" font-weight="800" fill="#1D4ED8">h</text>
+          <text x="78" y="202" text-anchor="middle" font-family="Nunito,sans-serif" font-size="14" font-weight="800" fill="#1D4ED8">a</text>
+          <text x="140" y="230" text-anchor="middle" font-family="Nunito,sans-serif" font-size="14" font-weight="800" fill="#1D4ED8">b</text>
+        </svg>
+      </div>
+      <p class="mini-note" style="text-align:center">Zwei Quader → Terme addieren<br>\(V = V_1 + V_2\)</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Aufgabe</span>
+      <span class="exercise-title">Volumen als Term</span>
+    </div>
+    <p>Quader 1: \(a\times 2a\times 3a\). Volumen?</p>
+    <div class="quiz-options" data-quiz="te0_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(6a\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(6a^{2}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(6a^{3}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(5a^{3}\)</div>
+    </div>
+    <div class="feedback" id="fb_te0_1"></div>
+
+    <p style="margin-top:16px;">Quader 2: \(3a\times 4b\times 7a\). Volumen?</p>
+    <div class="quiz-options" data-quiz="te0_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(84ab\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(84a^{2}b\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(14a^{2}b\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(84a^{3}b\)</div>
+    </div>
+    <div class="feedback" id="fb_te0_2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['te0_1','te0_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Zahlenspiele →</button>
+  </div>
 </div>
+
+<!-- 2 Zahlenspiele -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Mit Termen rechnen, Terme umformen und dies durch <strong>Rechenregeln begründen</strong>.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Die <strong>Struktur eines Terms</strong> erkennen, um Terme mit der jeweiligen Technologie gezielt verarbeiten zu können.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Zahlenspielereien — Magie mit Termen</div>
+  <p>Viele „Zaubertricks“ sind nur Termumformungen. Wer den Term aufstellt, versteht, warum immer dieselbe Zahl herauskommt. Bringe die Beweisschritte in die <strong>richtige Reihenfolge</strong> (Schritt tippen, dann Zielplatz tippen).</p>
+
+  <div class="viz-panel">
+    <h3>Beispiel: Immer 5</h3>
+    <p class="order-hint">Die Schritte sind gemischt. Ordne sie so, dass am Ende immer \(5\) herauskommt.</p>
+    <div class="order-pool" id="zsPoolImmer5" aria-label="Gemischte Schritte Immer 5"></div>
+    <div class="order-slots" id="zsSlotsImmer5" aria-label="Zielreihenfolge Immer 5"></div>
+    <div class="feedback" id="fb_zs_immer5"></div>
+    <div class="formula-box" style="margin-top:14px;">
+      <div class="formula-label">Als Term (Ziel)</div>
+      \[
+        \frac{2x+10}{2}-x = x+5-x = 5
+      \]
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Beweisen</span>
+      <span class="exercise-title">Drei aufeinanderfolgende Zahlen</span>
+    </div>
+    <p>Mittlere Zahl \(n\), Nachbarn \(n-1\) und \(n+1\). Ordne die Herleitung für \((n-1)n(n+1)+n = n^{3}\).</p>
+    <p class="order-hint">Wieder: Schritt aus dem Pool tippen, dann in Slot 1…4 legen. Belegten Slot tippen (ohne Auswahl) leert ihn.</p>
+    <div class="order-pool" id="zsPoolNachbarn" aria-label="Gemischte Herleitungsschritte"></div>
+    <div class="order-slots" id="zsSlotsNachbarn" aria-label="Zielreihenfolge Nachbarn"></div>
+    <div class="feedback" id="fb_zs_nachbarn"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkZahlenspieleOrders()">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Pyramide →</button>
+  </div>
 </div>
+
+<!-- 3 Pyramide -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Sektglaspyramide — Summe der Quadratzahlen</div>
+  <p>Jede Etage ist ein Quadrat: \(1^{2}+2^{2}+\ldots+n^{2}\). Das ergibt die <strong>n-te Pyramidenzahl</strong>. Mit dem vertikalen Regler wächst die Pyramide nach unten.</p>
+
+  <div class="viz-panel">
+    <h3>Live: Etagen wählen</h3>
+    <div class="pyr-layout">
+      <div class="pyr-slider-col">
+        <span style="font-weight:800;color:var(--blue-dark)">\(n=\)<span id="pyrNLabel">4</span></span>
+        <input class="pyr-vslider" type="range" id="pyrN" min="1" max="6" value="4" oninput="updatePyramid()" aria-label="Anzahl Etagen">
+        <span class="mini-note" style="margin:0;text-align:center">nach unten<br>mehr Etagen</span>
+      </div>
+      <div class="pyr-main">
+        <div class="pyramid-stack" id="pyramidViz" aria-hidden="true"></div>
+        <p class="pow-live" id="pyrOut" style="text-align:center;font-weight:800;color:var(--blue-dark);margin:8px 0 0;">Summe = 30</p>
+      </div>
+    </div>
+    <div class="formula-box" style="margin-top:14px;">
+      <div class="formula-label">Formel</div>
+      \[
+        \sum_{i=1}^{n} i^{2} = \frac{n(n+1)(2n+1)}{6}
+      \]
+      <p class="mini-note" style="margin-top:8px;text-align:center">Für \(n=4\): \(1+4+9+16=30=\frac{4\cdot5\cdot9}{6}\).</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Formel nutzen</span>
+    </div>
+    <p>Summe der ersten 5 Quadratzahlen?</p>
+    <div class="quiz-options" data-quiz="te2_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">25</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">55</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">15</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">125</div>
+    </div>
+    <div class="feedback" id="fb_te2_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['te2_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Struktur →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Terme<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- 4 Struktur -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Struktur eines Terms erkennen</div>
+  <p>Vor dem Rechnen: <strong>Summanden</strong>, <strong>Faktoren</strong>, gleiche Variablenteile — sonst fasst man Falsches zusammen.</p>
+
+  <div class="viz-panel">
+    <h3>Gleiche vs. ungleiche Summanden</h3>
+    <div class="term-chips">
+      <span class="term-chip like">\(3x\)</span>
+      <span class="term-chip like">\(5x\)</span>
+      <span class="term-chip unlike">\(2y\)</span>
+      <span class="term-chip like">\(-x\)</span>
+      <span class="term-chip unlike">\(4\)</span>
+    </div>
+    <p class="mini-note">Grün: gleiches Variablenprodukt → zusammenfassen. Orange: andere Struktur.</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Was gehört zusammen?</span>
+    </div>
+    <div class="match-list" id="matchStruct"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkMatchStruct()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_match_struct"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: ± Terme →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- 5 Plus Minus -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Terme addieren und subtrahieren</div>
+  <p>Nur <strong>gleichartige</strong> Summanden zusammenfassen: Koeffizienten addieren/subtrahieren, Variablenteil bleibt.</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Beispiel</div>
+    \[
+      7a-3a+5b+2a = (7-3+2)a+5b = 6a+5b
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Zusammenfassen</span>
+    </div>
+    <p>\(4x+9x-2x=\)</p>
+    <div class="quiz-options" data-quiz="te4_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(11x\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(15x\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(7x\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(4x^{2}\)</div>
+    </div>
+    <div class="feedback" id="fb_te4_1"></div>
+
+    <p style="margin-top:16px;">\(3\sqrt{2}+4\sqrt{2}=\)</p>
+    <div class="quiz-options" data-quiz="te4_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(7\sqrt{4}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(7\sqrt{2}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(12\sqrt{2}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\sqrt{14}\)</div>
+    </div>
+    <div class="feedback" id="fb_te4_2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(4, ['te4_1','te4_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Distributiv →</button>
+  </div>
+</div>
+
+<!-- 6 Distributiv -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Distributivgesetz</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Kern</div>
+    \[
+      a(b+c)=ab+ac
+      \qquad
+      (a+b)(c+d)=ac+ad+bc+bd
+    \]
+  </div>
+
+  <div class="viz-panel">
+    <h3>Flächenmodell: \(a(b+c)=ab+ac\)</h3>
+    <p class="mini-note">Ein Rechteck mit Höhe \(a\) und Breite \(b+c\) zerfällt in zwei Teilflächen.</p>
+    <div class="area-wrap">
+      <div class="area-side">\(a\)</div>
+      <div>
+        <div class="area-model" style="grid-template-columns:1.2fr 0.8fr;">
+          <div class="cell" style="background:#FDBA74;">\(ab\)</div>
+          <div class="cell" style="background:#93C5FD;">\(ac\)</div>
+        </div>
+        <div class="area-labels"><span>\(b\)</span><span>\(c\)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Flächenmodell: \((a+b)(c+d)\)</h3>
+    <p class="mini-note">Vier Teilrechtecke — jedes Produkt entspricht einer Fläche.</p>
+    <div class="area-wrap">
+      <div class="area-side" style="justify-content:space-around;gap:24px;">
+        <span>\(a\)</span><span>\(b\)</span>
+      </div>
+      <div>
+        <div class="area-model" style="grid-template-columns:1.1fr 0.9fr; grid-template-rows:1.1fr 0.9fr;">
+          <div class="cell" style="background:#FDBA74;">\(ac\)</div>
+          <div class="cell" style="background:#FCD34D;">\(ad\)</div>
+          <div class="cell" style="background:#93C5FD;">\(bc\)</div>
+          <div class="cell" style="background:#60A5FA;color:#fff;">\(bd\)</div>
+        </div>
+        <div class="area-labels"><span>\(c\)</span><span>\(d\)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Beispiel ausmultiplizieren</h3>
+    <div class="arrow-dist">
+      <span class="box">\(5x+7\)</span>
+      <span>·</span>
+      <span class="box">\(2x-3\)</span>
+      <span>=</span>
+      <span class="box" style="background:#ECFDF3;border-color:#16A34A;">\(10x^{2}-x-21\)</span>
+    </div>
+    <p class="mini-note">Jeder Summand links multipliziert mit jedem rechts — dann zusammenfassen.</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Ausmultiplizieren</span>
+    </div>
+    <p>\(3(2x-5)=\)</p>
+    <div class="quiz-options" data-quiz="te5_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(6x-5\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(6x-15\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(5x-15\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(6x+15\)</div>
+    </div>
+    <div class="feedback" id="fb_te5_1"></div>
+
+    <p style="margin-top:16px;">\((5x+7)(2x-3)=\)</p>
+    <div class="quiz-options" data-quiz="te5_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(10x^{2}-21\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(10x^{2}+x-21\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(10x^{2}-x-21\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(7x^{2}-15\)</div>
+    </div>
+    <div class="feedback" id="fb_te5_2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['te5_1','te5_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Klammern →</button>
+  </div>
+</div>
+
+<!-- 7 Klammern -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Klammern &amp; Vorzeichen</div>
+  <p>Minus vor der Klammer kehrt <strong>alle</strong> Vorzeichen darin um. Bei verschachtelten Klammern von innen nach außen arbeiten — gleiche Farbe = zusammengehöriges Paar.</p>
+
+  <div class="viz-panel">
+    <h3>Farbige Klammern</h3>
+    <div class="bracket-viz" aria-hidden="true">
+      \(3x-4-\)<span class="bk-a">[</span>\(2x+y-2-\)<span class="bk-b">(</span>\(x-y-1\)<span class="bk-b">)</span><span class="bk-a">]</span>
+      <br>= \(2x-2y-3\)
+    </div>
+    <p class="mini-note" style="text-align:center">
+      <span class="bk-a">■</span> äußere eckige Klammern &nbsp;·&nbsp;
+      <span class="bk-b">■</span> innere runde Klammern
+    </p>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-label">Muster</div>
+    \[
+      3x-4-\bigl[2x+y-2-(x-y-1)\bigr] = 2x-2y-3
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Vorzeichen</span>
+    </div>
+    <p class="bracket-viz" style="font-size:1.05rem;text-align:left;margin:8px 0;">
+      \(5-\)<span class="bk-a">(</span>\(3-x\)<span class="bk-a">)</span>\(=\;?\)
+    </p>
+    <div class="quiz-options" data-quiz="te6_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(2-x\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(8-x\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(2+x\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(5-3-x\)</div>
+    </div>
+    <div class="feedback" id="fb_te6_1"></div>
+
+    <p class="bracket-viz" style="font-size:1.05rem;text-align:left;margin:16px 0 8px;">
+      \(-\)<span class="bk-b">(</span>\(2x-5\)<span class="bk-b">)</span>\(=\;?\)
+    </p>
+    <div class="quiz-options" data-quiz="te6_2" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(-2x+5\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(-2x-5\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(2x-5\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(2x+5\)</div>
+    </div>
+    <div class="feedback" id="fb_te6_2"></div>
+
+    <p class="bracket-viz" style="font-size:1.05rem;text-align:left;margin:16px 0 8px;">
+      \(8-\)<span class="bk-a">[</span>\(3-\)<span class="bk-b">(</span>\(2-x\)<span class="bk-b">)</span><span class="bk-a">]</span>\(=\;?\)
+    </p>
+    <div class="quiz-options" data-quiz="te6_3" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(7-x\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(7+x\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(5-x\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(13-x\)</div>
+    </div>
+    <div class="feedback" id="fb_te6_3"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['te6_1','te6_2','te6_3'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Binome →</button>
+  </div>
+</div>
+
+<!-- 8 Binome intro -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Binomische Formeln — geometrisch</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Die drei Formeln</div>
+    \[
+      (a+b)^{2}=a^{2}+2ab+b^{2}
+      \qquad
+      (a-b)^{2}=a^{2}-2ab+b^{2}
+      \qquad
+      (a+b)(a-b)=a^{2}-b^{2}
+    \]
+  </div>
+
+  <div class="viz-panel">
+    <h3>Flächen selbst zusammensetzen</h3>
+    <p class="mini-note">Formel wählen → Kachel antippen → leeres Feld belegen. Alle drei Formeln geometrisch aufbauen.</p>
+    <div class="binom-tabs" role="tablist">
+      <button type="button" class="binom-tab active" id="btab0" onclick="setBinomMode(0)">(a+b)²</button>
+      <button type="button" class="binom-tab" id="btab1" onclick="setBinomMode(1)">(a−b)²</button>
+      <button type="button" class="binom-tab" id="btab2" onclick="setBinomMode(2)">(a+b)(a−b)</button>
+    </div>
+    <p id="binomHint" style="text-align:center;font-weight:700;color:var(--blue-dark);margin:8px 0;">Quadrat mit Seite \(a+b\)</p>
+    <div class="tile-palette" id="binomPalette"></div>
+    <div class="binom-stage" id="binomStage">
+      <div class="binom-board" id="binomBoard" aria-label="Flächenfelder"></div>
+      <div class="binom-dim" id="binomDims"></div>
+    </div>
+    <div class="binom-diff-guide" id="binomDiffGuide" hidden>
+      <svg viewBox="0 0 400 150" role="img" aria-label="Umordnung: L-Fläche wird zum Rechteck (a+b) mal (a-b)">
+        <!-- L-Form a² − b² -->
+        <rect x="18" y="18" width="100" height="100" fill="#FDBA74" stroke="#C2410C" stroke-width="2"/>
+        <rect x="82" y="82" width="36" height="36" fill="#FEE2E2" stroke="#B91C1C" stroke-width="2"
+              stroke-dasharray="4 3"/>
+        <text x="52" y="68" text-anchor="middle" font-size="13" font-weight="800" fill="#9A3412">a²</text>
+        <text x="100" y="104" text-anchor="middle" font-size="11" font-weight="800" fill="#7F1D1D">−b²</text>
+        <text x="68" y="138" text-anchor="middle" font-size="11" font-weight="700" fill="#1E3A8A">L-Fläche</text>
+        <!-- Pfeil -->
+        <path d="M140 68 H175" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+        <polygon points="175,62 188,68 175,74" fill="#2563EB"/>
+        <!-- Rechteck (a+b)×(a−b) -->
+        <g class="guide-rect">
+          <rect x="200" y="38" width="170" height="70" fill="#FDE68A" stroke="#B45309" stroke-width="2"/>
+          <line x1="200" y1="38" x2="200" y2="108" stroke="#1E3A8A" stroke-width="1.5"/>
+          <line x1="200" y1="108" x2="370" y2="108" stroke="#1E3A8A" stroke-width="1.5"/>
+          <text x="192" y="78" text-anchor="end" font-size="12" font-weight="800" fill="#1E3A8A">a−b</text>
+          <text x="285" y="128" text-anchor="middle" font-size="12" font-weight="800" fill="#1E3A8A">a+b</text>
+          <text x="285" y="78" text-anchor="middle" font-size="13" font-weight="800" fill="#92400E">(a+b)(a−b)</text>
+        </g>
+      </svg>
+      <p class="guide-caption">
+        Vom großen Quadrat \(a^{2}\) das kleine Quadrat \(b^{2}\) abziehen — die Restfläche lässt sich zum Rechteck mit Seiten \(a+b\) und \(a-b\) umordnen.
+      </p>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px;">
+      <button type="button" class="btn btn-check" onclick="checkBinomBoard()">Überprüfen ✓</button>
+      <button type="button" class="btn btn-prev" onclick="resetBinomBoard()">Zurücksetzen</button>
+    </div>
+    <div class="feedback" id="fb_binom_board"></div>
+    <div class="binom-ggb geogebra-embed" id="binomGgbEmbed" hidden>
+      <p class="geogebra-embed-title">GeoGebra: 3. binomische Formel ausprobieren</p>
+      <p class="mini-note" style="margin-top:0;margin-bottom:10px;">
+        Interaktive Herleitung — großes Quadrat minus kleines Quadrat und Umordnung zum Rechteck.
+        Sammlung: <a href="https://www.geogebra.org/m/bxcspuc6" target="_blank" rel="noopener noreferrer">Binomische Formeln</a>
+        · Applet: <a href="https://www.geogebra.org/m/feukzdve" target="_blank" rel="noopener noreferrer">Grafische Herleitung der 3. Formel</a>
+      </p>
+      <div class="geogebra-iframe-wrap">
+        <iframe
+          id="binomGgbIframe"
+          title="Grafische Herleitung der 3. binomischen Formel — GeoGebra"
+          loading="lazy"
+          allowfullscreen
+          data-ggb-src="https://www.geogebra.org/classic/feukzdve"
+          style="border:0;"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <p class="geogebra-embed-note">
+        Falls das Embed blockiert wird:
+        <a href="https://www.geogebra.org/m/feukzdve" target="_blank" rel="noopener noreferrer">Applet bei GeoGebra öffnen</a>
+        · weitere Darstellungen in der
+        <a href="https://www.geogebra.org/m/bxcspuc6" target="_blank" rel="noopener noreferrer">Materialsammlung</a>
+        (u.&nbsp;a. <a href="https://www.geogebra.org/m/sxcbucad" target="_blank" rel="noopener noreferrer">1.&nbsp;Formel</a>,
+        <a href="https://www.geogebra.org/m/p43w2jvc" target="_blank" rel="noopener noreferrer">2.&nbsp;Formel</a>).
+      </p>
+    </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>GeoGebra · Terme &amp; Ausdrücke</h3>
+    <p class="mini-note" style="margin-top:0;">
+      Noch mehr interaktive Übungen zu Termen, Binomen und Zuordnungen — ideal als Zusatztraining neben dem Flächen-Builder.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+      <a class="btn btn-check" href="https://www.geogebra.org/math/expressions" target="_blank" rel="noopener noreferrer">Übersicht öffnen ↗</a>
+      <a class="btn btn-hint" href="https://www.geogebra.org/m/bxcspuc6" target="_blank" rel="noopener noreferrer">Binome-Sammlung ↗</a>
+      <a class="btn btn-hint" href="https://www.geogebra.org/m/feukzdve" target="_blank" rel="noopener noreferrer">3. Formel grafisch ↗</a>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Lückentext</span>
+      <span class="exercise-title">Formeln vervollständigen</span>
+    </div>
+    <p>\((a+b)^{2}=\)</p>
+    <div class="quiz-options" data-quiz="te7_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(a^{2}+b^{2}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(a^{2}+2ab+b^{2}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(a^{2}-2ab+b^{2}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(a^{2}-b^{2}\)</div>
+    </div>
+    <div class="feedback" id="fb_te7_1"></div>
+
+    <p style="margin-top:16px;">Fläche eines Rechtecks mit Seiten \(x-y\) und \(x+y\)?</p>
+    <div class="quiz-options" data-quiz="te7_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(x^{2}+y^{2}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(x+y\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(x^{2}-y^{2}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(y-x\)</div>
+    </div>
+    <div class="feedback" id="fb_te7_2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(7, ['te7_1','te7_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(8)">Weiter: Anwenden →</button>
+  </div>
+</div>
+
+<!-- 9 Anwenden -->
+<div class="tab-panel" id="panel8">
+  <div class="ribbon">Binomische Formeln anwenden</div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Formel → Ergebnis</span>
+    </div>
+    <div class="match-list" id="matchBinom"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkMatchBinom()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_match_binom"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Fehlerfinder</span>
+      <span class="exercise-title">Wer hat falsch gerechnet?</span>
+    </div>
+    <div class="check-grid">
+      <div class="check-row"><span>✓</span><div>Nina: \((3x-1)^{2}=9x^{2}-6x+1\)</div></div>
+      <div class="check-row"><span>?</span><div>Anna: \((2x-2)^{2}=4x^{2}-4x+4\)</div></div>
+      <div class="check-row"><span>✓</span><div>Luise: \((5x-1)^{2}=25x^{2}-10x+1\)</div></div>
+    </div>
+    <p style="margin-top:12px;">Wer hat den Fehler?</p>
+    <div class="quiz-options" data-quiz="te8_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Nina</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Anna — Mitte muss \(-8x\) sein</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Luise</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">alle falsch</div>
+    </div>
+    <div class="feedback" id="fb_te8_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(8, ['te8_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(7)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(9)">Weiter: Training →</button>
+  </div>
+</div>
+
+<!-- 10 Training -->
+<div class="tab-panel" id="panel9">
+  <div class="ribbon">Training — erkennen &amp; sortieren</div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Sortieren</span>
+      <span class="exercise-title">Quadrat eines Binoms?</span>
+    </div>
+    <p>Klicke einen Term, dann die passende Box. (Ziel: alles richtig einsortieren.)</p>
+    <div class="term-chips" id="sortPool"></div>
+    <div class="sort-bins">
+      <div class="sort-bin" id="binYes" onclick="setSortTarget('yes')"><h4>Quadrat eines Binoms</h4></div>
+      <div class="sort-bin" id="binNo" onclick="setSortTarget('no')"><h4>Kein Quadrat eines Binoms</h4></div>
+    </div>
+    <p class="mini-note">Aktives Ziel: <strong id="sortTargetLabel">Quadrat eines Binoms</strong></p>
+    <button type="button" class="btn btn-check" onclick="checkSortBinom()">Überprüfen ✓</button>
+    <button type="button" class="btn btn-prev" onclick="resetSortBinom()">Zurücksetzen</button>
+    <div class="feedback" id="fb_sort"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Was stimmt?</span>
+      <span class="exercise-title">Mehrfachauswahl-Idee</span>
+    </div>
+    <p>\((x+3)^{2}=x^{2}+6x+9\) — richtig?</p>
+    <div class="quiz-options" data-quiz="te9_1" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Ja</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Nein, Mitte wäre \(3x\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Nein, es fehlt \(b^{2}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Nur für \(x=0\)</div>
+    </div>
+    <div class="feedback" id="fb_te9_1"></div>
+
+    <p style="margin-top:16px;">\((x-9)(x+9)=x^{2}+81\) — richtig?</p>
+    <div class="quiz-options" data-quiz="te9_2" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Ja</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Nein, es muss \(x^{2}-81\) heißen</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Nein, \(x^{2}+18x+81\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Ja, wegen 3. Formel</div>
+    </div>
+    <div class="feedback" id="fb_te9_2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(9, ['te9_1','te9_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(8)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(10)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 11 Quiz -->
+<div class="tab-panel" id="panel10">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>12 Fragen — Struktur, Distributivgesetz, Klammern, Binome und Einstiegsideen.</p>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+  <div id="finalResult" style="display:none; text-align:center; margin-top:20px;">
+    <h3 id="finalScore" style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); font-size:1.6rem;"></h3>
+    <p id="finalMessage"></p>
+    <div class="badge-container" id="badgeContainer"></div>
+    <button type="button" class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(9)">← Zurück</button>
+    <a class="btn btn-next" href="../formeln/index.html" style="text-decoration:none;">Weiter zu 08 →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Terme<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/terme-lernpfad/app.js"></script>
 </body>
 </html>

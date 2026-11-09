@@ -5,56 +5,837 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Potenzen</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
-<script src="../../../js/lernpfade-registry.js"></script>
-<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.po-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:780px){ .po-grid { grid-template-columns:1fr 1fr; } }
+.po-grid-3 { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:860px){ .po-grid-3 { grid-template-columns:repeat(3,1fr); } }
+.po-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px 16px; background:#fff; }
+.po-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.viz-panel { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#fff; margin-top:14px; box-shadow:0 1px 2px rgba(15,23,42,.05); }
+.viz-panel h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.mini-note { font-size:.86rem; color:var(--text-light); margin-top:6px; line-height:1.5; }
+.tool-box { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#F8FAFC; margin-top:14px; }
+.factor-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:10px 0; }
+.factor-chip {
+  min-width:42px; height:42px; border-radius:10px; border:2px solid var(--blue);
+  background:#EFF6FF; color:var(--blue-dark); font-weight:800; display:flex; align-items:center; justify-content:center;
+  font-family:Nunito,system-ui,sans-serif;
+}
+.factor-op { font-weight:800; color:var(--text-light); }
+.square-viz {
+  width:120px; height:120px; margin:12px auto; border:3px solid #2563EB; background:
+    linear-gradient(#93C5FD 0 0) 0 0/50% 50%,
+    linear-gradient(#DBEAFE 0 0) 100% 0/50% 50%,
+    linear-gradient(#DBEAFE 0 0) 0 100%/50% 50%,
+    linear-gradient(#93C5FD 0 0) 100% 100%/50% 50%;
+  background-repeat:no-repeat; border-radius:8px; position:relative;
+}
+.square-viz .label {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-weight:800; color:#1E3A8A; background:rgba(255,255,255,.35);
+}
+.cube-wrap { width:min(220px,100%); margin:8px auto 4px; text-align:center; }
+.cube-wrap svg { width:100%; height:auto; display:block; max-width:220px; margin:0 auto; }
+.cube-caption { font-size:.82rem; color:var(--text-light); font-weight:700; margin-top:4px; }
+.slider-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:10px; }
+.slider-row input[type=range] { flex:1; min-width:150px; }
+.slider-val { font-weight:800; color:var(--blue-dark); min-width:4rem; }
+.rule-chip {
+  border:1px solid #E2E8F0; border-radius:12px; padding:12px; background:#F8FAFC; margin-top:8px;
+}
+.rule-chip strong { color:var(--blue-dark); display:block; margin-bottom:4px; }
+.match-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.match-row {
+  display:grid; grid-template-columns:1fr; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+@media (min-width:720px){ .match-row { grid-template-columns:1.2fr 1fr; } }
+.match-row label { font-weight:700; }
+.match-row select {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.convert-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-top:10px; }
+@media (min-width:700px){ .convert-grid { grid-template-columns:1fr 1fr; } }
+.convert-item {
+  border:1px solid #E2E8F0; border-radius:12px; padding:12px; background:#fff;
+}
+.convert-item label { display:block; font-weight:700; margin-bottom:6px; color:var(--blue-dark); }
+.convert-item input {
+  width:100%; box-sizing:border-box; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif;
+}
+.convert-item input.ok { border-color:#16A34A; background:#ECFDF3; }
+.convert-item input.bad { border-color:#E11D48; background:#FEF2F2; }
+.like-terms {
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; margin:12px 0;
+}
+.term-block {
+  padding:10px 14px; border-radius:12px; border:2px solid #93C5FD; background:#EFF6FF;
+  font-weight:800; color:var(--blue-dark);
+}
+.term-block.alt { border-color:#FDBA74; background:#FFF7ED; color:#9A3412; }
+.term-block.result { border-color:#16A34A; background:#ECFDF3; color:#166534; }
+.srdp-table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.92rem; }
+.srdp-table th, .srdp-table td { border:1px solid #E2E8F0; padding:8px 10px; text-align:center; }
+.srdp-table th { background:#F8FAFC; color:var(--blue-dark); }
+.choice-list { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.choice-row {
+  display:grid; grid-template-columns:28px 1fr; gap:10px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff; cursor:pointer;
+}
+.choice-row:hover { background:#F8FAFC; }
+.choice-row.selected { border-color:#2563EB; background:#EFF6FF; }
+.choice-row.correct-answer { border-color:#16A34A; background:#ECFDF3; }
+.choice-row.wrong-answer { border-color:#E11D48; background:#FEF2F2; }
+.area-bars { display:flex; gap:16px; justify-content:center; align-items:flex-end; min-height:140px; margin:12px 0; }
+.area-col { text-align:center; }
+.area-block {
+  width:56px; background:linear-gradient(180deg,#38BDF8,#2563EB); border-radius:8px 8px 4px 4px;
+  border:2px solid #1D4ED8; transition:height .35s ease;
+}
+.pow-live { font-size:1.35rem; font-weight:800; color:var(--blue-dark); text-align:center; margin:8px 0; }
+.try-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:.9rem; }
+.try-table th, .try-table td { border:1px solid #E2E8F0; padding:6px 8px; text-align:center; }
+.try-table th { background:#F8FAFC; color:var(--blue-dark); font-weight:800; }
+.try-table td { background:#fff; }
+.try-probe {
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:10px;
+  padding:10px 12px; border:1px dashed #FDBA74; border-radius:12px; background:#FFF7ED;
+}
+.try-probe label { font-weight:700; color:#9A3412; }
+.try-probe input[type=number], .try-probe input[type=text] {
+  width:5.5rem; border:1px solid #FDBA74; border-radius:10px; padding:7px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-weight:700;
+}
+.try-probe .probe-out { font-weight:800; color:#9A3412; }
+.hint-ladder { margin-top:10px; }
+.hint-ladder .hint-step {
+  display:none; margin-top:8px; padding:10px 12px; border-radius:10px;
+  background:#FFFBEB; border:1px solid #F59E0B; font-size:.92rem; line-height:1.55;
+}
+.hint-ladder .hint-step.visible { display:block; }
+.hint-ladder .hint-step strong { color:#92400E; }
+.quiz-options.multi .quiz-option { position:relative; padding-left:2.2rem; }
+.quiz-options.multi .quiz-option::before {
+  content:'☐'; position:absolute; left:.7rem; top:50%; transform:translateY(-50%);
+  font-size:1.05rem; color:var(--text-light);
+}
+.quiz-options.multi .quiz-option.selected::before { content:'☑'; color:var(--blue); }
+.quiz-options.multi .quiz-option.correct-answer::before { content:'☑'; color:#16A34A; }
+.quiz-options.multi .quiz-option.wrong-answer::before { content:'☒'; color:#E11D48; }
+</style>
 </head>
 <body data-current-page="s3-p05" data-page-type="lernpfad" data-chapter-folder="Grundlagen/potenzen">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 9 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
   <h1>Potenzen</h1>
-  <p class="subtitle">Ganzzahlige und rationale Exponenten; Potenz- und Wurzelform — Inhalte werden ergänzt.</p>
+  <p class="subtitle">Rechengesetze mit ganzzahligen und rationalen Exponenten — und den Wechsel zwischen Potenz- und Wurzelschreibweise.</p>
   <span class="badge">3.&nbsp;Semester · Thema 05</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
-    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
-    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
-    <a href="../masseinheiten/index.html" style="color:var(--blue-dark); font-weight:600;">← 04 Maße</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    <a href="../masseinheiten/lernpfad-masseinheiten.html" style="color:var(--blue-dark); font-weight:600;">← 04 Maßeinheiten</a>
     · <a href="../gleitkomma/index.html" style="color:var(--blue-dark); font-weight:600;">06 Gleitkomma →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Quadrat/Kubus</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Regeln I</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Regeln II</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Rational</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Umwandeln</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Wurzeln</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>SRDP</button>
+  <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Quiz</button>
 </div>
+
+<!-- 1 Einstieg -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>Potenzgesetze</strong> und den Wechsel zwischen <strong>Potenz- und Wurzelschreibweise</strong>.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg &amp; Motivation</div>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Du lernst:</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Rechengesetze für ganzzahlige und rationale Exponenten anzuwenden und zu begründen,</li>
+        <li>Potenz- und Wurzelschreibweise sauber ineinander zu überführen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Denkanstoß</span>
+      <span class="exercise-title">Die größte Zahl mit 2, 3 und 5</span>
+    </div>
+    <p>Bilde die <strong>größte Zahl</strong> mit den drei Ziffern <strong>2, 3 und 5</strong> (jede nur einmal) und beliebigen, dir bekannten Rechenoperationen!</p>
+    <div class="po-grid-3">
+      <div class="po-card"><h3>Variante A</h3><p>\(532\)</p></div>
+      <div class="po-card"><h3>Variante B</h3><p>\(5\cdot 3^{2}=45\)</p></div>
+      <div class="po-card"><h3>Variante C</h3><p>\(5^{32}\)</p></div>
+    </div>
+    <p style="margin-top:12px;"><strong>Welche ist am größten — und warum?</strong></p>
+    <div class="quiz-options" data-quiz="po0_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">532 — die größte dreistellige Zahl</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(5\cdot 3^{2}=45\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(5^{32}\) — Potenzieren „schlägt“ Stellenwert und Multiplikation</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Alle drei sind ungefähr gleich groß</div>
+    </div>
+    <div class="feedback" id="fb_po0_1"></div>
+    <div class="info-box warning" style="margin-top:12px;">
+      <div class="icon">💡</div>
+      <div>
+        Unter A–C gewinnt klar \(5^{32}\). Noch größer wäre z.&nbsp;B. \(3^{52}\).
+        Der Einstieg zeigt: <strong>Potenzen wachsen extrem schnell</strong> — deshalb brauchen wir klare Rechengesetze.
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['po0_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Definition sichtbar machen</h3>
+    <div class="formula-box">
+      <div class="formula-label">Kurzschreibweise</div>
+      \[
+        \underbrace{a\cdot a\cdot \ldots \cdot a}_{n\text{ Faktoren}} = a^{n}
+      \]
+    </div>
+    <p class="mini-note">Wähle Basis und Exponent — die Faktoren erscheinen als Kacheln.</p>
+    <div class="slider-row">
+      <label style="font-weight:700;">Basis \(a\)</label>
+      <input type="range" id="defBase" min="2" max="5" value="3" oninput="updateDefViz()">
+      <span class="slider-val" id="defBaseLabel">3</span>
+    </div>
+    <div class="slider-row">
+      <label style="font-weight:700;">Exponent \(n\)</label>
+      <input type="range" id="defExp" min="1" max="6" value="4" oninput="updateDefViz()">
+      <span class="slider-val" id="defExpLabel">4</span>
+    </div>
+    <div class="factor-row" id="defFactors"></div>
+    <div class="pow-live" id="defResult">\(3^{4}=81\)</div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Quadrat/Kubus →</button>
+  </div>
 </div>
+
+<!-- 2 Quadrat/Kubus -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Die Rechengesetze von Potenzen mit <strong>ganzzahligen und rationalen Exponenten</strong> anwenden und begründen.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;"><strong>Potenz- und Wurzelschreibweise</strong> ineinander überführen.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Quadrat \(a^{2}\) und Kubus \(a^{3}\)</div>
+  <p>\(a^{2}\) ist eine <strong>Fläche</strong> (Seite × Seite), \(a^{3}\) ein <strong>Volumen</strong> (Seite × Seite × Seite). Das siehst du sofort:</p>
+
+  <div class="po-grid">
+    <div class="viz-panel" style="margin-top:0;">
+      <h3>Quadrat — \(a^{2}\)</h3>
+      <div class="square-viz"><div class="label">\(a^{2}\)</div></div>
+      <p class="mini-note">Fläche eines Quadrats mit Seitenlänge \(a\).</p>
+      <div class="slider-row">
+        <input type="range" id="sqSide" min="1" max="8" value="4" oninput="updateSquareCube()">
+        <span class="slider-val" id="sqSideLabel">\(a=4\)</span>
+      </div>
+      <p class="pow-live" id="sqOut">\(4^{2}=16\)</p>
+    </div>
+    <div class="viz-panel" style="margin-top:0;">
+      <h3>Würfel — \(a^{3}\)</h3>
+      <div class="cube-wrap" aria-hidden="true">
+        <svg viewBox="0 0 260 220" role="img" aria-label="Würfel mit Kantenlänge a">
+          <!-- soft ground shadow -->
+          <ellipse cx="130" cy="198" rx="78" ry="12" fill="rgba(30,58,138,0.12)"/>
+          <!-- hidden back edges (dashed) for depth -->
+          <path d="M60 50 L130 10 L200 50" fill="none" stroke="#93C5FD" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <path d="M130 10 L130 90" fill="none" stroke="#93C5FD" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <!-- isometric cube faces (equal projected edge lengths) -->
+          <polygon points="60,50 60,130 130,170 130,90" fill="#60A5FA" stroke="#1E3A8A" stroke-width="2.6" stroke-linejoin="round"/>
+          <polygon points="60,50 130,10 200,50 130,90" fill="#DBEAFE" stroke="#1E3A8A" stroke-width="2.6" stroke-linejoin="round"/>
+          <polygon points="130,90 200,50 200,130 130,170" fill="#1D4ED8" stroke="#1E3A8A" stroke-width="2.6" stroke-linejoin="round"/>
+          <text x="95" y="105" text-anchor="middle" font-family="Nunito,sans-serif" font-size="22" font-weight="800" fill="#FFFFFF">a³</text>
+          <!-- edge labels with dimension ticks -->
+          <line x1="42" y1="52" x2="42" y2="128" stroke="#1D4ED8" stroke-width="2"/>
+          <line x1="36" y1="52" x2="48" y2="52" stroke="#1D4ED8" stroke-width="2"/>
+          <line x1="36" y1="128" x2="48" y2="128" stroke="#1D4ED8" stroke-width="2"/>
+          <text x="28" y="95" text-anchor="middle" font-family="Nunito,sans-serif" font-size="18" font-weight="800" fill="#1D4ED8">a</text>
+          <text x="155" y="198" text-anchor="middle" font-family="Nunito,sans-serif" font-size="18" font-weight="800" fill="#1D4ED8">a</text>
+          <text x="188" y="28" text-anchor="middle" font-family="Nunito,sans-serif" font-size="18" font-weight="800" fill="#1D4ED8">a</text>
+        </svg>
+      </div>
+      <p class="mini-note">Volumen eines Würfels mit Kante \(a\): \(V=a\cdot a\cdot a=a^{3}\).</p>
+      <p class="pow-live" id="cuOut">\(4^{3}=64\)</p>
+    </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Vergleich der Werte</h3>
+    <div class="area-bars" aria-hidden="true">
+      <div class="area-col">
+        <div class="area-block" id="barSq" style="height:64px;"></div>
+        <div class="mini-note">\(a^{2}\)</div>
+      </div>
+      <div class="area-col">
+        <div class="area-block" id="barCu" style="height:120px; background:linear-gradient(180deg,#FDBA74,#EA580C); border-color:#C2410C;"></div>
+        <div class="mini-note">\(a^{3}\)</div>
+      </div>
+    </div>
+    <p class="mini-note" id="sqCuHint">Ab \(a&gt;1\) wächst \(a^{3}\) schneller als \(a^{2}\).</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Deutung</span>
+    </div>
+    <p>Ein Quadrat hat die Fläche \(36\,\text{m}^{2}\). Die Seitenlänge ist …</p>
+    <div class="quiz-options" data-quiz="po1_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(36^{2}\,\text{m}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(6\,\text{m}\), denn \(6^{2}=36\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(18\,\text{m}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(36^{3}\,\text{m}\)</div>
+    </div>
+    <div class="feedback" id="fb_po1_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['po1_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Regeln I →</button>
+  </div>
 </div>
+
+<!-- 3 Regeln I -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Potenzregeln I — gleiche Basis</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Kernregeln</div>
+    \[
+      a^{m}\cdot a^{n}=a^{m+n}
+      \qquad
+      \frac{a^{m}}{a^{n}}=a^{m-n}
+      \qquad
+      (a^{m})^{n}=a^{m\cdot n}
+    \]
+  </div>
+
+  <div class="po-grid-3">
+    <div class="rule-chip"><strong>Multiplizieren</strong>Exponenten <em>addieren</em></div>
+    <div class="rule-chip"><strong>Dividieren</strong>Exponenten <em>subtrahieren</em></div>
+    <div class="rule-chip"><strong>Potenzieren</strong>Exponenten <em>multiplizieren</em></div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Live: \(a^{m}\cdot a^{n}\)</h3>
+    <div class="slider-row">
+      <label style="font-weight:700;">\(m\)</label>
+      <input type="range" id="r1m" min="1" max="5" value="2" oninput="updateRule1()">
+      <span class="slider-val" id="r1mLabel">2</span>
+      <label style="font-weight:700;">\(n\)</label>
+      <input type="range" id="r1n" min="1" max="5" value="3" oninput="updateRule1()">
+      <span class="slider-val" id="r1nLabel">3</span>
+    </div>
+    <div class="pow-live" id="r1Out">\(2^{2}\cdot 2^{3}=2^{5}=32\)</div>
+    <p class="mini-note">Basis fest \(a=2\). Links Faktoren zählen, rechts ein Exponent.</p>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Regel ↔ Rechnung</span>
+    </div>
+    <div class="match-list" id="matchRules1"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkMatchRules1()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_match_r1"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Regeln II →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Potenzen<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- 4 Regeln II -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Potenzregeln II — Produkt, Quotient, \(0\), negativ</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Weitere Regeln</div>
+    \[
+      (a\cdot b)^{n}=a^{n}\cdot b^{n}
+      \qquad
+      \left(\frac{a}{b}\right)^{n}=\frac{a^{n}}{b^{n}}
+      \qquad
+      a^{0}=1
+      \qquad
+      a^{-n}=\frac{1}{a^{n}}
+    \]
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">🔁</div>
+    <div>
+      <strong>Negativer Exponent:</strong> Die Basis wechselt vom Zähler in den Nenner (oder umgekehrt):
+      \[
+        a^{-n}=\frac{1}{a^{n}},\qquad
+        \frac{1}{a^{-n}}=a^{n},\qquad
+        \left(\frac{a}{b}\right)^{-n}=\left(\frac{b}{a}\right)^{n}
+      \]
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Anwenden</span>
+    </div>
+    <div class="input-group">
+      <label for="r2_a">\(2^{3}\cdot 2^{4}\) — Ergebnis als Potenz \(2^{?}\) (nur Exponent)</label>
+      <input id="r2_a" type="text" inputmode="numeric" placeholder="7">
+    </div>
+    <div class="input-group">
+      <label for="r2_b">\((3^{2})^{3}\) — Exponent von \(3^{?}\)</label>
+      <input id="r2_b" type="text" inputmode="numeric" placeholder="6">
+    </div>
+    <div class="input-group">
+      <label for="r2_c">\(5^{-2}\) als Bruch — Nenner (ganze Zahl)</label>
+      <input id="r2_c" type="text" inputmode="numeric" placeholder="25">
+    </div>
+    <div class="input-group">
+      <label for="r2_d">\(7^{0}\)</label>
+      <input id="r2_d" type="text" inputmode="numeric" placeholder="1">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkRules2()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_r2"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Rational →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- 5 Rational / Würfel -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Rationale Exponenten — Einstieg mit dem Würfel</div>
+
+  <div class="po-grid">
+    <div class="viz-panel" style="margin-top:0;">
+      <h3>Würfel mit Volumen \(216\,\text{cm}^{3}\)</h3>
+      <div class="cube-wrap" aria-hidden="true">
+        <svg viewBox="0 0 260 220" role="img" aria-label="Würfel Volumen 216 Kubikzentimeter">
+          <ellipse cx="130" cy="198" rx="78" ry="12" fill="rgba(124,45,18,0.12)"/>
+          <path d="M60 50 L130 10 L200 50" fill="none" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <path d="M130 10 L130 90" fill="none" stroke="#FDBA74" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <polygon points="60,50 60,130 130,170 130,90" fill="#FB923C" stroke="#9A3412" stroke-width="2.6" stroke-linejoin="round"/>
+          <polygon points="60,50 130,10 200,50 130,90" fill="#FFEDD5" stroke="#9A3412" stroke-width="2.6" stroke-linejoin="round"/>
+          <polygon points="130,90 200,50 200,130 130,170" fill="#C2410C" stroke="#7C2D12" stroke-width="2.6" stroke-linejoin="round"/>
+          <text x="95" y="100" text-anchor="middle" font-family="Nunito,sans-serif" font-size="15" font-weight="800" fill="#7C2D12">V = 216</text>
+          <text x="95" y="118" text-anchor="middle" font-family="Nunito,sans-serif" font-size="13" font-weight="700" fill="#9A3412">cm³</text>
+          <line x1="42" y1="52" x2="42" y2="128" stroke="#C2410C" stroke-width="2"/>
+          <line x1="36" y1="52" x2="48" y2="52" stroke="#C2410C" stroke-width="2"/>
+          <line x1="36" y1="128" x2="48" y2="128" stroke="#C2410C" stroke-width="2"/>
+          <text x="28" y="95" text-anchor="middle" font-family="Nunito,sans-serif" font-size="18" font-weight="800" fill="#C2410C">a</text>
+          <text x="155" y="198" text-anchor="middle" font-family="Nunito,sans-serif" font-size="18" font-weight="800" fill="#C2410C">a</text>
+          <text x="188" y="28" text-anchor="middle" font-family="Nunito,sans-serif" font-size="18" font-weight="800" fill="#C2410C">a</text>
+        </svg>
+      </div>
+      <p>Wie lang ist die Seitenkante \(a\)? Probiere dich heran:</p>
+      \[
+        V=a\cdot a\cdot a=a^{3}=216
+        \quad\Rightarrow\quad
+        a=\sqrt[3]{216}=216^{1/3}=\,?
+      \]
+      <div class="try-probe">
+        <label for="cubeTryA">Probiere \(a=\)</label>
+        <input id="cubeTryA" type="number" min="1" max="20" step="0.5" value="5" oninput="updateCubeTry()">
+        <span class="probe-out" id="cubeTryOut">\(5^{3}=125\) — zu klein</span>
+      </div>
+      <p class="mini-note">Ändere \(a\), bis \(a^{3}=216\). Danach: \(a=\sqrt[3]{216}=216^{1/3}\). Vergleich Fläche: \(Q=s^{2}\).</p>
+    </div>
+    <div class="viz-panel" style="margin-top:0;">
+      <h3>Brücke Potenz ↔ Wurzel</h3>
+      <div class="formula-box">
+        <div class="formula-label">Zentrale Identität</div>
+        \[
+          z^{\frac{m}{n}}=\sqrt[n]{z^{m}}=\left(\sqrt[n]{z}\right)^{m}
+        \]
+      </div>
+      <p class="mini-note">Ganzzahlige Potenzen helfen beim Ausprobieren — siehe Tabelle unten bei „Exponenten finden“.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exponenten finden</span>
+      <span class="exercise-title">\(b^{x}=?\)</span>
+    </div>
+    <p class="mini-note" style="margin-bottom:8px;">Finde \(x\) durch Probieren. Nutze die Tabelle — liegt der Wert zwischen zwei Zeilen, ist der Exponent oft ein Bruch.</p>
+    <div class="po-grid" style="margin-top:0;">
+      <table class="try-table" aria-label="Potenztabelle Basis 2">
+        <thead><tr><th>\(x\)</th><th>\(2^{x}\)</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>2</td></tr>
+          <tr><td>2</td><td>4</td></tr>
+          <tr><td>3</td><td>8</td></tr>
+          <tr><td>4</td><td>16</td></tr>
+          <tr><td>5</td><td>32</td></tr>
+          <tr><td>6</td><td>64</td></tr>
+        </tbody>
+      </table>
+      <table class="try-table" aria-label="Potenztabelle Basis 4">
+        <thead><tr><th>\(x\)</th><th>\(4^{x}\)</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>4</td></tr>
+          <tr><td>2</td><td>16</td></tr>
+          <tr><td>3</td><td>64</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="convert-grid">
+      <div class="convert-item"><label>\(2^{x}=16\) → \(x=\)</label><input id="ex_1" data-ans="4" type="text" inputmode="decimal" autocomplete="off" placeholder="?"></div>
+      <div class="convert-item"><label>\(2^{x}=64\) → \(x=\)</label><input id="ex_2" data-ans="6" type="text" inputmode="decimal" autocomplete="off" placeholder="?"></div>
+      <div class="convert-item"><label>\(4^{x}=16\) → \(x=\)</label><input id="ex_3" data-ans="2" type="text" inputmode="decimal" autocomplete="off" placeholder="?"></div>
+      <div class="convert-item"><label>\(4^{x}=8\) → \(x=\)</label><input id="ex_4" data-ans="1.5" data-alt="3/2" type="text" inputmode="decimal" autocomplete="off" placeholder="?"></div>
+      <div class="convert-item"><label>\(4^{x}=2\) → \(x=\)</label><input id="ex_5" data-ans="0.5" data-alt="1/2" type="text" inputmode="decimal" autocomplete="off" placeholder="?"></div>
+      <div class="convert-item"><label>\(216^{1/3}=\)</label><input id="ex_6" data-ans="6" type="text" inputmode="decimal" autocomplete="off" placeholder="?"></div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkExponentFind()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_exfind"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Umwandeln →</button>
+  </div>
+</div>
+
+<!-- 6 Umwandeln -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Potenz- ↔ Wurzelschreibweise</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Merksatz</div>
+    \[
+      a^{\frac{m}{n}}=\sqrt[n]{a^{m}}
+      \qquad
+      a^{-\frac{m}{n}}=\frac{1}{\sqrt[n]{a^{m}}}
+      \qquad
+      \sqrt[n]{a^{m}}=a^{\frac{m}{n}}
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung 1</span>
+      <span class="exercise-title">Schreibe als Wurzel (Auswahl)</span>
+    </div>
+    <p>\(b^{1/4}=\)</p>
+    <div class="quiz-options" data-quiz="po5_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\sqrt{b^{4}}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\sqrt[4]{b}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\frac{1}{4}b\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\sqrt[b]{4}\)</div>
+    </div>
+    <div class="feedback" id="fb_po5_1"></div>
+    <div class="hint-ladder" data-hints="po5h1">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('po5h1')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Bei \(a^{m/n}\) ist der <em>Nenner</em> der Wurzelexponent und der <em>Zähler</em> die Potenz im Inneren.</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> Hier ist \(m=1\), \(n=4\) → vierte Wurzel aus \(b^{1}\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> Also \(b^{1/4}=\sqrt[4]{b}\) — nicht \(\sqrt{b^{4}}\) (das wäre \(b^{2}\)).</div>
+    </div>
+
+    <p style="margin-top:16px;">\(y^{-5/4}=\)</p>
+    <div class="quiz-options" data-quiz="po5_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\sqrt[5]{y^{4}}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\sqrt[4]{y^{5}}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\dfrac{1}{\sqrt[4]{y^{5}}}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(-\sqrt[4]{y^{5}}\)</div>
+    </div>
+    <div class="feedback" id="fb_po5_2"></div>
+    <div class="hint-ladder" data-hints="po5h2">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('po5h2')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Negativer Exponent → zuerst Kehrwert: \(y^{-5/4}=\dfrac{1}{y^{5/4}}\).</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> Wandeln \(y^{5/4}\) in eine Wurzel um: Nenner \(4\) → \(\sqrt[4]{y^{5}}\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> Zusammen: \(\dfrac{1}{\sqrt[4]{y^{5}}}\). Das Minuszeichen gehört <em>nicht</em> vor die Wurzel.</div>
+    </div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['po5_1','po5_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung 2</span>
+      <span class="exercise-title">Schreibe als rationale Potenz</span>
+    </div>
+    <p>\(\sqrt[3]{x^{2}}=\)</p>
+    <div class="quiz-options" data-quiz="po5_3" data-correct="3">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(-3x^{2}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(x^{3/2}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\frac{3}{x^{2}}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(x^{2/3}\)</div>
+    </div>
+    <div class="feedback" id="fb_po5_3"></div>
+    <div class="hint-ladder" data-hints="po5h3">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('po5h3')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Merksatz rückwärts: \(\sqrt[n]{a^{m}}=a^{m/n}\).</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> Wurzelexponent \(n=3\), innere Potenz \(m=2\) → Exponent \(\frac{2}{3}\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> Also \(x^{2/3}\) — nicht \(x^{3/2}\) (Zähler und Nenner nicht vertauschen).</div>
+    </div>
+
+    <p style="margin-top:16px;">\(\dfrac{1}{\sqrt[7]{v^{2}}}=\)</p>
+    <div class="quiz-options" data-quiz="po5_4" data-correct="0">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(v^{-2/7}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(-v^{2/7}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(v^{2/7}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(v^{-7/2}\)</div>
+    </div>
+    <div class="feedback" id="fb_po5_4"></div>
+    <div class="hint-ladder" data-hints="po5h4">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('po5h4')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> Zuerst die Wurzel: \(\sqrt[7]{v^{2}}=v^{2/7}\).</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> Der Kehrwert macht den Exponenten negativ: \(\dfrac{1}{v^{2/7}}=v^{-2/7}\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> Achtung: \(v^{-7/2}\) hätte Nenner und Zähler vertauscht — falsch.</div>
+    </div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(5, ['po5_3','po5_4'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung 3</span>
+      <span class="exercise-title">Mehrfachauswahl — was ist äquivalent?</span>
+    </div>
+    <p>Welche Schreibweisen sind <strong>gleichwertig</strong> zu \(z^{3/4}\)? (mehrere möglich)</p>
+    <div class="quiz-options multi" data-quiz="po5_multi" data-correct="0,2,3">
+      <div class="quiz-option" data-idx="0" onclick="toggleMultiQuiz(this)">\(\sqrt[4]{z^{3}}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="toggleMultiQuiz(this)">\(\sqrt[3]{z^{4}}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="toggleMultiQuiz(this)">\(\bigl(\sqrt[4]{z}\bigr)^{3}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="toggleMultiQuiz(this)">\(\sqrt[4]{z}\cdot\sqrt[4]{z}\cdot\sqrt[4]{z}\)</div>
+    </div>
+    <div class="hint-ladder" data-hints="po5hm">
+      <button type="button" class="btn btn-hint" onclick="revealNextHint('po5hm')">💡 Nächster Tipp</button>
+      <div class="hint-step" data-step="0"><strong>Tipp 1:</strong> \(z^{3/4}=\sqrt[4]{z^{3}}=(\sqrt[4]{z})^{3}\). Beide Formen sind erlaubt.</div>
+      <div class="hint-step" data-step="1"><strong>Tipp 2:</strong> \((\sqrt[4]{z})^{3}\) ist dasselbe wie dreimal multiplizieren: \(\sqrt[4]{z}\cdot\sqrt[4]{z}\cdot\sqrt[4]{z}\).</div>
+      <div class="hint-step" data-step="2"><strong>Tipp 3:</strong> \(\sqrt[3]{z^{4}}=z^{4/3}\) — anderer Exponent, also <em>nicht</em> äquivalent.</div>
+    </div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkMultiQuiz('po5_multi', 6)">Überprüfen ✓</button>
+    <div class="feedback" id="fb_po5_multi"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung 4</span>
+      <span class="exercise-title">Zuordnung Potenz ↔ Wurzel</span>
+    </div>
+    <p class="mini-note">Ordne jeder Potenz die passende Wurzelschreibweise zu.</p>
+    <div class="match-list" id="matchConvert"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkMatchConvert()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_match_convert"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Klassiker</span>
+      <span class="exercise-title">Kreuze die richtige Lösung an</span>
+    </div>
+    <div id="mcConvertBlock"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkMcConvert()">Alles überprüfen ✓</button>
+    <div class="feedback" id="fb_mc_convert"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Wurzeln →</button>
+  </div>
+</div>
+
+<!-- 7 Wurzeln rechnen -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Rechnen mit Wurzeln</div>
+
+  <div class="po-grid">
+    <div class="viz-panel" style="margin-top:0;">
+      <h3>Addieren — gleiche Radikanden</h3>
+      <div class="like-terms">
+        <span class="term-block">\(3\sqrt{2}\)</span>
+        <span class="factor-op">+</span>
+        <span class="term-block">\(4\sqrt{2}\)</span>
+        <span class="factor-op">=</span>
+        <span class="term-block result">\(7\sqrt{2}\)</span>
+      </div>
+      <p class="mini-note">Wie \(3a+4a=7a\) — hier ist \(a=\sqrt{2}\).</p>
+      <div class="like-terms">
+        <span class="term-block alt">\(4\sqrt[3]{13}\)</span>
+        <span class="factor-op">−</span>
+        <span class="term-block alt">\(2\sqrt[3]{13}\)</span>
+        <span class="factor-op">=</span>
+        <span class="term-block result">\(2\sqrt[3]{13}\)</span>
+      </div>
+    </div>
+    <div class="viz-panel" style="margin-top:0;">
+      <h3>Multiplizieren — über Potenzen</h3>
+      \[
+        \sqrt[3]{x^{2}}\cdot\sqrt[4]{x}
+        =x^{2/3}\cdot x^{1/4}
+        =x^{2/3+1/4}
+        =x^{11/12}
+        =\sqrt[12]{x^{11}}
+      \]
+      <p class="mini-note">Unterschiedliche Wurzelexponenten → erst in Potenzen umschreiben.</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Übung</span>
+      <span class="exercise-title">Zusammenfassen &amp; Umformen</span>
+    </div>
+    <p>\(5\sqrt{3}+2\sqrt{3}=\)</p>
+    <div class="quiz-options" data-quiz="po6_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(7\sqrt{6}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(7\sqrt{3}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(10\sqrt{3}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\sqrt{15}\)</div>
+    </div>
+    <div class="feedback" id="fb_po6_1"></div>
+
+    <p style="margin-top:16px;">\(x+\sqrt{x}\cdot 3\) ist gleich …</p>
+    <div class="quiz-options" data-quiz="po6_2" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\sqrt{x+3}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(4\sqrt{x}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\sqrt{x}\,(\sqrt{x}+3)\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(x^{3/2}\)</div>
+    </div>
+    <div class="feedback" id="fb_po6_2"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['po6_1','po6_2'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: SRDP →</button>
+  </div>
+</div>
+
+<!-- 8 SRDP -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Anwendung &amp; SRDP — Holzbretter</div>
+  <p>Holzbretter derselben Sorte trocknen je nach Dicke unterschiedlich schnell. Näherungsweise gilt:</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Zusammenhang</div>
+    \[
+      \frac{T}{t}=\left(\frac{D}{d}\right)^{1{,}5}
+      =\left(\frac{D}{d}\right)^{3/2}
+      =\sqrt{\left(\frac{D}{d}\right)^{3}}
+    \]
+  </div>
+
+  <table class="srdp-table" aria-label="Holzbretter">
+    <thead>
+      <tr><th></th><th>Dicke</th><th>Trockenzeit</th></tr>
+    </thead>
+    <tbody>
+      <tr><th>Holzbrett 1</th><td>\(d\)</td><td>\(t\)</td></tr>
+      <tr><th>Holzbrett 2</th><td>\(D\)</td><td>\(T\)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">SRDP</span>
+      <span class="exercise-title">Welcher Ausdruck passt <em>nicht</em>?</span>
+    </div>
+    <p>Kreuze den Ausdruck an, der <strong>nicht</strong> dem obigen Zusammenhang entspricht. [1 aus 5]</p>
+    <div class="choice-list" id="srdpChoices" data-correct="3"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkSrdp()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_srdp"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Vertiefung</span>
+      <span class="exercise-title">Umformen</span>
+    </div>
+    <p>\(1{,}5\) als Bruch?</p>
+    <div class="quiz-options" data-quiz="po7_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">\(\frac{1}{5}\)</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">\(\frac{3}{2}\)</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">\(\frac{5}{1}\)</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">\(\frac{15}{10}\) vereinfacht zu \(\frac{1}{2}\)</div>
+    </div>
+    <div class="feedback" id="fb_po7_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(7, ['po7_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(8)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 9 Quiz -->
+<div class="tab-panel" id="panel8">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>10 Fragen zu Regeln, negativem Exponenten, Umwandlung und SRDP-Idee.</p>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+  <div id="finalResult" style="display:none; text-align:center; margin-top:20px;">
+    <h3 id="finalScore" style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); font-size:1.6rem;"></h3>
+    <p id="finalMessage"></p>
+    <div class="badge-container" id="badgeContainer"></div>
+    <button type="button" class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(7)">← Zurück</button>
+    <a class="btn btn-next" href="../gleitkomma/index.html" style="text-decoration:none;">Weiter zu 06 →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Potenzen<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/potenzen-lernpfad/app.js"></script>
 </body>
 </html>

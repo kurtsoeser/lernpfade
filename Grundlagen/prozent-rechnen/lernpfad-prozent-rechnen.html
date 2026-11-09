@@ -23,6 +23,72 @@ MathJax = {
 .tool-box { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#F8FAFC; margin-top:14px; }
 .bar-demo { height:28px; border-radius:999px; background:#E2E8F0; overflow:hidden; margin:10px 0 6px; }
 .bar-demo span { display:block; height:100%; background:linear-gradient(90deg,#2563EB,#38BDF8); width:0; transition:width .4s ease; }
+.viz-panel { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#fff; margin-top:14px; box-shadow:0 1px 2px rgba(15,23,42,.05); }
+.viz-panel h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.pct-grid {
+  display:grid; grid-template-columns:repeat(10,1fr); gap:3px; max-width:280px; margin:10px auto;
+}
+.pct-cell {
+  aspect-ratio:1; border-radius:4px; background:#E2E8F0; transition:background .15s ease;
+}
+.pct-cell.on { background:linear-gradient(135deg,#2563EB,#38BDF8); }
+.pct-cell.tiny { background:#FDBA74; }
+.slider-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:10px; }
+.slider-row input[type=range] { flex:1; min-width:160px; }
+.slider-val { font-weight:800; color:var(--blue-dark); min-width:4.5rem; }
+.split-viz { display:grid; grid-template-columns:1fr; gap:14px; margin-top:12px; }
+@media (min-width:780px){ .split-viz { grid-template-columns:1fr 1fr; } }
+.stack-bar {
+  height:36px; border-radius:12px; background:#E2E8F0; overflow:hidden; display:flex; margin:8px 0;
+  border:1px solid #D8E2EF;
+}
+.stack-bar .part { height:100%; transition:width .35s ease; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.72rem; font-weight:800; }
+.stack-bar .w-part { background:linear-gradient(90deg,#2563EB,#38BDF8); }
+.stack-bar .rest-part { background:#CBD5E1; color:#334155; }
+.stack-bar .up-part { background:linear-gradient(90deg,#16A34A,#4ADE80); }
+.stack-bar .down-part { background:linear-gradient(90deg,#E11D48,#FB7185); }
+.price-tag {
+  max-width:280px; margin:12px auto; padding:18px 20px; border-radius:16px;
+  background:linear-gradient(145deg,#FEF3C7,#FDE68A); border:2px dashed #D97706; text-align:center;
+  position:relative;
+}
+.price-tag .old { text-decoration:line-through; color:#92400E; font-size:1rem; opacity:.75; }
+.price-tag .new { font-size:1.8rem; font-weight:800; color:#9A3412; font-family:'Patrick Hand',cursive; }
+.price-tag .badge-rabatt {
+  position:absolute; top:-10px; right:-8px; background:#DC2626; color:#fff;
+  border-radius:999px; padding:6px 10px; font-weight:800; font-size:.8rem; transform:rotate(8deg);
+}
+.compare-bars { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+.compare-row { display:grid; grid-template-columns:72px 1fr 52px; gap:8px; align-items:center; font-size:.88rem; font-weight:700; }
+.compare-track { height:22px; border-radius:999px; background:#EEF2F7; overflow:hidden; }
+.compare-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#2563EB,#38BDF8); transition:width .35s ease; }
+.pie-wrap { width:160px; height:160px; margin:10px auto; border-radius:50%; position:relative;
+  background:conic-gradient(#2563EB 0deg, #E2E8F0 0deg); box-shadow:inset 0 0 0 1px #D8E2EF; }
+.pie-hole {
+  position:absolute; inset:28%; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center;
+  font-weight:800; color:var(--blue-dark); font-size:1.1rem;
+}
+.match-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.match-row {
+  display:grid; grid-template-columns:1fr; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+@media (min-width:700px){ .match-row { grid-template-columns:1.3fr 1fr; } }
+.match-row label { font-weight:700; }
+.match-row select {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.bar-pick-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-top:10px; }
+@media (min-width:700px){ .bar-pick-grid { grid-template-columns:1fr 1fr; } }
+.bar-pick {
+  border:2px solid #E2E8F0; border-radius:12px; padding:12px; background:#fff; cursor:pointer;
+}
+.bar-pick:hover { border-color:#93C5FD; }
+.bar-pick.selected { border-color:#2563EB; background:#EFF6FF; }
+.bar-pick.correct-answer { border-color:#16A34A; background:#ECFDF3; }
+.bar-pick.wrong-answer { border-color:#E11D48; background:#FEF2F2; }
+.mini-note { font-size:.86rem; color:var(--text-light); margin-top:6px; }
 </style>
 </head>
 <body data-current-page="s3-p03" data-page-type="lernpfad" data-chapter-folder="Grundlagen/prozent-rechnen">
@@ -48,7 +114,7 @@ MathJax = {
     · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
     · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
     <a href="../grundrechnungsarten/lernpfad-grundrechnungsarten.html" style="color:var(--blue-dark); font-weight:600;">← 02 Grundrechnungsarten</a>
-    · <a href="../masseinheiten/index.html" style="color:var(--blue-dark); font-weight:600;">04 Maßeinheiten →</a>
+    · <a href="../masseinheiten/lernpfad-masseinheiten.html" style="color:var(--blue-dark); font-weight:600;">04 Maßeinheiten →</a>
   </p>
 </div>
 
@@ -87,6 +153,17 @@ MathJax = {
       <strong>Lehrplan-Kompetenz</strong><br>
       Zahlenangaben in Prozent und Promille verstehen, berechnen und in unterschiedlichem Kontext anwenden.
     </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Visuell: Was bedeuten 20&nbsp;%?</h3>
+    <p class="mini-note">Jede Kachel = 1 von 100. Bewege den Regler — so „fühlst“ du Prozent.</p>
+    <div class="pct-grid" id="introGrid" aria-hidden="true"></div>
+    <div class="slider-row">
+      <input type="range" id="introPct" min="0" max="100" value="20" oninput="updateIntroViz(this.value)">
+      <span class="slider-val" id="introPctLabel">20&nbsp;%</span>
+    </div>
+    <div class="pie-wrap" id="introPie" aria-hidden="true"><div class="pie-hole" id="introPieHole">20%</div></div>
   </div>
 
   <div class="exercise">
@@ -138,12 +215,52 @@ MathJax = {
 
   <p>Prozent teilt das Ganze in <strong>100</strong> gleiche Teile, Promille in <strong>1000</strong>. Deshalb: <strong>10&nbsp;‰ = 1&nbsp;%</strong>.</p>
 
-  <div class="info-box concept">
-    <div class="icon">📊</div>
-    <div>
-      <strong>Bild:</strong> 25&nbsp;% eines Balkens sind ein Viertel.
-      <div class="bar-demo" aria-hidden="true"><span style="width:25%"></span></div>
-      <span style="font-size:.88rem; color:var(--text-light);">25 von 100 Teilen sind markiert.</span>
+  <div class="split-viz">
+    <div class="viz-panel">
+      <h3>% live</h3>
+      <div class="bar-demo" aria-hidden="true"><span id="pctLiveBar" style="width:25%"></span></div>
+      <div class="slider-row">
+        <input type="range" id="pctLive" min="0" max="100" value="25" oninput="updatePctLive(this.value)">
+        <span class="slider-val" id="pctLiveLabel">25&nbsp;%</span>
+      </div>
+      <p class="mini-note" id="pctLiveHint">25 von 100 Teilen · Dezimal: 0,25</p>
+    </div>
+    <div class="viz-panel">
+      <h3>% vs. ‰ im Vergleich</h3>
+      <div class="compare-bars">
+        <div class="compare-row"><span>1&nbsp;%</span><div class="compare-track"><div class="compare-fill" style="width:100%"></div></div><span>10&nbsp;‰</span></div>
+        <div class="compare-row"><span>0,1&nbsp;%</span><div class="compare-track"><div class="compare-fill" style="width:10%; background:linear-gradient(90deg,#F59E0B,#FDBA74);"></div></div><span>1&nbsp;‰</span></div>
+      </div>
+      <p class="mini-note">10&nbsp;‰ = 1&nbsp;% — Promille ist „feiner“ (von Tausend).</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Visuell</span>
+      <span class="exercise-title">Welcher Balken zeigt 40&nbsp;%?</span>
+    </div>
+    <div class="bar-pick-grid" data-quiz="pr1_viz" data-correct="1">
+      <div class="bar-pick quiz-option" data-idx="0" onclick="selectBarPick(this)">
+        <div class="bar-demo"><span style="width:25%"></span></div>
+        <span class="mini-note">Option A</span>
+      </div>
+      <div class="bar-pick quiz-option" data-idx="1" onclick="selectBarPick(this)">
+        <div class="bar-demo"><span style="width:40%"></span></div>
+        <span class="mini-note">Option B</span>
+      </div>
+      <div class="bar-pick quiz-option" data-idx="2" onclick="selectBarPick(this)">
+        <div class="bar-demo"><span style="width:60%"></span></div>
+        <span class="mini-note">Option C</span>
+      </div>
+      <div class="bar-pick quiz-option" data-idx="3" onclick="selectBarPick(this)">
+        <div class="bar-demo"><span style="width:80%"></span></div>
+        <span class="mini-note">Option D</span>
+      </div>
+    </div>
+    <div class="feedback" id="fb_pr1_viz"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(1, ['pr1_viz'])">Überprüfen ✓</button>
     </div>
   </div>
 
@@ -211,12 +328,27 @@ MathJax = {
     \]
   </div>
 
+  <div class="viz-panel">
+    <h3>Bild: G und W als Balken</h3>
+    <p class="mini-note">Der ganze Balken ist \(G\) (100&nbsp;%). Der blaue Teil ist \(W\).</p>
+    <div class="stack-bar" aria-hidden="true">
+      <div class="part w-part" id="gwpWPart" style="width:15%">W</div>
+      <div class="part rest-part" id="gwpRestPart" style="width:85%"></div>
+    </div>
+    <div class="slider-row">
+      <label for="gwpSlider" style="font-weight:700;">p</label>
+      <input type="range" id="gwpSlider" min="0" max="100" value="15" oninput="updateGwpViz(this.value)">
+      <span class="slider-val" id="gwpSliderLabel">15&nbsp;%</span>
+    </div>
+    <p class="mini-note" id="gwpHint">Bei G = 200 und p = 15&nbsp;% ist W = 30.</p>
+  </div>
+
   <div class="tool-box">
     <strong>Prozent-Rechner</strong>
     <div class="input-row" style="margin-top:10px;">
       <div class="input-group">
         <label for="pc_mode">Gesucht</label>
-        <select id="pc_mode">
+        <select id="pc_mode" onchange="syncCalcViz()">
           <option value="W">Prozentwert W</option>
           <option value="G">Grundwert G</option>
           <option value="p">Prozentsatz p</option>
@@ -224,19 +356,23 @@ MathJax = {
       </div>
       <div class="input-group">
         <label for="pc_g">G</label>
-        <input id="pc_g" type="text" value="200" inputmode="decimal">
+        <input id="pc_g" type="text" value="200" inputmode="decimal" oninput="syncCalcViz()">
       </div>
       <div class="input-group">
         <label for="pc_w">W</label>
-        <input id="pc_w" type="text" value="30" inputmode="decimal">
+        <input id="pc_w" type="text" value="30" inputmode="decimal" oninput="syncCalcViz()">
       </div>
       <div class="input-group">
         <label for="pc_p">p (in %)</label>
-        <input id="pc_p" type="text" value="15" inputmode="decimal">
+        <input id="pc_p" type="text" value="15" inputmode="decimal" oninput="syncCalcViz()">
       </div>
     </div>
     <button type="button" class="btn btn-check" onclick="runPercentCalc()">Berechnen</button>
     <p id="pc_out" style="margin-top:12px; font-weight:700;"></p>
+    <div class="stack-bar" style="margin-top:10px;" aria-hidden="true">
+      <div class="part w-part" id="calcWPart" style="width:15%">W</div>
+      <div class="part rest-part" id="calcRestPart" style="width:85%"></div>
+    </div>
   </div>
 
   <div class="exercise" style="margin-top:16px;">
@@ -288,6 +424,21 @@ MathJax = {
     </div>
   </div>
 
+  <div class="viz-panel">
+    <h3>Live: Erhöhen / Vermindern</h3>
+    <p class="mini-note">Ausgangswert 100. Bewege den Regler — der Balken wächst oder schrumpft.</p>
+    <div class="stack-bar" aria-hidden="true">
+      <div class="part up-part" id="changeBarFill" style="width:100%">100</div>
+    </div>
+    <div class="slider-row">
+      <input type="range" id="changeSlider" min="-40" max="40" value="0" oninput="updateChangeViz(this.value)">
+      <span class="slider-val" id="changeSliderLabel">±0&nbsp;%</span>
+    </div>
+    <p class="mini-note" id="changeHint">Faktor 1,00 · neuer Wert = 100</p>
+    <button type="button" class="btn btn-prev" style="margin-top:8px;" onclick="demoPlusMinusTrap()">Falle zeigen: +10&nbsp;% dann −10&nbsp;%</button>
+    <p class="mini-note" id="trapHint" style="display:none;"></p>
+  </div>
+
   <div class="exercise">
     <div class="exercise-header">
       <span class="exercise-badge">Aufgabe</span>
@@ -321,6 +472,25 @@ MathJax = {
     <div>
       <strong>Beispiel (Muster):</strong> Jacke 120&nbsp;€, 25&nbsp;% Rabatt.<br>
       \(W = 120\cdot 0{,}25 = 30\) (Ersparnis), neuer Preis \(120\cdot 0{,}75 = 90\).
+    </div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Preisschild zum Ausprobieren</h3>
+    <div class="price-tag">
+      <span class="badge-rabatt" id="priceBadge">−25&nbsp;%</span>
+      <div class="old" id="priceOld">120,00&nbsp;€</div>
+      <div class="new" id="priceNew">90,00&nbsp;€</div>
+      <p class="mini-note" id="priceSave">Ersparnis W = 30&nbsp;€</p>
+    </div>
+    <div class="slider-row">
+      <label for="pricePct" style="font-weight:700;">Rabatt</label>
+      <input type="range" id="pricePct" min="0" max="70" value="25" oninput="updatePriceTag(this.value)">
+      <span class="slider-val" id="pricePctLabel">25&nbsp;%</span>
+    </div>
+    <div class="stack-bar" aria-hidden="true">
+      <div class="part w-part" id="pricePayPart" style="width:75%">zahlst</div>
+      <div class="part down-part" id="priceSavePart" style="width:25%">Rabatt</div>
     </div>
   </div>
 
@@ -379,6 +549,30 @@ MathJax = {
     \]
   </div>
 
+  <div class="viz-panel">
+    <h3>Zoom: 1&nbsp;% vs. 1&nbsp;‰</h3>
+    <p class="mini-note">Links: 100 Kacheln (1&nbsp;% = 1 Kachel). Rechts: derselbe Anteil als Promille wirkt „kleiner“ im Tausender-Maßstab.</p>
+    <div class="split-viz">
+      <div>
+        <strong>100er-Raster (Prozent)</strong>
+        <div class="pct-grid" id="permilleGridPct" aria-hidden="true"></div>
+        <p class="mini-note" id="pmGridPctLabel">1&nbsp;% markiert</p>
+      </div>
+      <div>
+        <strong>Vergleichsbalken</strong>
+        <div class="compare-bars" style="margin-top:18px;">
+          <div class="compare-row"><span>1&nbsp;%</span><div class="compare-track"><div class="compare-fill" style="width:100%"></div></div><span>10&nbsp;‰</span></div>
+          <div class="compare-row"><span>1&nbsp;‰</span><div class="compare-track"><div class="compare-fill" style="width:10%; background:linear-gradient(90deg,#F59E0B,#FDBA74);"></div></div><span>0,1&nbsp;%</span></div>
+        </div>
+        <div class="slider-row">
+          <input type="range" id="pmSlider" min="1" max="30" value="3" oninput="updatePermilleViz(this.value)">
+          <span class="slider-val" id="pmSliderLabel">3&nbsp;‰</span>
+        </div>
+        <p class="mini-note" id="pmHint">3&nbsp;‰ = 0,3&nbsp;% = 0,003</p>
+      </div>
+    </div>
+  </div>
+
   <div class="exercise">
     <div class="exercise-header">
       <span class="exercise-badge">Aufgabe</span>
@@ -408,8 +602,18 @@ MathJax = {
 
   <div class="exercise">
     <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Situation ↔ Formel-Idee</span>
+    </div>
+    <div class="match-list" id="trainMatch"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkTrainMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_train_match"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
       <span class="exercise-badge">Training</span>
-      <span class="exercise-title">Zwei gemischte Aufgaben</span>
+      <span class="exercise-title">Gemischte Aufgaben</span>
     </div>
     <div class="input-group">
       <label for="mx_a">Nettopreis 110&nbsp;€, Aufschlag 15&nbsp;%. Bruttopreis?</label>
@@ -419,8 +623,31 @@ MathJax = {
       <label for="mx_b">15&nbsp;€ sind wie viel Prozent von 60&nbsp;€?</label>
       <input id="mx_b" type="text" inputmode="decimal" placeholder="25">
     </div>
+    <div class="input-group">
+      <label for="mx_c">Preis 80&nbsp;€, Rabatt 25&nbsp;%. Neuer Preis?</label>
+      <input id="mx_c" type="text" inputmode="decimal" placeholder="60">
+    </div>
     <button type="button" class="btn btn-check" onclick="checkMixed()">Überprüfen ✓</button>
     <div class="feedback" id="fb_mx"></div>
+  </div>
+
+  <div class="viz-panel">
+    <h3>Schnellcheck: Balken lesen</h3>
+    <p>Welcher Anteil ist blau markiert?</p>
+    <div class="stack-bar" aria-hidden="true">
+      <div class="part w-part" style="width:35%">?</div>
+      <div class="part rest-part" style="width:65%"></div>
+    </div>
+    <div class="quiz-options" data-quiz="pr6_viz" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">15&nbsp;%</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">25&nbsp;%</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">35&nbsp;%</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">65&nbsp;%</div>
+    </div>
+    <div class="feedback" id="fb_pr6_viz"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(6, ['pr6_viz'])">Überprüfen ✓</button>
+    </div>
   </div>
 
   <div class="info-box success">
@@ -445,7 +672,7 @@ MathJax = {
 <!-- 8 -->
 <div class="tab-panel" id="panel7">
   <div class="ribbon">Abschlussquiz</div>
-  <p>8 Fragen zu Prozent, Promille, Formeln und Faktoren.</p>
+  <p>10 Fragen — inkl. Balken lesen, Formeln, Faktoren und Kontext.</p>
   <div class="quiz-stepper" id="finalQuizStepper"></div>
   <div id="finalQuizContainer"></div>
   <div id="finalResult" style="display:none; text-align:center; margin-top:20px;">
@@ -457,7 +684,7 @@ MathJax = {
 
   <div class="tab-nav">
     <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
-    <a class="btn btn-next" href="../masseinheiten/index.html" style="text-decoration:none;">Weiter zu 04 →</a>
+    <a class="btn btn-next" href="../masseinheiten/lernpfad-masseinheiten.html" style="text-decoration:none;">Weiter zu 04 →</a>
   </div>
 </div>
 

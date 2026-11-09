@@ -5,56 +5,558 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lernpfad: Maßeinheiten</title>
 <script>
-MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, options: { menuOptions: { settings: { zoom: 'NoZoom' } } } };
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  options: { menuOptions: { settings: { zoom: 'NoZoom' } } }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
-<link rel="stylesheet" href="../../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
-<script src="../../../js/lernpfade-registry.js"></script>
-<script src="../../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/normalverteilung-lernpfad.css">
+<link rel="stylesheet" href="../../Wahrscheinlichkeitsrechnung/css/lernpfade-nav.css">
+<script src="../../js/lernpfade-registry.js"></script>
+<script src="../../Wahrscheinlichkeitsrechnung/js/lernpfade-nav.js" defer></script>
+<style>
+.me-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:780px){ .me-grid { grid-template-columns:1fr 1fr; } }
+.me-grid-3 { display:grid; grid-template-columns:1fr; gap:12px; margin-top:12px; }
+@media (min-width:820px){ .me-grid-3 { grid-template-columns:repeat(3,1fr); } }
+.me-card { border:1px solid #E2E8F0; border-radius:12px; padding:14px 16px; background:#fff; }
+.me-card h3 { margin:0 0 8px; color:var(--blue-dark); font-size:1.05rem; }
+.tool-box { border:1px solid #E2E8F0; border-radius:14px; padding:14px 16px; background:#F8FAFC; margin-top:14px; }
+.ladder {
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;
+  margin:14px 0; padding:12px; border-radius:14px; background:#EFF6FF; border:1px solid #D8E2EF;
+}
+.ladder-chip {
+  border:2px solid var(--blue); background:#fff; color:var(--blue-dark);
+  border-radius:999px; padding:8px 14px; font-weight:800; cursor:pointer; font-size:.9rem;
+  font-family:Nunito,system-ui,sans-serif;
+}
+.ladder-chip:hover { background:#DBEAFE; }
+.ladder-chip.active { background:var(--blue); color:#fff; }
+.ladder-arrow { color:var(--text-light); font-weight:800; font-size:.85rem; }
+.ladder-info { margin-top:8px; font-weight:700; color:var(--blue-dark); min-height:1.4em; text-align:center; }
+.match-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.match-row {
+  display:grid; grid-template-columns:1fr; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+@media (min-width:700px){ .match-row { grid-template-columns:1.2fr 1fr; } }
+.match-row label { font-weight:700; color:var(--text); }
+.match-row select {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.92rem;
+}
+.convert-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.convert-row {
+  display:grid; grid-template-columns:auto 1fr auto; gap:8px; align-items:center;
+  padding:10px 12px; border:1px solid #E2E8F0; border-radius:12px; background:#fff;
+}
+.convert-row .src { font-weight:800; color:var(--blue-dark); white-space:nowrap; }
+.convert-row input {
+  width:100%; border:1px solid #CBD5E1; border-radius:10px; padding:8px 10px;
+  font-family:Nunito,system-ui,sans-serif; font-size:.95rem;
+}
+.convert-row input.ok { border-color:#16A34A; background:#ECFDF3; }
+.convert-row input.bad { border-color:#E11D48; background:#FEF2F2; }
+.convert-row .unit { font-weight:800; color:var(--text); min-width:2.4em; }
+.notebook-table { width:100%; border-collapse:collapse; margin-top:10px; font-size:.92rem; }
+.notebook-table th, .notebook-table td { border-bottom:1px solid #E2E8F0; padding:8px 6px; text-align:left; }
+.notebook-table th { color:var(--blue-dark); }
+.rain-demo {
+  margin:14px auto 6px; width:min(220px,100%); height:140px; border:2px solid #93C5FD;
+  border-radius:12px; background:linear-gradient(#EFF6FF,#DBEAFE); position:relative; overflow:hidden;
+}
+.rain-water {
+  position:absolute; left:0; right:0; bottom:0; height:0; background:linear-gradient(#38BDF8,#2563EB);
+  transition:height .45s ease;
+}
+.rain-label { text-align:center; font-size:.86rem; color:var(--text-light); font-weight:700; }
+.trainer-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:10px 0; }
+.trainer-toolbar label { font-weight:700; font-size:.9rem; display:flex; gap:8px; align-items:center; }
+.factor-pill {
+  display:inline-block; margin:2px 4px; padding:4px 10px; border-radius:999px;
+  background:#FFF7ED; border:1px solid #FDBA74; font-weight:800; font-size:.82rem; color:#9A3412;
+}
+</style>
 </head>
 <body data-current-page="s3-p04" data-page-type="lernpfad" data-chapter-folder="Grundlagen/masseinheiten">
 
 <div class="progress-bar-container">
-  <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progressText">Station 0 von 3 besucht</span><span id="progressPercent">0 %</span></div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span id="progressText">Station 0 von 9 abgeschlossen</span>
+    <span id="progressPercent">0 %</span>
+  </div>
 </div>
+
 <div class="container">
+
 <div class="hero">
   <h1>Maßeinheiten</h1>
-  <p class="subtitle">Grundeinheiten, Beziehungen und Umrechnungen — Inhalte werden ergänzt.</p>
+  <p class="subtitle">Längen-, Flächen-, Raum- und Hohlmaße, Zeit und Masse — Beziehungen verstehen und sicher umrechnen.</p>
   <span class="badge">3.&nbsp;Semester · Thema 04</span>
   <p style="margin-top:14px; font-size:0.88rem; color:var(--text-light); max-width:700px; margin-left:auto; margin-right:auto;">
     <a href="index.html" style="color:var(--blue-dark); font-weight:600;">Unterkapitel</a>
-    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
-    · <a href="../../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
-    <a href="../prozent-rechnen/index.html" style="color:var(--blue-dark); font-weight:600;">← 03 Prozent</a>
+    · <a href="../index.html" style="color:var(--blue-dark); font-weight:600;">3.&nbsp;Semester</a>
+    · <a href="../../index.html" style="color:var(--blue-dark); font-weight:600;">Gesamt</a><br>
+    <a href="../prozent-rechnen/lernpfad-prozent-rechnen.html" style="color:var(--blue-dark); font-weight:600;">← 03 Prozent</a>
     · <a href="../potenzen/index.html" style="color:var(--blue-dark); font-weight:600;">05 Potenzen →</a>
   </p>
 </div>
+
 <div class="tab-bar" id="tabBar">
   <button type="button" class="tab-btn active" onclick="switchTab(0)"><span class="tab-num">1</span>Einstieg</button>
-  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Kompetenzen</button>
-  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Inhalt folgt</button>
+  <button type="button" class="tab-btn" onclick="switchTab(1)"><span class="tab-num">2</span>Länge</button>
+  <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Fläche</button>
+  <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Raum/Hohl</button>
+  <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Masse</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Zeit</button>
+  <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Trainer</button>
+  <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Kontext</button>
+  <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Quiz</button>
 </div>
+
+<!-- 1 Einstieg -->
 <div class="tab-panel active" id="panel0">
-  <div class="ribbon">Einstieg</div>
-  <p>Einstieg in <strong>Längen-, Flächen-, Raum- und Hohlmaße</strong>, Zeit und Masse.</p>
-  <div class="tab-nav"><div></div><button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter →</button></div>
+  <div class="ribbon">Einstieg &amp; Grundidee</div>
+  <p>Physikalische Größen bestehen aus <strong>Zahlenwert</strong> und <strong>Einheit</strong>. Ändert sich die Einheit, ändert sich der Zahlenwert — die Größe bleibt dieselbe.</p>
+
+  <div class="formula-box">
+    <div class="formula-label">Grundformel</div>
+    \[
+      g = \text{Zahlenwert}\cdot [\text{Einheit}]
+    \]
+    <p style="margin-top:8px;">Beispiel: \(2{,}45\,\text{kg} = 2450\,\text{g}\).</p>
+  </div>
+
+  <div class="info-box concept">
+    <div class="icon">🎯</div>
+    <div>
+      <strong>Du lernst:</strong>
+      <ul style="margin:8px 0 0 18px; line-height:1.65;">
+        <li>Längen-, Flächen-, Raum-/Hohlmaße, Masse und Zeit zu beschreiben,</li>
+        <li>Umrechnungsleitern und typische Faktoren (10 / 100 / 1000 / 60),</li>
+        <li>beliebig umzurechnen — inkl. Zeitfallen und Kontextaufgaben.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">📌</div>
+    <div>
+      <strong>Lehrplan</strong><br>
+      Grundlegende Maßeinheiten beschreiben, zueinander in Beziehung setzen und damit rechnen;
+      Maßeinheiten nach vorgegebenen Kriterien umwandeln.
+    </div>
+  </div>
+
+  <div class="me-grid-3">
+    <div class="me-card"><h3>MKS-System</h3><p>Meter (Länge), Kilogramm (Masse), Sekunde (Zeit) — Basis des metrischen Systems.</p></div>
+    <div class="me-card"><h3>Vorsilben</h3><p>kilo = \(10^3\), dezi = \(10^{-1}\), centi = \(10^{-2}\), milli = \(10^{-3}\), mikro = \(10^{-6}\).</p></div>
+    <div class="me-card"><h3>Faustregel</h3><p>Länge: oft Faktor 10 · Fläche: 100 · Volumen: 1000 · Zeit: 60 / 24.</p></div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Größe ↔ passende Einheit</span>
+    </div>
+    <div class="match-list" id="matchIntro"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkIntroMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_match_intro"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Grundverständnis</span>
+    </div>
+    <p><strong>Frage:</strong> Wenn du von Metern zu Zentimetern wechselst, was passiert mit dem Zahlenwert?</p>
+    <div class="quiz-options" data-quiz="me0_1" data-correct="1">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Er wird kleiner (÷&nbsp;100).</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Er wird größer (×&nbsp;100).</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Er bleibt gleich.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Die Einheit spielt keine Rolle.</div>
+    </div>
+    <div class="feedback" id="fb_me0_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(0, ['me0_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div></div>
+    <button type="button" class="btn btn-next" onclick="switchTab(1)">Weiter: Länge →</button>
+  </div>
 </div>
+
+<!-- 2 Länge -->
 <div class="tab-panel" id="panel1">
-  <div class="ribbon">Kompetenzen (Lehrplan)</div>
-  <div class="info-box success"><div class="icon">📌</div><div><p style="margin:0;">Grundlegende Maßeinheiten (<strong>Längen-, Flächen-, Raum- und Hohlmaße, Zeit, Masse</strong>) beschreiben, diese zueinander in Beziehung setzen und damit rechnen.</p></div></div>
-  <div class="info-box success" style="margin-top:10px;"><div class="icon">📌</div><div><p style="margin:0;">Beliebige Maßeinheiten nach <strong>vorgegebenen Kriterien umwandeln</strong>.</p></div></div>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button><button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter →</button></div>
+  <div class="ribbon">Längenmaße</div>
+  <p>Die Längenleiter: benachbarte Stufen unterscheiden sich meist um den Faktor <span class="factor-pill">×&nbsp;10</span>, zwischen mm und µm bzw. µm und nm um <span class="factor-pill">×&nbsp;1000</span>.</p>
+
+  <div class="ladder" id="ladderLength" aria-label="Längenleiter interaktiv"></div>
+  <div class="ladder-info" id="ladderLengthInfo">Tippe auf zwei Einheiten, um den Faktor zu sehen.</div>
+
+  <div class="info-box concept">
+    <div class="icon">💻</div>
+    <div>
+      <strong>Notebook-Daten (Länge):</strong> Abmessungen \(37{,}6 \times 24{,}7 \times 3{,}13\,\text{cm}\).
+      Wir nutzen die Länge \(37{,}6\,\text{cm}\) für die ersten Umrechnungen.
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Selbstkontrolle</span>
+      <span class="exercise-title">Längen umrechnen</span>
+    </div>
+    <div class="convert-list" id="lenConvert"></div>
+    <div class="trainer-toolbar">
+      <button type="button" class="btn btn-check" onclick="checkConvertGroup('lenConvert', 2)">Alles überprüfen ✓</button>
+      <label><input type="checkbox" id="lenInstant" checked> beim Verlassen der Felder sofort überprüfen</label>
+    </div>
+    <div class="feedback" id="fb_len"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(0)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(2)">Weiter: Fläche →</button>
+  </div>
 </div>
+
+<!-- 3 Fläche -->
 <div class="tab-panel" id="panel2">
-  <div class="ribbon">Inhalt in Arbeit</div>
-  <p>Material und Übungen folgen.</p>
-  <div class="tab-nav"><button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button><div></div></div>
+  <div class="ribbon">Flächenmaße</div>
+  <p>Fläche = Länge × Länge. Deshalb ist der Faktor zwischen benachbarten Flächeneinheiten <span class="factor-pill">×&nbsp;100</span> (nicht 10!).</p>
+
+  <div class="ladder" id="ladderArea"></div>
+  <div class="ladder-info" id="ladderAreaInfo">Tippe auf zwei Einheiten der Flächenleiter.</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Merkhilfe</div>
+    \[
+      1\,\text{km}^2 = 100\,\text{ha}
+      \quad
+      1\,\text{ha} = 100\,\text{a}
+      \quad
+      1\,\text{a} = 100\,\text{m}^2
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Selbstkontrolle</span>
+      <span class="exercise-title">Flächen umrechnen</span>
+    </div>
+    <div class="convert-list" id="areaConvert"></div>
+    <div class="trainer-toolbar">
+      <button type="button" class="btn btn-check" onclick="checkConvertGroup('areaConvert', 3)">Alles überprüfen ✓</button>
+      <label><input type="checkbox" id="areaInstant" checked> beim Verlassen sofort prüfen</label>
+    </div>
+    <div class="feedback" id="fb_area"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Quick-Check</span>
+      <span class="exercise-title">Faktor verstehen</span>
+    </div>
+    <p>Von \(\text{m}^2\) nach \(\text{cm}^2\): welcher Faktor?</p>
+    <div class="quiz-options" data-quiz="me2_1" data-correct="2">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">×&nbsp;10</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">×&nbsp;100</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">×&nbsp;10&nbsp;000</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">÷&nbsp;100</div>
+    </div>
+    <div class="feedback" id="fb_me2_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(2, ['me2_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(1)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(3)">Weiter: Raum/Hohl →</button>
+  </div>
 </div>
-<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">Lernpfad · Maßeinheiten<br><a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a></div>
+
+<!-- 4 Raum/Hohl -->
+<div class="tab-panel" id="panel3">
+  <div class="ribbon">Raum- und Hohlmaße</div>
+  <p>Volumen: benachbarte kubische Einheiten mit Faktor <span class="factor-pill">×&nbsp;1000</span>. Wichtiger Brückenschlag: <strong>1&nbsp;dm³ = 1&nbsp;ℓ</strong> und <strong>1&nbsp;cm³ = 1&nbsp;ml</strong>.</p>
+
+  <div class="ladder" id="ladderVolume"></div>
+  <div class="ladder-info" id="ladderVolumeInfo">Tippe auf zwei Volumeneinheiten.</div>
+
+  <div class="me-grid">
+    <div class="me-card">
+      <h3>Raummaße</h3>
+      <p>\(1\,\text{m}^3 = 1000\,\text{dm}^3 = 10^6\,\text{cm}^3 = 10^9\,\text{mm}^3\)</p>
+    </div>
+    <div class="me-card">
+      <h3>Hohlmaße</h3>
+      <p>\(1\,\text{hl} = 100\,\ell\), \(1\,\ell = 10\,\text{dl} = 100\,\text{cl} = 1000\,\text{ml}\)</p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zuordnung</span>
+      <span class="exercise-title">Raummaß ↔ Hohlmaß</span>
+    </div>
+    <div class="match-list" id="matchVolume"></div>
+    <button type="button" class="btn btn-check" style="margin-top:12px;" onclick="checkVolumeMatch()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_match_vol"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Notebook</span>
+      <span class="exercise-title">Volumen berechnen &amp; umrechnen</span>
+    </div>
+    <p>Maße: \(37{,}6\,\text{cm} \times 24{,}7\,\text{cm} \times 3{,}13\,\text{cm}\).</p>
+    <div class="input-group">
+      <label for="vol_cm3">Volumen in cm³ (auf ganze Zahl runden)</label>
+      <input id="vol_cm3" type="text" inputmode="decimal" placeholder="z. B. 2907">
+    </div>
+    <div class="input-group">
+      <label for="vol_l">Dasselbe in Litern (dm³), 3 Nachkommastellen</label>
+      <input id="vol_l" type="text" inputmode="decimal" placeholder="z. B. 2,907">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkNotebookVolume()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_vol"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(2)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(4)">Weiter: Masse →</button>
+  </div>
 </div>
-<script src="js/lernpfad-platzhalter-app.js"></script>
+
+<!-- 5 Masse -->
+<div class="tab-panel" id="panel4">
+  <div class="ribbon">Masse</div>
+  <p>Masse bleibt am Ort gleich — im Alltag oft „Gewicht“ genannt, physikalisch aber Newton. Für die Schule: sicher umrechnen mit Faktor <span class="factor-pill">×&nbsp;1000</span> und Dekagramm (dag).</p>
+
+  <div class="ladder" id="ladderMass"></div>
+  <div class="ladder-info" id="ladderMassInfo">Tippe auf zwei Masseneinheiten.</div>
+
+  <div class="formula-box">
+    <div class="formula-label">Beziehungen</div>
+    \[
+      1\,\text{t} = 1000\,\text{kg}
+      \quad
+      1\,\text{kg} = 100\,\text{dag} = 1000\,\text{g}
+      \quad
+      1\,\text{dz} = 100\,\text{kg} = 0{,}1\,\text{t}
+    \]
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Selbstkontrolle</span>
+      <span class="exercise-title">Masse umrechnen</span>
+    </div>
+    <div class="convert-list" id="massConvert"></div>
+    <div class="trainer-toolbar">
+      <button type="button" class="btn btn-check" onclick="checkConvertGroup('massConvert', 5)">Alles überprüfen ✓</button>
+      <label><input type="checkbox" id="massInstant" checked> beim Verlassen sofort prüfen</label>
+    </div>
+    <div class="feedback" id="fb_mass"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(3)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(5)">Weiter: Zeit →</button>
+  </div>
+</div>
+
+<!-- 6 Zeit -->
+<div class="tab-panel" id="panel5">
+  <div class="ribbon">Zeitmaße — und die Dezimalfalle</div>
+  <p>Zeit rechnet mit <span class="factor-pill">60</span> und <span class="factor-pill">24</span> — nicht dezimal wie Meter. Deshalb: <strong>2&nbsp;h&nbsp;22&nbsp;min ≠ 2,22&nbsp;h</strong>.</p>
+
+  <div class="ladder" id="ladderTime"></div>
+  <div class="ladder-info" id="ladderTimeInfo">Tippe auf zwei Zeiteinheiten.</div>
+
+  <div class="info-box warning">
+    <div class="icon">⚠️</div>
+    <div>
+      <strong>Wichtig:</strong> \(2\,\text{h}\,22\,\text{min} = 2 + \frac{22}{60} \approx 2{,}367\,\text{h}\).<br>
+      Umgekehrt: \(2{,}8\,\text{h} = 2\,\text{h} + 0{,}8\cdot 60\,\text{min} = 2\,\text{h}\,48\,\text{min}\).
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Zwewege-Trainer</span>
+      <span class="exercise-title">Gemischt ↔ Dezimalstunden</span>
+    </div>
+    <div class="input-group">
+      <label for="time_a">2&nbsp;h 22&nbsp;min in Dezimalstunden (2 Nachkommastellen)</label>
+      <input id="time_a" type="text" inputmode="decimal" placeholder="2,37">
+    </div>
+    <div class="input-group">
+      <label for="time_b">2,8&nbsp;h als Minutenanteil: wie viele Minuten zusätzlich zu 2&nbsp;h?</label>
+      <input id="time_b" type="text" inputmode="decimal" placeholder="48">
+    </div>
+    <div class="input-group">
+      <label for="time_c">240&nbsp;s in Minuten</label>
+      <input id="time_c" type="text" inputmode="decimal" placeholder="4">
+    </div>
+    <div class="input-group">
+      <label for="time_d">4&nbsp;h in Minuten</label>
+      <input id="time_d" type="text" inputmode="decimal" placeholder="240">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkTime()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_time"></div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(4)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(6)">Weiter: Trainer →</button>
+  </div>
+</div>
+
+<!-- 7 Freier Trainer -->
+<div class="tab-panel" id="panel6">
+  <div class="ribbon">Freier Umrechnungstrainer</div>
+  <p>Gemischte Aufgaben wie im klassischen Selbstkontrollblatt — Länge, Fläche, Masse, Zeit. Optional Sofortprüfung beim Verlassen.</p>
+
+  <div class="tool-box">
+    <div class="trainer-toolbar">
+      <button type="button" class="btn btn-next" onclick="regenTrainer()">Neue Aufgaben</button>
+      <label><input type="checkbox" id="trainerInstant" checked> beim Verlassen sofort überprüfen</label>
+    </div>
+    <div class="convert-list" id="freeTrainer"></div>
+    <div class="trainer-toolbar" style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkConvertGroup('freeTrainer', 7)">Alles überprüfen ✓</button>
+    </div>
+    <div class="feedback" id="fb_trainer"></div>
+  </div>
+
+  <div class="info-box success">
+    <div class="icon">✅</div>
+    <div>
+      <strong>Tipp:</strong> Schreibe zuerst die Leiter auf und zähle die Schritte.
+      Bei Fläche und Volumen die Faktoren 100 bzw. 1000 nicht mit Länge verwechseln.
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(5)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(7)">Weiter: Kontext →</button>
+  </div>
+</div>
+
+<!-- 8 Kontext -->
+<div class="tab-panel" id="panel7">
+  <div class="ribbon">Kontext, Tempo &amp; Anwendungen</div>
+
+  <table class="notebook-table" aria-label="Notebook-Daten">
+    <thead><tr><th>Notebook</th><th>Angabe</th></tr></thead>
+    <tbody>
+      <tr><td>Abmessungen</td><td>\(37{,}6 \times 24{,}7 \times 3{,}13\,\text{cm}\)</td></tr>
+      <tr><td>Akkulaufzeit</td><td>bis 4&nbsp;h</td></tr>
+      <tr><td>Masse</td><td>\(2{,}45\,\text{kg}\)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Projekt</span>
+      <span class="exercise-title">Notebook: Fläche &amp; Masse</span>
+    </div>
+    <div class="input-group">
+      <label for="ctx_area">Grundfläche \(L\cdot B\) in cm² (1 Nachkommastelle)</label>
+      <input id="ctx_area" type="text" inputmode="decimal" placeholder="928,7">
+    </div>
+    <div class="input-group">
+      <label for="ctx_area_m2">Dieselbe Fläche in m²</label>
+      <input id="ctx_area_m2" type="text" inputmode="decimal" placeholder="0,09287">
+    </div>
+    <div class="input-group">
+      <label for="ctx_mass_g">Masse 2,45&nbsp;kg in Gramm</label>
+      <input id="ctx_mass_g" type="text" inputmode="decimal" placeholder="2450">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkContextNotebook()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_ctx_nb"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Tempo</span>
+      <span class="exercise-title">km/h ↔ m/s</span>
+    </div>
+    <p>Salzburg–Wien: 317&nbsp;km in 2,8&nbsp;h. Merkregel: \(3{,}6\,\text{km/h} = 1\,\text{m/s}\).</p>
+    <div class="input-group">
+      <label for="ctx_v_kmh">Durchschnittsgeschwindigkeit in km/h (1 Nachkommastelle)</label>
+      <input id="ctx_v_kmh" type="text" inputmode="decimal" placeholder="113,2">
+    </div>
+    <div class="input-group">
+      <label for="ctx_v_ms">Dieselbe Geschwindigkeit in m/s (1 Nachkommastelle)</label>
+      <input id="ctx_v_ms" type="text" inputmode="decimal" placeholder="31,4">
+    </div>
+    <button type="button" class="btn btn-check" onclick="checkSpeed()">Überprüfen ✓</button>
+    <div class="feedback" id="fb_speed"></div>
+  </div>
+
+  <div class="exercise" style="margin-top:14px;">
+    <div class="exercise-header">
+      <span class="exercise-badge">Grafik</span>
+      <span class="exercise-title">Regen: 1&nbsp;ℓ/m² = 1&nbsp;mm</span>
+    </div>
+    <p>1 Liter Wasser auf 1&nbsp;m² ergibt eine Schichthöhe von 1&nbsp;mm. Stelle die Höhe ein und prüfe die Aussage.</p>
+    <div class="rain-demo" aria-hidden="true"><div class="rain-water" id="rainWater"></div></div>
+    <div class="rain-label" id="rainLabel">0 mm</div>
+    <input id="rainSlider" type="range" min="0" max="20" value="0" step="1" style="width:100%; margin-top:8px;" oninput="updateRain(this.value)">
+    <div class="quiz-options" data-quiz="me7_1" data-correct="0" style="margin-top:12px;">
+      <div class="quiz-option" data-idx="0" onclick="selectQuiz(this)">Stimmt: 1&nbsp;ℓ/m² entspricht 1&nbsp;mm Niederschlagshöhe.</div>
+      <div class="quiz-option" data-idx="1" onclick="selectQuiz(this)">Falsch: 1&nbsp;ℓ/m² entspricht 1&nbsp;cm.</div>
+      <div class="quiz-option" data-idx="2" onclick="selectQuiz(this)">Falsch: Liter und mm lassen sich nie verknüpfen.</div>
+      <div class="quiz-option" data-idx="3" onclick="selectQuiz(this)">Stimmt nur bei Schnee.</div>
+    </div>
+    <div class="feedback" id="fb_me7_1"></div>
+    <div style="margin-top:12px;">
+      <button type="button" class="btn btn-check" onclick="checkQuizGroup(7, ['me7_1'])">Überprüfen ✓</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(6)">← Zurück</button>
+    <button type="button" class="btn btn-next" onclick="switchTab(8)">Weiter: Quiz →</button>
+  </div>
+</div>
+
+<!-- 9 Quiz -->
+<div class="tab-panel" id="panel8">
+  <div class="ribbon">Abschlussquiz</div>
+  <p>10 Fragen zu Einheiten, Faktoren, Umrechnen, Zeitfalle und Kontext.</p>
+  <div class="quiz-stepper" id="finalQuizStepper"></div>
+  <div id="finalQuizContainer"></div>
+  <div id="finalResult" style="display:none; text-align:center; margin-top:20px;">
+    <h3 id="finalScore" style="font-family:'Patrick Hand',cursive; color:var(--blue-dark); font-size:1.6rem;"></h3>
+    <p id="finalMessage"></p>
+    <div class="badge-container" id="badgeContainer"></div>
+    <button type="button" class="btn btn-reset" onclick="resetFinalQuiz()" style="margin-top:12px;">Quiz neu starten</button>
+  </div>
+
+  <div class="tab-nav">
+    <button type="button" class="btn btn-prev" onclick="switchTab(7)">← Zurück</button>
+    <a class="btn btn-next" href="../potenzen/index.html" style="text-decoration:none;">Weiter zu 05 →</a>
+  </div>
+</div>
+
+<div style="text-align:center; padding:20px 0 10px; color:var(--text-light); font-size:0.8rem;">
+  Lernpfad · Maßeinheiten<br>
+  <a href="https://www.kurtrocks.com" target="_blank" rel="noopener noreferrer" style="color:var(--blue);">by kurtrocks</a>
+</div>
+</div>
+
+<script src="js/masseinheiten-lernpfad/app.js"></script>
 </body>
 </html>
