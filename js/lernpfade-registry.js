@@ -862,7 +862,7 @@
               cardTitle: 'Beschreibende Statistik',
               semesterTopicCode: '04',
               description:
-                'Vier-Perspektiven-Modell: Zentral- und Streuungsmaße, Boxplot, Pearson-Korrelation, Lorenzkurve und Gini — mit Rechenübungen, Fehlerhinweisen und Abschlussquiz.',
+                'Interaktive Labs: Zentralmaße live, Häufigkeitstabellen, Streuungsvergleich, Boxplot-Builder, Pearson-Streudiagramm, Lorenz/Gini — plus GeoGebra, AT-Kontext und Abschlussquiz.',
               semesterId: 's7',
               order: 40
             }

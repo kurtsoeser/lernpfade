@@ -31,6 +31,9 @@ function switchTab(idx) {
     var panel = document.getElementById('panel' + idx);
     if (panel) MathJax.typesetPromise([panel]).catch(function () {});
   }
+  if (typeof window.bsRefreshVisibleLabs === 'function') {
+    window.bsRefreshVisibleLabs(idx);
+  }
 }
 
 function updateProgress() {
@@ -107,39 +110,6 @@ function checkQuizGroup(tabIdx, quizIds) {
   if (allCorrect) markComplete(tabIdx + 1);
 }
 
-function checkBsMeanExercise() {
-  var v = parseNum(document.getElementById('bs_mean_input').value);
-  var fb = document.getElementById('fb_bs_mean');
-  if (approxEq(v, 14, 0.05)) {
-    fb.className = 'feedback correct';
-    fb.style.display = 'block';
-    fb.textContent = '\u2705 Richtig: \\(\\bar{x} = 70/5 = 14\\).';
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function () {});
-  } else {
-    fb.className = 'feedback incorrect';
-    fb.style.display = 'block';
-    fb.innerHTML =
-      '\u274c Summe aller Werte durch \\(n=5\\).';
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function () {});
-  }
-}
-
-function checkBsRangeExercise() {
-  var v = parseNum(document.getElementById('bs_range_input').value);
-  var fb = document.getElementById('fb_bs_range');
-  if (approxEq(v, 38, 0.05)) {
-    fb.className = 'feedback correct';
-    fb.style.display = 'block';
-    fb.textContent = '\u2705 Richtig: \\(R = 58 - 20 = 38\\).';
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function () {});
-  } else {
-    fb.className = 'feedback incorrect';
-    fb.style.display = 'block';
-    fb.innerHTML = '\u274c Spannweite = Maximum \u2212 Minimum.';
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function () {});
-  }
-}
-
 var finalQuizData = [
   {
     q: 'F\u00fcr nominalskalierte Daten (z.\u00a0B. Lieblingsmarke) ist sinnvoll vor allem …',
@@ -174,18 +144,18 @@ var finalQuizData = [
       'sie ohne Mittelwert berechenbar ist'
     ],
     correct: 1,
-    explain: '\\(\\sigma = \\sqrt{\\sigma^2}\\) — gleiche Einheit wie die Daten, besser interpretierbar.'
+    explain: '\\(s = \\sqrt{s^2}\\) — gleiche Einheit wie die Daten, besser interpretierbar.'
   },
   {
     q: 'Der Interquartilsabstand (IQR) beschreibt typischerweise …',
     opts: [
       'die Spannweite der Extremwerte',
-      'die Streuung der mittleren 50\u00a0% der Daten (\\(Q_3-Q_1\\))',
+      'die Streuung der mittleren 50\u00a0% der Daten (\\(q_3-q_1\\))',
       'den Median',
       'die Korrelation zweier Merkmale'
     ],
     correct: 1,
-    explain: 'IQR = \\(Q_3 - Q_1\\) — robuste Streuungsma\u00df f\u00fcr die mittlere H\u00e4lfte.'
+    explain: 'IQR = \\(q_3 - q_1\\) — robustes Streuungsma\u00df f\u00fcr die mittlere H\u00e4lfte.'
   },
   {
     q: 'Der Korrelationskoeffizient nach Pearson misst …',
@@ -231,7 +201,7 @@ var finalQuizData = [
       'die Korrelation'
     ],
     correct: 1,
-    explain: 'Box von \\(Q_1\\) bis \\(Q_3\\) — je breiter, desto gr\u00f6\u00dfer die Streuung der mittleren 50\u00a0%.'
+    explain: 'Box von \\(q_1\\) bis \\(q_3\\) — je breiter, desto gr\u00f6\u00dfer die Streuung der mittleren 50\u00a0%.'
   }
 ];
 
