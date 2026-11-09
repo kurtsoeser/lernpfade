@@ -314,6 +314,70 @@
 
 .bs-done-flag.show { display: block; }
 
+.bs-build-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bs-build-step {
+  appearance: none;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  color: var(--text-light);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.bs-build-step.active {
+  border-color: var(--blue);
+  background: var(--blue-light);
+  color: var(--blue-dark);
+}
+
+.bs-build-step.done {
+  border-color: rgba(39, 174, 96, 0.45);
+  color: var(--green);
+}
+
+.bs-build-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+  align-items: center;
+}
+
+.bs-build-dot {
+  min-width: 34px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: #edf2f7;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--blue-dark);
+}
+
+.bs-build-dot.hi {
+  background: #d6eaf8;
+  outline: 2px solid var(--blue);
+}
+
+.bs-build-dot.med {
+  background: rgba(39, 174, 96, 0.18);
+  outline: 2px solid var(--green);
+}
+
+.bs-build-dot.q {
+  background: rgba(243, 156, 18, 0.2);
+  outline: 2px solid var(--orange);
+}
+
 .bs-lorenz-drag {
   touch-action: none;
   user-select: none;

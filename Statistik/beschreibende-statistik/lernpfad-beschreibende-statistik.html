@@ -427,7 +427,43 @@ MathJax = {
 <div class="tab-panel" id="panel4">
   <div class="ribbon">Boxplot</div>
 
-  <p>Der Boxplot zeigt Min, \(q_1\), Median, \(q_3\), Max. Die <strong>Box</strong> ist die mittlere 50 % (\(q_3-q_1\) = IQR).</p>
+  <p>Der Boxplot zeigt Min, \(q_1\), Median \(q_2\), \(q_3\), Max. Die <strong>Box</strong> ist die mittlere 50 % (\(q_3-q_1\) = IQR). Zuerst baust du einen Boxplot <strong>Schritt für Schritt</strong>.</p>
+
+  <div class="bs-lab" id="bsBoxBuildLab">
+    <h3 class="bs-lab-title">Schritt für Schritt: Boxplot zeichnen</h3>
+    <p class="bs-lab-hint">Beispielwerte: \(3,\;5,\;6,\;7,\;8,\;10,\;12,\;13,\;15\). Gehe die Bauanleitung durch — Grafik und Erklärung aktualisieren sich mit.</p>
+
+    <div class="bs-build-progress" data-boxbuild-steps>
+      <button type="button" class="bs-build-step active" data-step="0">1 · Sortieren</button>
+      <button type="button" class="bs-build-step" data-step="1">2 · Min / Max</button>
+      <button type="button" class="bs-build-step" data-step="2">3 · Median</button>
+      <button type="button" class="bs-build-step" data-step="3">4 · Quartile</button>
+      <button type="button" class="bs-build-step" data-step="4">5 · Box</button>
+      <button type="button" class="bs-build-step" data-step="5">6 · Medianlinie</button>
+      <button type="button" class="bs-build-step" data-step="6">7 · Antennen</button>
+      <button type="button" class="bs-build-step" data-step="7">8 · Fertig</button>
+    </div>
+
+    <div class="bs-grid-2" style="margin-top:12px;">
+      <div>
+        <div class="bs-panel">
+          <h4 data-boxbuild-title>Schritt 1</h4>
+          <div data-boxbuild-text style="font-size:0.92rem; line-height:1.55;"></div>
+          <div class="bs-stats-row" data-boxbuild-stats style="margin-top:10px;"></div>
+        </div>
+        <div class="bs-lab-toolbar" style="margin-top:12px;">
+          <button type="button" class="bs-btn" data-boxbuild-prev>← Zurück</button>
+          <button type="button" class="bs-btn bs-btn-primary" data-boxbuild-next>Weiter →</button>
+          <button type="button" class="bs-btn" data-boxbuild-reset>Von vorn</button>
+        </div>
+      </div>
+      <div>
+        <div class="bs-chart" data-boxbuild-chart></div>
+        <div class="bs-live-note" data-boxbuild-note style="margin-top:8px;"></div>
+      </div>
+    </div>
+    <div class="bs-done-flag" id="bsBoxBuildDone">Bauanleitung durchgearbeitet.</div>
+  </div>
 
   <div class="bs-lab" id="bsBoxLab">
     <h3 class="bs-lab-title">Labor: Boxplot bauen</h3>

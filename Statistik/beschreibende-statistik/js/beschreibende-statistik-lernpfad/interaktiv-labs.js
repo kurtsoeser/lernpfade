@@ -625,6 +625,435 @@
     return { q: q, minX: minX, maxX: maxX, x: x, W: W, padL: padL, padR: padR };
   }
 
+  function initBoxBuildLab() {
+    var root = document.getElementById('bsBoxBuildLab');
+    if (!root) return;
+
+    var raw = [8, 3, 15, 7, 12, 5, 10, 13, 6];
+    var sorted = sortedCopy(raw);
+    var q = quartiles(sorted);
+    var step = 0;
+    var maxStep = 7;
+
+    var steps = [
+      {
+        title: 'Schritt 1 — Daten sortieren',
+        html:
+          '<p>Ungeordnete Urliste:</p><div class="bs-build-dots" data-dots="raw"></div>' +
+          '<p>Für Min, Max, Median und Quartile brauchst du die <strong>geordnete</strong> Liste:</p>' +
+          '<div class="bs-build-dots" data-dots="sorted"></div>' +
+          '<p>Schreibe: \(x_{(1)} \\le x_{(2)} \\le \\dots \\le x_{(n)}\) mit \(n=9\).</p>',
+        note: 'Ohne Sortieren kein korrektes Boxplot — immer zuerst ordnen.',
+        draw: 'sort'
+      },
+      {
+        title: 'Schritt 2 — Minimum und Maximum',
+        html:
+          '<p>An den Enden der sortierten Liste:</p>' +
+          '<ul style="margin:8px 0 0 18px;"><li><strong>Min</strong> = \(x_{(1)} = ' +
+          q.min +
+          '\)</li><li><strong>Max</strong> = \(x_{(n)} = ' +
+          q.max +
+          '\)</li></ul>' +
+          '<p>Das wird später die Länge der <strong>Antennen (Whisker)</strong>.</p>',
+        note: 'Spannweite = Max − Min = ' + (q.max - q.min) + '.',
+        draw: 'minmax'
+      },
+      {
+        title: 'Schritt 3 — Median \(q_2\) finden',
+        html:
+          '<p>Bei ungeradem \(n=9\) ist der Median der <strong>mittlere</strong> Wert: Position \(\\frac{n+1}{2}=5\).</p>' +
+          '<div class="bs-build-dots" data-dots="median"></div>' +
+          '<p>Also \(q_2 = \\tilde{x} = ' +
+          q.q2 +
+          '\). Bei geradem \(n\) nimmst du das Mittel der beiden mittleren Werte.</p>',
+        note: 'Der Median teilt die Daten in eine untere und eine obere Hälfte.',
+        draw: 'median'
+      },
+      {
+        title: 'Schritt 4 — Quartile \(q_1\) und \(q_3\)',
+        html:
+          '<p><strong>Untere Hälfte</strong> (ohne Median bei ungeradem \(n\)): \(3,5,6,7\) → Median davon = \(q_1 = ' +
+          fmtDe(q.q1, 1) +
+          '\).</p>' +
+          '<p><strong>Obere Hälfte</strong>: \(10,12,13,15\) → Median davon = \(q_3 = ' +
+          fmtDe(q.q3, 1) +
+          '\).</p>' +
+          '<p>IQR = \(q_3 - q_1 = ' +
+          fmtDe(q.q3 - q.q1, 1) +
+          '\) (Streuung der mittleren 50 %).</p>',
+        note: 'Quartilmethode „Hälften“ — im Unterricht eine Konvention vereinbaren.',
+        draw: 'quartiles'
+      },
+      {
+        title: 'Schritt 5 — Die Box zeichnen',
+        html:
+          '<p>Zeichne ein Rechteck von \(q_1 = ' +
+          fmtDe(q.q1, 1) +
+          '\) bis \(q_3 = ' +
+          fmtDe(q.q3, 1) +
+          '\).</p>' +
+          '<p>Diese Box enthält die <strong>mittleren 50 %</strong> der Daten. Je breiter die Box, desto größer der IQR.</p>',
+        note: 'Noch ohne Medianlinie und ohne Antennen.',
+        draw: 'box'
+      },
+      {
+        title: 'Schritt 6 — Medianlinie in die Box',
+        html:
+          '<p>Zeichne innerhalb der Box eine senkrechte Linie bei \(q_2 = ' +
+          q.q2 +
+          '\).</p>' +
+          '<p>Liegt der Median näher an \(q_1\), ist die Verteilung oft nach rechts ausgezogen (rechtsschief) — und umgekehrt.</p>',
+        note: 'Median ≠ Mittelwert — im Boxplot steht der Median, nicht das arithmetische Mittel.',
+        draw: 'boxmed'
+      },
+      {
+        title: 'Schritt 7 — Antennen (Whisker)',
+        html:
+          '<p>Verbinde die Boxenden mit den Extremen:</p>' +
+          '<ul style="margin:8px 0 0 18px;"><li>links: von \(q_1\) bis Min \(=' +
+          q.min +
+          '\)</li><li>rechts: von \(q_3\) bis Max \(=' +
+          q.max +
+          '\)</li></ul>' +
+          '<p>Kleine Querstriche markieren Min und Max.</p>',
+        note: 'In manchen Varianten enden Whisker an 1,5·IQR — hier: klassisch bis Min/Max.',
+        draw: 'whiskers'
+      },
+      {
+        title: 'Schritt 8 — Fertiger Boxplot',
+        html:
+          '<p>Du hast alle fünf Kennzahlen:</p>' +
+          '<div class="bs-stats-row">' +
+          '<div class="bs-stat"><div class="lbl">Min</div><div class="val">' +
+          q.min +
+          '</div></div>' +
+          '<div class="bs-stat"><div class="lbl">q₁</div><div class="val">' +
+          fmtDe(q.q1, 1) +
+          '</div></div>' +
+          '<div class="bs-stat"><div class="lbl">Median</div><div class="val">' +
+          q.q2 +
+          '</div></div>' +
+          '<div class="bs-stat"><div class="lbl">q₃</div><div class="val">' +
+          fmtDe(q.q3, 1) +
+          '</div></div>' +
+          '<div class="bs-stat"><div class="lbl">Max</div><div class="val">' +
+          q.max +
+          '</div></div></div>' +
+          '<p style="margin-top:10px;"><strong>Merksatz:</strong> sortieren → Min/Max → Median → Quartile → Box → Medianlinie → Antennen.</p>',
+        note: 'Als Nächstes: eigene Daten im Labor darunter ausprobieren.',
+        draw: 'full'
+      }
+    ];
+
+    function fillDots(container, values, highlight) {
+      if (!container) return;
+      container.innerHTML = '';
+      values.forEach(function (v, i) {
+        var d = document.createElement('span');
+        d.className = 'bs-build-dot';
+        if (highlight === 'median' && i === 4) d.classList.add('med');
+        if (highlight === 'q' && (i <= 3 || i >= 5)) d.classList.add('q');
+        if (highlight === 'ends' && (i === 0 || i === values.length - 1)) d.classList.add('hi');
+        d.textContent = String(v).replace('.', ',');
+        container.appendChild(d);
+      });
+    }
+
+    function drawStep(mode) {
+      var host = root.querySelector('[data-boxbuild-chart]');
+      var W = 520;
+      var H = 170;
+      var padL = 36;
+      var padR = 24;
+      var minX = q.min - 1;
+      var maxX = q.max + 1;
+      function x(v) {
+        return padL + ((v - minX) / (maxX - minX)) * (W - padL - padR);
+      }
+      var y = 78;
+      var parts = ['<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">'];
+      parts.push(
+        '<line x1="' +
+          padL +
+          '" y1="' +
+          (H - 28) +
+          '" x2="' +
+          (W - padR) +
+          '" y2="' +
+          (H - 28) +
+          '" stroke="#cfd8e3" stroke-width="2"/>'
+      );
+
+      // always show sorted points as dots on axis for context from step 0
+      if (mode === 'sort') {
+        raw.forEach(function (v, i) {
+          parts.push(
+            '<circle cx="' +
+              x(v) +
+              '" cy="' +
+              (40 + (i % 3) * 14) +
+              '" r="6" fill="#94a3b8" opacity="0.7"/>'
+          );
+        });
+        sorted.forEach(function (v) {
+          parts.push(
+            '<circle cx="' +
+              x(v) +
+              '" cy="' +
+              (H - 28) +
+              '" r="7" fill="#3B82C4" stroke="#fff" stroke-width="2"/>'
+          );
+        });
+      } else {
+        sorted.forEach(function (v) {
+          parts.push(
+            '<circle cx="' +
+              x(v) +
+              '" cy="' +
+              (H - 28) +
+              '" r="5" fill="#cbd5e1"/>'
+          );
+        });
+      }
+
+      if (mode === 'minmax' || mode === 'median' || mode === 'quartiles') {
+        parts.push(
+          '<line x1="' +
+            x(q.min) +
+            '" y1="50" x2="' +
+            x(q.min) +
+            '" y2="110" stroke="#3B82C4" stroke-width="3"/>'
+        );
+        parts.push(
+          '<line x1="' +
+            x(q.max) +
+            '" y1="50" x2="' +
+            x(q.max) +
+            '" y2="110" stroke="#3B82C4" stroke-width="3"/>'
+        );
+        parts.push(
+          '<text x="' +
+            x(q.min) +
+            '" y="42" text-anchor="middle" font-size="12" fill="#3B82C4" font-weight="700">Min</text>'
+        );
+        parts.push(
+          '<text x="' +
+            x(q.max) +
+            '" y="42" text-anchor="middle" font-size="12" fill="#3B82C4" font-weight="700">Max</text>'
+        );
+      }
+
+      if (mode === 'median' || mode === 'quartiles') {
+        parts.push(
+          '<line x1="' +
+            x(q.q2) +
+            '" y1="50" x2="' +
+            x(q.q2) +
+            '" y2="110" stroke="#27AE60" stroke-width="3"/>'
+        );
+        parts.push(
+          '<text x="' +
+            x(q.q2) +
+            '" y="42" text-anchor="middle" font-size="12" fill="#27AE60" font-weight="700">Med</text>'
+        );
+      }
+
+      if (mode === 'quartiles') {
+        parts.push(
+          '<line x1="' +
+            x(q.q1) +
+            '" y1="55" x2="' +
+            x(q.q1) +
+            '" y2="105" stroke="#F39C12" stroke-width="3"/>'
+        );
+        parts.push(
+          '<line x1="' +
+            x(q.q3) +
+            '" y1="55" x2="' +
+            x(q.q3) +
+            '" y2="105" stroke="#F39C12" stroke-width="3"/>'
+        );
+        parts.push(
+          '<text x="' +
+            x(q.q1) +
+            '" y="48" text-anchor="middle" font-size="12" fill="#F39C12" font-weight="700">q₁</text>'
+        );
+        parts.push(
+          '<text x="' +
+            x(q.q3) +
+            '" y="48" text-anchor="middle" font-size="12" fill="#F39C12" font-weight="700">q₃</text>'
+        );
+      }
+
+      var showBox = mode === 'box' || mode === 'boxmed' || mode === 'whiskers' || mode === 'full';
+      var showMed = mode === 'boxmed' || mode === 'whiskers' || mode === 'full';
+      var showWhisk = mode === 'whiskers' || mode === 'full';
+
+      if (showBox) {
+        parts.push(
+          '<rect x="' +
+            x(q.q1) +
+            '" y="' +
+            (y - 22) +
+            '" width="' +
+            Math.max(2, x(q.q3) - x(q.q1)) +
+            '" height="44" fill="#d6eaf8" stroke="#3B82C4" stroke-width="2.5" rx="4"/>'
+        );
+      }
+      if (showMed) {
+        parts.push(
+          '<line x1="' +
+            x(q.q2) +
+            '" y1="' +
+            (y - 22) +
+            '" x2="' +
+            x(q.q2) +
+            '" y2="' +
+            (y + 22) +
+            '" stroke="#27AE60" stroke-width="3.5"/>'
+        );
+      }
+      if (showWhisk) {
+        parts.push(
+          '<line x1="' +
+            x(q.min) +
+            '" y1="' +
+            y +
+            '" x2="' +
+            x(q.q1) +
+            '" y2="' +
+            y +
+            '" stroke="#5D6D7E" stroke-width="2.5"/>'
+        );
+        parts.push(
+          '<line x1="' +
+            x(q.q3) +
+            '" y1="' +
+            y +
+            '" x2="' +
+            x(q.max) +
+            '" y2="' +
+            y +
+            '" stroke="#5D6D7E" stroke-width="2.5"/>'
+        );
+        parts.push(
+          '<line x1="' +
+            x(q.min) +
+            '" y1="' +
+            (y - 12) +
+            '" x2="' +
+            x(q.min) +
+            '" y2="' +
+            (y + 12) +
+            '" stroke="#5D6D7E" stroke-width="2.5"/>'
+        );
+        parts.push(
+          '<line x1="' +
+            x(q.max) +
+            '" y1="' +
+            (y - 12) +
+            '" x2="' +
+            x(q.max) +
+            '" y2="' +
+            (y + 12) +
+            '" stroke="#5D6D7E" stroke-width="2.5"/>'
+        );
+      }
+
+      if (mode === 'full') {
+        [
+          [q.min, 'Min'],
+          [q.q1, 'q₁'],
+          [q.q2, 'Med'],
+          [q.q3, 'q₃'],
+          [q.max, 'Max']
+        ].forEach(function (p) {
+          parts.push(
+            '<text x="' +
+              x(p[0]) +
+              '" y="28" text-anchor="middle" font-size="11" fill="#5D6D7E" font-weight="700">' +
+              p[1] +
+              '</text>'
+          );
+          parts.push(
+            '<text x="' +
+              x(p[0]) +
+              '" y="' +
+              (H - 8) +
+              '" text-anchor="middle" font-size="11" fill="#5D6D7E">' +
+              fmtDe(p[0], 1) +
+              '</text>'
+          );
+        });
+      }
+
+      parts.push('</svg>');
+      host.innerHTML = parts.join('');
+    }
+
+    function render() {
+      var s = steps[step];
+      root.querySelector('[data-boxbuild-title]').textContent = s.title;
+      var text = root.querySelector('[data-boxbuild-text]');
+      text.innerHTML = s.html;
+      root.querySelector('[data-boxbuild-note]').textContent = s.note;
+
+      fillDots(text.querySelector('[data-dots="raw"]'), raw);
+      fillDots(text.querySelector('[data-dots="sorted"]'), sorted, step === 1 ? 'ends' : null);
+      fillDots(text.querySelector('[data-dots="median"]'), sorted, 'median');
+
+      root.querySelectorAll('[data-boxbuild-steps] .bs-build-step').forEach(function (btn) {
+        var i = parseInt(btn.getAttribute('data-step'), 10);
+        btn.classList.toggle('active', i === step);
+        btn.classList.toggle('done', i < step);
+      });
+
+      root.querySelector('[data-boxbuild-prev]').disabled = step === 0;
+      root.querySelector('[data-boxbuild-next]').textContent =
+        step >= maxStep ? 'Fertig ✓' : 'Weiter →';
+
+      drawStep(s.draw);
+
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([text]).catch(function () {});
+      }
+
+      if (step >= maxStep) {
+        showDone('bsBoxBuildDone');
+        markExplore(4);
+      }
+    }
+
+    root.querySelector('[data-boxbuild-next]').addEventListener('click', function () {
+      if (step < maxStep) {
+        step++;
+        render();
+      } else {
+        showDone('bsBoxBuildDone');
+        markExplore(4);
+      }
+    });
+    root.querySelector('[data-boxbuild-prev]').addEventListener('click', function () {
+      if (step > 0) {
+        step--;
+        render();
+      }
+    });
+    root.querySelector('[data-boxbuild-reset]').addEventListener('click', function () {
+      step = 0;
+      render();
+    });
+    root.querySelectorAll('[data-boxbuild-steps] .bs-build-step').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        step = parseInt(btn.getAttribute('data-step'), 10);
+        render();
+      });
+    });
+
+    render();
+  }
+
   function initBoxplotLab() {
     var root = document.getElementById('bsBoxLab');
     if (!root) return;
@@ -1579,6 +2008,7 @@
     initToyLab();
     initChoiceLab();
     initDispersionLab();
+    initBoxBuildLab();
     initBoxplotLab();
     initPearsonLab();
     initLorenzLab();
