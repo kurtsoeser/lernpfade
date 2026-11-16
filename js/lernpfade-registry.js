@@ -862,7 +862,7 @@
               cardTitle: 'Beschreibende Statistik',
               semesterTopicCode: '04',
               description:
-                'Interaktive Labs: Zentralmaße live, Häufigkeitstabellen, Streuungsvergleich, Boxplot-Builder, Pearson-Streudiagramm, Lorenz/Gini — plus GeoGebra, AT-Kontext und Abschlussquiz.',
+                'Interaktive Labs: Zentralmaße live, Häufigkeitstabellen, Streuungsvergleich, Boxplot-Builder, Korrelation (Streudiagramm + Einschätz-Übung), Lorenz/Gini — plus GeoGebra, AT-Kontext und Abschlussquiz.',
               semesterId: 's7',
               order: 40
             }

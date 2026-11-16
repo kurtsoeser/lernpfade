@@ -1274,41 +1274,294 @@
   }
 
   var pearsonRedraw = null;
+  var corrChallengeRedraw = null;
+  var corrIntroRedraw = null;
 
-  /* ========== 5) Pearson Lab ========== */
-  function initPearsonLab() {
-    var root = document.getElementById('bsPearsonLab');
+  /* ========== Korrelation Einstieg Schlaf/Bildschirm ========== */
+  function initCorrIntro() {
+    var root = document.getElementById('bsCorrIntro');
     if (!root) return;
-    var canvas = root.querySelector('canvas');
+
+    // Schlafdauer x, Bildschirmzeit y — negativer Trend, r ≈ -0,87
+    // gleiche Schlafdauer mit unterschiedlicher Bildschirmzeit
+    var data = [
+      { x: 6, y: 5.5 },
+      { x: 6, y: 4.2 },
+      { x: 7, y: 4.8 },
+      { x: 7, y: 3.6 },
+      { x: 7, y: 4.0 },
+      { x: 8, y: 3.8 },
+      { x: 8, y: 2.5 },
+      { x: 9, y: 3.2 },
+      { x: 9, y: 2.0 },
+      { x: 9, y: 1.5 },
+      { x: 10, y: 2.4 },
+      { x: 10, y: 1.2 }
+    ];
+    var xs = data.map(function (d) {
+      return d.x;
+    });
+    var ys = data.map(function (d) {
+      return d.y;
+    });
+    var rTrue = pearsonR(xs, ys);
+    var r2True = rTrue * rTrue;
+
+    var mx = mean(xs);
+    var my = mean(ys);
+    var num = 0;
+    var den = 0;
+    for (var i = 0; i < xs.length; i++) {
+      num += (xs[i] - mx) * (ys[i] - my);
+      den += (xs[i] - mx) * (xs[i] - mx);
+    }
+    var aTrue = den ? num / den : 0;
+    var bTrue = my - aTrue * mx;
+
+    var step = 0;
+    var userSlope = -0.4;
+    var userIntercept = 4.0; // y at x≈6 roughly via: y = userSlope*(x-6) + userIntercept
+    var canvas = root.querySelector('[data-corr-intro-canvas]');
     var ctx = canvas.getContext('2d');
-    var points = [];
-    var showLine = true;
+
+    var xMin = 5.5;
+    var xMax = 10.5;
+    var yMin = 0;
+    var yMax = 6;
 
     function setSize() {
-      var cw = root.querySelector('.bs-scatter-wrap');
-      var basis = (cw && cw.clientWidth) || root.clientWidth || 520;
+      var wrap = root.querySelector('.bs-corr-intro-wrap');
+      var basis = (wrap && wrap.clientWidth) || 520;
+      var w = Math.min(520, Math.max(280, basis - 8));
+      canvas.width = w;
+      canvas.height = Math.round(w * 0.78);
+    }
+
+    function toPixel(x, y) {
+      var padL = 42;
+      var padR = 16;
+      var padT = 16;
+      var padB = 36;
+      return {
+        px: padL + ((x - xMin) / (xMax - xMin)) * (canvas.width - padL - padR),
+        py: canvas.height - padB - ((y - yMin) / (yMax - yMin)) * (canvas.height - padT - padB)
+      };
+    }
+
+    function drawAxes() {
+      ctx.strokeStyle = '#cfd8e3';
+      ctx.lineWidth = 1;
+      var o = toPixel(xMin, yMin);
+      var xr = toPixel(xMax, yMin);
+      var yt = toPixel(xMin, yMax);
+      ctx.beginPath();
+      ctx.moveTo(o.px, o.py);
+      ctx.lineTo(xr.px, xr.py);
+      ctx.moveTo(o.px, o.py);
+      ctx.lineTo(yt.px, yt.py);
+      ctx.stroke();
+      ctx.fillStyle = '#5D6D7E';
+      ctx.font = '12px Nunito,sans-serif';
+      ctx.textAlign = 'center';
+      for (var xv = 6; xv <= 10; xv++) {
+        var p = toPixel(xv, yMin);
+        ctx.fillText(String(xv), p.px, canvas.height - 12);
+      }
+      ctx.textAlign = 'right';
+      for (var yv = 0; yv <= 6; yv++) {
+        var q = toPixel(xMin, yv);
+        ctx.fillText(String(yv), q.px - 6, q.py + 4);
+      }
+      ctx.textAlign = 'center';
+      ctx.fillText('Schlafdauer (h)', canvas.width / 2, canvas.height - 2);
+    }
+
+    function drawPoints() {
+      data.forEach(function (d) {
+        var p = toPixel(d.x, d.y);
+        ctx.beginPath();
+        ctx.fillStyle = '#3B82C4';
+        ctx.arc(p.px, p.py, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      });
+    }
+
+    function drawUserLine() {
+      // y = userSlope*(x-6) + userIntercept
+      var y1 = userSlope * (xMin - 6) + userIntercept;
+      var y2 = userSlope * (xMax - 6) + userIntercept;
+      var p1 = toPixel(xMin, y1);
+      var p2 = toPixel(xMax, y2);
+      ctx.strokeStyle = '#F39C12';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(p1.px, p1.py);
+      ctx.lineTo(p2.px, p2.py);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function drawTrueLine() {
+      var y1 = aTrue * xMin + bTrue;
+      var y2 = aTrue * xMax + bTrue;
+      var p1 = toPixel(xMin, y1);
+      var p2 = toPixel(xMax, y2);
+      ctx.strokeStyle = '#e74c3c';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(p1.px, p1.py);
+      ctx.lineTo(p2.px, p2.py);
+      ctx.stroke();
+    }
+
+    function draw() {
+      setSize();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      drawAxes();
+      if (step >= 0) drawPoints();
+      if (step === 1) drawUserLine();
+      if (step >= 2) {
+        drawUserLine();
+        drawTrueLine();
+      }
+    }
+
+    function render() {
+      var title = root.querySelector('[data-corr-intro-title]');
+      var text = root.querySelector('[data-corr-intro-text]');
+      var controls = root.querySelector('[data-corr-intro-controls]');
+      var reveal = root.querySelector('[data-corr-intro-reveal]');
+      var note = root.querySelector('[data-corr-intro-note]');
+
+      root.querySelectorAll('[data-corr-intro-steps] .bs-build-step').forEach(function (btn) {
+        var i = parseInt(btn.getAttribute('data-cistep'), 10);
+        btn.classList.toggle('active', i === step);
+        btn.classList.toggle('done', i < step);
+      });
+
+      controls.style.display = step === 1 ? 'block' : 'none';
+      reveal.style.display = step === 2 ? 'block' : 'none';
+
+      if (step === 0) {
+        title.textContent = 'Schritt 1 — Punkte eintragen';
+        text.innerHTML =
+          '<p>Trage jedes Paar \((\\text{Schlaf},\\text{Bildschirm})\) als Punkt ein.</p>' +
+          '<p><strong>x-Achse:</strong> Schlafdauer · <strong>y-Achse:</strong> Bildschirmzeit.</p>' +
+          '<p>Hinweis: Bei gleicher Schlafdauer (z. B. dreimal 7 h) liegen Punkte <strong>übereinander</strong> — die Bildschirmzeit streut trotzdem.</p>' +
+          '<p>Trotzdem erkennt man einen <strong>negativen</strong> Trend: längerer Schlaf ↔ eher weniger Bildschirmzeit.</p>';
+        note.textContent = 'Noch keine Gerade — erst die Lage und Streuung der Punkte verstehen.';
+      } else if (step === 1) {
+        title.textContent = 'Schritt 2 — Eigene Trendgerade versuchen';
+        text.innerHTML =
+          '<p>Lege eine Gerade so, dass sie den Zusammenhang möglichst gut beschreibt.</p>' +
+          '<p>Erwartung: <strong>negative Steigung</strong> (mehr Schlaf ↔ weniger Bildschirmzeit).</p>';
+        note.textContent = 'Orange gestrichelt = deine Gerade. Probiere Steigung und Lage.';
+      } else {
+        title.textContent = 'Schritt 3 — Echte Trendlinie, \(r\) und \(r^2\)';
+        text.innerHTML =
+          '<p>Die <strong>rote</strong> Gerade ist die Regressionsgerade (beste lineare Anpassung).</p>' +
+          '<p>Vergleiche mit deiner orangenen Linie. \(r\) misst die Stärke des linearen Zusammenhangs, \(r^2\) das Bestimmtheitsmaß.</p>';
+        root.querySelector('[data-corr-intro-r]').textContent = fmtDe(rTrue, 3);
+        root.querySelector('[data-corr-intro-r2]').textContent = fmtDe(r2True, 3);
+        root.querySelector('[data-corr-intro-eq]').innerHTML =
+          'Trendlinie: \\(y \\approx ' +
+          aTrue.toFixed(2) +
+          '\\,x + (' +
+          bTrue.toFixed(2) +
+          ')\\). ' +
+          'Korrelation \\(r \\approx ' +
+          rTrue.toFixed(2) +
+          '\\) (stark negativ, aber nicht perfekt), Bestimmtheitsmaß \\(r^2 \\approx ' +
+          r2True.toFixed(2) +
+          '\\).';
+        note.className = 'bs-live-note ok';
+        note.textContent =
+          '|r| ≈ 0,87: klarer negativer linearer Zusammenhang, die Streuung bei gleicher Schlafdauer verhindert |r| = 1.';
+        showDone('bsCorrIntroDone');
+        markExplore(5);
+      }
+
+      root.querySelector('[data-corr-intro-prev]').disabled = step === 0;
+      root.querySelector('[data-corr-intro-next]').textContent = step >= 2 ? 'Fertig ✓' : 'Weiter →';
+
+      draw();
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([
+          text,
+          root.querySelector('[data-corr-intro-eq]'),
+          title
+        ]).catch(function () {});
+      }
+    }
+
+    root.querySelector('[data-corr-intro-next]').addEventListener('click', function () {
+      if (step < 2) {
+        step++;
+        render();
+      }
+    });
+    root.querySelector('[data-corr-intro-prev]').addEventListener('click', function () {
+      if (step > 0) {
+        step--;
+        noteReset();
+        render();
+      }
+    });
+    function noteReset() {
+      var note = root.querySelector('[data-corr-intro-note]');
+      note.className = 'bs-live-note';
+    }
+    root.querySelectorAll('[data-corr-intro-steps] .bs-build-step').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        step = parseInt(btn.getAttribute('data-cistep'), 10);
+        noteReset();
+        render();
+      });
+    });
+
+    var slopeEl = root.querySelector('[data-corr-intro-slope]');
+    var intEl = root.querySelector('[data-corr-intro-intercept]');
+    slopeEl.addEventListener('input', function () {
+      userSlope = parseFloat(slopeEl.value);
+      draw();
+    });
+    intEl.addEventListener('input', function () {
+      userIntercept = parseFloat(intEl.value);
+      draw();
+    });
+
+    window.addEventListener('resize', draw);
+    corrIntroRedraw = draw;
+    render();
+  }
+
+  function scatterHelpers(canvas) {
+    function setSize(wrap) {
+      var basis = (wrap && wrap.clientWidth) || canvas.parentElement.clientWidth || 520;
       var w = Math.min(520, Math.max(280, basis - 8));
       canvas.width = w;
       canvas.height = Math.round(w * 0.72);
     }
-
     function toPixel(x, y) {
       var pad = 28;
-      var px = pad + (x / 10) * (canvas.width - 2 * pad);
-      var py = canvas.height - pad - (y / 10) * (canvas.height - 2 * pad);
-      return { px: px, py: py };
-    }
-
-    function fromPixel(px, py) {
-      var pad = 28;
-      var x = ((px - pad) / (canvas.width - 2 * pad)) * 10;
-      var y = ((canvas.height - pad - py) / (canvas.height - 2 * pad)) * 10;
       return {
-        x: Math.max(0, Math.min(10, x)),
-        y: Math.max(0, Math.min(10, y))
+        px: pad + (x / 10) * (canvas.width - 2 * pad),
+        py: canvas.height - pad - (y / 10) * (canvas.height - 2 * pad)
       };
     }
-
+    function fromPixel(px, py) {
+      var pad = 28;
+      return {
+        x: Math.max(0, Math.min(10, ((px - pad) / (canvas.width - 2 * pad)) * 10)),
+        y: Math.max(0, Math.min(10, ((canvas.height - pad - py) / (canvas.height - 2 * pad)) * 10))
+      };
+    }
     function regression(xs, ys) {
       var n = xs.length;
       if (n < 2) return null;
@@ -1322,12 +1575,10 @@
       }
       if (den === 0) return null;
       var a = num / den;
-      var b = my - a * mx;
-      return { a: a, b: b };
+      return { a: a, b: my - a * mx };
     }
-
-    function draw() {
-      setSize();
+    function drawScene(ctx, points, opts) {
+      opts = opts || {};
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#fff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1353,8 +1604,7 @@
       var ys = points.map(function (p) {
         return p.y;
       });
-      var r = pearsonR(xs, ys);
-      if (showLine && points.length >= 2) {
+      if (opts.showLine !== false && points.length >= 2) {
         var reg = regression(xs, ys);
         if (reg) {
           ctx.strokeStyle = '#e74c3c';
@@ -1377,6 +1627,24 @@
         ctx.lineWidth = 2;
         ctx.stroke();
       });
+      return pearsonR(xs, ys);
+    }
+    return { setSize: setSize, toPixel: toPixel, fromPixel: fromPixel, drawScene: drawScene };
+  }
+
+  /* ========== 5) Korrelation Labor ========== */
+  function initPearsonLab() {
+    var root = document.getElementById('bsPearsonLab');
+    if (!root) return;
+    var canvas = root.querySelector('canvas');
+    var ctx = canvas.getContext('2d');
+    var helpers = scatterHelpers(canvas);
+    var points = [];
+    var showLine = true;
+
+    function draw() {
+      helpers.setSize(root.querySelector('.bs-scatter-wrap'));
+      var r = helpers.drawScene(ctx, points, { showLine: showLine });
       root.querySelector('[data-r-val]').textContent = isFinite(r) ? fmtDe(r, 3) : '—';
       root.querySelector('[data-r-n]').textContent = String(points.length);
       var note = root.querySelector('[data-r-note]');
@@ -1394,24 +1662,19 @@
       }
     }
 
-    function addPoint(ev) {
+    canvas.addEventListener('click', function (ev) {
       var rect = canvas.getBoundingClientRect();
       var px = ((ev.clientX - rect.left) / rect.width) * canvas.width;
       var py = ((ev.clientY - rect.top) / rect.height) * canvas.height;
-      points.push(fromPixel(px, py));
+      points.push(helpers.fromPixel(px, py));
       draw();
       if (points.length >= 5) {
         showDone('bsPearsonDone');
         markExplore(5);
       }
-    }
-
-    canvas.addEventListener('click', addPoint);
-
-    var lastPreset = null;
+    });
 
     function preset(kind) {
-      lastPreset = kind;
       points = [];
       var i;
       if (kind === 'pos') {
@@ -1431,13 +1694,16 @@
       } else if (kind === 'curve') {
         for (i = 0; i < 14; i++) {
           var x3 = 0.5 + i * 0.65;
-          points.push({ x: x3, y: 0.35 * (x3 - 5) * (x3 - 5) + 1.5 + (Math.random() - 0.5) * 0.6 });
+          points.push({
+            x: x3,
+            y: 0.35 * (x3 - 5) * (x3 - 5) + 1.5 + (Math.random() - 0.5) * 0.6
+          });
         }
       } else if (kind === 'sleep') {
-        var sx = [6, 7, 7, 8, 8, 9, 9, 10, 10];
-        var sy = [4, 4, 2, 3, 3, 2, 2, 1, 2];
+        var sx = [6, 6, 7, 7, 7, 8, 8, 9, 9, 9, 10, 10];
+        var sy = [5.5, 4.2, 4.8, 3.6, 4.0, 3.8, 2.5, 3.2, 2.0, 1.5, 2.4, 1.2];
         for (i = 0; i < sx.length; i++) {
-          points.push({ x: (sx[i] - 5) * 1.5, y: sy[i] * 1.8 });
+          points.push({ x: (sx[i] - 5) * 1.5, y: sy[i] * 1.5 });
         }
       }
       draw();
@@ -1470,53 +1736,186 @@
       draw();
     });
 
-    root.querySelectorAll('[data-r-guess]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var guess = btn.getAttribute('data-r-guess');
-        var fb = root.querySelector('[data-r-guess-fb]');
-        var xs = points.map(function (p) {
-          return p.x;
+    window.addEventListener('resize', draw);
+    pearsonRedraw = draw;
+    draw();
+  }
+
+  /* ========== Korrelation Challenge (eigene Kachel) ========== */
+  function initCorrChallenge() {
+    var root = document.getElementById('bsCorrChallenge');
+    if (!root) return;
+    var canvas = root.querySelector('[data-corr-canvas]');
+    var ctx = canvas.getContext('2d');
+    var helpers = scatterHelpers(canvas);
+    var points = [];
+    var answerKind = 'weak';
+    var answered = false;
+    var solvedCount = 0;
+
+    function clamp(v, lo, hi) {
+      return Math.max(lo, Math.min(hi, v));
+    }
+
+    function genLinear(slopeSign, noise) {
+      var pts = [];
+      var intercept = 2 + Math.random() * 3;
+      var slope = slopeSign * (0.65 + Math.random() * 0.35);
+      for (var i = 0; i < 14; i++) {
+        var x = 0.8 + i * 0.65 + (Math.random() - 0.5) * 0.2;
+        var y = intercept + slope * x + (Math.random() - 0.5) * noise;
+        pts.push({ x: clamp(x, 0.3, 9.7), y: clamp(y, 0.3, 9.7) });
+      }
+      return pts;
+    }
+
+    function genWeak() {
+      var pts = [];
+      for (var i = 0; i < 16; i++) {
+        pts.push({
+          x: 0.5 + Math.random() * 9,
+          y: 0.5 + Math.random() * 9
         });
-        var ys = points.map(function (p) {
-          return p.y;
-        });
-        var r = pearsonR(xs, ys);
-        var ok = false;
-        var msg = '';
-        if (guess === 'strong-pos') {
-          ok = isFinite(r) && r > 0.7;
-          msg = ok
-            ? '✅ Passt — stark positiv linear.'
-            : '❌ Aktuell r ≈ ' + fmtDe(r, 2) + '. Preset „positiv“ laden.';
-        } else if (guess === 'strong-neg') {
-          ok = isFinite(r) && r < -0.7;
-          msg = ok
-            ? '✅ Passt — stark negativ linear.'
-            : '❌ Aktuell r ≈ ' + fmtDe(r, 2) + '. Preset „negativ“ laden.';
-        } else if (guess === 'weak') {
-          ok = isFinite(r) && Math.abs(r) < 0.35;
-          msg = ok
-            ? '✅ Kaum linearer Zusammenhang.'
-            : '❌ |r| ist hier nicht klein. Preset „kein linearer“ oder „U-Form“.';
-        } else if (guess === 'curve') {
-          ok = lastPreset === 'curve' || (isFinite(r) && Math.abs(r) < 0.45);
-          msg = ok
-            ? '✅ Bei U-Form kann |r| klein sein, obwohl klarer Zusammenhang besteht.'
-            : '❌ Lade Preset „U-Form / krumm“ und vergleiche Bild mit r.';
+      }
+      return pts;
+    }
+
+    function genOther() {
+      var pts = [];
+      var mode = Math.random() < 0.5 ? 'u' : 'invu';
+      for (var i = 0; i < 15; i++) {
+        var x = 0.6 + i * 0.6 + (Math.random() - 0.5) * 0.15;
+        var y;
+        if (mode === 'u') {
+          y = 0.32 * (x - 5) * (x - 5) + 1.2 + (Math.random() - 0.5) * 0.7;
+        } else {
+          y = 9 - 0.32 * (x - 5) * (x - 5) + (Math.random() - 0.5) * 0.7;
         }
+        pts.push({ x: clamp(x, 0.3, 9.7), y: clamp(y, 0.3, 9.7) });
+      }
+      return pts;
+    }
+
+    function classify(pts) {
+      var xs = pts.map(function (p) {
+        return p.x;
+      });
+      var ys = pts.map(function (p) {
+        return p.y;
+      });
+      var r = pearsonR(xs, ys);
+      // quadratic residual heuristic for "other"
+      var mx = mean(xs);
+      var my = mean(ys);
+      var sxx = 0;
+      var sxy = 0;
+      for (var i = 0; i < xs.length; i++) {
+        sxx += (xs[i] - mx) * (xs[i] - mx);
+        sxy += (xs[i] - mx) * (ys[i] - my);
+      }
+      var a = sxx ? sxy / sxx : 0;
+      var b = my - a * mx;
+      var ssLin = 0;
+      var ssQuad = 0;
+      // rough quadratic fit around mean
+      var sx2 = 0;
+      var sx3 = 0;
+      var sx4 = 0;
+      var sxy2 = 0;
+      for (var j = 0; j < xs.length; j++) {
+        var dx = xs[j] - mx;
+        sx2 += dx * dx;
+        sx3 += dx * dx * dx;
+        sx4 += dx * dx * dx * dx;
+        sxy2 += dx * dx * (ys[j] - my);
+        var pred = a * xs[j] + b;
+        var e = ys[j] - pred;
+        ssLin += e * e;
+      }
+      var c2 = sx4 > 1e-9 ? sxy2 / sx4 : 0;
+      for (var k = 0; k < xs.length; k++) {
+        var dx2 = xs[k] - mx;
+        var predQ = my + c2 * dx2 * dx2;
+        var eq = ys[k] - predQ;
+        ssQuad += eq * eq;
+      }
+      var curved = ssQuad < ssLin * 0.72 && Math.abs(r) < 0.55;
+      if (curved) return { kind: 'other', r: r };
+      if (r > 0.7) return { kind: 'strong-pos', r: r };
+      if (r < -0.7) return { kind: 'strong-neg', r: r };
+      return { kind: 'weak', r: r };
+    }
+
+    function newExample() {
+      answered = false;
+      root.querySelector('[data-corr-fb]').style.display = 'none';
+      root.querySelector('[data-corr-reveal]').style.display = 'none';
+      root.querySelectorAll('[data-corr-guess]').forEach(function (c) {
+        c.classList.remove('selected', 'correct', 'wrong');
+      });
+
+      var kinds = ['strong-pos', 'strong-neg', 'weak', 'other'];
+      var want = kinds[Math.floor(Math.random() * kinds.length)];
+      var tries = 0;
+      var cls;
+      do {
+        if (want === 'strong-pos') points = genLinear(1, 0.9);
+        else if (want === 'strong-neg') points = genLinear(-1, 0.9);
+        else if (want === 'weak') points = genWeak();
+        else points = genOther();
+        cls = classify(points);
+        tries++;
+      } while (cls.kind !== want && tries < 25);
+
+      answerKind = cls.kind;
+      draw();
+    }
+
+    function draw() {
+      helpers.setSize(root.querySelector('.bs-scatter-wrap'));
+      var r = helpers.drawScene(ctx, points, { showLine: true });
+      root.querySelector('[data-corr-r]').textContent = isFinite(r) ? fmtDe(r, 3) : '—';
+    }
+
+    root.querySelector('[data-corr-new]').addEventListener('click', newExample);
+
+    root.querySelectorAll('[data-corr-guess]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (answered) return;
+        answered = true;
+        var guess = btn.getAttribute('data-corr-guess');
+        var fb = root.querySelector('[data-corr-fb]');
+        var ok = guess === answerKind;
+        root.querySelectorAll('[data-corr-guess]').forEach(function (c) {
+          c.classList.remove('selected', 'correct', 'wrong');
+          if (c.getAttribute('data-corr-guess') === answerKind) c.classList.add('correct');
+        });
+        btn.classList.add(ok ? 'correct' : 'wrong');
+        var labels = {
+          'strong-pos': 'stark positiv',
+          'strong-neg': 'stark negativ',
+          weak: 'schwach / nahe 0',
+          other: 'anderer Zusammenhang'
+        };
         fb.className = 'feedback ' + (ok ? 'correct' : 'incorrect');
         fb.style.display = 'block';
-        fb.textContent = msg;
+        fb.textContent = ok
+          ? '✅ Richtig — ' + labels[answerKind] + '.'
+          : '❌ Passender: ' + labels[answerKind] + '.';
+        root.querySelector('[data-corr-reveal]').style.display = 'block';
         if (ok) {
-          showDone('bsPearsonDone');
-          markExplore(5);
+          solvedCount++;
+          if (solvedCount >= 1) {
+            showDone('bsCorrChallengeDone');
+            markExplore(5);
+          }
         }
       });
     });
 
     window.addEventListener('resize', draw);
-    pearsonRedraw = draw;
-    draw();
+    corrChallengeRedraw = draw;
+    newExample();
   }
 
   /* ========== 6) Lorenz / Gini ========== */
@@ -2010,13 +2409,19 @@
     initDispersionLab();
     initBoxBuildLab();
     initBoxplotLab();
+    initCorrIntro();
     initPearsonLab();
+    initCorrChallenge();
     initLorenzLab();
   }
 
   window.bsRefreshVisibleLabs = function (tabIdx) {
-    if (tabIdx === 5 && typeof pearsonRedraw === 'function') {
-      setTimeout(pearsonRedraw, 40);
+    if (tabIdx === 5) {
+      setTimeout(function () {
+        if (typeof corrIntroRedraw === 'function') corrIntroRedraw();
+        if (typeof pearsonRedraw === 'function') pearsonRedraw();
+        if (typeof corrChallengeRedraw === 'function') corrChallengeRedraw();
+      }, 40);
     }
   };
 

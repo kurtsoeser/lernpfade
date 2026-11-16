@@ -48,7 +48,7 @@ MathJax = {
   <button type="button" class="tab-btn" onclick="switchTab(2)"><span class="tab-num">3</span>Häufigkeiten</button>
   <button type="button" class="tab-btn" onclick="switchTab(3)"><span class="tab-num">4</span>Streuung</button>
   <button type="button" class="tab-btn" onclick="switchTab(4)"><span class="tab-num">5</span>Boxplot</button>
-  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Pearson</button>
+  <button type="button" class="tab-btn" onclick="switchTab(5)"><span class="tab-num">6</span>Korrelation</button>
   <button type="button" class="tab-btn" onclick="switchTab(6)"><span class="tab-num">7</span>Lorenz · Gini</button>
   <button type="button" class="tab-btn" onclick="switchTab(7)"><span class="tab-num">8</span>Vertiefung</button>
   <button type="button" class="tab-btn" onclick="switchTab(8)"><span class="tab-num">9</span>Quiz</button>
@@ -62,7 +62,7 @@ MathJax = {
   <ul style="margin:10px 0 10px 22px; line-height:1.65;">
     <li><strong>Lage</strong> — Wo liegt ein typischer Wert? (Zentralmaße)</li>
     <li><strong>Streuung</strong> — Wie stark unterscheiden sich die Werte?</li>
-    <li><strong>Zusammenhang</strong> — Wie hängen zwei Merkmale linear zusammen? (Pearson)</li>
+    <li><strong>Zusammenhang</strong> — Wie hängen zwei Merkmale linear zusammen? (Korrelation)</li>
     <li><strong>Konzentration</strong> — Wie gleich oder ungleich ist eine Verteilung? (Lorenz, Gini)</li>
   </ul>
 
@@ -510,49 +510,147 @@ MathJax = {
   </div>
 </div>
 
-<!-- 6 Pearson -->
+<!-- 6 Korrelation -->
 <div class="tab-panel" id="panel5">
-  <div class="ribbon">Korrelation nach Pearson</div>
+  <div class="ribbon">Korrelation</div>
 
-  <p>Maß für den <strong>linearen</strong> Zusammenhang metrischer Merkmale: \(-1\le r\le 1\).</p>
-  \[ r=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\cdot\sum(y_i-\bar{y})^2}} \]
+  <p>Zwei Merkmale können zusammenhängen — z. B. <strong>Schlafdauer</strong> und <strong>Bildschirmzeit</strong> pro Tag. Zuerst ein konkretes Beispiel Schritt für Schritt, danach die Formeln.</p>
+
+  <div class="bs-lab" id="bsCorrIntro">
+    <h3 class="bs-lab-title">Einstieg: Schlaf &amp; Bildschirmzeit</h3>
+    <p class="bs-lab-hint">Bei 12 Personen wurde die Schlafdauer (h) und die tägliche Bildschirmzeit (h) erhoben. Gleiche Schlafdauer kann mit unterschiedlicher Bildschirmzeit vorkommen — die Punkte liegen dann übereinander auf der x-Achse.</p>
+
+    <div class="bs-panel" style="margin-bottom:12px; overflow-x:auto;">
+      <table class="bs-table" data-corr-intro-table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Schlafdauer (h)</th>
+            <td>6</td><td>6</td><td>7</td><td>7</td><td>7</td><td>8</td><td>8</td><td>9</td><td>9</td><td>9</td><td>10</td><td>10</td>
+          </tr>
+          <tr>
+            <th scope="row">Bildschirmzeit (h)</th>
+            <td>5,5</td><td>4,2</td><td>4,8</td><td>3,6</td><td>4,0</td><td>3,8</td><td>2,5</td><td>3,2</td><td>2,0</td><td>1,5</td><td>2,4</td><td>1,2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bs-build-progress" data-corr-intro-steps>
+      <button type="button" class="bs-build-step active" data-cistep="0">1 · Punkte</button>
+      <button type="button" class="bs-build-step" data-cistep="1">2 · Eigene Gerade</button>
+      <button type="button" class="bs-build-step" data-cistep="2">3 · Echte Trendlinie</button>
+    </div>
+
+    <div class="bs-grid-2" style="margin-top:12px;">
+      <div>
+        <div class="bs-scatter-wrap bs-corr-intro-wrap">
+          <canvas width="520" height="400" data-corr-intro-canvas aria-label="Schlaf und Bildschirmzeit"></canvas>
+        </div>
+      </div>
+      <div>
+        <div class="bs-panel">
+          <h4 data-corr-intro-title>Schritt 1</h4>
+          <div data-corr-intro-text style="font-size:0.92rem; line-height:1.55;"></div>
+          <div data-corr-intro-controls style="display:none; margin-top:12px;">
+            <label class="bs-slider-row" style="display:block; margin-bottom:10px;">
+              Steigung der Geraden
+              <input type="range" min="-2" max="0.5" step="0.05" value="-0.4" data-corr-intro-slope>
+            </label>
+            <label class="bs-slider-row" style="display:block;">
+              Achsenabschnitt (bei Schlaf ≈ 6)
+              <input type="range" min="0" max="8" step="0.1" value="4" data-corr-intro-intercept>
+            </label>
+            <p class="bs-lab-hint" style="margin-top:8px;">Verschiebe die Regler, bis deine Gerade gut durch die Punktewolke passt (negativer Trend!).</p>
+          </div>
+          <div data-corr-intro-reveal style="display:none; margin-top:12px;">
+            <div class="bs-stats-row">
+              <div class="bs-stat"><div class="lbl">\(r\)</div><div class="val" data-corr-intro-r>—</div></div>
+              <div class="bs-stat"><div class="lbl">\(r^2\)</div><div class="val" data-corr-intro-r2>—</div></div>
+            </div>
+            <p style="margin-top:10px; font-size:0.88rem;" data-corr-intro-eq></p>
+          </div>
+        </div>
+        <div class="bs-lab-toolbar" style="margin-top:12px;">
+          <button type="button" class="bs-btn" data-corr-intro-prev>← Zurück</button>
+          <button type="button" class="bs-btn bs-btn-primary" data-corr-intro-next>Weiter →</button>
+        </div>
+        <div class="bs-live-note" data-corr-intro-note style="margin-top:10px;"></div>
+      </div>
+    </div>
+    <div class="bs-done-flag" id="bsCorrIntroDone">Einstiegsbeispiel erledigt.</div>
+  </div>
+
+  <div class="info-box concept" style="margin-top:8px;">
+    <div class="icon">📐</div>
+    <div>
+      <strong>Formel (zum Nachschlagen)</strong>
+      <p style="margin-top:6px;">Der Korrelationskoeffizient nach Pearson misst den <strong>linearen</strong> Zusammenhang: \(-1\le r\le 1\). Das Bestimmtheitsmaß \(r^2\) gibt an, welcher Anteil der Streuung durch die Gerade erklärt wird.</p>
+      \[ r=\frac{\sum(x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum(x_i-\bar{x})^2\cdot\sum(y_i-\bar{y})^2}} \]
+    </div>
+  </div>
 
   <div class="bs-lab" id="bsPearsonLab">
     <h3 class="bs-lab-title">Labor: Streudiagramm &amp; \(r\)</h3>
-    <p class="bs-lab-hint">Klicke in die Fläche, um Punkte zu setzen. Presets laden starke/schwache/keine/gekrümmte Zusammenhänge. Optional Trendlinie.</p>
+    <p class="bs-lab-hint">Starte mit einer leeren Fläche: <strong>klicke Punkte ein</strong>. Optional Trendlinie einblenden. Beispiele laden fertige Wolken zum Vergleich.</p>
     <div class="bs-lab-toolbar">
+      <span>Zeichnen:</span>
+      <button type="button" class="bs-btn active" data-r-line>Trendlinie</button>
+      <button type="button" class="bs-btn" data-r-clear>Löschen</button>
+      <span style="margin-left:8px;">Beispiele:</span>
       <button type="button" class="bs-btn" data-r-pos>positiv</button>
       <button type="button" class="bs-btn" data-r-neg>negativ</button>
       <button type="button" class="bs-btn" data-r-none>kein linearer</button>
       <button type="button" class="bs-btn" data-r-curve>U-Form / krumm</button>
-      <button type="button" class="bs-btn" data-r-sleep>Schlaf / TV</button>
-      <button type="button" class="bs-btn active" data-r-line>Trendlinie</button>
-      <button type="button" class="bs-btn" data-r-clear>Löschen</button>
+      <button type="button" class="bs-btn" data-r-sleep>Schlaf / Bildschirm</button>
     </div>
     <div class="bs-grid-2">
       <div class="bs-scatter-wrap">
-        <canvas width="520" height="374" aria-label="Streudiagramm"></canvas>
+        <canvas width="520" height="374" aria-label="Streudiagramm Labor"></canvas>
       </div>
       <div class="bs-panel">
-        <h4>Pearson-\(r\)</h4>
+        <h4>Korrelationskoeffizient \(r\)</h4>
         <div class="bs-r-big" data-r-val>—</div>
         <p style="font-size:0.85rem; color:var(--text-light);">Punkte: <span data-r-n>0</span></p>
         <div class="bs-live-note" data-r-note style="margin-top:10px;"></div>
         <p style="margin-top:12px; font-size:0.88rem;"><strong>Merke:</strong> Korrelation ≠ Kausalität. Bei U-Form kann \(r\approx 0\) sein, obwohl ein klarer Zusammenhang besteht.</p>
       </div>
     </div>
-    <div style="margin-top:14px;" class="bs-panel">
-      <h4>Challenge: \(r\) einschätzen</h4>
-      <p style="font-size:0.88rem; margin:0 0 8px;">Lade ein Preset und tippe, welcher Bereich für \(r\) passt — ohne auf die große Zahl zu schauen (kurz abdecken).</p>
-      <div class="bs-chip-row">
-        <button type="button" class="bs-chip" data-r-guess="strong-pos">stark positiv (&gt; 0,7)</button>
-        <button type="button" class="bs-chip" data-r-guess="weak">schwach / nahe 0</button>
-        <button type="button" class="bs-chip" data-r-guess="strong-neg">stark negativ (&lt; −0,7)</button>
-        <button type="button" class="bs-chip" data-r-guess="curve">U-Form → \(r\) täuscht</button>
-      </div>
-      <div class="feedback" data-r-guess-fb style="display:none; margin-top:8px;"></div>
+    <div class="bs-done-flag" id="bsPearsonDone">Korrelations-Labor erledigt.</div>
+  </div>
+
+  <div class="bs-lab" id="bsCorrChallenge">
+    <h3 class="bs-lab-title">Übung: Zusammenhang einschätzen</h3>
+    <p class="bs-lab-hint">Zufälliges Streudiagramm mit Trendlinie — <strong>ohne</strong> angezeigten \(r\)-Wert. Welche Beschreibung passt am besten?</p>
+    <div class="bs-lab-toolbar">
+      <button type="button" class="bs-btn bs-btn-primary" data-corr-new>Neues Beispiel</button>
     </div>
-    <div class="bs-done-flag" id="bsPearsonDone">Pearson-Labor erledigt.</div>
+    <div class="bs-grid-2">
+      <div class="bs-scatter-wrap">
+        <canvas width="520" height="374" data-corr-canvas aria-label="Streudiagramm Challenge"></canvas>
+      </div>
+      <div class="bs-panel">
+        <h4>Deine Einschätzung</h4>
+        <div class="bs-chip-row" style="flex-direction:column; align-items:stretch;">
+          <button type="button" class="bs-chip" data-corr-guess="strong-pos">stark positiv</button>
+          <button type="button" class="bs-chip" data-corr-guess="weak">schwach / nahe 0</button>
+          <button type="button" class="bs-chip" data-corr-guess="strong-neg">stark negativ</button>
+          <button type="button" class="bs-chip" data-corr-guess="other">anderer Zusammenhang (z. B. U-Form)</button>
+        </div>
+        <div class="feedback" data-corr-fb style="display:none; margin-top:12px;"></div>
+        <p style="margin-top:12px; font-size:0.82rem; color:var(--text-light);">Nach dem Check siehst du \(r\) — und kannst ein neues Zufallsbeispiel laden.</p>
+        <div class="bs-stat" style="margin-top:8px; display:none;" data-corr-reveal>
+          <div class="lbl">Tatsächliches \(r\)</div>
+          <div class="val" data-corr-r>—</div>
+        </div>
+      </div>
+    </div>
+    <div class="bs-done-flag" id="bsCorrChallengeDone">Einschätz-Übung erledigt.</div>
   </div>
 
   <div class="geogebra-embed" style="margin-top:16px;">
@@ -564,7 +662,7 @@ MathJax = {
         width="900" height="520" allowfullscreen
         style="border:0;" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
-    <p class="geogebra-embed-note"><a href="https://www.geogebra.org/m/KVBqUYT8#material/Q3VprCHa" target="_blank" rel="noopener noreferrer">Applet öffnen</a> · Brücke zur Trendlinie (Kernziel hier: Pearson-\(r\))</p>
+    <p class="geogebra-embed-note"><a href="https://www.geogebra.org/m/KVBqUYT8#material/Q3VprCHa" target="_blank" rel="noopener noreferrer">Applet öffnen</a> · Brücke zur Trendlinie</p>
   </div>
 
   <div class="tab-nav">
